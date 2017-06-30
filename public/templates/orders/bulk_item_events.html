@@ -1,0 +1,10 @@
+<div ng-if="order['num_items'] > 1" class="bulk-item-actions">
+
+  <span class="inline-label">Bulk item actions:</span>
+
+  <span ng-repeat="(event, count) in bulkItemEvents()">
+    <span class="link action" ng-click="bulkTriggerItemEvent(event)">{{ event | removeUnderscores }} ({{ count }})</span>
+    <span ng-if="!$last">|</span>
+  </span>
+
+</div>

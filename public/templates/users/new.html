@@ -1,0 +1,27 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<h1>New user</h1>
+
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+
+<div ng-hide="loading">
+
+  <div ng-include="templateUrl('users/ldap_search')"/>
+
+  <div class="user-form" ng-include="templateUrl('users/form_fields')"/>
+
+  <div class="form-section form-submit-section">
+    <button class="button" class="submit" ng-click="createUser()">Submit</button>
+    <button class="button" ng-click="goto('/users')">Cancel</button>
+  </div>
+
+</div>
+
+
+<div ng-if="debug" class="data-panel">
+{{ findUid }} <br><br>
+{{ circaLocations | json }}<br><br>
+{{ user | json }}
+</div>

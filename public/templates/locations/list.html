@@ -1,0 +1,39 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<h1>Locations</h1>
+
+<p>Locations listed here are managed by Circa as temporary locations where materials will be used. Permanent storage locations of materials are managed in ArchivesSpace.</p>
+
+<div class="record-list-actions">
+  <div class="record-action"><span class="link" ng-click="goto('locations/new')"><i class="fa fa-plus"></i>Create new location</span></div>
+</div>
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+
+<div ng-hide="loading">
+
+<ul class="records-list locations-list">
+
+  <li ng-repeat="location in circaLocations">
+    <div class="row">
+      <div class="small-10 columns">{{ location['title'] }}
+      <span ng-if="location['default']" class="default-append">(default)</span>
+      </div>
+      <div class="small-2 columns text-right record-actions">
+
+        <span class="button tiny view" ng-click="showLocation(location['id'])">View</span>
+
+<!--         <div class="record-actions order-actions">
+          <div class="action"><span class="link" ng-click="showLocation(location['id'])">View</span></div>
+        </div> -->
+
+      </div>
+    </div>
+  </li>
+
+</ul>
+
+<div ng-if="debug" class="data-panel">
+{{ circaLocations | json }}
+</div>

@@ -1,0 +1,13 @@
+{
+  "name": "dsl-generated-dependencies",
+  "dependencies": {
+    "angular": "~1.6.4",
+    "angular-route": "~1.6.4",
+    "angular-mocks": "~1.6.4",
+    "angular-loader": "~1.6.4",
+    "angular-animate": "~1.6.4",
+    "angucomplete-alt": "~3.0.0",
+    "angular-foundation": "~0.8.0",
+    "ng-country-select": "~0.1.4"
+  }
+}

@@ -1,0 +1,55 @@
+<div ng-controller="ReportsResourceRequestsCtrl as report">
+
+  <div ng-show="report.loading" ng-include="report.templateUrl('common/processing')"/>
+
+  <div ng-show="!report.loading">
+
+    <div ng-init="section='reports'" ng-include="report.templateUrl('common/app_header')"></div>
+
+    <h1>Item requests per resource</h1>
+
+    <div ng-include="report.templateUrl('reports/date_config')"></div>
+
+    <div class="table-options">
+
+      <span ng-show="report.limit < report.requestsPerResource.total_resources">
+        <span class="info">Showing top {{ report.defaultLimit }}</span>
+        <span class="link"  ng-click="report.showAll()">Show all</span>
+      </span>
+      <span class="link" ng-show="report.limit > report.defaultLimit" ng-click="report.showLimit()">Show top {{ report.defaultLimit }} only</span>
+
+    </div>
+
+
+    <table>
+
+      <thead>
+        <tr>
+          <th style="width: 50%;">Resource</th>
+          <th style="width: 40%;">Item requests by order type</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr ng-repeat="resource in report.requestsPerResource.resources | orderBy:'-item_requests' | limitTo: report.limit">
+          <td style="width: 50%;">{{ resource.resource_identifier }} - {{ resource.resource_title }}</td>
+          <td style="width: 40%;">
+            <div ng-repeat="orderType in resource.sorted_order_types">{{ orderType }}: {{ resource.order_types[orderType] }}</div>
+          </td>
+          <td>{{ resource.total_requests }}</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+
+
+  <div ng-if="debug" class="data-panel">
+  {{ report.requestsPerResource | json }}
+  </div>
+
+
+</div>
+

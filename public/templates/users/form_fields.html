@@ -1,0 +1,237 @@
+<div ng-if="user.hasValidationErrors == true" class="validation-error form-validation-error">
+Please fix the problems noted below.
+</div>
+
+<div class="row">
+
+  <div class="small-6 columns">
+    <div ng-class="user.validationErrors['first_name'] ? 'has-error' : ''">
+      <span class="field-label">First name</span><br>
+      <input type="text" ng-model="user['first_name']">
+      <div ng-if="user.validationErrors['first_name']" class="validation-error field-validation-error">{{ user.validationErrors['first_name'] }}</div>
+    </div>
+  </div>
+
+  <div class="small-6 columns">
+    <div ng-class="user.validationErrors['last_name'] ? 'has-error' : ''">
+      <span class="field-label">Last name</span><br>
+      <input type="text" ng-model="user['last_name']">
+      <div ng-if="user.validationErrors['last_name']" class="validation-error field-validation-error">{{ user.validationErrors['last_name'] }}</div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row">
+
+  <div class="small-6 columns end">
+    <div ng-class="user.validationErrors['email'] ? 'has-error' : ''">
+      <span class="field-label">Email</span><br>
+      <input type="text" ng-model="user['email']">
+      <div ng-if="user.validationErrors['email']" class="validation-error field-validation-error">{{ user.validationErrors['email'] }}</div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<div class="row" ng-if="mode == 'new' && options['use_devise_passwords']">
+  <div class="small-6 columns end">
+    <div ng-class="user.validationErrors['password'] ? 'has-error' : ''">
+      <span class="field-label">Password</span>
+      <input type="text" ng-model="user['password']">
+      <div ng-if="user.validationErrors['password']" class="validation-error field-validation-error">{{ user.validationErrors['password'] }}</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+
+  <div class="small-6 columns end">
+    <div ng-class="user.validationErrors['user_role_id'] ? 'has-error' : ''">
+      <span class="field-label">Circa user role</span><br>
+      <select ng-model="user['user_role_id']">
+        <option ng-repeat="role in currentUser['assignable_roles']" value="{{ role['id'] }}" ng-selected="role.id == user['user_role_id']">{{ role['name'] }}</option>
+      </select>
+      <div ng-if="user.validationErrors['role']" class="validation-error field-validation-error">{{ user.validationErrors['role'] }}</div>
+    </div>
+  </div>
+
+  <div class="small-6 columns end">
+    <div ng-class="user.validationErrors['patron_type_id'] ? 'has-error' : ''">
+      <span class="field-label">Patron type</span><br>
+      <select ng-model="user['patron_type_id']">
+        <option ng-repeat="patronType in $parent.controlledValues['patron_type']" value="{{ patronType.id }}" ng-selected="patronType.id == user['patron_type_id']">{{ patronType.value }}</option>
+      </select>
+      <div ng-if="user.validationErrors['patron_type_id']" class="validation-error field-validation-error">{{ user.validationErrors['patron_type_id'] }}</div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row">
+
+  <div class="small-6 columns">
+    <div ng-class="user.validationErrors['affiliation'] ? 'has-error' : ''">
+      <span class="field-label">Affiliation</span><br>
+      <input type="text" ng-model="user['affiliation']">
+      <div ng-if="user.validationErrors['affiliation']" class="validation-error field-validation-error">{{ user.validationErrors['affiliation'] }}</div>
+    </div>
+  </div>
+
+  <div class="small-6 columns">
+    <div ng-class="user.validationErrors['position'] ? 'has-error' : ''">
+      <span class="field-label">Position</span><br>
+      <input type="text" ng-model="user['position']">
+      <div ng-if="user.validationErrors['position']" class="validation-error field-validation-error">{{ user.validationErrors['position'] }}</div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row">
+
+  <div class="small-12 columns">
+    <div ng-class="user.validationErrors['address1'] ? 'has-error' : ''">
+      <span class="field-label">Address (line 1)</span><br>
+      <input type="text" ng-model="user['address1']">
+      <div ng-if="user.validationErrors['address1']" class="validation-error field-validation-error">{{ user.validationErrors['address1'] }}</div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row">
+
+  <div class="small-12 columns">
+    <div ng-class="user.validationErrors['address2'] ? 'has-error' : ''">
+      <span class="field-label">Address (line 2)</span><br>
+      <input type="text" ng-model="user['address2']">
+      <div ng-if="user.validationErrors['address2']" class="validation-error field-validation-error">{{ user.validationErrors['address2'] }}</div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row">
+
+  <div class="small-6 columns">
+    <div ng-class="user.validationErrors['city'] ? 'has-error' : ''">
+      <span class="field-label">City</span><br>
+      <input type="text" ng-model="user['city']">
+      <div ng-if="user.validationErrors['city']" class="validation-error field-validation-error">{{ user.validationErrors['city'] }}</div>
+    </div>
+  </div>
+
+  <div class="small-3 columns">
+    <div ng-class="user.validationErrors['state'] ? 'has-error' : ''">
+      <span class="field-label">State</span><br>
+      <select ng-model="user['state']">
+        <option ng-repeat="state in stateRegionValues" ng-selected="user['state'] == state[0]" value="{{ state[0] }}">{{ state[1] }}</option>
+      </select>
+      <div ng-if="user.validationErrors['state']" class="validation-error field-validation-error">{{ user.validationErrors['state'] }}</div>
+    </div>
+  </div>
+
+  <div class="small-3 columns">
+    <div ng-class="user.validationErrors['zip'] ? 'has-error' : ''">
+      <span class="field-label">ZIP</span><br>
+      <input type="text" ng-model="user['zip']">
+      <div ng-if="user.validationErrors['zip']" class="validation-error field-validation-error">{{ user.validationErrors['zip'] }}</div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row">
+
+  <div class="small-6 columns end">
+    <div ng-class="user.validationErrors['country'] ? 'has-error' : ''">
+      <span class="field-label">Country</span><br>
+      <country-select cs-priorities="US" ng-model="user['country']"></country-select>
+      <div ng-if="user.validationErrors['country']" class="validation-error field-validation-error">{{ user.validationErrors['country'] }}</div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row">
+  <div class="small-6 columns end">
+    <div ng-class="user.validationErrors['phone'] ? 'has-error' : ''">
+      <span class="field-label">Phone</span><br>
+      <input type="text" ng-model="user['phone']">
+      <div ng-if="user.validationErrors['phone']" class="validation-error field-validation-error">{{ user.validationErrors['phone'] }}</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="small-6 columns end">
+    <div ng-class="user.validationErrors['agreement_confirmed'] ? 'has-error' : ''">
+      <input type="checkbox" ng-model="user['agreement_confirmed']" ng-checked="user['agreement_confirmed']">
+      <span class="field-label">Policies agreement signed?</span>
+      <div ng-if="user.validationErrors['agreement_confirmed']" class="validation-error field-validation-error">{{ user.validationErrors['agreement_confirmed'] }}</div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- notes -->
+<div class="row">
+
+  <div class="small-12 columns">
+    <h2>Notes</h2>
+
+    <ul class="sub-records-list notes-list" ng-if="user['notes'].length > 0">
+
+      <li ng-repeat="note in user['notes']">
+        <div class="row">
+
+          <div class="small-11 columns">
+            <textarea ng-model="user['notes'][$index]['content']"/>
+          </div>
+
+          <div class="small-1 columns">
+            <div class="sub-record-actions item-actions">
+              <span class="link action" ng-click="removeNote($index, user)">Remove</span>
+            </div>
+          </div>
+
+        </div>
+      </li>
+
+    </ul>
+
+
+    <span class="link" ng-click="addNote(user)">Add note</span>
+
+    <div ng-show="removedNotes.length > 0">
+
+      <div class="heading">Removed notes:</div>
+
+      <ul class="sub-records-list removed-notes-list">
+        <li ng-repeat="note in removedNotes">
+          <div class="row">
+            <div class="small-10 columns"><p>{{ note['content'] }}</p></div>
+            <div class="small-2 columns sub-record-actions"><span class="link action" ng-click="restoreNote(note, user)">Restore</span></div>
+          </div>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+

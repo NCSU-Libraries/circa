@@ -1,0 +1,47 @@
+// Place all the styles related to the items controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.item-details {
+  margin: 2rem 0;
+}
+
+.checkout-controls {
+  background: $grayDark;
+  color: $white !important;
+  padding: 0.5rem;
+
+  * {
+    color: $white;
+  }
+
+  .user-select-list {
+    margin: 1rem 0;
+  }
+
+  .link {
+    color: $white;
+    &:hover {
+      color: $yellow;
+    }
+  }
+
+  .button {
+    margin-bottom: 0;
+  }
+}
+
+.obsolete-label {
+  font-weight: bold;
+  color: $red;
+  text-transform: uppercase;
+}
+
+// table.item-list {
+//   tr.item-list-row {
+//     &:hover {
+//       background: $yellow;
+//       cursor: pointer;
+//     }
+//   }
+// }

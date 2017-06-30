@@ -1,0 +1,61 @@
+<div class="record-overview item-overview">
+
+
+  <div>
+
+    <div class="inline overview-element">
+      <span ng-if="item['resource_identifier']">{{ item['resource_identifier'] }} - </span>{{ item['resource_title'] }}
+    </div>
+
+  </div>
+
+
+  <div>
+
+    <div class="inline overview-element nowrap" ng-if="item['source'] == 'archivesspace'">
+      <span class="label">Container:</span>
+      <span class="value">{{ item['container'] }}</span>
+    </div>
+
+    <div class="inline overview-element nowrap" ng-if="item['barcode']">
+      <span class="label">Barcode:</span>
+      <span class="value">{{ item['barcode'] }}</span>
+    </div>
+
+  </div>
+
+
+
+  <div ng-if="item['source'] == 'catalog'">
+
+    <div class="inline overview-element nowrap">
+      <span class="label">Call number:</span>
+      <span class="value">{{ item['resource_identifier'] }}</span>
+    </div>
+
+    <div class="inline overview-element nowrap">
+      <span class="label">Catalog record ID:</span>
+      <span class="value">{{ item['item_catalog_record']['catalog_record_id'] }}</span>
+    </div>
+
+    <div class="inline overview-element nowrap">
+      <span class="label">Catalog item ID:</span>
+      <span class="value">{{ item['item_catalog_record']['catalog_item_id'] }}</span>
+    </div>
+
+  </div>
+
+
+
+  <div>
+
+    <div class="inline overview-element">
+      <span class="label">Permanent location:</span>
+      <span class="value">{{ item['permanent_location']['title'] }}</span>
+    </div>
+
+  </div>
+
+
+
+</div>

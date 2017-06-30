@@ -1,0 +1,66 @@
+header {
+
+  margin-top: 0px; /* fix the spacing problem with the University nav iframe */
+  background: $red !important;
+
+  .top-bar {
+    background: $red !important;
+    height: 60px;
+    padding: 0 5px;
+    height: 4.25rem;
+
+    .name {
+      padding-top: 5px;
+      font-size: 16px;
+      height: 4.25rem;
+      margin: 0;
+      img {
+        height: inherit;
+      }
+    }
+
+  }
+
+  .simple-header {
+
+    .name {
+      @media #{$small-up} {
+        padding-left: rem-calc(10);
+      }
+
+      @media #{$large-up} {
+        padding-left: 0;
+      }
+
+    }
+
+  }
+
+}
+
+
+#current-user-tools {
+  position: absolute;
+  top: 5px;
+  right: 0;
+  color: $white;
+  width: 100%;
+  text-align: right;
+  z-index: 100;
+  padding-top: 0.25rem;
+  padding-right: 10px;
+
+  a {
+    color: $grayLightest;;
+    &:hover {
+      color: $white;
+      text-decoration: underline;
+    }
+  }
+
+  .sign-out {
+    text-transform: uppercase;
+    font-size: 70%;
+    padding-left: 0.25rem;
+  }
+}

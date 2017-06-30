@@ -1,0 +1,52 @@
+<div class="filters">
+
+
+  <div class="filter-toggle">
+    <span ng-hide="filterConfig.show" ng-click="toggleShowFilters()" class="link show-filters">Show filters</span>
+    <span ng-show="filterConfig.show" ng-click="toggleShowFilters()" class="link hide-filters">Hide filters</span>
+  </div>
+
+
+  <div ng-show="filterConfig.show" class="filter-select">
+
+    <div class="row filter-field">
+      <div class="small-12 columns">
+        <label>
+          <input type="checkbox" ng-model="filterConfig.filters['digital_object']" ng-true-value="true" name="digital_object">
+          Show only digital object items
+        </label>
+      </div>
+    </div>
+
+
+    <div class="row filter-field">
+      <div class="small-12 columns">
+        <label>
+          <input type="checkbox" ng-model="filterConfig.filters['obsolete']" ng-false-value="null"/>
+          Show only obsolete items
+        </label>
+      </div>
+    </div>
+
+    <span class="button small" ng-click="applyFilters()">Apply filters</span>
+
+  </div>
+
+
+</div>
+
+
+<div class="active-filters" ng-show="filterConfig.filtersApplied">
+  <div ng-repeat="(filter, value) in filterConfig.appliedFilters">
+    <label ng-if="$first">Filters:</label>
+    <span ng-if="filter=='digital_object'" class="filter">Digital object items only</span>
+    <span ng-if="filter=='obsolete'" class="filter">Obsolete items only</span>
+    <span ng-if="!$last">; </span>
+    <span ng-if="$last" class="link action" ng-click="resetFilters();">Clear filters</span>
+  </div>
+</div>
+
+<!-- <div ng-if="debug" class="data-panel">
+{{ filterConfig | json }}<br>
+{{ filterConfig.options | json }}
+</div> -->

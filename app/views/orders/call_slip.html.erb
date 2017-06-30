@@ -1,0 +1,114 @@
+<div class="call-slip">
+
+  <h1>Order #<%= @order.id %></h1>
+
+  <div class="order-details">
+
+    <div class="overview-item">
+      <span class="label">Date/time created:</span> <%= @order.created_at.strftime('%B %e, %Y') %>, <%= @order.created_at.strftime('%l:%M %p') %>
+    </div>
+
+    <div class="overview-item">
+      <span class="label">Access <%= @order.access_date_end ? 'dates' : 'date' %>:</span>
+      <%= @order.access_date_start.strftime('%B %e, %Y') %>
+      <% if @order.access_date_end %>
+      - <%= @order.access_date_end.strftime('%B %e, %Y') %>
+      <% end %>
+    </div>
+
+    <div class="overview-item-group">
+      <div class="overview-item inline">
+        <span class="label">Order type:</span>
+        <%=  @order.order_type[:value] %>
+      </div>
+
+      <div class="overview-item inline">
+        <span class="label">Total items:</span>
+        <%= @order.items.length %>
+      </div>
+    </div>
+
+
+    <div class="overview-item">
+      <% if @order.temporary_location %>
+        <span class="label">Use location:</span>
+        <%= @order.temporary_location.title %>
+      <% end %>
+    </div>
+
+
+    <div class="overview-item">
+      <span class="label"><%= "Patron".pluralize(@order.users.length) %>:</span>
+      <% @order.users.each_index do |i| %>
+        <% if i < 5 %>
+          <% u = @order.users[i] %>
+          <%= u.last_name %>, <%= u.first_name %> (<%= u.email %>)<%= u != @order.users.last ? '; ' : '' %>
+        <% else
+          break
+        end %>
+      <% end %>
+      <% if @order.users.length > 5 %>
+      <span class="truncated-list-post-note">+ <%= @order.users.length - 5 %> more</span>
+      <% end %>
+
+
+    </div>
+
+
+    <% if @order.notes.length > 0 %>
+      <div class="overview-item notes">
+        <div class="label">Notes:</div>
+        <% @order.notes.each do |n| %>
+        <div class="note"><%= n.content %></div>
+        <% end %>
+      </div>
+    <% end %>
+
+
+  </div>
+
+
+
+  <h2><%== "Item".pluralize(@items.length) %> requested</h2>
+
+  <ul class="items-list">
+  <% @items.each do |i| %>
+    <li>
+
+      <div class="item-heading">
+        <%= i.resource_identifier %> - <%= i.resource_title %>
+        <% if i.container %>
+          <br><%= i.container %>
+        <% end %>
+      </div>
+
+
+      <% if i.barcode %>
+      <div>
+        <span class="label">Barcode:</span>
+        <%= i.barcode %>
+      </div>
+      <% end %>
+
+
+      <div>
+        <span class="label">Permanent location:</span>
+        <%= i.permanent_location ? i.permanent_location.title : '[unknown]' %>
+      </div>
+
+    </li>
+  <% end %>
+  </ul>
+
+
+
+
+
+
+  <div class="call-slip-info record-details">
+    <div class="overview-item">
+      <span class="label">Printed by:</span> <%= @current_user.display_name %> (<%= @current_user.email %>) on <%= DateTime.now.strftime("%Y-%m-%d at %l:%M %P") %>
+    </div>
+  </div>
+
+</div>

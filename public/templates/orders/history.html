@@ -1,0 +1,45 @@
+<div ng-if="!order['history']">
+<span class="link" ng-click="getOrderHistory()">Show order history</span>
+</div>
+
+
+<div ng-if="order['history']">
+
+  <h2>History</h2>
+
+  <table cellspacing="0">
+
+    <thead>
+      <tr>
+        <th>date/time</th>
+        <th>record</th>
+        <th>status</th>
+        <th>user</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr ng-repeat="historyItem in order.history">
+        <td class="nowrap">
+          {{ historyItem['created_at'] | date: 'yyyy-MM-dd' }}<br>
+          {{ historyItem['created_at'] | date: 'HH:mm:ss' }}
+        </td>
+        <td>
+          <div ng-if="historyItem['record_type'] == 'Order'">Order</div>
+          <div ng-if="historyItem['record_type'] == 'Item'">
+            <span ng-if="historyItem['item']['resource_identifier']">{{ historyItem['item']['resource_identifier'] }} - </span>
+            <span ng-if="historyItem['item']['resource_title']">{{ historyItem['item']['resource_title'] }}.</span>
+            <span ng-if="historyItem['item']['container']">{{ historyItem['item']['container'] }}</span>
+          </div>
+        </td>
+        <td>{{ historyItem['to_state'] | removeUnderscores}}</td>
+        <td>
+          {{ historyItem['user']['last_name'] }}, {{ historyItem['user']['first_name'] }} ({{ historyItem['user']['email'] }})</div>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+
+</div>
+

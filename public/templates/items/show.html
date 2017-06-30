@@ -1,0 +1,105 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<h1>Item details</h1>
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+<div ng-if="!loading">
+
+
+  <div class="record-show-actions" ng-if="!item.obsolete">
+
+    <div class="record-action"><span class="link" ng-click="confirmObsolete(item.id)"><i class="fa fa-times-circle"></i>Obsolete</span></div>
+
+    <div class="record-action"><span class="link" ng-click="updateItemFromSource(item.id)"><i class="fa fa-refresh"></i>Refresh item data from source</span></div>
+
+  </div>
+
+
+  <div ng-if="item.obsolete" class="obsolete-label">This item is obsolete</div>
+
+
+  <div ng-include="templateUrl('items/item_detail')"/>
+
+
+  <section>
+
+    <h2>Access history</h2>
+
+    <table cellspacing="0" ng-if="item['access_sessions'].length > 0">
+
+      <thead>
+        <tr>
+          <th>User(s)</th>
+          <th>Start date/time</th>
+          <th>End date/time</th>
+          <th>Location</th>
+          <th>Order</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr ng-repeat="session in item['access_sessions'] | orderBy : session['start_datetime'] : true">
+          <td><div ng-repeat="user in session['users']">{{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})</div></td>
+          <td>{{ session['start_datetime'] | date: 'shortDate' }} {{ session['start_datetime'] | date: 'mediumTime' }}</td>
+          <td>{{ session['end_datetime'] | date: 'shortDate' }} {{ session['end_datetime'] | date: 'mediumTime' }}</td>
+          <td>{{ session['location']['title'] }}</td>
+          <td><span class="link" ng-click="showOrder(session['order_id'])" ng-if="session['order_id']">{{ session['order_id'] }} [view]</span></td>
+        </tr>
+      </tbody>
+
+    </table>
+
+    <div ng-if="item['access_sessions'].length == 0">
+    There is no record of this item having been accessed.
+    </div>
+
+  </section>
+
+
+  <div ng-if="!item['digital_object']">
+
+    <section ng-if="!item['event_history']">
+      <span class="link" ng-if="!item['movement_history']" ng-click="getItemHistory(item['id'])">Get movement history</span>
+    </section>
+
+
+    <section ng-if="item['movement_history']">
+
+      <h2>Movement history</h2>
+
+      <table cellspacing="0">
+
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>Location</th>
+            <th>Date/time</th>
+            <th>Staff responsible</th>
+            <th>Order ID</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr ng-repeat="historyItem in item['movement_history'] | orderBy : historyItem['datetime'] : true">
+            <td>{{ historyItem['action'] }}</td>
+            <td>{{ historyItem['location']['title'] }}</td>
+            <td>{{ historyItem['datetime'] | date: 'yyyy-MM-dd HH:mm:ss a' }}</td>
+            <td><div ng-if="historyItem['user']">{{ historyItem['user']['last_name'] }}, {{ historyItem['user']['first_name'] }} ({{ historyItem['user']['email'] }})</div></td>
+            <td><span class="link" ng-click="showOrder(historyItem['order_id'])" ng-if="historyItem['order_id']">{{ historyItem['order_id'] }} [view]</span></td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </section>
+
+  </div>
+
+
+
+</div>
+
+<div ng-if="debug" class="data-panel">
+{{ item | json }}
+</div>

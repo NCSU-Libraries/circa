@@ -1,0 +1,92 @@
+// Place all the styles related to the pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+// HOME
+
+#home-title {
+  font-family: "GlyphaRoman", serif;
+  font-size: 8rem;
+  font-weight: bold;
+  line-height: 1em;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+
+.row.big-nav {
+  margin-bottom: 2rem;
+}
+
+
+.big-nav-item {
+  position: relative;
+  height: 10rem;
+  color: $red;
+  text-align: center;
+
+  &:hover {
+    background: $orange;
+    .big-nav-icon, .big-nav-text {
+      color: $white;
+      text-decoration: none;
+    }
+  }
+  &.disabled {
+    color: $grayLighter;
+    &:hover {
+      background: inherit;
+      .big-nav-icon, .big-nav-text {
+        color: inherit;
+      }
+    }
+  }
+}
+
+.big-nav-icon {
+  font-size: 4rem;
+  line-height: 1em;
+  padding-top: 1rem;
+  i {
+    // padding-left: 1rem;
+  }
+  .fa-briefcase {
+    line-height: 1.15em;
+  }
+}
+
+.big-nav-text {
+  font-size: 1.5rem;
+  line-height: 1em;
+  font-family: "GlyphaRoman", serif;
+  font-weight: bold;
+  padding-top: 1.25rem;
+}
+
+.big-nav-link {
+  display: block;
+  height: 11rem;
+  width: 100%;
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.section-nav {
+
+  .section-nav-item {
+    font-size: 1.1rem;
+    line-height: 1.5em;
+    font-family: "GlyphaRoman", serif;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+
+    i {
+      color: $gray;
+      padding-right: 0.25rem;
+    }
+  }
+}
+

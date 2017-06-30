@@ -1,0 +1,120 @@
+// Place all the styles related to the orders controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+table.order-list {
+
+  tr.order-list-row {
+    &:hover {
+      background: $yellow;
+      cursor: pointer;
+    }
+  }
+
+}
+
+
+.order-details {
+  margin: 2rem 0;
+}
+
+
+
+
+
+
+.workflow-controls {
+
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+
+  .workflow-event {
+    float: left;
+
+    .workflow-event-inner {
+      background-image: image-url("timeline_sprite.png");
+      background-position: center -200px;
+      background-repeat: repeat-x;
+      padding-top: 30px;
+      text-align: center;
+
+      &.first {
+        background-image: image-url("timeline_sprite_start.png");
+      }
+
+      &.last {
+        background-image: image-url("timeline_sprite_end.png");
+      }
+
+      &.available, &.permitted {
+
+      }
+
+      &.unavailable, &.not_permitted {
+        color: $grayLighter;
+      }
+
+      &.complete {
+        color: $gray;
+        background-position: center 0;
+      }
+
+      &.current {
+        font-weight: bold;
+        background-position: center -400px;
+        color: $black;
+      }
+
+    }
+  }
+
+  @for $i from 1 through 20 {
+    .workflow-event.of-#{$i} { width: percentage((100 / $i) * .01); }
+  }
+
+
+}
+
+
+
+ul.records-list.orders-list {
+  li {
+    padding: 0;
+
+    .row {
+      margin: 0;
+      padding: 0.5rem;
+      background: $greenLight;
+
+      // color-coding of orders list items
+
+      &.finished {
+        background: $grayLightest;
+      }
+
+      &.pending, &.reviewing {
+        background: $pink;
+      }
+    }
+  }
+}
+
+
+.bulk-item-actions {
+  background: $grayLightest;
+  padding: 0.5rem;
+  font-size: 80%;
+  line-height: 1.1em;
+  border: 1px solid $grayLight;
+  border-bottom-width: 0;
+
+  .link {
+    text-transform: uppercase;
+  }
+
+  .inline-label {
+    padding-right: 1rem;
+  }
+}

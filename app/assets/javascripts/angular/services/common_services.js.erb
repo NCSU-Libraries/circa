@@ -1,0 +1,581 @@
+// Execute a callback function if it exists
+var executeCallback = function(fn, data){
+  if (typeof fn !== 'undefined') {
+    fn(data);
+  }
+}
+
+var match = function(needle, haystack) {
+  var regexp = new RegExp(needle);
+  return haystack.match(regexp) ? true : false;
+}
+
+
+// Simple utility for merging objects, useful for appending new attributes/methods to $scope
+var objectMerge = function(target, source) {
+  $.each(source, function(key, value) {
+    if (source.hasOwnProperty(key)) {
+      target[key] = value;
+    }
+  });
+  return target;
+}
+
+
+var inArray = function(array, element) {
+  return array.indexOf(element) >= 0
+}
+
+
+// Add elements to an array if not already included
+var addToArray = function(array, newElement) {
+  if (array.indexOf(newElement) < 0) {
+    array.push(newElement);
+  }
+}
+
+
+var toggleArrayElement = function(array, element) {
+  var index = array.indexOf(element);
+  if (index >= 0) {
+    array.splice(index,1);
+  }
+  else {
+    array.push(element);
+  }
+  return true;
+}
+
+
+var sortArrayOfObjects = function(array, key, direction) {
+  var sortValues = [];
+  var sortedContents = [];
+
+  array.forEach(function(item, index) {
+    var compVal = (typeof item[key] == 'string') ? item[key].toLowerCase() : item[key];
+    sortValues.push([ index, compVal ]);
+  });
+
+  sortValues = sortValues.sort(function(a,b) {
+    if (a[1] < b[1]) {
+      return -1;
+    }
+    if (a[1] > b[1]) {
+      return 1;
+    }
+    return 0;
+  });
+
+  sortValues.forEach(function(values) {
+    var i = values[0];
+    sortedContents.push(array[i]);
+  });
+
+  if (direction == 'desc') {
+    sortedContents = sortedContents.reverse();
+  }
+  return sortedContents;
+}
+
+
+// Shift index of array item by one in either direction
+var shiftPositionOfItemInArray = function(array, index, delta) {
+  if (delta > 0) {
+    delta = 1;
+  }
+  else if (delta < 0) {
+    delta = -1;
+  }
+  var switchIndex = index + delta;
+  var indexSort = [];
+  for (var i = 0; i < array.length; i++) {
+    if (i == index) {
+      indexSort.push(switchIndex);
+    }
+    else if (i == switchIndex) {
+      indexSort.push(index);
+    }
+    else {
+      indexSort.push(i);
+    }
+  }
+  values = [];
+  for (var i = 0; i < indexSort.length; i++) {
+    values.push(array[indexSort[i]]);
+  }
+  return values;
+}
+
+
+// Provides pagination paramters for list views
+var paginationParams = function(data) {
+  var params = {};
+  params.page = data.page;
+  params.pages = data.pages;
+  params.perPage = data.per_page;
+  params.total = data.total;
+  params.sort = data.sort;
+  if (params.sort) {
+    params.sortField = params.sort.split(' ')[0];
+    params.sortOrder = params.sort.split(' ')[1];
+  }
+  if (params.page <= 6) {
+    params.pageListStart = 1;
+  }
+  else if ((params.page > (params.pages - 9)) && ((params.pages - 9) > 10)) {
+    params.pageListStart = params.pages - 9;
+  }
+  else {
+    params.pageListStart = params.page - 5;
+  }
+
+  if ((params.pages < 10) || ((params.page + 4) > params.pages)) {
+    params.pageListEnd = params.pages;
+  }
+  else {
+    params.pageListEnd = params.pageListStart + 9;
+  }
+
+  params.pageList = [];
+
+  for (var i = params.pageListStart; i <= params.pageListEnd; i++) {
+    params.pageList.push(i);
+  }
+  return params;
+}
+
+
+var calculatePercent = function(num) {
+  return Math.floor(100 / num);
+}
+
+
+var rootPath = function() {
+  return '<%= Rails.application.config.action_controller.relative_url_root %>';
+}
+
+var templateUrl = function(template_name) {
+  var templatesPath = rootPath() + '/templates/';
+  return templatesPath + template_name + '.html';
+}
+
+var imageUrl = function(filename) {
+  var assetsPath = rootPath() + '/assets/';
+  return assetsPath + filename;
+}
+
+var railsEnv = function() {
+  return '<%= Rails.env %>';
+}
+
+circaApp.factory('commonUtils', ['$http', '$modal', '$window', function($http, $modal, $window) {
+
+  // Helper to open a modal and execute callbacks using mm-foundation modal
+  var openModal = function (options) {
+    $window.scrollTo(0,0);
+
+    var modalInstance = $modal.open({
+      templateUrl: templateUrl(options.template),
+      controller: options.controller,
+      resolve: options.resolve
+    });
+
+    modalInstance.result.then(
+      function () {
+        executeCallback(options.callback);
+      },
+      function () { return false; }
+    );
+  }
+
+  return {
+    executeCallback: executeCallback,
+    match: match,
+    objectMerge: objectMerge,
+    paginationParams: paginationParams,
+    calculatePercent: calculatePercent,
+    addToArray: addToArray,
+    toggleArrayElement: toggleArrayElement,
+    inArray: inArray,
+    sortArrayOfObjects: sortArrayOfObjects,
+    shiftPositionOfItemInArray: shiftPositionOfItemInArray,
+    urlHelpers: {
+      templateUrl: templateUrl,
+      imageUrl: imageUrl,
+      rootPath: rootPath
+    },
+    openModal: openModal,
+    railsEnv: railsEnv
+  }
+}]);
+
+
+
+
+// Helpers to send requests to the Rails backend
+// NOTE: response is returned even if response status is an error - handle errors in controller
+circaApp.factory('apiRequests', ['$http', function($http) {
+
+  var returnResponse = function(response) {
+    return response;
+  }
+
+  var checkPath = function(path) {
+    if (!path.match(/^\//)) {
+      path = '/' + path;
+    }
+    return path;
+  }
+
+  var myService = {
+    get: function(path, config) {
+      // $http returns a promise, which has a then function, which also returns a promise
+      var promise = $http.get(rootPath() + checkPath(path), config).then(
+        // The then function here is an opportunity to modify the response
+        // The return value gets picked up by the then in the controller.
+        // Success callback
+        returnResponse,
+        // Error callback
+        returnResponse
+      );
+      // Return the promise to the controller
+      return promise;
+    },
+
+    post: function(path, data, config) {
+      var promise = $http.post(rootPath() + checkPath(path), data, config).then(
+        returnResponse,
+        returnResponse
+      );
+      return promise;
+    },
+
+    put: function(path, data, config) {
+      var promise = $http.put(rootPath() + checkPath(path), data, config).then(
+        returnResponse,
+        returnResponse
+      );
+      return promise;
+    },
+
+    delete: function(path, config) {
+      var promise = $http.delete(rootPath() + checkPath(path), config).then(
+        returnResponse,
+        returnResponse
+      );
+      return promise;
+    },
+
+    getPage: function(path, page, config) {
+      if (!config) {
+        config = { 'params': { 'page': page } }
+      }
+      else if (!config['params']) {
+        config['params'] = { 'page': page };
+      }
+      else {
+        config['params']['page'] = page;
+      }
+      var promise = $http.get(rootPath() + checkPath(path), config).then(
+        returnResponse,
+        returnResponse
+      );
+      return promise;
+    },
+
+    getCurrentUser: function() {
+      var promise = $http.get(rootPath() + '/current_user').then(
+        returnResponse,
+        returnResponse
+      );
+      return promise;
+    }
+
+    // getEnumerationValues: function(enumerationName) {
+    //   var promise = $http.get(rootPath() + '/enumeration_values?enumeration_name:' + enumerationName).then(
+    //     returnResponse,
+    //     returnResponse
+    //   );
+    //   return promise;
+    // }
+
+  };
+  return myService;
+}]);
+
+
+
+
+// Set up the cache and add current user info to it
+circaApp.factory('sessionCache', [ '$cacheFactory', 'apiRequests', 'commonUtils', function($cacheFactory, apiRequests, commonUtils) {
+
+  var cache = $cacheFactory.get('sessionCache');
+
+  if (typeof cache === 'undefined') {
+    var cache = $cacheFactory('sessionCache');
+  }
+
+  var cached = function(cache, key) {
+    return (typeof cache.get(key) === 'undefined') ? false : true;
+  }
+
+  var init = function(callback, scope) {
+
+    var cacheCurrentUser = function(cache) {
+      if (!cached(cache,'currentUser')) {
+        apiRequests.getCurrentUser().then(function(response) {
+          cache.put('currentUser', response.data['user']);
+          executeCallbackChain(cache);
+        });
+      }
+      else {
+        executeCallbackChain(cache);
+      }
+    }
+
+    // var cacheEnumerationValues = function(cache) {
+    //   if (!cached(cache,'enumerationValues')) {
+    //     path = '/enumeration_values';
+    //     apiRequests.get(path).then(function(response) {
+    //       cache.put('enumerationValues', response.data['enumeration_values']);
+    //       executeCallbackChain(cache);
+    //     });
+    //   }
+    //   else {
+    //     executeCallbackChain(cache);
+    //   }
+    // }
+
+    var cacheControlledValues = function(cache) {
+      if (!cached(cache,'controlledValues')) {
+        path = '/controlled_values';
+        apiRequests.get(path).then(function(response) {
+          cache.put('controlledValues', response.data['controlled_values']);
+          executeCallbackChain(cache);
+        });
+      }
+      else {
+        executeCallbackChain(cache);
+      }
+    }
+
+    var cacheCircaLocations = function(cache) {
+      if (!cached(cache, 'circaLocations')) {
+        path = '/circa_locations';
+        apiRequests.get(path).then(function(response) {
+          cache.put('circaLocations', response.data['locations']);
+          executeCallbackChain(cache);
+        });
+      }
+      else {
+        executeCallbackChain(cache);
+      }
+    }
+
+
+    var cacheStatesEvents = function(cache) {
+      if (!cached(cache, 'orderStatesEvents') || !cached(cache, 'itemStatesEvents')) {
+        path = '/states_events';
+        apiRequests.get(path).then(function(response) {
+          cache.put('orderStatesEvents', response.data['order_states_events']);
+          cache.put('itemStatesEvents', response.data['item_states_events']);
+          executeCallbackChain(cache);
+        });
+      }
+      else {
+        executeCallbackChain(cache);
+      }
+    }
+
+
+    var cacheOptions = function(cache) {
+      if (!cached(cache, 'options')) {
+        path = '/options';
+        apiRequests.get(path).then(function(response) {
+          cache.put('options', response.data['options']);
+          executeCallbackChain(cache);
+        });
+      }
+      else {
+        executeCallbackChain(cache);
+      }
+    }
+
+
+    var callbackChain = [ cacheCurrentUser, cacheControlledValues, cacheCircaLocations, cacheStatesEvents, cacheOptions, callback ];
+
+    var executeCallbackChain = function(cache) {
+      if (callbackChain.length > 0) {
+        c = callbackChain.splice(0,1)[0];
+        if (typeof c === 'undefined') {
+          executeCallbackChain(cache);
+        }
+        else {
+          c(cache);
+        }
+      }
+    }
+
+    executeCallbackChain(cache);
+  }
+
+  var refresh = function(key) {
+    if (typeof key !== 'undefined') {
+      cache.remove(key);
+    }
+    else {
+      cache.removeAll();
+    }
+    init();
+  }
+
+  var put = function(key, value) {
+    if (typeof key !== 'undefined') {
+      cache.put(key, value);
+    }
+  }
+
+  return {
+    init: init,
+    refresh: refresh,
+    put: put
+  }
+
+}]);
+
+
+
+circaApp.factory('formUtils', [function() {
+
+  var stateRegionValues = function() {
+
+    var usStates = [
+      ["AL","Alabama"],
+      ["AK","Alaska"],
+      ["AZ","Arizona"],
+      ["AR","Arkansas"],
+      ["CA","California"],
+      ["CO","Colorado"],
+      ["CT","Connecticut"],
+      ["DE","Delaware"],
+      ["DC","District Of Columbia"],
+      ["FL","Florida"],
+      ["GA","Georgia"],
+      ["HI","Hawaii"],
+      ["ID","Idaho"],
+      ["IL","Illinois"],
+      ["IN","Indiana"],
+      ["IA","Iowa"],
+      ["KS","Kansas"],
+      ["KY","Kentucky"],
+      ["LA","Louisiana"],
+      ["ME","Maine"],
+      ["MD","Maryland"],
+      ["MA","Massachusetts"],
+      ["MI","Michigan"],
+      ["MN","Minnesota"],
+      ["MS","Mississippi"],
+      ["MO","Missouri"],
+      ["MT","Montana"],
+      ["NE","Nebraska"],
+      ["NV","Nevada"],
+      ["NH","New Hampshire"],
+      ["NJ","New Jersey"],
+      ["NM","New Mexico"],
+      ["NY","New York"],
+      ["NC","North Carolina"],
+      ["ND","North Dakota"],
+      ["OH","Ohio"],
+      ["OK","Oklahoma"],
+      ["OR","Oregon"],
+      ["PA","Pennsylvania"],
+      ["RI","Rhode Island"],
+      ["SC","South Carolina"],
+      ["SD","South Dakota"],
+      ["TN","Tennessee"],
+      ["TX","Texas"],
+      ["UT","Utah"],
+      ["VT","Vermont"],
+      ["VA","Virginia"],
+      ["WA","Washington"],
+      ["WV","West Virginia"],
+      ["WI","Wisconsin"],
+      ["WY","Wyoming"]
+    ];
+
+    var usTerritories = [
+      ["AS","American Samoa"],
+      ["GU","Guam"],
+      ["MP","Northern Mariana Islands"],
+      ["PR","Puerto Rico"],
+      ["UM","United States Minor Outlying Islands"],
+      ["VI","Virgin Islands"]
+    ];
+
+    var canadaProvinces = [
+      ["AB","Alberta"],
+      ["BC","British Columbia"],
+      ["MB","Manitoba"],
+      ["NB","New Brunswick"],
+      ["NL","Newfoundland and Labrador"],
+      ["NS","Nova Scotia"],
+      ["ON","Ontario"],
+      ["PE","Prince Edward Island"],
+      ["QC","Quebec"],
+      ["SK","Saskatchewan"],
+      ["NT","Northwest Territories"],
+      ["NU","Nunavut"],
+      ["YT","Yukon"]
+    ];
+
+    var mexicoStates = [
+      ["DIF","Distrito Federal"],
+      ["AGS","Aguascalientes"],
+      ["BCN","Baja California"],
+      ["BCS","Baja California Sur"],
+      ["CAM","Campeche"],
+      ["CHP","Chiapas"],
+      ["CHI","Chihuahua"],
+      ["COA","Coahuila"],
+      ["COL","Colima"],
+      ["DUR","Durango"],
+      ["GTO","Guanajuato"],
+      ["GRO","Guerrero"],
+      ["HGO","Hidalgo"],
+      ["JAL","Jalisco"],
+      ["MEX","M&eacute;xico"],
+      ["MIC","Michoac&aacute;n"],
+      ["MOR","Morelos"],
+      ["NAY","Nayarit"],
+      ["NLE","Nuevo Le&oacute;n"],
+      ["OAX","Oaxaca"],
+      ["PUE","Puebla"],
+      ["QRO","Quer&eacute;taro"],
+      ["ROO","Quintana Roo"],
+      ["SLP","San Luis Potos&iacute;"],
+      ["SIN","Sinaloa"],
+      ["SON","Sonora"],
+      ["TAB","Tabasco"],
+      ["TAM","Tamaulipas"],
+      ["TLX","Tlaxcala"],
+      ["VER","Veracruz"],
+      ["YUC","Yucat&aacute;n"],
+      ["ZAC","Zacatecas"]
+    ];
+
+    var values = [];
+    values = values.concat(usStates);
+    values.push([null,'---']);
+    values = values.concat(usTerritories);
+    values.push([null,'---']);
+    values = values.concat(canadaProvinces);
+    values.push([null,'---']);
+    values = values.concat(mexicoStates);
+    return values;
+  }
+
+  return {
+    stateRegionValues: stateRegionValues
+  }
+
+}]);

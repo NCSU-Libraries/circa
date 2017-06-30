@@ -1,0 +1,18 @@
+<h1>Is this item obsolete?</h1>
+
+<p>An item can be marked as obsolete if the ArchivesSpace container associated with it no longer exists. Clicking 'Continue' below will check the URI(s) used to add this item to Orders. In each case:</p>
+
+<ul>
+<li>If the container information (eg box number) retrieved from ArchivesSpace is different from that of the Circa Item,
+a new Item will be created (or retrieved if an Item exists corresponding to the new container) and is associated with the Order,
+and this Item will be eligible to be marked as obsolete.</li>
+
+<li>If no data is returned from ArchivesSpace via the original URI (presumably because the ArchivesSpace record no longer exists) this Item will be eligible to be marked as obsolete.</li>
+
+<li>If the container information retrieved from ArchivesSpace is the same as that of this Item,
+no change will be made to the Order and the Item will NOT be eligible to be marked as obsolete.</li>
+</ul>
+
+<button ng-click="ok()">Continue</button>
+
+<button ng-click="dismiss()">Cancel</button>

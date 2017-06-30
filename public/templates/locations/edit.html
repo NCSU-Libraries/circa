@@ -1,0 +1,19 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<h1>Edit location</h1>
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+<div ng-hide="loading">
+
+  <div ng-include="templateUrl('locations/form_fields')"/>
+
+  <button class="button" ng-click="updateLocation()">Update</button>
+  <button class="button" ng-click="goto('/locations')">Cancel</button>
+
+</div>
+
+<div ng-if="debug" class="data-panel">
+{{ location | json }}<br><br>
+{{ controlledValues | json }}
+</div>

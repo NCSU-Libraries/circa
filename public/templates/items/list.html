@@ -1,0 +1,56 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<h1>Items</h1>
+
+<div ng-include="templateUrl('common/search_form')"></div>
+
+<div ng-include="templateUrl('items/list_sort')"></div>
+
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+<div ng-hide="loading">
+
+  <div ng-include="templateUrl('common/pagination')"></div>
+
+  <div ng-include="templateUrl('items/list_filters')"></div>
+
+  <div class="empty-list-label" ng-if="items.length == 0">
+  There are no items that match your criteria
+  </div>
+
+  <ul class="records-list items-list">
+
+    <li ng-repeat="item in items" data-item-id="{{ item['id'] }}">
+
+      <div class="row">
+
+        <div class="small-10 columns">
+          <div ng-include="templateUrl('items/item_overview')"></div>
+        </div>
+
+        <div class="small-2 columns">
+          <div class="record-actions order-actions">
+            <div class="action"><span class="link" ng-click="showItem(item['id'])">View item details</span></div>
+            <div class="action"><span class="link" ng-click="goto('/orders?q=item_id:' + item['id'])">View orders for this item</span></div>
+          </div>
+        </div>
+
+      </div>
+
+    </li>
+
+  </ul>
+
+
+  <div ng-include="templateUrl('common/pagination')"></div>
+
+</div>
+
+
+<div ng-if="debug" class="data-panel">
+  {{ sortField }}
+  <div ng-repeat="item in items">
+    {{ item | json }}
+  </div>
+</div>

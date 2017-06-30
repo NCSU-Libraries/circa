@@ -1,0 +1,19 @@
+defaults: &defaults
+  order_notification_default_email: 'jlbaker2@ncsu.edu,trthorn2@ncsu.edu'
+  order_notification_digital_items_email: 'bjdietz@ncsu.edu'
+  circa_email: 'scrc@ncsu.edu'
+  circa_email_display_name: 'NCSU Special Collections Research Center'
+
+development:
+  <<: *defaults
+  order_notification_default_email: 'trthorn2@ncsu.edu'
+  order_notification_digital_items_email: 'trthorn2@ncsu.edu'
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults

@@ -1,0 +1,208 @@
+.form-field {
+  margin: 0 0 1rem 0;
+
+  label, .label {
+    font-weight: bold;
+  }
+
+  input {
+    margin-bottom: 0;
+  }
+}
+
+.form-field-note {
+  font-style: italic;
+  font-size: 90%;
+  margin-top: 0.25rem;
+}
+
+
+.form-section {
+  margin: 2rem 0;
+  &.form-submit-section {
+    margin-bottom: 0;
+
+    .button, button {
+      margin: 0;
+    }
+  }
+}
+
+
+input.datepicker-input {
+  width: 10em;
+  display: inline;
+}
+
+
+.date-range {
+  position: relative;
+
+  .date-range-from, .date-range-to {
+
+    input {
+      display: inline;
+      width: 10rem;
+    }
+
+  }
+}
+
+
+.date-range-fieldset {
+  .date-range-field {
+    display: inline;
+    padding-right: 1rem;
+  }
+  label, .datepicker-input {
+    display: inline;
+  }
+}
+
+
+.ui-datepicker {
+  background: $white;
+  border: 1px solid $black;
+
+  .ui-icon {
+    overflow: hidden;
+    text-indent: -99999px;
+  }
+
+  .ui-datepicker-header {
+    padding: 5px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+
+    .ui-datepicker-prev {
+      float: left;
+    }
+
+    .ui-datepicker-next {
+      float: right;
+    }
+
+  }
+
+  .ui-datepicker-unselectable, .ui-state-disabled {
+    color: $grayLighter;
+  }
+
+}
+
+.ui-datepicker-trigger {
+  padding: 0 0.25rem;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: $grayLight;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color: $grayLight;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color: $grayLight;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: $grayLight;
+}
+:placeholder-shown { /* Standard (https://drafts.csswg.org/selectors-4/#placeholder) */
+  color: $grayLight;
+}
+input:focus::-webkit-input-placeholder { color:transparent; }
+input:focus:-moz-placeholder { color:transparent; } /* FF 4-18 */
+input:focus::-moz-placeholder { color:transparent; } /* FF 19+ */
+input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
+
+
+.has-error {
+  padding: 0.5rem;
+  border: 2px solid $orange;
+}
+
+.validation-error {
+  font-weight: bold;
+  font-style: italic;
+  color: $orange;
+}
+
+
+
+.selector {
+
+  padding: 0.5em;
+  background: $grayLightest;
+  border: 1px solid $grayLighter;
+  margin: 2px 0 1rem 0;
+
+  .heading {
+    font-size: 110%;
+    font-weight: bold;
+  }
+
+  .subheading {
+    font-size: 90%;
+    font-weight: bold;
+    padding-left: 1rem;
+  }
+
+
+  .instruction {
+    font-size: 90%;
+  }
+
+  input, button, .button {
+    margin-bottom: 0 !important;
+  }
+
+  .selection-display {
+    border: 1px solid $grayLighter;
+    padding: 1rem;
+    margin-top: 1rem;
+    background: $grayGhost;
+    .record-detail {
+      padding: 0;
+      margin-bottom: 1rem;
+    }
+    .heading {
+      margin: 1rem 0;
+    }
+  }
+
+  .alert {
+    padding: 0.5rem;
+    margin: 1rem 0;
+    background: $orange;
+    color: $white;
+    font-weight: bold;
+  }
+}
+
+
+.archivesspace-record-selector {
+
+  margin: 2px 0 1rem 0;
+
+  input {
+    margin: 0;
+  }
+
+  .button {
+    margin: 0
+  }
+
+}
+
+.radio-block {
+  input {
+    margin-bottom: 0.25rem;
+  }
+}
+
+.radio-inline {
+  white-space: nowrap;
+  padding-right: 1rem;
+}

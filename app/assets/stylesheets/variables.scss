@@ -1,0 +1,40 @@
+$white: #fff;
+$black: #000;
+
+$red: #CC0000;
+$red2: #990000;
+$orange: #D14905;
+$yellow: #FDD726;
+$green: #7D8C1F;
+$green2: #5F691B;
+$blue: #427E93;
+$blue2: #3A6A7C;
+$indigo: #4156A1;
+
+$greenLight: #e8eebe;
+$pink: #f8d4d6;
+
+$grayDarkest: #222;
+$grayDarker: #383838;
+$grayDark: #444;
+$gray: #666;
+$grayLight: #999;
+$grayLighter: #ccc;
+$grayLightest: #e1e1e1;
+$grayGhost: #efefef;
+
+$linkColor: $blue;
+$textColor: $grayDark;
+$bodyBackground: $white;
+
+$yellowLight: #FDF1B5;
+
+/* Foundation overrides */
+
+$h1-font-size: rem-calc(32);
+$h2-font-size: rem-calc(24);
+$h3-font-size: rem-calc(21);
+$h4-font-size: rem-calc(18);
+$h5-font-size: rem-calc(14);
+$h6-font-size: 1rem;
+$paragraph-line-height: 1.4rem;

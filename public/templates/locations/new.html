@@ -1,0 +1,22 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<h1>Add location</h1>
+
+<p>NOTE: Permanent locations of materials are maintained in ArchivesSpace. This is for temporary locations only.</p>
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+<div ng-hide="loading">
+
+  <div ng-include="templateUrl('locations/form_fields')"/>
+
+  <button class="button" ng-click="createLocation()">Create location</button>
+  <button class="button" ng-click="goto('/locations')">Cancel</button>
+
+</div>
+
+<div ng-if="debug" class="data-panel">
+{{ location | json }}<br><br>
+{{ controlledValues | json }}
+</div>
+

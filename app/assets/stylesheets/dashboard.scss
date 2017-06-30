@@ -1,0 +1,27 @@
+.dashboard {
+
+  h3 {
+    margin: 1rem 0 0.5rem 0;
+  }
+
+  h3 .print-call-slip {
+    font-size: 1rem;
+    padding-left: 1rem;
+  }
+
+  .print-list {
+    margin: 1rem 0;
+  }
+
+  .pending-transfers-order {
+    margin: 1rem 0;
+  }
+
+  .facility-filter-option, .location-filter-option {
+    padding: 0 1rem;
+    border-right: 1px solid $grayLight;
+    &.last {
+      border-right: 0;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+<div ng-controller="ReportsRequestsPerLocationCtrl as report">
+
+  <div ng-init="section='reports'" ng-include="report.templateUrl('common/app_header')"></div>
+
+  <h1>Item requests per storage location</h1>
+
+  <div ng-include="report.templateUrl('reports/date_config')"></div>
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>{{ report.dateColumnHeading() }}</th>
+        <th ng-repeat="location in report.requestsPerLocation.location_values">{{ location }}</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr ng-repeat="date in report.requestsPerLocation.date_values">
+        <td>{{ date }}</td>
+        <td ng-repeat="location in report.requestsPerLocation.location_values">{{ report.requestsPerLocation.locations[location][date] }}</td>
+      </tr>
+    </tbody>
+
+  </table>
+
+
+  <div ng-if="debug" class="data-panel">
+  Date params:<br>
+  {{ report.dateParams | json }}<br>
+  {{ report.requestsPerLocation | json }}
+  </div>
+
+
+</div>
+

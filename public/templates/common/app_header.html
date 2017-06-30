@@ -1,0 +1,51 @@
+<div class="row app-header">
+
+  <div class="app-name"><span class="link"  ng-click="goto('/')">Circa</span></div>
+
+  <div class="app-nav">
+
+    <span class="nav-link">
+      <a ng-click="goto('/orders')" ng-class="section == 'orders' ? 'current' : ''">
+      <!-- <i class="fa fa-bell-o"></i> -->
+      Orders</a>
+    </span>
+
+    <span class="nav-link">
+      <a ng-click="goto('/items')" ng-class="section == 'items' ? 'current' : ''">
+      <!-- <i class="fa fa-cubes"></i> -->
+      Items</a>
+    </span>
+
+
+    <span class="nav-link">
+      <a ng-click="goto('/users')" ng-class="section == 'users' ? 'current' : ''">
+      <!-- <i class="fa fa-cubes"></i> -->
+      Users</a>
+    </span>
+
+
+    <span class="nav-link">
+      <a ng-click="goto('/locations')" ng-class="section == 'locations' ? 'current' : ''">
+      <!-- <i class="fa fa-cubes"></i> -->
+      Locations</a>
+    </span>
+
+
+    <span class="nav-link">
+      <a ng-click="goto('/reports')" ng-class="section == 'reports' ? 'current' : ''">
+      <!-- <i class="fa fa-cubes"></i> -->
+      Reports</a>
+    </span>
+
+
+    <span class="nav-link" ng-if="currentUserIsAdmin">
+      <a ng-click="goto('/settings')" ng-class="section == 'settings' ? 'current' : ''">
+      <!-- <i class="fa fa-cubes"></i> -->
+      Settings</a>
+    </span>
+
+  </div>
+
+</div>
+
+<div ng-if="flash" class="flash">{{ flash }}</div>

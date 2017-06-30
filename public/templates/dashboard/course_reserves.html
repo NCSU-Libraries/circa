@@ -1,0 +1,36 @@
+<div ng-controller="CourseReservesDashboardCtrl as courseReserves">
+
+  <h2>Open course reserves</h2>
+
+  <div ng-show="courseReserves.loading" ng-include="courseReserves.templateUrl('common/processing')"/>
+
+  <div ng-show="!courseReserves.loading">
+    <table>
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Course number</th>
+          <th>Course name</th>
+          <th>Total researchers</th>
+          <th>Total items</th>
+          <th>Start/end dates</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr ng-repeat="order in courseReserves.orders">
+          <td><span class="link" ng-click="showOrder(order.id)">{{ order.id }}</span></td>
+          <td>{{ order.course_number }}</td>
+          <td>{{ order.course_name }}</td>
+          <td>{{ order.users.length }}</td>
+          <td>{{ order.num_items }}</td>
+          <td>{{ order.access_date_start }}/{{ order.access_date_end }}</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

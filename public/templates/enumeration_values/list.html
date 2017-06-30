@@ -1,0 +1,53 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<h1>{{ enumerationValuesListTitle() }}</h1>
+
+<div class="record-list-actions">
+<span class="link" ng-click="goto('/settings/enumeration_values/new/order_type')"><i class="fa fa-plus"></i>Create new {{ enumerationName | removeUnderscores }}</span>
+</div>
+
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+<div ng-hide="loading">
+
+  <table cellspacing="0" class="hover">
+
+    <thead>
+      <tr>
+        <th width="1%">&nbsp;</th>
+        <th>Value</th>
+        <th>Value short</th>
+        <th class="text-center">Orders</th>
+        <th class="table-actions edit" width="1%">&nbsp;</th>
+        <th class="table-actions merge" width="1%">&nbsp;</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr ng-repeat="enumerationValue in enumerationValuesList">
+        <td width="1%">
+          <span class="link" ng-click="updateSortOrder(enumerationName, $index, -1)" ng-if="!$first"><i class="fa fa-arrow-up" aria-hidden="true"></i></span>
+          <span class="link" ng-click="updateSortOrder(enumerationName, $index, 1)" ng-if="!$last"><i class="fa fa-arrow-down" aria-hidden="true"></i></span>
+        </td>
+        <td>{{ enumerationValue.value }}</td>
+        <td>{{ enumerationValue.value_short }}</td>
+        <td class="text-center">{{ enumerationValue.associated_records_count }}</td>
+        <td class="text-right" width="1%">
+          <span class="button tiny edit" ng-click="goto('/settings/enumeration_values/' + enumerationName + '/' + enumerationValue.id + '/edit')">Edit</span>
+        </td>
+        <td class="text-right" width="1%">
+          <span class="button tiny merge" ng-if="enumerationValue.associated_records_count > 0" ng-click="goto('/settings/enumeration_values/' + enumerationName + '/' + enumerationValue.id + '/merge')">Merge</span>
+          <span class="button tiny delete" ng-if="enumerationValue.associated_records_count == 0" ng-click="confirmDeleteRecord('enumerationValue', enumerationValue, '/settings/enumeration_values/list/order_type')">Delete</span>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+
+</div>
+
+<div ng-if="debug" class="data-panel">
+{{ controlledValues | json }}
+</div>
+

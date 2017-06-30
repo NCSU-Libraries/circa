@@ -1,0 +1,25 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<h1>Edit user registration
+<span class="subhead">ID: {{ user['id'] }}</span>
+</h1>
+
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+
+<div ng-hide="loading">
+
+  <div class="user-form" ng-include="templateUrl('users/form_fields')"/>
+
+  <div class="form-section form-submit-section">
+    <button class="button" class="submit" ng-click="updateUser()">Submit changes</button>
+    <button class="button" ng-click="goto('/users')">Cancel</button>
+  </div>
+
+</div>
+
+
+<div ng-if="debug" class="data-panel">
+  <div>{{ user | json }}</div>
+</div>

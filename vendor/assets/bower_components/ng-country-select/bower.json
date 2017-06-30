@@ -1,0 +1,25 @@
+{
+  "name": "ng-country-select",
+  "version": "0.1.4",
+  "homepage": "https://github.com/navinpeiris/ng-country-select",
+  "authors": [
+    "navinpeiris <navinpeiris@gmail.com"
+  ],
+  "description": "Angular module to generate an HTML select list of countries using country codes in the ISO 3166-1 standard",
+  "main": "dist/ng-country-select.js",
+  "keywords": [
+    "angular",
+    "angularjs",
+    "countries",
+    "country",
+    "country-select"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src",
+    "test"
+  ]
+}

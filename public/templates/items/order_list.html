@@ -1,0 +1,34 @@
+<table class="order-list">
+
+  <thead>
+
+    <tr>
+      <th>ID</th>
+      <th>User email(s)</th>
+      <th>Date created</th>
+      <th>Requested date start</th>
+      <th>Requested date end</th>
+      <th># items</th>
+      <th>Status</th>
+    </tr>
+
+  </thead>
+
+
+  <tbody>
+
+    <tr ng-repeat="order in item['orders'] | orderBy: 'access_date_start'" class="order-list-row" ng-click="viewOrder(order['id'])">
+      <td class="order-id">
+        {{ order['id'] }}
+      </td>
+      <td class="order-users"><div ng-repeat="user in order['users']">{{ user['email'] }}</div></td>
+      <td class="order-created-date">{{ order['created_at'] | date: 'yyyy-MM-dd' }}</td>
+      <td class="order-visit-date">{{ order['access_date_start'] | date: 'yyyy-MM-dd' }}</td>
+      <td class="order-visit-date">{{ order['access_date_end'] | date: 'yyyy-MM-dd' }}</td>
+      <td class="order-num-items">{{ order['num_items'] }}</td>
+      <td class="order-status">{{ order['current_state'] }}</td>
+    </tr>
+
+  </tbody>
+
+</table>

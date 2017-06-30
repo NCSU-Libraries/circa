@@ -1,0 +1,35 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+<div ng-hide="loading">
+
+  <h1>Merge {{ enumerationName | removeUnderscores }} values</h1>
+
+  <p>After the merge, all records associated with the "merge from" value will become associated instead with the "merge into" value.</p>
+
+  <p>The original "merge from" value will remain in the system but will become eligible for deletion.</p>
+
+  <p class="warning">Use caution when using this feature - changes cannot be undone once the merge is complete.</p>
+
+  <div class="form-field">
+    <label>Merge from value:</label> {{ enumerationValue.value }} ({{ enumerationValue.associated_records_count }} records)
+  </div>
+
+
+  <div class="form-field">
+    <label>Merge into value:</label>
+    <select ng-model="mergeIntoId">
+      <option ng-repeat="evalue in mergeIntoValues" value="{{ evalue.id }}">{{ evalue.value }} ({{ evalue.associated_records_count }} records)</option>
+    </select>
+  </div>
+
+  <button class="button" ng-click="mergeEnumerationValues()">Save changes</button>
+  <button class="button" ng-click="goto('/settings/enumeration_values/list/' + enumerationValue.enumeration_name)">Cancel</button>
+</div>
+
+
+<div ng-if="debug" class="data-panel">
+  <div>{{ enumerationValue | json }}</div>
+  <div>{{ mergeIntoId | json }}</div>
+</div>

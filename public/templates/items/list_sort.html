@@ -1,0 +1,10 @@
+<div class="list-sort">
+<span class="label">Sort:</span>
+
+<span class="sort-option link" ng-show="sortField != 'resource_title'" ng-click="sortList('resource_title')">Collection/resource title</span>
+<span class="sort-option selected" ng-show="sortField == 'resource_title'">Collection/resource title <span ng-include="templateUrl('common/sort_order_toggle')"></span></span>
+
+<span class="sort-option link" ng-show="sortField != 'last_accessed'" ng-click="sortList('last_accessed')">Date last used</span>
+<span class="sort-option selected" ng-show="sortField == 'last_accessed'">Date last used <span ng-include="templateUrl('common/sort_order_toggle')"></span></span>
+
+</div>

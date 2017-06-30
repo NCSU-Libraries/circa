@@ -1,0 +1,25 @@
+<div class="row">
+
+  <div class="small-9 columns">
+
+    <div class="record-overview user-overview">
+
+
+      <div class="overview-element primary">
+        {{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})
+      </div>
+
+
+      <div>
+        <div class='overview-element inline'><span class="label">Researcher type:</span> {{ user['patron_type'] }}</div>
+      </div>
+
+
+      <div class='overview-element' ng-class="user['agreement_confirmed'] ? 'positive' : 'negative' "><span class="label">SCRC policies agreement signed?</span> {{ user['agreement_confirmed'] ? 'Yes' : 'No '}}</div>
+
+    </div>
+
+  </div>
+
+
+</div>

@@ -1,0 +1,26 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<h1>Items</h1>
+
+<ul class="records-list items-list">
+
+  <li ng-repeat="item in items" data-item-id="{{ item['id'] }}">
+
+    <div class="row">
+
+      <div class="small-10 columns">
+        <div ng-include="templateUrl('items/item_overview')"></div>
+      </div>
+
+      <div class="small-2 columns">
+        <div class="record-actions order-actions">
+          <div class="action"><span class="link" ng-click="showItem(item['id'])">View</span></div>
+        </div>
+      </div>
+
+    </div>
+
+
+  </li>
+
+</ul>

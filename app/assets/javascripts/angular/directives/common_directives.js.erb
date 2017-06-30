@@ -1,0 +1,86 @@
+'use strict';
+
+/* Directives */
+
+var commonDirectives = angular.module('commonDirectives', []);
+
+commonDirectives.directive("datepicker", function () {
+  return {
+    restrict: "A",
+    link: function (scope, elem, attrs) {
+
+      console.log(attrs['allowPastDates']);
+
+      var pastPermitted = attrs['allowPastDates'];
+      var defaultDate = attrs['defaultDate'];
+
+      console.log(attrs['defaultDate']);
+
+      elem.datepicker( {
+        dateFormat: 'yy-mm-dd',
+        minDate: (pastPermitted) ? null : new Date(),
+        showOn: 'button',
+        buttonImageOnly: true,
+        buttonImage: '<%= image_url("calendar.png") %>'
+      });
+    }
+  }
+});
+
+
+commonDirectives.directive('convertToNumber', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, element, attrs, ngModel) {
+      ngModel.$parsers.push(function(val) {
+        return parseInt(val, 10);
+      });
+      ngModel.$formatters.push(function(val) {
+        return '' + val;
+      });
+    }
+  };
+});
+
+
+commonDirectives.directive("poptip", function () {
+  return {
+    restrict: "A",
+    link: function (scope, elem, attrs) {
+      var text = attrs['poptip'];
+      var positionChoice = attrs['poptipPosition'] ? attrs['poptipPosition'] : 'left';
+      var parent = elem.offsetParent();
+      var tipbox = $('<div class="tipbox">' + text + '</div>');
+
+      elem.on('mouseover', function() {
+        var elemWidth = $(this).width();
+        $('.tipbox').remove();
+        var position = $(this).offset();
+        var css = {
+          width: 'auto',
+          padding: '0.5rem',
+          fontSize: '80%',
+          position: 'absolute',
+          top: position.top + 20,
+          background: '#eee',
+          border: '1px solid #999',
+          cursor: 'pointer',
+          display: 'none',
+          zIndex: 1000
+        };
+        if (positionChoice == 'right') {
+          css['left'] = position.left - 200 + elemWidth;
+        }
+        else {
+          css['left'] = position.left;
+        }
+        tipbox.css(css);
+        $('body').append(tipbox);
+        setTimeout(function() { $(tipbox).fadeIn('slow'); }, 500);
+      });
+      elem.on('mouseout click', function() {
+        $('.tipbox').remove();
+      });
+    }
+  }
+});

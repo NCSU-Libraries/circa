@@ -1,0 +1,176 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+
+<div ng-if="!loading">
+
+  <div ng-if="errorCode && !order">
+    <span class="link" ng-click="goto('/orders/')">Go to Orders list</span>
+  </div>
+
+
+  <div ng-if="order">
+
+    <h1>Order #{{ order['id'] }}</h1>
+
+
+    <div ng-if="order.open || adminOverrideEnabled" ng-include="templateUrl('orders/workflow_controls')"></div>
+
+    <div class="order-closed callout" ng-if="!order.open"><strong>This order is closed.</strong></div>
+
+
+    <div class="record-show-actions">
+
+      <div ng-if="order.open || adminOverrideEnabled" class="record-action"><span class="link" ng-click="editOrder(order['id'])"><i class="fa fa-pencil"></i>Edit order</span></div>
+
+      <div ng-if="order['deletable']" class="record-action"><span class="link" ng-click="confirmDeleteRecord('order', order)"><i class="fa fa-pencil"></i>Delete order</span></div>
+
+      <div ng-if="currentUserIsAdmin" ng-include="templateUrl('common/admin_override')" class="record-action admin-override" />
+
+      <div poptip="Generate printable 'call slip'" class="record-action"><a ng-href="{{ rootPath() }}/orders/{{ order['id'] }}/call_slip" target="_blank"><i class="fa fa-print"></i>Print</a></div>
+
+    </div>
+
+
+    <section class="record-detail order-detail">
+
+      <h2>Order details</h2>
+
+
+      <div>
+        <div class="inline detail-element">
+          <span class="label">Created:</span>
+          <span class="value">{{ order['created_at'] | date: 'yyyy-MM-dd' }}</span>
+          <span class="value" ng-if="order['created_by_user']">by {{ order['created_by_user']['display_name'] }} ({{ order['created_by_user']['email'] }})</span>
+        </div>
+      </div>
+
+
+      <div>
+        <div class="inline detail-element">
+          <span class="label">Order type:</span>
+          <span class="value">{{ order['order_type']['label'] }}</span>
+        </div>
+
+        <div class="inline detail-element">
+          <span class="label">Order sub-type:</span>
+          <span class="value">{{ order['order_sub_type']['label'] }}</span>
+        </div>
+      </div>
+
+
+      <div>
+        <div class="inline detail-element">
+          <span class="label">{{ (order['order_type']['value_short'] == 'research') ? 'Access date:' : 'Access dates:' }}</span>
+          <span class="value">{{ order['access_date_start'] | date: 'yyyy-MM-dd' }}</span>
+          <span ng-if="order['access_date_end']" >
+            <span class="date-range-delimeter">to</span>
+            <span class="value">{{ order['access_date_end'] | date: 'yyyy-MM-dd' }}</span>
+          </span>
+        </div>
+
+        <div class="inline detail-element">
+          <span class="label">Use location:</span>
+          <span class="value">{{ order['temporary_location']['title'] }}</span>
+        </div>
+      </div>
+
+
+      <div class="detail-element" ng-if="order['course_reserve']">
+        <div class="inline detail-element">
+          <span class="label">Course number:</span>
+          <span class="value">{{ order['course_reserve']['course_number'] }}</span>
+        </div>
+        <div class="inline detail-element">
+          <span class="label">Course name:</span>
+          <span class="value">{{ order['course_reserve']['course_name'] }}</span>
+        </div>
+      </div>
+
+
+      <div>
+        <div class="inline detail-element">
+          <span class="label">Assigned to:</span>
+          <span class="value" ng-if="order['assignees'].length > 0">
+            <span ng-repeat="assignee in order['assignees']">{{ assignee['last_name'] }}, {{ assignee['first_name'] }} ({{ assignee['email'] }})<span ng-if="!$last">; </span></span>
+          </span>
+        </div>
+      </div>
+
+
+    </section>
+
+
+
+    <section>
+
+      <h2>Researchers</h2>
+
+      <ul class="sub-records-list users-list">
+
+        <li ng-repeat="user in order['users'] | limitTo: calculatedUsersLimit()">
+          <span class="link" ng-click="showUser(user['id'])">{{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})</span>
+          <span ng-if="user['id'] == order['primary_user_id']">[primary]</span>
+          <span ng-if="!user['agreement_confirmed']" class="callout alert">This user has not signed the policies agreement <span class="link" ng-click="goto('users/' + user['id'] + '/edit')">Edit user</span></span>
+        </li>
+
+      </ul>
+
+      <div ng-if="order['users'].length > usersLimit">
+        <span ng-if="truncateUsers" class="truncated-list-post-note">+ {{ order['users'].length - usersLimit }} more</span>
+        <span ng-if="truncateUsers" class="link" ng-click="toggleTruncateUsers()">Show all</span>
+        <span ng-if="!truncateUsers" class="link" ng-click="toggleTruncateUsers()">Show less</span>
+      </div>
+
+    </section>
+
+
+
+    <section>
+
+      <h2>Items ({{ order['num_items'] }})</h2>
+
+      <div ng-include="templateUrl('orders/bulk_item_events')"></div>
+
+      <div ng-include="templateUrl('orders/show_item_list')"></div>
+
+    </section>
+
+
+
+    <section ng-if="order['notes'].length > 0">
+
+      <h2>Notes</h2>
+
+      <div class="note-content" ng-repeat="note in order['notes']">
+        {{ note['content'] }}
+      </div>
+
+    </section>
+
+
+
+    <section>
+
+      <div ng-include="templateUrl('orders/history')"></div>
+
+    </section>
+
+
+  </div>
+
+
+</div>
+
+<!-- <div class="state-events">
+<button ng-repeat="event in order['available_events']" ng-click="triggerEvent(event)">{{ event }}</button>
+</div> -->
+
+
+<div ng-if="debug" class="data-panel">
+{{ order | json }}
+<br><br>
+{{ order.items | json }}
+</div>

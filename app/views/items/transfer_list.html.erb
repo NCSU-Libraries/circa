@@ -1,0 +1,49 @@
+<div class="print-list pending-transfers">
+
+  <h1>Items ready for transfer</h2>
+
+  <% if @orders.length > 0 %>
+
+    <% @orders.each do |id, order| %>
+
+    <div class="pending-transfers-order">
+
+      <h2>Order #<%= id %></h3>
+
+      <ul class="records-list items-list">
+
+        <% order[:items].each do |i| %>
+        <li>
+
+          <div class="item-heading">
+            <%= i[:resource_identifier] %> - <%= i[:resource_title] %>
+            <% if i[:container] %>
+              <br><%= i[:container] %>
+            <% end %>
+          </div>
+
+
+          <% if i[:barcode] %>
+          <div>
+            <span class="label">Barcode:</span>
+            <%= i[:barcode] %>
+          </div>
+          <% end %>
+
+
+          <div>
+            <span class="label">Permanent location:</span>
+            <%= i[:permanent_location] ? i[:permanent_location][:title] : '[unknown]' %>
+          </div>
+
+        </li>
+        <% end %>
+
+      </ul>
+    </div>
+
+    <% end %>
+
+  <% end %>
+
+</div>

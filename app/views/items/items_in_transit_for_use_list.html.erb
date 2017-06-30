@@ -1,0 +1,53 @@
+<div class="print-list items-in-transit-for-use">
+
+  <h1>Items in transit for use</h2>
+
+  <% if @orders.length > 0 %>
+
+    <% @orders.each do |id, order| %>
+
+    <div class="items-in-transit-order">
+
+      <h2>Order #<%= id %></h3>
+
+      <p>Use location: <%= order[:location] %></p>
+
+      <ul class="records-list items-list">
+
+        <% order[:items].each do |i| %>
+        <li>
+
+          <div class="item-heading">
+            <%= i[:resource_identifier] %> - <%= i[:resource_title] %>
+            <% if i[:container] %>
+              <br><%= i[:container] %>
+            <% end %>
+          </div>
+
+
+          <% if i[:barcode] %>
+          <div>
+            <span class="label">Barcode:</span>
+            <%= i[:barcode] %>
+          </div>
+          <% end %>
+
+
+          <div>
+            <span class="label">Permanent location:</span>
+            <%= i[:permanent_location] ? i[:permanent_location][:title] : '[unknown]' %>
+          </div>
+
+
+
+        </li>
+        <% end %>
+
+      </ul>
+    </div>
+
+    <% end %>
+
+  <% end %>
+
+</div>

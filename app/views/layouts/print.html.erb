@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Circa | NCSU Special Collections Research Center</title>
+
+  <meta charset="utf-8" />
+
+  <meta content="ie=edge, chrome=1" http-equiv="x-ua-compatible" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=9" />
+  <%= favicon_link_tag '/homescreen-icon-114x114.png', sizes: "114x114", rel: "shortcut icon" %>
+  <%= favicon_link_tag '/homescreen-icon-57x57.png', sizes: "57x57", rel: 'apple-touch-icon', type: 'image/png' %>
+  <%= favicon_link_tag '/homescreen-icon-72x72.png', sizes: "72x72", rel: 'apple-touch-icon', type: 'image/png' %>
+  <%= favicon_link_tag '/homescreen-icon-114x114.png', sizes: "114x114", rel: 'apple-touch-icon', type: 'image/png' %>
+
+  <link href="//cdn.ncsu.edu/brand-assets/fonts/include.css" rel="stylesheet" type="text/css" />
+
+  <%= javascript_include_tag :modernizr %>
+  <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag "print", media: 'print, screen' %>
+</head>
+
+<body>
+
+  <main>
+
+    <%= yield %>
+
+  </main>
+
+  <!-- js -->
+  <%= javascript_include_tag 'application' %>
+
+  <% if Rails.env.development? || Rails.env.test? %>
+  <%= javascript_include_tag 'sinon' %>
+  <% end %>
+
+  <%= ncsul_web_ie_conditionals %>
+
+</body>
+
+</html>

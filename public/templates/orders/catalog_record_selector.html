@@ -1,0 +1,47 @@
+<div record-select-trigger class="selector catalog-record-selector">
+
+
+  <div class="heading">Add item from catalog record</div>
+
+
+  <div class="instruction">Enter the catalog record ID and click 'Get items'</div>
+
+
+  <div class="loading" ng-show="catalogRecordSelect['loading']">
+    <div class="message">Fetching data from catalog...</div>
+  </div>
+
+
+  <div class="row collapse" ng-hide="catalogRecordSelect['loading']">
+    <div class="small-10 columns">
+      <input type="text" ng-model="catalogRecordSelect['catalogRecordId']" placeholder="Enter catalog record ID"/>
+    </div>
+    <div class="small-2 columns">
+      <span class="button postfix" ng-click="getCatalogRecord()">Get items</span>
+    </div>
+  </div>
+
+  <div class="alert warning" ng-show="catalogRecordSelect['alert']">{{ catalogRecordSelect['alert'] }}</div>
+
+  <div class="selection-display catalog-record" ng-show="catalogRecordSelect['catalogRecordData']">
+
+    <div class="record-detail catalog-record-detail">
+      <div class="detail-element catalog-record-title"><span class="label">Title: </span>{{ catalogRecordSelect['catalogRecordData']['record']['title'] }}</div>
+      <div class="detail-element catalog-record-author"><span class="label">Author: </span>{{ catalogRecordSelect['catalogRecordData']['record']['author'] }}</div>
+    </div>
+
+    <div class="heading">Select a specific item to add to this order</div>
+
+    <div class="record-detail catalog-item-detail" ng-repeat="item in catalogRecordSelect['catalogRecordData']['requestOptions']['requestItems'] | filter: { 'specialCollections': true }">
+      <div class="detail-element"><span class="label">Item ID (barcode):</span> {{ item['barcode'] }}</div>
+      <div class="detail-element"><span class="label">Library:</span> {{ item['displayLibrary'] }}</div>
+      <div class="detail-element"><span class="label">Location:</span> {{ item['displayLocation'] }}<span ng-if="item['location'].length > 0">, {{ item['location'] }}</span></div>
+      <div class="detail-element"><span class="label">Format:</span> {{ item['format'] }}</div>
+      <div class="detail-element"><span class="label">Call number:</span> {{ item['callNumber'] }}</div>
+      <div ng-if="!commonUtils.inArray(order['catalog_items'], item['barcode'])"><a class="small button" ng-click="addItemFromCatalog(catalogRecordSelect['catalogRecordId'], item['barcode'])">Add this item to order</a></div>
+      <div ng-if="commonUtils.inArray(order['catalog_items'], item['barcode'])"><strong>This item has been added to the order</strong></div>
+    </div>
+
+  </div>
+
+</div>

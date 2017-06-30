@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="circaApp">
+
+<%= render partial: 'layouts/head' %>
+
+<body>
+
+  <% if Rails.env != 'production' %>
+  <div class="environment-label">
+    <i class="fa fa-bolt"></i>
+    This is the <%= Rails.env %> version -- not for production use
+    <i class="fa fa-bolt"></i>
+    </div>
+  <% end %>
+
+
+  <div class="off-canvas-wrap">
+    <div class="inner-wrap">
+
+      <%= render partial: 'layouts/header' %>
+
+      <main>
+
+        <%= yield %>
+
+      </main>
+
+      <%# render partial: 'layouts/footer' %>
+
+    </div>
+  </div>
+
+  <!-- js -->
+  <%= javascript_include_tag 'application' %>
+
+  <% ncsul_web_ie_conditionals %>
+
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+<h1>Create {{ enumerationName | removeUnderscores }}</h1>
+
+<div ng-hide="loading">
+
+  <div ng-include="templateUrl('enumeration_values/form_fields')"/>
+    <button class="button" ng-click="createEnumerationValue()">Create</button>
+    <button class="button" ng-click="goto('/settings/enumeration_values/list/' + enumerationName)">Cancel</button>
+  </div>
+
+
+  <div ng-if="debug" class="data-panel">
+  {{ enumerationValue | json }}
+  </div>
+
+</div>

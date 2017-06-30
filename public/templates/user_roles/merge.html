@@ -1,0 +1,35 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+<div ng-hide="loading">
+
+  <h1>Merge user roles</h1>
+
+  <p>After the merge, all users assigned to the "merge from" role will be re-assigned to the "merge into" role.</p>
+
+  <p>The original "merge from" role will remain in the system but will become eligible for deletion.</p>
+
+  <p>NOTE: The admin role is not eligible for merging.</p>
+
+  <p class="warning">Use caution when using this feature - changes cannot be undone once the merge is complete.</p>
+
+  <div class="form-field">
+    <label>Merge from user role:</label> {{ userRole.name }} ({{ userRole.users_count }} users)
+  </div>
+
+  <div class="form-field">
+    <label>Merge into user role:</label>
+    <select ng-model="mergeIntoId">
+      <option ng-repeat="role in mergeIntoUserRoles" value="{{ role.id }}">{{ role.name }} ({{ role.users_count }} records)</option>
+    </select>
+  </div>
+
+  <button class="button" ng-click="mergeUserRoles()">Merge roles</button>
+  <button class="button" ng-click="goto('/settings/user_roles/list')">Cancel</button>
+</div>
+
+
+<div ng-if="debug" class="data-panel">
+  <div>{{ mergeIntoId | json }}</div>
+</div>

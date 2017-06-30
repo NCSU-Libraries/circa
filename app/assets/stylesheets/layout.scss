@@ -1,0 +1,851 @@
+// Overrides to ncsul_web
+
+.feedback-form {
+  display: none;
+}
+
+html.js {
+  margin-top: 0 !important;
+}
+
+body {
+  background: $white;
+  color: $textColor;
+}
+
+section {
+  margin: 1rem 0;
+}
+
+.environment-label {
+  text-align: center;
+  background: $black;
+  color: $white;
+  padding: 0.25rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.skip-link {
+  left: -999px;
+  position: absolute;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: scroll;
+  z-index: -999;
+}
+
+
+
+
+
+.alert-box {
+
+  border-width: 0;
+
+  &.notice, &.info {
+    background-color: $blue;
+  }
+
+  &.warning {
+    background-color: $orange;
+  }
+}
+
+
+.record-show-actions, .record-list-actions,
+table .record-list-actions {
+  margin: 1rem 0;
+  position: relative;
+
+  .record-action {
+    display: inline;
+    white-space: nowrap;
+    padding-right: 1.5rem;
+  }
+
+  .admin-override {
+    float: right;
+  }
+
+}
+
+
+
+button, .button {
+  background: linear-gradient(to bottom, $red 0%, $red2 100%);
+  opacity: 0.9;
+  &:hover {
+    opacity: 1;
+  }
+
+  &.edit {
+    background: linear-gradient(to bottom, $blue 0%, $blue2 100%);
+  }
+
+  &.merge {
+    background: linear-gradient(to bottom, $grayLight 0%, $gray 100%);
+  }
+
+  &.view {
+    background: linear-gradient(to bottom, $green 0%, $green2 100%);
+  }
+}
+
+
+td .button, td button,
+.record-actions button, .record-actions .button {
+  margin-bottom: 0;
+}
+
+
+.record-overview, .record-detail {
+
+  .row {
+    margin-left: 0;
+  }
+
+  line-height: 1.4em;
+
+  .record-show-actions {
+    margin: 0;
+    position: absolute;
+    top: -1.5rem;
+    width: 100%;
+    overflow: auto;
+    text-align: right;
+  }
+
+  .label {
+    text-transform: uppercase;
+    font-size: 75%;
+    color: $grayLight;
+    padding-right: 0.5em;
+    display: inline;
+    font-weight: normal;
+  }
+
+  .overview-element, .detail-element {
+
+    // margin-bottom: 0.5rem;
+
+    &.primary {
+      font-weight: bold;
+      font-size: 110%;
+    }
+
+    &.inline {
+      display: inline;
+      margin-bottom: 0.5rem;
+      padding-right: 1.5rem;
+    }
+
+  }
+
+  .selector {
+    padding: 0.5em 0;
+    background: none;
+    border-width: 0;
+    margin: 0;
+
+    .button {
+      padding: 0;
+    }
+  }
+
+}
+
+.record-detail {
+  background: $grayGhost;
+  padding: 1rem;
+  position: relative;
+
+  &.order-detail {
+    background: none;
+    padding: 0;
+  }
+}
+
+
+ul.actions-list {
+  li {
+    white-space: nowrap;
+    // margin-bottom: 0;
+    line-height: 1.25em;
+  }
+}
+
+
+ul.sub-records-list, ul.records-list {
+
+  padding: 0;
+  margin: 0;
+
+  li {
+    padding: .5rem;
+    margin: 0;
+    border: 1px solid $grayLight;
+    border-top: 0;
+    background: $bodyBackground;
+
+    &:first-child {
+      border-top: 1px solid $grayLight;
+    }
+
+    .sub-record-actions, .record-actions {
+
+      text-align: right;
+      .action {
+        text-transform: uppercase;
+        font-size: 80%;
+        line-height: 1.1em;
+        margin-bottom: 1em;
+        div {
+          display: inline;
+        }
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+
+  &.notes-list li {
+    border: 0;
+    padding: 0 0 .5rem 0;
+  }
+
+
+  &.users-list {
+    li {
+      padding: .5rem;
+      // margin: 0 0 .5rem 0;
+      // border: none;
+    }
+  }
+
+
+  &.removed {
+    li {
+      background: $grayGhost;
+    }
+  }
+}
+
+
+ul.records-list {
+  margin-bottom: 1rem;
+}
+
+
+
+
+.empty-list-label, .empty-content {
+  font-style: italic;
+  margin: 1em 0;
+  color: $grayLight;
+}
+
+
+.truncated-list-post-note {
+  color: $gray;
+  font-size: 0.8em;
+  text-transform: uppercase;
+}
+
+
+
+
+
+.positive {
+  color: $green;
+}
+
+
+.negative {
+  color: $red;
+}
+
+.primary-user {
+  color: $green;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+
+
+main {
+
+  @extend .row;
+
+  min-height: 600px;
+  padding: 1rem;
+
+  font-family: "UniversRoman", Arial, sans-serif;
+  font-size: 0.9375rem;
+
+  a, .link {
+    color: $blue;
+    cursor: pointer;
+    &:visited {
+      color: $blue;
+    }
+    &:hover {
+      color: $green;
+      text-decoration: underline;
+    }
+
+    &.action-trigger {
+      text-transform: uppercase;
+      font-size: 80%;
+    }
+    &.no-underline {
+      text-decoration: none;
+    }
+    i {
+      padding-right: 0.25rem;
+    }
+  }
+
+  .disabled {
+    color: $grayLighter;
+    &:hover {
+      cursor: inherit;
+      color: $grayLighter;
+      text-decoration: none;
+    }
+  }
+
+  ul {
+    line-height: 1.6em;
+    list-style: none outside none;
+    margin-left: 0.9rem;
+  }
+
+  ul > *:before {
+    content: none;
+  }
+
+
+  .small {
+    font-size: 80%;
+  }
+
+
+
+  h1, h2, h3, .heading {
+    font-family: "GlyphaRoman", serif;
+    font-weight: bold;
+  }
+
+  h1 {
+    margin: 1rem 0 2rem 0;
+    font-size: 2rem;
+    color: inherit;
+    font-weight: bold;
+    line-height: 1.1em;
+
+    &.big-head {
+      font-size: 4rem;
+      font-weight: bold;
+      margin: 2rem 0;
+    }
+
+    .subhead {
+      display: block;
+      font-size: 1rem;
+      line-height: 1rem;
+      font-weight: normal;
+      font-family: inherit;
+    }
+
+    &.small-head {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 0 0.5rem 0;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    margin: 0 0 1rem 0;
+    padding: 0;
+  }
+
+
+
+  ul, ol, dl {
+    font-size: 0.9375rem;
+  }
+
+  // app header
+
+  .app-header {
+
+    @extend .row;
+    margin: 0.5rem auto 2.5rem auto;
+    position: relative;
+
+    a.home-link {
+      display: block;
+      height: 2.5rem;
+      width: 75%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      * {
+        visibility: hidden;
+      }
+      z-index: 100;
+    }
+
+    .column {
+      padding-left: 0;
+    }
+
+    .app-name {
+      // text-transform: uppercase;
+      font-family: "GlyphaRoman", serif;
+      border-bottom: 1px solid $gray;
+      font-size: 3rem;
+      font-weight: bold;
+      line-height: 1em;
+      padding-bottom: -0.25rem;
+      .link {
+        color: $textColor;
+        &:hover {
+          text-decoration: none;
+          color: $textColor;
+        }
+      }
+    }
+
+
+    .app-nav {
+      text-transform: uppercase;
+      // font-size: 80%;
+      .nav-link {
+
+        padding: 0 1.5rem 0 0.5rem;
+        i {
+          padding-right: 0.25rem;
+        }
+        a {
+          color: $textColor;
+          &.current {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    .sign-out {
+      position: absolute;
+      top: 0;
+      right: 0;
+      text-transform: none;
+    }
+
+
+
+  }
+
+
+
+}
+
+
+.admin-override {
+  font-size: 80%;
+  text-transform: uppercase;
+}
+
+
+
+
+// Big Nav
+
+.icon-link {
+  font-size: 1.25rem;
+  &.remove {
+    color: $red;
+    &:hover {
+      color: $red2;
+    }
+  }
+}
+
+
+
+
+
+.pagination, ul.pagination {
+  margin: 0 0 0.5rem 0;
+  width: 100%;
+  overflow: hidden;
+
+  > *:before {
+    content: none;
+    margin-left: 0;
+    padding-right: 0;
+  }
+}
+
+
+.list-sort {
+  margin: 0 0 1rem 0;
+
+  font-size: 90%;
+
+  .sort-option {
+    display: inline;
+    padding-right: 1rem;
+  }
+
+  .label {
+    display: inline;
+    font-size: 80%;
+    text-transform: uppercase;
+    padding-right: 0.5rem;
+  }
+
+  .selected {
+    font-weight: bold;
+  }
+}
+
+
+.search-info {
+
+  margin: 0 0 1rem 0;
+
+  .info {
+    padding-right: 0.5rem;
+    .term {
+      font-weight: bold;
+    }
+  }
+
+  .show-all {
+    text-transform: uppercase;
+    font-size: 80%;
+    font-weight: bold;
+  }
+}
+
+.sort-order-toggle {
+  cursor: pointer;
+
+  &:hover {
+    color: $blue;
+  }
+}
+
+
+.sortable {
+  .sort-choice, .sort-order {
+    &:hover {
+      color: $blue;
+    }
+  }
+
+  .sort-choice {
+    text-decoration: underline;
+    cursor: pointer;
+    &.sorted {
+      text-decoration: none;
+      cursor: default;
+      color: inherit;
+    }
+
+  }
+
+}
+
+
+
+.filters {
+
+  margin: 0;
+
+  .filter-select {
+    padding: 1.5rem 1rem 1rem 1rem;
+    border: 1px solid $grayLighter;
+    border-bottom-color: $white;
+    margin: 0;
+    background: $grayLight;
+    color: $white;
+    position: relative;
+
+    label {
+      display: inline;
+      color: $white;
+    }
+
+    .date-range-point {
+      padding-right: 1rem;
+    }
+
+  }
+
+
+  .filter-toggle {
+    padding: 3px;
+    margin: 0;
+    border: 1px solid $grayLight;
+    border-bottom-width: 0;
+    width: 10rem;
+    text-align: center;
+    background: $grayLight;
+    .link {
+      color: $white;
+    }
+    text-transform: uppercase;
+    font-size: 80%;
+  }
+
+
+  .button {
+    margin: 0;
+  }
+}
+
+
+.active-filters {
+  background: $grayDark;
+  color: $white;
+  border: 1px solid $grayLighter;
+  border-bottom-width: 0;
+  padding: 0.5rem;
+  font-size: 0.9em;
+
+  .link {
+    color: $white;
+  }
+
+  .action {
+    font-size: 80%;
+    text-transform: uppercase;
+  }
+  .filter {
+    padding-right: 0.5rem;
+    span {
+      &:after { content: ';'; }
+    }
+  }
+  .filter, label {
+    display: inline;
+  }
+  label {
+    padding-right: 0.5rem;
+    font-size: 80%;
+    text-transform: uppercase;
+    color: $grayLightest;
+  }
+}
+
+
+
+
+
+.data-panel {
+  @extend .panel;
+  height: 10rem;
+  overflow: auto;
+  background: $grayLightest;
+  margin: 2rem 0;
+}
+
+
+
+
+table {
+
+  width: 100%;
+
+  tr.disabled td {
+    font-style: italic;
+    color: $grayLight;
+  }
+
+  thead tr th {
+    background: $grayDark;
+    color: white;
+    white-space: nowrap;
+  }
+
+  .table-action {
+    display: block;
+    font-size: 80%;
+    text-transform: uppercase;
+    i {
+      font-size: 120%;
+    }
+  }
+
+  td.resource-title, th.resource-title {
+    width: 35%;
+  }
+
+  td.container, th.container {
+    width: 10%;
+  }
+
+  td.current-location, th.current-location {
+    width: 30%;
+  }
+
+  td.state, th.state {
+    width: 15%;
+  }
+
+  td.actions, th.actions {
+    text-align: right;
+    width: 10%;
+  }
+
+  .sub-heading {
+    @extend h3;
+    padding: 0.5625rem 0.625rem;
+  }
+
+  .removed td {
+    color: $grayLight;
+
+    .table-action {
+      @extend .link;
+    }
+  }
+
+}
+
+
+
+
+
+.loading {
+  background-image: image-url("loading.gif");
+  background-position: center top;
+  background-repeat: no-repeat;
+  min-height: 70px;
+
+  .message {
+    padding: 70px 0 20px 0;
+    color: $red;
+    font-style: italic;
+    text-align: center;
+  }
+}
+
+span.postfix, label.postfix {
+  background: $red;
+  color: $white;
+}
+
+
+
+
+.date-range-delimeter {
+  padding: 0 0.5rem;
+}
+
+
+
+.block {
+  display: block;
+}
+
+.inline {
+  display: inline;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.staff-label {
+  font-size: 70%;
+  text-transform: uppercase;
+  padding: 0.2rem 0.3rem 0.1rem 0.3rem;
+  background: $red;
+  color: $white;
+  white-space: nowrap;
+  line-height: 1em;
+
+  &.admin {
+    background: $indigo;
+  }
+}
+
+.na {
+  font-size: 90%;
+  color: $grayLight;
+}
+
+.callout {
+  font-weight: bold;
+  &.alert {
+    // color: $orange;
+  }
+
+  &.order-closed {
+    padding: 0.5rem;
+    background: $yellow;
+    margin: 1rem 0;
+    line-height: 1.1em;
+  }
+}
+
+.tip-link {
+  font-size: 90%;
+  cursor: pointer;
+  color: $grayLight;
+  &:hover {
+    color: $green;
+  }
+}
+
+
+.flash {
+  background: $yellow;
+  padding: 0.5rem;
+  // position: absolute;
+  // width: 500px;
+  // top: 200px;
+  // left: 50%;
+  // margin-left: -250px;
+  // z-index: 1000;
+}
+
+dl.tabs {
+  dd {
+    border-right: 2px solid $white;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 2px;
+  }
+}
+
+.tabset .tab-content {
+  padding: 0 1rem;
+}
+
+dl.tabs dd > a {
+  font-size: 90%;
+}
+
+p.warning, div.warning, span.warning {
+  color: $red;
+  font-weight: bold;
+}

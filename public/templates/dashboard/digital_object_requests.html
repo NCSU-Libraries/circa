@@ -1,0 +1,49 @@
+<div ng-controller="DigitalObjectRequestsCtrl as requests">
+
+  <h2>Digital object requests</h2>
+
+
+  <div ng-show="requests.loading" ng-include="templateUrl('common/processing')"/>
+
+
+  <div ng-show="!requests.loading">
+
+    <div ng-show="requests.digitalObjectRequests['total_orders'] == 0">
+      <strong>There are no pending requests for digital materials, or all have been fulfilled.</strong>
+    </div>
+
+    <div ng-show="requests.digitalObjectRequests['total_orders'] > 0">
+
+      <div ng-repeat="(orderId, order) in requests.digitalObjectRequests['orders']" class="pending-transfers-order">
+
+        <h3><span class="link" ng-click="requests.showOrder(orderId)">Order #{{ orderId }}</span></h3>
+
+        <ul class="records-list items-list">
+
+          <li ng-repeat="item in order['items']" data-item-id="{{ orderId }}">
+
+            <div class="row">
+
+              <div class="small-10 columns">
+                <div ng-include="requests.templateUrl('items/item_overview')"></div>
+              </div>
+
+              <div class="small-2 columns">
+                <div class="record-actions order-actions">
+                  <div class="action"><span class="link" ng-click="requests.showItem(item['id'])">View item details</span></div>
+                </div>
+              </div>
+
+            </div>
+
+          </li>
+
+        </ul>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

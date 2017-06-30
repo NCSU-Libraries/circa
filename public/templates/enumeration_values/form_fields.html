@@ -1,0 +1,18 @@
+<div  class="form-field">
+  <div class="label">Value</div>
+  <input type="text" ng-model="enumerationValue['value']"/>
+</div>
+
+
+<div ng-if="mode == 'new'" class="form-field">
+  <div class="label">Value (short)</div>
+  <p class="form-field-note">This is a machine-readable value and can only contain letters, numbers and underscores. If left blank, the value will be generated from the main value above.</p>
+  <input type="text" ng-model="enumerationValue['value_short']"/>
+</div>
+
+
+<div ng-if="mode == 'edit'" class="form-field">
+  <div class="label">Value (short)</div>
+  <input type="text" disabled="true" value="{{ enumerationValue['value_short'] }}"/>
+  <p class="form-field-note">This is a machine-readable value and cannot be modified once created.</p>
+</div>

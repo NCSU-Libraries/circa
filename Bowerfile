@@ -1,0 +1,8 @@
+asset 'angular', '~1.6.4'
+asset 'angular-route', '~1.6.4'
+asset 'angular-mocks', '~1.6.4'
+asset 'angular-loader', '~1.6.4'
+asset 'angular-animate', '~1.6.4'
+asset 'angucomplete-alt', '~3.0.0'
+asset 'angular-foundation', '~0.8.0'
+asset 'ng-country-select', '~0.1.4'

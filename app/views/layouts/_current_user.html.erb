@@ -1,0 +1,13 @@
+<% if :user_signed_in? && current_user%>
+
+<div id="current-user-tools">
+  <div class="row">
+    <i class="fa fa-user"></i>
+    <%= current_user.email %>
+    <span class="sign-out"><%= link_to('Sign out', destroy_user_session_path, :method => :delete) %></span>
+  </div>
+</div>
+
+<% end %>
+
+

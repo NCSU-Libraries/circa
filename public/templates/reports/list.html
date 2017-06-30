@@ -1,0 +1,17 @@
+<div ng-controller="ReportsCtrl as ctrl">
+
+<div ng-init="section='reports'" ng-include="templateUrl('common/app_header')"></div>
+
+  <h1>Reports</h1>
+
+  <div class="section-nav">
+
+    <div ng-repeat="report in ctrl.reportsList" class="section-nav-item">
+      <i class="fa fa-table"></i>
+      <span class="link" ng-click="goto(report.path)">{{ report.title }}</span>
+    </div>
+
+  </div>
+
+</div>
+

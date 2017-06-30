@@ -1,0 +1,36 @@
+<div record-select-trigger class="selector archivesspace-record-selector">
+
+
+  <div class="heading">Add item from ArchivesSpace</div>
+
+
+  <div class="instruction">Enter the URI of the ArchivesSpace archival object record and click 'Add'</div>
+
+
+  <div class="loading" ng-show="archivesSpaceRecordSelect.loading">
+    <div class="message">Fetching data from ArchivesSpace...</div>
+  </div>
+
+
+  <div class="row collapse" ng-hide="archivesSpaceRecordSelect.loading">
+    <div class="small-10 columns">
+      <input type="text" ng-model="archivesSpaceRecordSelect.uri" placeholder="Enter ArchivesSpace URI"/>
+    </div>
+    <div class="small-2 columns">
+      <span class="button postfix" ng-click="addItemsFromArchivesSpace()">Add</span>
+    </div>
+  </div>
+
+
+  <div class="row collapse" ng-hide="archivesSpaceRecordSelect.loading">
+    <div class="small-12 columns">
+      <input type="checkbox" ng-model="archivesSpaceRecordSelect.digitalObject">
+      <label>Check if the requested item is a digital object</label>
+    </div>
+  </div>
+
+
+  <div class="alert" ng-show="archivesSpaceRecordSelect.alert" alert-control>{{ archivesSpaceRecordSelect.alert }}</div>
+
+
+</div>

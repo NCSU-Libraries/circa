@@ -1,0 +1,20 @@
+@charset "UTF-8";
+// @import "ncsul_web/foundation/settings";   // Foundation variables defined by ncsul_web
+@import "variables";
+// @import "ncsul_web/normalize";
+@import "foundation";                         // Core Foundation SCSS
+@import "font-awesome-sprockets";
+@import "font-awesome";                       // FontAwesome
+// @import "ncsul_web";                       // NCSU Foundation styles
+// @import "ncsul_web_resets";                // Reset nuisance NCSU Foundation styles
+@import "foundation_resets";                  // Reset nuisance Foundation styles
+@import "layout";
+@import "header";
+@import "forms";
+@import "items";
+@import "orders";
+@import "pages";
+@import "users";
+@import "dashboard";
+@import "reports";
+@import "angucomplete-alt/angucomplete-alt"

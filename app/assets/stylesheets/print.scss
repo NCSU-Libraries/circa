@@ -1,0 +1,106 @@
+@media print, screen {
+
+  .print-list, .call-slip, .pending-transfers {
+
+    font-family: "UniversRoman", Helvetica, Arial, sans-serif;
+    line-height: 1.25em;
+
+    * {
+      font-size: 12pt;
+
+    }
+
+    h1, h2, h3, .heading {
+      font-family: "GlyphaRoman", Helvetica, Arial, sans-serif;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: 30pt;
+      margin: 0 0 1rem 0;
+    }
+
+
+
+    h2 {
+      font-size: 21pt;
+      margin: 1rem 0;
+    }
+
+    .label {
+      font-size: 70%;
+      text-transform: uppercase;
+      color: #999;
+    }
+    span.label {
+      display: inline;
+    }
+    div.label {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .item-heading {
+      font-weight: bold;
+    }
+
+    .order-details, .call-slip-info {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border: 1px solid #ccc;
+    }
+
+    .overview-item, .overview-item-group {
+      margin-bottom: 0.5rem;
+    }
+
+    .overview-item:last-child, .overview-item-group:last-child  {
+      margin-bottom: 0;
+    }
+
+    .overview-item-group .overview-item.inline {
+      display: inline;
+      padding-right: 1rem;
+    }
+
+
+    .notes {
+      .note {
+        margin: 0 0 0.5rem 0;
+
+        &:last-child {
+          margin: 0;
+        }
+      }
+    }
+
+    ul.items-list {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      line-height: 1.2em;
+      font-size: 1rem;
+
+      .item-heading {
+        font-size: 12pt;
+      }
+
+      li {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.5rem 0;
+      }
+    }
+
+  }
+
+  .truncated-list-post-note {
+    color: #999;
+    font-size: 0.8em;
+    text-transform: uppercase;
+  }
+
+
+}
+
+
