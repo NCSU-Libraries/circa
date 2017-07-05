@@ -21,21 +21,18 @@
 
   <div ng-include="templateUrl('orders/list_filters')"></div>
 
-  <div ng-if="orders.length == 0">No orders match the selected filters</div>
+  <div ng-if="orders.length == 0" class="empty-list-label">No orders found</div>
 
   <ul ng-if="orders.length > 0" class="records-list orders-list">
-
     <li ng-repeat="order in orders">
       <div ng-include="templateUrl('orders/record_list_item')"/>
     </li>
-
   </ul>
-
 
 </div>
 
-
+<!--
 <div ng-if="debug" class="data-panel">
 {{ orders | json }}
 </div>
-
+ -->

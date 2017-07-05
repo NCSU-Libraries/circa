@@ -13,6 +13,10 @@
 
 <div ng-hide="loading">
 
+<div class="empty-list-label" ng-if="circaLocations.length == 0">
+  No locations found
+</div>
+
 <ul class="records-list locations-list">
 
   <li ng-repeat="location in circaLocations">
@@ -24,9 +28,11 @@
 
         <span class="button tiny view" ng-click="showLocation(location['id'])">View</span>
 
-<!--         <div class="record-actions order-actions">
+        <!--
+        <div class="record-actions order-actions">
           <div class="action"><span class="link" ng-click="showLocation(location['id'])">View</span></div>
-        </div> -->
+        </div>
+        -->
 
       </div>
     </div>
@@ -34,6 +40,8 @@
 
 </ul>
 
+<!--
 <div ng-if="debug" class="data-panel">
 {{ circaLocations | json }}
 </div>
+ -->

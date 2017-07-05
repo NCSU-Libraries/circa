@@ -16,16 +16,30 @@ Circa provides close integration with ArchivesSpace, upon which the application 
 
 # Installation
 
-All of the following assume that you have Ruby (version 2.)
-## Clone repository
+These instructions should get a local development version up and running. Better options for setting up a development environment are in the works.
 
-## Install Solr
+Before you can begin, you will need access to a running Solr instance. To install Solr locally:
 
-## Create Solr core
+1. Download the most recent version from http://lucene.apache.org/solr/
+2. Unzip/decompress the downloaded files somewhere on your local machine
+3. `cd` into the local Solr root directory, e.g. 'solr-6.6.0' - the rest of these instructions assume you are in this directory
+4. Start Solr by running `bin/solr start`
+5. Add a new core for Circa:
+  a. `mkdir ./server/solr/circa`
+  b. Run this command replacing `<full path to circa>` with the actual full path to your locally cloned copy of this repo:<br>
+  `ln -s <full path to circa>/solr_conf ./server/solr/circa/conf`
+  c. Run `bin/solr create -c circa`
+6. If you navigate (in your browser) to localhost:8983 you should see the Solr admin UI, and 'circa' should be included in the 'Core Selector' dropdown on the left. If so, you are ready to go.
 
-## Install Redis (optional)
+Once Solr is running you are ready to
+
+5. Update YAML config files as described in the previous section.
+6. Run this rake task to SET UP DATABASE AND POPULATE WITH DEFAULT VALUES. IMPORTANT: THis script will create a default admin user, with username/email: 'admin@circa' and password 'admin'. You will want to edit this user from within Circa if and when you move to production or deploy to a publicly accessible server.
 
 
+1. Clone this repository to your local machine
+2. From the cloned directory, run `bundle install`
+3. Insta
 
 # Configuration
 

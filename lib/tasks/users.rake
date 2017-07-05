@@ -11,12 +11,12 @@ namespace :users do
 
   desc "create generic admin user for initial "
   task :create_admin => :environment do |t, args|
-    admin_role = UserRole.where(name: 'admin')
+    admin_role = UserRole.where(name: 'admin').first
     if admin_role
-      existing_admin_user = User.where(user_role_id: admin_role.id)
+      existing_admin_user = User.where(user_role_id: admin_role.id).first
       if !existing_admin_user
-        user = User.create!(email: 'admin@circa', password: 'admin', user_role_id: admin_role.id)
-        puts "Admin user created. email: admin@circa, password: admin"
+        user = User.create!(email: 'admin@circa', password: 'circa_admin', user_role_id: admin_role.id)
+        puts "Admin user created. email: admin@circa, password: circa_admin"
       else
         puts "An admin user already exists with email '#{ existing_admin_user.email }'"
       end

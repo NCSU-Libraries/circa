@@ -1,3 +1,12 @@
+.top-bar {
+  background: $red;
+  height: 2rem;
+  line-height: 2rem;
+  margin-bottom: 0;
+  overflow: hidden;
+  position: relative;
+}
+
 header {
 
   margin-top: 0px; /* fix the spacing problem with the University nav iframe */
@@ -41,7 +50,7 @@ header {
 
 #current-user-tools {
   position: absolute;
-  top: 5px;
+  top: 0;
   right: 0;
   color: $white;
   width: 100%;
