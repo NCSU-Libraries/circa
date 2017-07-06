@@ -16,30 +16,40 @@ Circa provides close integration with ArchivesSpace, upon which the application 
 
 # Installation
 
-These instructions should get a local development version up and running. Better options for setting up a development environment are in the works.
+These instructions should help you get a local development version up and running. Better options for providing a development environment (like Vagrant) are in the works.
 
 Before you can begin, you will need access to a running Solr instance. To install Solr locally:
 
 1. Download the most recent version from http://lucene.apache.org/solr/
 2. Unzip/decompress the downloaded files somewhere on your local machine
-3. `cd` into the local Solr root directory, e.g. 'solr-6.6.0' - the rest of these instructions assume you are in this directory
+3. `cd` into the Solr root directory, e.g. 'solr-6.6.0' - the rest of these instructions assume you are in this directory
 4. Start Solr by running `bin/solr start`
 5. Add a new core for Circa:
-  a. `mkdir ./server/solr/circa`
-  b. Run this command replacing `<full path to circa>` with the actual full path to your locally cloned copy of this repo:<br>
+  a. Create a directory for core files:<br>
+  `mkdir ./server/solr/circa`
+  b. Symlink to solr config included in this repo with this command, replacing `<full path to circa>` with the actual full path to your locally cloned copy of this repo:<br>
   `ln -s <full path to circa>/solr_conf ./server/solr/circa/conf`
-  c. Run `bin/solr create -c circa`
+  c. Create the core:<br>
+  `bin/solr create -c circa`
 6. If you navigate (in your browser) to localhost:8983 you should see the Solr admin UI, and 'circa' should be included in the 'Core Selector' dropdown on the left. If so, you are ready to go.
 
-Once Solr is running you are ready to
-
-5. Update YAML config files as described in the previous section.
-6. Run this rake task to SET UP DATABASE AND POPULATE WITH DEFAULT VALUES. IMPORTANT: THis script will create a default admin user, with username/email: 'admin@circa' and password 'admin'. You will want to edit this user from within Circa if and when you move to production or deploy to a publicly accessible server.
-
+Once Solr is running you are ready to proceed:
 
 1. Clone this repository to your local machine
-2. From the cloned directory, run `bundle install`
-3. Insta
+2. `cd` into the local Circa directory (the one you just cloned)
+3. Run `bundle install` to install gems
+4. Update YAML config files as described in the 'Configuration' section below.
+5. Once the configuration is done, run this to set up your database:<br>
+`bundle exec rake db:schema:load`
+6. Populate the database with default values:<br>
+`bundle exec rake db:seed`
+7. Circa requires all users to log in, so you will need to create an admin user to start. Run this:<br>
+`bundle exec rake users:create_admin`<br>
+This will create a default admin user, with username/email: 'admin@circa' and password 'circa_admin'. You will want to edit this user from within Circa if and when you move to production or deploy to a publicly accessible server.
+
+You should now be ready to run Circa locally. Start the server with<br>
+`rails server`
+Then go to localhost:3000 in your browser and log in (admin@circa/circa-admin)
 
 # Configuration
 
@@ -96,7 +106,7 @@ Defines variables required for email notifications sent by Circa.
 
 # User guide
 
-See [User guide](user_guide/user_guide.md) for detailed instruction on using Circa.
+See [User guide](user_guide/user_guide.md) for detailed instruction on using Circa. (in progress)
 
 
 # Back end functionality overview
