@@ -25,11 +25,11 @@ Before you can begin, you will need access to a running Solr instance. To instal
 3. `cd` into the Solr root directory, e.g. 'solr-6.6.0' - the rest of these instructions assume you are in this directory
 4. Start Solr by running `bin/solr start`
 5. Add a new core for Circa:
-  a. Create a directory for core files:<br>
-  `mkdir ./server/solr/circa`
-  b. Symlink to solr config included in this repo with this command, replacing `<full path to circa>` with the actual full path to your locally cloned copy of this repo:<br>
-  `ln -s <full path to circa>/solr_conf ./server/solr/circa/conf`
-  c. Create the core:<br>
+   1. Create a directory for core files:<br>
+   `mkdir ./server/solr/circa`
+   2. Symlink to solr config included in this repo with this command, replacing `<full path to circa>` with the actual full path to your locally cloned copy of this repo:<br>
+   `ln -s <full path to circa>/solr_conf ./server/solr/circa/conf`
+   3. Create the core:<br>
   `bin/solr create -c circa`
 6. If you navigate (in your browser) to localhost:8983 you should see the Solr admin UI, and 'circa' should be included in the 'Core Selector' dropdown on the left. If so, you are ready to go.
 
