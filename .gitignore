@@ -8,9 +8,6 @@
 /config/deploy.rb
 /config/database.yml
 /config/secrets.yml
-/config/archivesspace.yml
-/config/solr.yml
-/config/email.yml
 /README.md.old
 
 # Ignore sqlite db if there is one
