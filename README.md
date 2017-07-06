@@ -1,6 +1,6 @@
 # Circa
 
-A system for managing requests for special collections materials. The application includes a JSON API, built in Ruby on Rails, and a default front end written in Angular.js (v. 1.6.x).
+A web-based system for managing requests for special collections materials. The application includes a JSON API, built in Ruby on Rails, and a default front end written in Angular.js (v. 1.6.x).
 
 Circa provides close integration with ArchivesSpace, upon which the application depends for managing containers associated with specific collection components, as well as the location of those containers. It can also support requests for materials described in an ILS.
 
@@ -18,40 +18,35 @@ Circa provides close integration with ArchivesSpace, upon which the application 
 
 These instructions should help you get a local development version up and running. Better options for providing a development environment (like Vagrant) are in the works.
 
-Before you can begin, you will need access to a running Solr instance. To install Solr locally:
-
-1. Download the most recent version from http://lucene.apache.org/solr/
-2. Unzip/decompress the downloaded files somewhere on your local machine
-3. `cd` into the Solr root directory, e.g. 'solr-6.6.0' - the rest of these instructions assume you are in this directory
-4. Start Solr by running `bin/solr start`
-5. Add a new core for Circa:
-   1. Create a directory for core files:<br>
-   `mkdir ./server/solr/circa`
-   2. Symlink to solr config included in this repo with this command, replacing `<full path to circa>` with the actual full path to your locally cloned copy of this repo:<br>
-   `ln -s <full path to circa>/solr_conf ./server/solr/circa/conf`
-   3. Create the core:<br>
-  `bin/solr create -c circa`
-6. If you navigate (in your browser) to localhost:8983 you should see the Solr admin UI, and 'circa' should be included in the 'Core Selector' dropdown on the left. If so, you are ready to go.
-
-Once Solr is running you are ready to proceed:
+## Clone repo and install gems
 
 1. Clone this repository to your local machine
 2. `cd` into the local Circa directory (the one you just cloned)
 3. Run `bundle install` to install gems
-4. Update YAML config files as described in the 'Configuration' section below.
-5. Once the configuration is done, run this to set up your database:<br>
-`bundle exec rake db:schema:load`
-6. Populate the database with default values:<br>
-`bundle exec rake db:seed`
-7. Circa requires all users to log in, so you will need to create an admin user to start. Run this:<br>
-`bundle exec rake users:create_admin`<br>
-This will create a default admin user, with username/email: 'admin@circa' and password 'circa_admin'. You will want to edit this user from within Circa if and when you move to production or deploy to a publicly accessible server.
 
-You should now be ready to run Circa locally. Start the server with<br>
-`rails server`
-Then go to localhost:3000 in your browser and log in (admin@circa/circa-admin)
 
-# Configuration
+## Install Solr and add core
+
+Before you can begin, you will need access to a running Solr instance. To install Solr locally:
+
+1. Download the most recent version from http://lucene.apache.org/solr/
+2. Unzip/decompress the downloaded files somewhere on your local machine
+3. `cd` into the Solr root directory, e.g. 'solr-6.6.0' (the rest of these instructions assume you are in this directory)
+4. Start Solr by running `bin/solr start`
+
+Next you need to add a Solr core for Circa.
+
+1. Create a directory for core files:<br>
+`mkdir ./server/solr/circa`
+2. Symlink to solr config included in this repo with this command, replacing `<full path to circa>` with the actual full path to your locally cloned copy of this repo:<br>
+`ln -s <full path to circa>/solr_conf ./server/solr/circa/conf`
+3. Create the core:<br>
+`bin/solr create -c circa`
+
+If you navigate (in your browser) to localhost:8983 you should see the Solr admin UI, and 'circa' should be included in the 'Core Selector' dropdown on the left. If so, you are ready to go.
+
+
+## Configuration
 
 Several YAML files are used to set environment variables used by the application to facilitate communication with other systems and components. In each case, settings can be made per environment, with the ability to define inheritable default values. Settings defined at the environment level will override the defaults.
 
@@ -63,15 +58,15 @@ ENV['solr_host']
 
 There are example versions of these YAML files included in this repo, with "\_example" appended to the file name. You should create copies of these files renamed with "\_example" removed, eg:
 
-archivesspace_example.yml -> archivesspace.yml
+**archivesspace_example.yml -> archivesspace.yml**
 
 
-## config/database.yml
+### config/database.yml
 
 Edit this file with the appropriate options for your database. This is a standard Rails config file. For more info, see the [Rails configuration documentation](http://edgeguides.rubyonrails.org/configuring.html#configuring-a-database)
 
 
-## config/archivesspace.yml
+### config/archivesspace.yml
 
 Defines variables required to communicate with the ArchivesSpace API and provide links to the ArchviesSpace staff interface.
 
@@ -85,7 +80,7 @@ Defines variables required to communicate with the ArchivesSpace API and provide
 \* Note that, while there are methods available to communicate with the ArchivesSpace Solr index, this functionality is not currently being used in the application
 
 
-## config/solr.yml
+### config/solr.yml
 
 Defines variables required to connect to your Solr index.
 
@@ -94,7 +89,7 @@ Defines variables required to connect to your Solr index.
 * **solr\_core_path**: The path to the Solr core used by Circa (default: '/solr/circa/')
 
 
-## config/email.yml
+### config/email.yml
 
 Defines variables required for email notifications sent by Circa.
 
@@ -102,6 +97,28 @@ Defines variables required for email notifications sent by Circa.
 * **order\_notification\_digital\_items_email**: Comma-separated list of email addresses to receive notifications when an order is created that includes digital items
 * **circa_email**: 'From' email address on emails sent by Circa
 * **circa\_email\_display_name**: 'From' display name on emails sent by Circa
+
+
+## Set up development database
+
+The development version will use the embedded SQLite database (MySQL is required for production). Follow these steps to prepare the database and populate it with default data used in the system.
+
+1. Once the configuration is done, run this to set up your database:<br>
+`bundle exec rake db:schema:load`
+2. Populate the database with default values:<br>
+`bundle exec rake db:seed`
+3. Circa requires all users to log in, so you will need to create an admin user to start. Run this:<br>
+`bundle exec rake users:create_admin`<br>
+This will create a default admin user, with username/email: 'admin@circa' and password 'circa_admin'. You will want to edit this user from within Circa if and when you move to production or deploy to a publicly accessible server.
+
+## Start Circa!
+
+You should now finally be ready to run Circa locally. Start the server with<br>
+`rails server`
+Then go to localhost:3000 in your browser and log in (admin@circa/circa-admin)
+
+The first thing you should do is to create a location, probably representing your reading room, where materials will be delivered for use. Then you can try to create an Order by importing item data from ArchivesSpace.
+
 
 
 # User guide
