@@ -56,14 +56,16 @@ Environment variables can be referenced in code via the `ENV` constant, eg:
 ENV['solr_host']
 ```
 
-There are example versions of these YAML files included in this repo, with "\_example" appended to the file name. You should create copies of these files renamed with "\_example" removed, eg:
-
-**archivesspace_example.yml -> archivesspace.yml**
+Example files are included in the **config** directory. You will save copies of these in the same directory, following the instructions below.
 
 
 ### config/database.yml
 
-Edit this file with the appropriate options for your database. This is a standard Rails config file. For more info, see the [Rails configuration documentation](http://edgeguides.rubyonrails.org/configuring.html#configuring-a-database)
+There are 2 example files included. Select the appropriate file and save a copy as **database.yml**
+
+**config/database-sqlite3.yml** - To use the embedded SQLite database for evaluation or development. Use as is.
+
+**config/database-mysql.yml** - To use MySQL. Edit this file with the appropriate options for your database. This is a standard Rails config file. For more info, see the [Rails configuration documentation](http://edgeguides.rubyonrails.org/configuring.html#configuring-a-database)
 
 
 ### config/archivesspace.yml
