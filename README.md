@@ -18,11 +18,12 @@ Circa provides close integration with ArchivesSpace, upon which the application 
 
 These instructions should help you get a local development version up and running. Better options for providing a development environment (like Vagrant) are in the works.
 
-## Clone repo and install gems
+## Clone repo and basic setup
 
 1. Clone this repository to your local machine
 2. `cd` into the local Circa directory (the one you just cloned)
 3. Run `bundle install` to install gems
+4. Run `bundle exec rake circa:generate_secrets` to generate the Rails secret\_key_base, used to validate cookies.
 
 
 ## Install Solr and add core
