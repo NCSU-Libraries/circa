@@ -118,14 +118,24 @@ Please fix the problems noted below.
 
   <h2>Use location</h2>
 
-  <input type="radio" ng-model="order['default_location']" ng-value="{{ true }}">
-  {{ defaultLocation['title'] }}<br>
-  <input type="radio" ng-model="order['default_location']" ng-value="{{ false }}">
-  Other
+  <div ng-if="defaultLocation">
+    <input type="radio" ng-model="order['default_location']" ng-value="{{ true }}">
+    {{ defaultLocation['title'] }}<br>
+    <input type="radio" ng-model="order['default_location']" ng-value="{{ false }}">
+    Other
 
-  <select ng-if="!order['default_location']" ng-model="order['temporary_location']['id']" convert-to-number>
-    <option ng-repeat="location in circaLocations" value="{{ location['id'] }}">{{ location['title'] }}</option>
-  </select>
+    <select ng-if="!order['default_location']" ng-model="order['temporary_location']['id']" convert-to-number>
+      <option ng-repeat="location in circaLocations" value="{{ location['id'] }}">{{ location['title'] }}</option>
+    </select>
+  </div>
+
+
+  <div ng-if="!defaultLocation">
+    <select ng-model="order['temporary_location']['id']" convert-to-number>
+      <option ng-repeat="location in circaLocations" value="{{ location['id'] }}">{{ location['title'] }}</option>
+    </select>
+  </div>
+
 
   <!-- <select ng-model="order['temporary_location']['id']" ng-options="location.id as location.title for location in circaLocations"></select> -->
 
