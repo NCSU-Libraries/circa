@@ -51,18 +51,12 @@ If you navigate (in your browser) to localhost:8983 you should see the Solr admi
 
 Several YAML files are used to set environment variables used by the application to facilitate communication with other systems and components. In each case, settings can be made per environment, with the ability to define inheritable default values. Settings defined at the environment level will override the defaults.
 
-Environment variables can be referenced in code via the `ENV` constant, eg:
-
-```
-ENV['solr_host']
-```
-
 Example files are included in the **config** directory. You will save copies of these in the same directory, following the instructions below.
 
 
 ### config/database.yml
 
-There are 2 example files included. Select the appropriate file and save a copy as **database.yml**
+Sets database connection parameters. There are 2 example files included. Select the appropriate file and rename or save a copy as **database.yml**
 
 **config/database-sqlite3.yml** - To use the embedded SQLite database for evaluation or development. Use as is.
 
@@ -71,7 +65,7 @@ There are 2 example files included. Select the appropriate file and save a copy 
 
 ### config/archivesspace.yml
 
-Defines variables required to communicate with the ArchivesSpace API and provide links to the ArchviesSpace staff interface.
+Sets variables required to communicate with the ArchivesSpace API and provide links to the ArchviesSpace staff interface. Locate **archivesspace.example.yml**, save as **archivesspace.yml**, and update values as follows:
 
 * **archivesspace\_backend_port**: Port number (as a string) of ArchivesSpace back end (default: '8089')
 * **archivesspace\_frontend_port**: Port number (as a string) of ArchivesSpace front end/ staff interface (default: '8080')
@@ -85,7 +79,7 @@ Defines variables required to communicate with the ArchivesSpace API and provide
 
 ### config/solr.yml
 
-Defines variables required to connect to your Solr index.
+Set variables required to connect to your Solr index. Locate **solr.example.yml**, save as **solr.yml**, and update values as follows:
 
 * **solr_host**: The host name of your active Solr 5 installation (default: 'localhost')
 * **solr_port**: The port on which your Solr instance is running (default: '8983')
@@ -94,7 +88,7 @@ Defines variables required to connect to your Solr index.
 
 ### config/email.yml
 
-Defines variables required for email notifications sent by Circa.
+Sets variables required for email notifications sent by Circa.
 
 * **order\_notification\_default_email**: Comma-separated list of email addresses to receive notifications when an order is created
 * **order\_notification\_digital\_items_email**: Comma-separated list of email addresses to receive notifications when an order is created that includes digital items
@@ -114,14 +108,14 @@ The development version will use the embedded SQLite database (MySQL is required
 `bundle exec rake users:create_admin`<br>
 This will create a default admin user, with username/email: 'admin@circa' and password 'circa_admin'. You will want to edit this user from within Circa if and when you move to production or deploy to a publicly accessible server.
 
+
 ## Start Circa!
 
 You should now finally be ready to run Circa locally. Start the server with<br>
 `rails server`
 Then go to localhost:3000 in your browser and log in (admin@circa/circa-admin)
 
-The first thing you should do is to create a location, probably representing your reading room, where materials will be delivered for use. Then you can try to create an Order by importing item data from ArchivesSpace.
-
+The first thing you should do is to create a location representing your reading room or wherever materials will be delivered for use. Then you can try to create an Order by importing item data from ArchivesSpace.
 
 
 # User guide
