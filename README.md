@@ -117,6 +117,9 @@ Then go to localhost:3000 in your browser and log in (admin@circa/circa-admin)
 
 The first thing you should do is to create a location representing your reading room or wherever materials will be delivered for use. Then you can try to create an Order by importing item data from ArchivesSpace.
 
+NOTE: Referencing a record in ArchivesSpace requires knowing its URI. This plugin will make this easier by including the URI in the standard ArchivesSpace record display:
+https://github.com/NCSU-Libraries/archivesspace-component-uri-display-plugin
+
 
 # User guide
 
