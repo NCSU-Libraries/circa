@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5.1'
+gem 'rails', '4.2.8'
 gem 'rake'
 
 # Use mysql as the database for Active Record
@@ -18,7 +18,7 @@ gem 'archivesspace-api-utility', git: "https://github.com/trevorthornton/archive
 gem 'paper_trail'
 gem 'formtastic'
 # Using 0.10.0.rc3
-gem 'active_model_serializers', git: "https://github.com/rails-api/active_model_serializers.git"
+gem 'active_model_serializers', git: "https://github.com/rails-api/active_model_serializers.git", branch: "0-10-stable"
 
 
 gem 'sprockets-rails', '~> 3.0.2', :require => 'sprockets/railtie'
