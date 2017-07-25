@@ -11,6 +11,9 @@ class User < ActiveRecord::Base
   # include UserRoles
   include SolrDoc
 
+  include NCSULdap
+  require 'campus-ldap.rb'
+
   belongs_to :user_role
   has_many :order_users
   has_many :item_orders
