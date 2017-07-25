@@ -8,7 +8,6 @@ Circa provides close integration with ArchivesSpace, upon which the application 
 # System requirements
 
 * Ruby 2.2.1 or higher
-* Rails 4.2.0 or higher
 * MySQL
 * Solr 5
 * Redis (to support notifications)
