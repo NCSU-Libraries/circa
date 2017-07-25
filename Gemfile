@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.8'
 gem 'rake'
@@ -14,6 +13,7 @@ gem 'sqlite3'
 gem 'devise'
 
 gem 'archivesspace-api-utility', git: "https://github.com/trevorthornton/archivesspace-api-utility.git"
+
 
 gem 'paper_trail'
 gem 'formtastic'
@@ -34,6 +34,12 @@ gem 'modernizr-rails'
 gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'foundation-will_paginate'
+
+
+# NCSU only
+gem 'devise_wolftech_authenticatable', git: "git@github.ncsu.edu:NCSU-Libraries/devise_wolftech_authenticatable.git"
+gem 'ncsu_catalog_api_client', git: "git@github.ncsu.edu:trthorn2/ncsu_catalog_api_client.git"
+# END - NCSU only
 
 
 # See https://github.com/rails/execjs#readme for more supported runtimes

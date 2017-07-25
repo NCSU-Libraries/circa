@@ -1,0 +1,15 @@
+defaults: &defaults
+  wolftech_username: lib.kbox.service
+  wolftech_password: W0lfp@ck
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults

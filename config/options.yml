@@ -1,2 +1,2 @@
-use_devise_passwords: true
+use_devise_passwords: false
 send_order_notifications: true
