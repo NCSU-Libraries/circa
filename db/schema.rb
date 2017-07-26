@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608140909) do
+ActiveRecord::Schema.define(version: 20170726173418) do
 
   create_table "access_sessions", force: :cascade do |t|
     t.integer  "item_id",        limit: 4,                null: false
@@ -33,6 +33,17 @@ ActiveRecord::Schema.define(version: 20170608140909) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
   end
+
+  create_table "digital_image_orders", force: :cascade do |t|
+    t.integer  "order_id",   limit: 4,     null: false
+    t.string   "image_id",   limit: 255,   null: false
+    t.text     "detail",     limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "digital_image_orders", ["image_id"], name: "by_image_id", using: :btree
+  add_index "digital_image_orders", ["order_id"], name: "by_order_id", using: :btree
 
   create_table "enumeration_values", force: :cascade do |t|
     t.integer  "enumeration_id", limit: 4
@@ -77,6 +88,7 @@ ActiveRecord::Schema.define(version: 20170608140909) do
     t.text     "archivesspace_uri", limit: 65535
     t.integer  "user_id",           limit: 4
     t.boolean  "active",                          default: false, null: false
+    t.text     "detail",            limit: 65535
   end
 
   add_index "item_orders", ["item_id"], name: "index_item_orders_on_item_id", using: :btree

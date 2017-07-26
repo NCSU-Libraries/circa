@@ -18,6 +18,7 @@ class Order < ActiveRecord::Base
   has_many :items, through: :item_orders
   has_many :notes, as: :noted
   has_one :course_reserve
+  has_many :digital_image_orders
 
   has_many :access_sessions do
     def active
