@@ -6,14 +6,6 @@ var OrdersCtrl = function($scope, $route, $routeParams, $location, $window, $mod
 
   CircaCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
 
-  $scope.setOrderType = function(orderTypes) {
-    _this.setOrderType($scope, orderTypes);
-  }
-
-  $scope.setOrderSubType = function(orderSubTypes) {
-    _this.setOrderSubType($scope, orderSubTypes);
-  }
-
   $scope.setPrimaryUserId = function(userId) {
     _this.setPrimaryUserId($scope, userId);
   }
@@ -35,18 +27,6 @@ OrdersCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window'
 
 
 OrdersCtrl.prototype = Object.create(CircaCtrl.prototype);
-
-
-OrdersCtrl.prototype.setOrderType = function(scope, orderTypes) {
-  var value = this.getControlledValue(orderTypes, scope.order['order_type_id']);
-  scope.order['order_type'] = value;
-}
-
-
-OrdersCtrl.prototype.setOrderSubType = function(scope, orderSubTypes) {
-  var value = this.getControlledValue(orderSubTypes, scope.order['order_sub_type_id']);
-  scope.order['order_sub_type'] = value;
-}
 
 
 OrdersCtrl.prototype.setPrimaryUserId = function(scope, userId) {
@@ -270,6 +250,18 @@ var OrderCtrl = function($scope, $route, $routeParams, $location, $window, $moda
 
   $scope.activateItem = function(item) {
     _this.updateItemActivation($scope, item, 'activate');
+  }
+
+  $scope.dateSingleOrRange = function() {
+    return _this.dateSingleOrRange($scope);
+  }
+
+  $scope.setOrderType = function(orderTypes) {
+    _this.setOrderType($scope, orderTypes);
+  }
+
+  $scope.setOrderSubType = function(orderSubTypes) {
+    _this.setOrderSubType($scope, orderSubTypes);
   }
 
   $scope.archivesSpaceRecordSelect = this.initializeArchivesSpaceRecordSelect();
@@ -860,6 +852,38 @@ OrderCtrl.prototype.updateItemActivation = function(scope, item, method) {
       scope.flash = response.data['error']['detail'];
     }
   });
+}
+
+
+OrderCtrl.prototype.setOrderType = function(scope, orderTypes) {
+  var value = this.getControlledValue(orderTypes, scope.order['order_type_id']);
+  scope.order['order_type'] = value;
+  scope.dateSingleOrRange = this.dateSingleOrRange(scope);
+}
+
+
+OrderCtrl.prototype.setOrderSubType = function(scope, orderSubTypes) {
+  var value = this.getControlledValue(orderSubTypes, scope.order['order_sub_type_id']);
+  scope.order['order_sub_type'] = value;
+  scope.dateSingleOrRange = this.dateSingleOrRange(scope);
+}
+
+
+OrderCtrl.prototype.dateSingleOrRange = function(scope) {
+  console.log(scope.order);
+
+  var val = 'range';
+
+  if (scope.order['order_type'] && scope.order['order_sub_type']) {
+    if (scope.order['order_type']['name'] == 'research' && scope.order['order_sub_type']['name'] != 'course_reserve') {
+      val = 'single';
+    }
+    else if (scope.order['order_type']['name'] == 'reproduction') {
+      val = 'single';
+    }
+  }
+
+  return val;
 }
 
 

@@ -1,0 +1,26 @@
+<div class="form-section" ng-class="validationErrors['access_date'] ? 'has-error' : ''">
+
+  <h2 ng-switch="order['order_type']['name']">
+    <span ng-switch-when="research">Visit date</span>
+    <span ng-switch-when="reproduction">Due date</span>
+    <span ng-switch-default>Requested dates</span>
+  </h2>
+
+
+  <div ng-if="dateSingleOrRange == 'single'">
+    <input type="text" datepicker ng-model="order['access_date_start']" class="datepicker-input"/>
+  </div>
+
+
+  <div ng-if="dateSingleOrRange == 'range'">
+    <div class="date-range-field">
+      <label>Start:</label>
+      <input type="text" datepicker ng-model="order['access_date_start']" class="datepicker-input"/>
+    </div>
+    <div class="date-range-field">
+      <label>End:</label>
+      <input type="text" datepicker ng-model="order['access_date_end']" class="datepicker-input"/>
+    </div>
+  </div>
+
+</div>

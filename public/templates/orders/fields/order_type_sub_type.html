@@ -1,0 +1,30 @@
+<div class="form-section" ng-class="validationErrors['order_type_id'] ? 'has-error' : ''">
+
+  <h2>Order type</h2>
+
+  <div ng-if="mode == 'new'">
+    <select
+      ng-model="order['order_type_id']"
+      ng-change="setOrderType(controlledValues['order_type'])">
+
+      <option ng-repeat="orderType in controlledValues['order_type']" value="{{ orderType.id }}" ng-selected="orderType.id == order['order_type_id']">{{ orderType.label }}</option>
+    </select>
+    <div ng-if="validationErrors['order_type_id']" class="validation-error field-validation-error">{{ validationErrors['order_type_id'] }}</div>
+  </div>
+
+  <div ng-if="mode == 'edit'" class="form-field">{{ order.order_type.label }}</div>
+
+  <div ng-if="order['order_type_id']">
+    <h3>Sub-type</h3>
+
+    <div ng-repeat="orderSubType in controlledValues['order_sub_type'] | filter:{ order_type_id: order['order_type_id'] }" class="radio-block">
+      <input type="radio" ng-model="order['order_sub_type_id']"
+        ng-change="setOrderSubType(controlledValues['order_sub_type'])"
+        value="orderSubType" ng-value="orderSubType.id">
+      {{ orderSubType.label }}
+    </div>
+
+    <div ng-if="validationErrors['order_type_id']" class="validation-error field-validation-error">{{ validationErrors['order_type_id'] }}</div>
+  </div>
+
+</div>

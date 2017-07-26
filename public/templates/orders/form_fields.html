@@ -3,109 +3,28 @@ Please fix the problems noted below.
 </div>
 
 
-<div class="form-section" ng-class="validationErrors['order_type_id'] ? 'has-error' : ''">
-
-  <h2>Order type</h2>
-
-  <div ng-if="mode == 'new'">
-    <select
-      ng-model="order['order_type_id']"
-      ng-change="setOrderType(controlledValues['order_type'])">
-
-      <option ng-repeat="orderType in controlledValues['order_type']" value="{{ orderType.id }}" ng-selected="orderType.id == order['order_type_id']">{{ orderType.label }}</option>
-    </select>
-    <div ng-if="validationErrors['order_type_id']" class="validation-error field-validation-error">{{ validationErrors['order_type_id'] }}</div>
-  </div>
-
-  <div ng-if="mode == 'edit'" class="form-field">{{ order.order_type.label }}</div>
-
-  <div ng-if="order['order_type_id']">
-    <h3>Sub-type</h3>
-
-    <div ng-repeat="orderSubType in controlledValues['order_sub_type'] | filter:{ order_type_id: order['order_type_id'] }" class="radio-block">
-      <input type="radio" ng-model="order['order_sub_type_id']"
-        ng-change="setOrderSubType(controlledValues['order_sub_type'])"
-        value="orderSubType" ng-value="orderSubType.id">
-      {{ orderSubType.label }}
-    </div>
-
-    <div ng-if="validationErrors['order_type_id']" class="validation-error field-validation-error">{{ validationErrors['order_type_id'] }}</div>
-  </div>
-
-</div>
+<!-- order type/sub-type -->
+<div ng-include="templateUrl('orders/fields/order_type_sub_type')"></div>
 
 
-<!-- course_reserve -->
-<div class="form-section" ng-show="order['order_sub_type']['name'] == 'course_reserve'">
-
-  <h2>Course information</h2>
-
-  <div>
-    <label>Course number:</label>
-    <input type="text" ng-model="order['course_reserve']['course_number']">
-  </div>
-
-  <div>
-    <label>Course name:</label>
-    <input type="text" ng-model="order['course_reserve']['course_name']">
-  </div>
-
-</div>
+<!-- course info - for course reserves only -->
+<div ng-include="templateUrl('orders/fields/course_info')" ng-show="order['order_sub_type']['name'] == 'course_reserve'"></div>
 
 
 <!-- users -->
-<div class="form-section" ng-class="validationErrors['users'] ? 'has-error' : ''">
-
-  <h2>Researchers</h2>
-
-  <div ng-if="validationErrors['users']" class="validation-error field-validation-error">{{ validationErrors['users'] }}</div>
-
-  <div ng-include="templateUrl('orders/user_list')"></div>
-
-  <div ng-include="templateUrl('orders/user_selector')"></div>
-
-  <div><span class="link" ng-click="createAndAddUser()">Create and add new researcher</span></div>
-
-</div>
+<div ng-include="templateUrl('orders/fields/research_users')" ng-show="order['order_type']['name'] == 'research'"></div>
 
 
 <!-- items -->
-<div class="form-section" ng-class="validationErrors['items'] ? 'has-error' : ''">
-
-  <h2>Items</h2>
-
-  <div ng-if="validationErrors['items']" class="validation-error field-validation-error">{{ validationErrors['items'] }}</div>
-
-  <div ng-include="templateUrl('orders/new_edit_item_list')"></div>
-
-  <div ng-include="templateUrl('orders/archivesspace_record_selector')"></div>
-
-  <div ng-include="templateUrl('orders/catalog_record_selector')"></div>
-
-</div>
+<div ng-include="templateUrl('orders/fields/items')" ng-show="order['order_type']['name'] != 'reproduction'"></div>
+<div ng-include="templateUrl('orders/fields/reproduction_items')" ng-show="order['order_type']['name'] == 'reproduction'"></div>
 
 
-<div ng-if="order['order_type']['value_short'] == 'research'">
-  <div class="form-section" ng-class="validationErrors['access_date'] ? 'has-error' : ''">
-    <h2>Visit date</h2>
-    <input type="text" datepicker ng-model="order['access_date_start']" class="datepicker-input"/>
-  </div>
-</div>
+<!-- dates -->
+<div ng-include="templateUrl('orders/fields/dates')"></div>
 
 
-<div ng-if="(order['order_type']) && (order['order_type']['value_short'] != 'research')" class="date-range-fieldset">
-  <div class="form-section" ng-class="validationErrors['access_date'] ? 'has-error' : ''">
-    <h2>Requested dates</h2>
-    <div class="date-range-field">
-      <label>Start:</label>
-      <input type="text" datepicker ng-model="order['access_date_start']" class="datepicker-input"/>
-    </div>
-    <div class="date-range-field">
-      <label>End:</label>
-      <input type="text" datepicker ng-model="order['access_date_end']" class="datepicker-input"/>
-    </div
-  </div>
-</div>
+
 
 
 <div ng-if="validationErrors['access_date']" class="validation-error field-validation-error">{{ validationErrors['access_date'] }}</div>
