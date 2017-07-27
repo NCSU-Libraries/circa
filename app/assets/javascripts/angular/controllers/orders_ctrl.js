@@ -264,10 +264,16 @@ var OrderCtrl = function($scope, $route, $routeParams, $location, $window, $moda
     _this.setOrderSubType($scope, orderSubTypes);
   }
 
+  $scope.getIIIFManifest = function() {
+    _this.getIIIFManifest($scope);
+  }
+
   $scope.archivesSpaceRecordSelect = this.initializeArchivesSpaceRecordSelect();
   $scope.catalogRecordSelect = this.initializeCatalogRecordSelect();
+  $scope.digitalImageSelect = this.initializeDigitalImageSelect();
   $scope.userSelect = this.initializeUserSelect();
   $scope.assigneeSelect = this.initializeUserSelect();
+
   $scope.removedUsers = [];
   $scope.removedAssignees = [];
   $scope.removedItems = [];
@@ -308,6 +314,12 @@ OrderCtrl.prototype.initializeArchivesSpaceRecordSelect = function() {
 // Initialize object used to manage selections from catalog
 OrderCtrl.prototype.initializeCatalogRecordSelect = function() {
   return { 'catalogRecordId': '', 'catalogRecordData': '', 'requestItemId': '', 'loading': false, 'alert': null };
+}
+
+
+// Initialize object used to manage NCSU digital image selections
+OrderCtrl.prototype.initializeDigitalImageSelect = function() {
+  return { 'imageId': '', 'manifest': null, 'requestedImages': [], 'loading': false, 'alert': null };
 }
 
 
@@ -382,7 +394,6 @@ OrderCtrl.prototype.hasValidationErrors = function(scope) {
 
 
 OrderCtrl.prototype.orderTypeIdMatch = function(scope, typeId) {
-
   if (scope.order['order_type_id'] == typeId) {
     return true;
   }
@@ -769,7 +780,7 @@ OrderCtrl.prototype.getCatalogRecord = function(scope, callback) {
   scope.catalogRecordSelect['loading'] = true;
   scope.catalogRecordSelect['alert'] = null;
 
-  _this.apiRequests.get('catalog_get', { 'params': { 'catalog_record_id': catalogRecordId } } ).then(function(response) {
+  _this.apiRequests.get('get_ncsu_catalog_record', { 'params': { 'catalog_record_id': catalogRecordId } } ).then(function(response) {
     scope.catalogRecordSelect['loading'] = false;
     if (response.status == 200) {
       scope.catalogRecordSelect['catalogRecordData'] = response.data['data'];
@@ -887,4 +898,20 @@ OrderCtrl.prototype.dateSingleOrRange = function(scope) {
 }
 
 
+OrderCtrl.prototype.getIIIFManifest = function(scope) {
+  path = 'ncsu_iiif_manifest'
+  this.apiRequests.get(path, { 'params': { 'image_id': scope.digitalImageSelect.uri } } ).then(function(response) {
+    scope.itemEventLoading = false;
+    if (response.status == 200) {
+
+      console.log(response.data);
+
+      scope.digitalImageSelect['manifest'] = response.data;
+    }
+    else if (response.data['error'] && response.data['error']['detail']) {
+      scope.flash = response.data['error']['detail'];
+    }
+  });
+
+}
 

@@ -1,7 +1,7 @@
 <div class="form-section" ng-class="validationErrors['access_date'] ? 'has-error' : ''">
 
   <h2 ng-switch="order['order_type']['name']">
-    <span ng-switch-when="research">Visit date</span>
+    <span ng-switch-when="research">{{ order['order_sub_type']['name'] == 'course_reserve' ? 'Visit dates' : 'Visit date' }}</span>
     <span ng-switch-when="reproduction">Due date</span>
     <span ng-switch-default>Requested dates</span>
   </h2>
@@ -12,12 +12,12 @@
   </div>
 
 
-  <div ng-if="dateSingleOrRange == 'range'">
-    <div class="date-range-field">
+  <div ng-if="dateSingleOrRange == 'range'" class="row">
+    <div class="date-range-field small-12 medium-3 columns">
       <label>Start:</label>
       <input type="text" datepicker ng-model="order['access_date_start']" class="datepicker-input"/>
     </div>
-    <div class="date-range-field">
+    <div class="date-range-field small-12 medium-3 columns end">
       <label>End:</label>
       <input type="text" datepicker ng-model="order['access_date_end']" class="datepicker-input"/>
     </div>

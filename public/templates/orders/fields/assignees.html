@@ -1,0 +1,13 @@
+<div class="form-section" ng-class="validationErrors['assignees'] ? 'has-error' : ''">
+
+  <h2>Assigned staff</h2>
+
+  <div ng-include="templateUrl('orders/assignee_list')"></div>
+
+  <div ng-if="validationErrors['assignees']" class="validation-error field-validation-error">{{ validationErrors['assignees'] }}</div>
+
+  <div ng-include="templateUrl('orders/assignee_selector')"></div>
+
+  <div><span class="link" ng-click="createAndAddAssignee()">Create and add new staff assignee</span></div>
+
+</div>

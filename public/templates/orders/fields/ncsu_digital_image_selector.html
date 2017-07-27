@@ -1,0 +1,35 @@
+<div record-select-trigger class="selector catalog-record-selector">
+
+
+  <div class="heading">Add...</div>
+
+
+  <div class="instruction">Enter the image ID or URL from d.lib.ncsu.edu then click 'Get images'</div>
+
+
+  <div class="loading" ng-show="digitalImageSelect.loading">
+    <div class="message">Fetching data from d.lib.ncsu.edu...</div>
+  </div>
+
+
+  <div class="row collapse" ng-hide="digitalImageSelect.loading">
+
+    <div class="small-10 columns">
+      <input type="text" ng-model="digitalImageSelect.uri" placeholder="Enter image ID or d.lib.ncsu.edu URL"/>
+    </div>
+
+    <div class="small-2 columns">
+      <span class="button postfix" ng-click="getIIIFManifest()">Add</span>
+    </div>
+
+  </div>
+
+
+  <div class="selection-display digital-image" ng-show="digitalImageSelect['manifest']">
+
+    {{ digitalImageSelect['manifest'] | json }}
+
+  </div>
+
+
+</div>

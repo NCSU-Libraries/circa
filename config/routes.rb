@@ -43,9 +43,9 @@ Rails.application.routes.draw do
   get 'archivesspace_redirect(/*archivesspace_path)' => 'utility#archivesspace_redirect'
   get 'archivesspace_resolver(/*archivesspace_uri)' => 'utility#archivesspace_resolver'
 
-  get 'aspace_get' => 'utility#aspace_get'
+  get 'get_archivesspace_record' => 'utility#get_archivesspace_record'
 
-  get 'catalog_get' => 'utility#catalog_get'
+  get 'get_ncsu_catalog_record' => 'utility#get_ncsu_catalog_record'
 
   get 'user_typeahead' => 'utility#user_typeahead'
   get 'user_typeahead/:q' => 'utility#user_typeahead'
@@ -117,6 +117,7 @@ Rails.application.routes.draw do
   get 'local_values' => 'utility#local_values'
   get 'options' => 'utility#options'
   get 'controlled_values' => 'utility#controlled_values'
+  get 'ncsu_iiif_manifest' => 'utility#get_ncsu_iiif_manifest'
 
   get "reports/item_requests_per_resource" => 'reports/item_requests_per_resource'
   get "reports/item_requests_per_location" => 'reports/item_requests_per_location'

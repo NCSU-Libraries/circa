@@ -7,124 +7,35 @@ Please fix the problems noted below.
 <div ng-include="templateUrl('orders/fields/order_type_sub_type')"></div>
 
 
-<!-- course info - for course reserves only -->
-<div ng-include="templateUrl('orders/fields/course_info')" ng-show="order['order_sub_type']['name'] == 'course_reserve'"></div>
+<div ng-show="order['order_type'] && order['order_sub_type']">
+
+  <!-- course info - for course reserves only -->
+  <div ng-include="templateUrl('orders/fields/course_info')" ng-show="order['order_sub_type']['name'] == 'course_reserve'"></div>
 
 
-<!-- users -->
-<div ng-include="templateUrl('orders/fields/research_users')" ng-show="order['order_type']['name'] == 'research'"></div>
+  <!-- users -->
+  <div ng-include="templateUrl('orders/fields/research_users')" ng-show="order['order_type']['name'] == 'research'"></div>
 
 
-<!-- items -->
-<div ng-include="templateUrl('orders/fields/items')" ng-show="order['order_type']['name'] != 'reproduction'"></div>
-<div ng-include="templateUrl('orders/fields/reproduction_items')" ng-show="order['order_type']['name'] == 'reproduction'"></div>
+  <!-- items -->
+  <div ng-include="templateUrl('orders/fields/items')" ng-show="order['order_type']['name'] != 'reproduction'"></div>
+
+  <div ng-include="templateUrl('orders/fields/reproduction_items')" ng-show="order['order_type']['name'] == 'reproduction'"></div>
 
 
-<!-- dates -->
-<div ng-include="templateUrl('orders/fields/dates')"></div>
+  <!-- dates -->
+  <div ng-include="templateUrl('orders/fields/dates')"></div>
 
 
+  <!-- location -->
+  <div ng-include="templateUrl('orders/fields/location')"></div>
 
 
-
-<div ng-if="validationErrors['access_date']" class="validation-error field-validation-error">{{ validationErrors['access_date'] }}</div>
-
-</div>
+  <!-- assignees -->
+  <div ng-include="templateUrl('orders/fields/assignees')"></div>
 
 
-
-<div class="form-section">
-
-  <h2>Use location</h2>
-
-  <div ng-if="defaultLocation">
-    <input type="radio" ng-model="order['default_location']" ng-value="{{ true }}">
-    {{ defaultLocation['title'] }}<br>
-    <input type="radio" ng-model="order['default_location']" ng-value="{{ false }}">
-    Other
-
-    <select ng-if="!order['default_location']" ng-model="order['temporary_location']['id']" convert-to-number>
-      <option ng-repeat="location in circaLocations" value="{{ location['id'] }}">{{ location['title'] }}</option>
-    </select>
-  </div>
-
-
-  <div ng-if="!defaultLocation">
-    <select ng-model="order['temporary_location']['id']" convert-to-number>
-      <option ng-repeat="location in circaLocations" value="{{ location['id'] }}">{{ location['title'] }}</option>
-    </select>
-  </div>
-
-
-  <!-- <select ng-model="order['temporary_location']['id']" ng-options="location.id as location.title for location in circaLocations"></select> -->
-
-</div>
-
-
-<!-- assignees -->
-<div class="form-section" ng-class="validationErrors['assignees'] ? 'has-error' : ''">
-
-  <h2>Assigned staff</h2>
-
-  <div ng-include="templateUrl('orders/assignee_list')"></div>
-
-  <div ng-if="validationErrors['assignees']" class="validation-error field-validation-error">{{ validationErrors['assignees'] }}</div>
-
-  <div ng-include="templateUrl('orders/assignee_selector')"></div>
-
-  <div><span class="link" ng-click="createAndAddAssignee()">Create and add new staff assignee</span></div>
-
-</div>
-
-
-<!-- notes -->
-<div class="form-section">
-
-  <h2>Notes</h2>
-
-
-  <ul class="sub-records-list notes-list" ng-if="order['notes'].length > 0">
-
-    <li ng-repeat="note in order['notes']">
-      <div class="row">
-
-        <div class="small-11 columns">
-          <textarea ng-model="order['notes'][$index]['content']"/>
-        </div>
-
-        <div class="small-1 columns">
-          <div class="sub-record-actions item-actions">
-            <span class="link action" ng-click="removeNote($index)">Remove</span>
-          </div>
-        </div>
-
-      </div>
-    </li>
-
-  </ul>
-
-
-
-
-
-  <span class="link" ng-click="addNote()">Add note</span>
-
-
-  <div ng-show="removedNotes.length > 0">
-
-    <div class="heading">Removed notes:</div>
-
-    <ul class="sub-records-list removed-notes-list">
-
-      <li ng-repeat="note in removedNotes">
-        <div class="row">
-          <div class="small-10 columns"><p>{{ note['content'] }}</p></div>
-          <div class="small-2 columns sub-record-actions"><span class="link action" ng-click="restoreNote(note)">Restore</span></div>
-        </div>
-      </li>
-
-    </ul>
-
-  </div>
+  <!-- notes -->
+  <div ng-include="templateUrl('orders/fields/notes')"></div>
 
 </div>

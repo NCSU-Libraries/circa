@@ -1,0 +1,47 @@
+<div class="form-section">
+
+  <h2>Notes</h2>
+
+
+  <ul class="sub-records-list notes-list" ng-if="order['notes'].length > 0">
+
+    <li ng-repeat="note in order['notes']">
+      <div class="row">
+
+        <div class="small-11 columns">
+          <textarea ng-model="order['notes'][$index]['content']"/>
+        </div>
+
+        <div class="small-1 columns">
+          <div class="sub-record-actions item-actions">
+            <span class="link action" ng-click="removeNote($index)">Remove</span>
+          </div>
+        </div>
+
+      </div>
+    </li>
+
+  </ul>
+
+
+  <span class="link" ng-click="addNote()">Add note</span>
+
+
+  <div ng-show="removedNotes.length > 0">
+
+    <div class="heading">Removed notes:</div>
+
+    <ul class="sub-records-list removed-notes-list">
+
+      <li ng-repeat="note in removedNotes">
+        <div class="row">
+          <div class="small-10 columns"><p>{{ note['content'] }}</p></div>
+          <div class="small-2 columns sub-record-actions"><span class="link action" ng-click="restoreNote(note)">Restore</span></div>
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+
+</div>

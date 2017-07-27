@@ -2,13 +2,14 @@ class UtilityController < ApplicationController
 
   include AspaceUtilities
   include NcsuCatalogUtilities
+  include NcsuDigitalImagesUtilities
 
   def uuid
     render text: SecureRandom.uuid
   end
 
 
-  def aspace_get
+  def get_archivesspace_record
     if params[:uri]
       @uri = params[:uri]
       @params = params[:params] || {}
@@ -22,8 +23,7 @@ class UtilityController < ApplicationController
   end
 
 
-  def catalog_get
-
+  def get_ncsu_catalog_record
     if params[:catalog_record_id]
       # catalog_id_from_url() will handle either full url or just the id
       id = catalog_id_from_url(params[:catalog_record_id])
@@ -37,6 +37,17 @@ class UtilityController < ApplicationController
         render json: record
       end
     end
+  end
+
+
+  def get_ncsu_iiif_manifest
+    manifest = {}
+    if params[:image_id]
+      if (image_id = image_id_from_url(params[:image_id]))
+        manifest = get_iiif_manifest(image_id) || {}
+      end
+    end
+    render json: manifest
   end
 
 
