@@ -10,7 +10,8 @@ module NcsuDigitalImagesUtilities
       index_before = path_segs.index('catalog')
       if index_before
         id_seg = path_segs[index_before + 1]
-        id_seg.gsub(/[^\d].*/,'')
+        id_seg_split = id_seg.split(/[\#\?]+/)
+        id_seg_split[0]
       else
         nil
       end

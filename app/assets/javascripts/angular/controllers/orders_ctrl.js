@@ -870,6 +870,7 @@ OrderCtrl.prototype.setOrderType = function(scope, orderTypes) {
   var value = this.getControlledValue(orderTypes, scope.order['order_type_id']);
   scope.order['order_type'] = value;
   scope.dateSingleOrRange = this.dateSingleOrRange(scope);
+  scope.userLabel = this.userLabel(scope);
 }
 
 
@@ -881,8 +882,6 @@ OrderCtrl.prototype.setOrderSubType = function(scope, orderSubTypes) {
 
 
 OrderCtrl.prototype.dateSingleOrRange = function(scope) {
-  console.log(scope.order);
-
   var val = 'range';
 
   if (scope.order['order_type'] && scope.order['order_sub_type']) {
@@ -912,6 +911,17 @@ OrderCtrl.prototype.getIIIFManifest = function(scope) {
       scope.flash = response.data['error']['detail'];
     }
   });
+}
 
+
+OrderCtrl.prototype.userLabel = function(scope) {
+  var userLabels = {
+    research: 'researcher',
+    reproduction: 'requester',
+    exhibition: 'requester',
+    processing: 'user'
+  };
+
+  return scope.order['order_type'] ? userLabels[ scope.order['order_type']['name'] ] : 'user';
 }
 

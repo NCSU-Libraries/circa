@@ -18,6 +18,22 @@
 
     </div>
 
+
+    <div class="row" ng-if="order['order_type']['name'] == 'reproduction'">
+      <div class="small-12 columns">
+        <div class="heading">Specific items for reproduction</div>
+        <textarea ng-model="order['items'][$index]['detail']"/>
+      </div>
+    </div>
+
+
+    <div class="row" ng-if="order['order_type']['name'] == 'reproduction'">
+      <div class="small-12 columns">
+        <div class="heading">Total pages</div>
+        <input ng-model="order['items'][$index]['reproduction_pages']" class="integer"/>
+      </div>
+    </div>
+
   </li>
 
 </ul>
