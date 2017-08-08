@@ -20,9 +20,9 @@ GIT
 
 GIT
   remote: git@github.ncsu.edu:trthorn2/ncsu_catalog_api_client.git
-  revision: 107e4f4a65699608730639f887c8e21f394a53ac
+  revision: 8f04854b6dedb8be8188599615beea6c6a09be52
   specs:
-    ncsu_catalog_api_client (1.2.1)
+    ncsu_catalog_api_client (1.2.2)
       activesupport
       nokogiri (>= 1.6)
 
@@ -180,7 +180,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
     mini_portile2 (2.2.0)
-    minitest (5.10.2)
+    minitest (5.10.3)
     modernizr-rails (2.7.1)
     mono_logger (1.1.0)
     multi_json (1.12.1)
