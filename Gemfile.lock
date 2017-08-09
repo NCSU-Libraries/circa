@@ -10,12 +10,12 @@ GIT
 
 GIT
   remote: git@github.ncsu.edu:NCSU-Libraries/devise_wolftech_authenticatable.git
-  revision: 46193985fa16972a81aab62e547c3e853c8eb5a0
+  revision: 90a44066acdce24091b44cb4b2ea3f5ba40095c4
   specs:
-    devise_wolftech_authenticatable (0.0.3)
+    devise_wolftech_authenticatable (0.0.4)
       devise
       highline
-      net-ldap (~> 0.12.1)
+      net-ldap
       slop (= 3.6.0)
 
 GIT
@@ -186,7 +186,7 @@ GEM
     multi_json (1.12.1)
     multipart-post (2.0.0)
     mysql2 (0.3.21)
-    net-ldap (0.12.1)
+    net-ldap (0.16.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.1.0)

@@ -1,33 +1,15 @@
-// ItemsInTransitForUseCtrl  - inherits from DashboardCtrl
+// extends from DashboardCtrl
 
-/*
-
-var ItemsInTransitForUseCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
-  DashboardCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
-
-  this.getDashboardRecords = function(filters) {
-    this.getItemsInTransitForUse(filters);
-  }
-
-  // set pendingItemTransfers
-  this.getItemsInTransitForUse();
-}
-
-ItemsInTransitForUseCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
-ItemsInTransitForUseCtrl.prototype = Object.create(DashboardCtrl.prototype);
-circaControllers.controller('ItemsInTransitForUseCtrl', ItemsInTransitForUseCtrl);
-
-
-ItemsInTransitForUseCtrl.prototype.filterByLocation = function(location) {
+DashboardCtrl.prototype.filterByLocation = function(location) {
   var _this = this;
   var filters = { location: location };
   _this.getItemsInTransitForUse(filters);
 }
 
 
-ItemsInTransitForUseCtrl.prototype.getItemsInTransitForUse = function(filters) {
+DashboardCtrl.prototype.getItemsInTransitForUse = function(filters) {
 
-  this.loading = true;
+  this.dashbaordLoading = true;
 
   var _this = this;
   var path = '/items/items_in_transit_for_use';
@@ -43,8 +25,11 @@ ItemsInTransitForUseCtrl.prototype.getItemsInTransitForUse = function(filters) {
   }
 
   this.apiRequests.get(path, config).then(function(response) {
-    _this.loading = false;
+    _this.dashbaordLoading = false;
     if (response.status == 200) {
+
+      console.log(response.data);
+
       _this.itemsInTransitForUse = response.data;
     }
     else if (response.data['error'] && response.data['error']['detail']) {
@@ -54,7 +39,7 @@ ItemsInTransitForUseCtrl.prototype.getItemsInTransitForUse = function(filters) {
 }
 
 
-ItemsInTransitForUseCtrl.prototype.openList = function() {
+DashboardCtrl.prototype.openList = function() {
   var url = this.rootPath() + '/items/items_in_transit_for_use_list';
   var q = [];
   if (this.filters) {
@@ -70,5 +55,3 @@ ItemsInTransitForUseCtrl.prototype.openList = function() {
   }
   this.window.open(url,'_blank');
 }
-
-*/

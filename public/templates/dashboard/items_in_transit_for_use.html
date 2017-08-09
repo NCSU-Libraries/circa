@@ -1,29 +1,29 @@
-<div ng-controller="ItemsInTransitForUseCtrl as inTransitForUse">
+<div>
 
   <h2>Items in transit for use</h2>
 
-  <div ng-show="inTransitForUse.loading" ng-include="inTransitForUse.templateUrl('common/processing')"/>
+  <div ng-show="dashboard.dashbaordLoading" ng-include="dashboard.templateUrl('common/processing')"/>
 
-  <div ng-show="!inTransitForUse.loading">
+  <div ng-show="!dashboard.dashbaordLoading">
 
-    <div ng-if="!inTransitForUse.filters['location'] && inTransitForUse.itemsInTransitForUse['locations']" class="location-filter">
-    Filter by use location: <span ng-repeat="location in inTransitForUse.itemsInTransitForUse['locations']" class="location-filter-option" ng-class="$last ? 'last' : ''"><span ng-click="inTransitForUse.filterByLocation(location)" class="link nowrap">{{ location }}</span></span>
+    <div ng-if="!dashboard.filters['location'] && dashboard.itemsInTransitForUse['locations']" class="location-filter">
+    Filter by use location: <span ng-repeat="location in dashboard.itemsInTransitForUse['locations']" class="location-filter-option" ng-class="$last ? 'last' : ''"><span ng-click="dashboard.filterByLocation(location)" class="link nowrap">{{ location }}</span></span>
     </div>
 
-    <div ng-if="inTransitForUse.filters['location']" class="location-filter-info">
-    Showing only items for {{ inTransitForUse.filters['location'] }} <span ng-click="inTransitForUse.getItemsInTransitForUse()" class="link">Show all</span>
+    <div ng-if="dashboard.filters['location']" class="location-filter-info">
+    Showing only items for {{ dashboard.filters['location'] }} <span ng-click="dashboard.getItemsInTransitForUse()" class="link">Show all</span>
     </div>
 
 
-    <div ng-show="inTransitForUse.itemsInTransitForUse['total_orders'] > 0">
+    <div ng-show="dashboard.itemsInTransitForUse['total_orders'] > 0">
 
       <div class="print-list">
-        <span poptip="Generate printable list" class="print-link"><span class="link" ng-click="inTransitForUse.openList()"><i class="fa fa-print"></i>Print list</span></span>
+        <span poptip="Generate printable list" class="print-link"><span class="link" ng-click="dashboard.openList()"><i class="fa fa-print"></i>Print list</span></span>
       </div>
 
-      <div ng-repeat="(orderId, order) in inTransitForUse.itemsInTransitForUse['orders']" class="pending-transfers-order">
+      <div ng-repeat="(orderId, order) in dashboard.itemsInTransitForUse['orders']" class="pending-transfers-order">
 
-        <h3><span class="link" ng-click="inTransitForUse.showOrder(orderId)">Order #{{ orderId }}</span></h3>
+        <h3><span class="link" ng-click="dashboard.showOrder(orderId)">Order #{{ orderId }}</span></h3>
 
         <ul class="records-list items-list">
 
@@ -31,12 +31,12 @@
             <div class="row">
 
               <div class="small-10 columns">
-                <div ng-include="inTransitForUse.templateUrl('items/item_location_overview')"></div>
+                <div ng-include="dashboard.templateUrl('items/item_location_overview')"></div>
               </div>
 
               <div class="small-2 columns">
                 <div class="record-actions order-actions">
-                  <div class="action"><span class="link" ng-click="inTransitForUse.showItem(item['id'])">View item details</span></div>
+                  <div class="action"><span class="link" ng-click="dashboard.showItem(item['id'])">View item details</span></div>
                 </div>
               </div>
 
@@ -53,7 +53,7 @@
 
 
   <div ng-if="debug" class="data-panel">
-  {{ inTransitForUse.itemsInTransitForUse | json }}
+  {{ dashboard.itemsInTransitForUse | json }}
   </div>
 
 

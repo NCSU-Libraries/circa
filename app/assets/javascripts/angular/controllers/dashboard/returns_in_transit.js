@@ -1,29 +1,15 @@
-// ReturnsInTransitCtrl - inherits from DashboardCtrl
+// extends DashboardCtrl
 
-/*
-
-var ReturnsInTransitCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
-  DashboardCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
-
-  // set pendingItemTransfers
-  this.getReturnsInTransit();
-}
-
-ReturnsInTransitCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
-ReturnsInTransitCtrl.prototype = Object.create(DashboardCtrl.prototype);
-circaControllers.controller('ReturnsInTransitCtrl', ReturnsInTransitCtrl);
-
-
-ReturnsInTransitCtrl.prototype.filterByFacility = function(facility) {
+DashboardCtrl.prototype.filterReturnsInTransitByFacility = function(facility) {
   var _this = this;
   var filters = { permanent_location_facility: facility };
   _this.getReturnsInTransit(filters);
 }
 
 
-ReturnsInTransitCtrl.prototype.getReturnsInTransit = function(filters) {
+DashboardCtrl.prototype.getReturnsInTransit = function(filters) {
 
-  this.loading = true;
+  this.dashbaordLoading = true;
 
   var _this = this;
   var path = '/items/returns_in_transit';
@@ -38,9 +24,12 @@ ReturnsInTransitCtrl.prototype.getReturnsInTransit = function(filters) {
   }
 
   this.apiRequests.get(path, config).then(function(response) {
-    _this.loading = false;
+    _this.dashbaordLoading = false;
     if (response.status == 200) {
       _this.returnsInTransit = response.data;
+
+      console.log(_this.returnsInTransit );
+
     }
     else if (response.data['error'] && response.data['error']['detail']) {
       _this.flash = response.data['error']['detail'];
@@ -49,7 +38,7 @@ ReturnsInTransitCtrl.prototype.getReturnsInTransit = function(filters) {
 }
 
 
-ReturnsInTransitCtrl.prototype.openReturnsList = function() {
+DashboardCtrl.prototype.openReturnsList = function() {
   var url = this.rootPath() + '/items/returns_list';
   var q = [];
   if (this.filters) {
@@ -66,6 +55,3 @@ ReturnsInTransitCtrl.prototype.openReturnsList = function() {
 
   this.window.open(url,'_blank');
 }
-
-
-*/

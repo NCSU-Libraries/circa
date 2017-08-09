@@ -829,6 +829,22 @@ span.postfix, label.postfix {
   // z-index: 1000;
 }
 
+
+.tabs {
+
+  position: relative;
+  overflow: auto;
+  width: 100%;
+
+  .tab {
+    float: left;
+    padding: 0.5rem;
+    border: 1px solid $gray;
+    margin-right: 2px;
+  }
+}
+
+
 dl.tabs {
   dd {
     border-right: 2px solid $white;
@@ -837,12 +853,13 @@ dl.tabs {
   }
 }
 
-.tabset .tab-content {
-  padding: 0 1rem;
-}
-
 dl.tabs dd > a {
   font-size: 90%;
+}
+
+
+.tabset .tab-content {
+  padding: 0 1rem;
 }
 
 p.warning, div.warning, span.warning {

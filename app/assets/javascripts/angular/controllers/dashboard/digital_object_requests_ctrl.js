@@ -1,5 +1,7 @@
 // ReturnsInTransitCtrl - inherits from DashboardCtrl
 
+/*
+
 var DigitalObjectRequestsCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
   DashboardCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
 
@@ -25,3 +27,5 @@ DigitalObjectRequestsCtrl.prototype.getDigitalObjectRequests = function() {
     }
   });
 }
+
+*/

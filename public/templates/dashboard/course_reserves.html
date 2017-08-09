@@ -1,10 +1,10 @@
-<div ng-controller="CourseReservesDashboardCtrl as courseReserves">
+<div>
 
   <h2>Open course reserves</h2>
 
-  <div ng-show="courseReserves.loading" ng-include="courseReserves.templateUrl('common/processing')"/>
+  <div ng-show="dashboard.dashbaordLoading" ng-include="dashboard.templateUrl('common/processing')"/>
 
-  <div ng-show="!courseReserves.loading">
+  <div ng-show="!dashboard.dashbaordLoading">
     <table>
 
       <thead>
@@ -19,7 +19,7 @@
       </thead>
 
       <tbody>
-        <tr ng-repeat="order in courseReserves.orders">
+        <tr ng-repeat="order in dashboard.orders">
           <td><span class="link" ng-click="showOrder(order.id)">{{ order.id }}</span></td>
           <td>{{ order.course_number }}</td>
           <td>{{ order.course_name }}</td>

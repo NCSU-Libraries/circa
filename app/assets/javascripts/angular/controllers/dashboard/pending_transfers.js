@@ -1,33 +1,17 @@
-//  - inherits from DashboardCtrl
+// extends from DashboardCtrl
 
-/**
-
-console.log('dead');
-
-var PendingTransfersCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
-  DashboardCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
-
-  // set pendingItemTransfers
-  this.getPendingItemTransfers();
-}
-
-PendingTransfersCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
-PendingTransfersCtrl.prototype = Object.create(DashboardCtrl.prototype);
-circaControllers.controller('PendingTransfersCtrl', PendingTransfersCtrl);
-
-
-PendingTransfersCtrl.prototype.filterByFacility = function(facility) {
+DashboardCtrl.prototype.filterPendingTransfersByFacility = function(facility) {
   var _this = this;
   var filters = { permanent_location_facility: facility };
   _this.getPendingItemTransfers(filters);
 }
 
 
-PendingTransfersCtrl.prototype.getPendingItemTransfers = function(filters) {
+DashboardCtrl.prototype.getPendingItemTransfers = function(filters) {
 
-  this.loading = true;
-
+  this.dashbaordLoading = true;
   var _this = this;
+
   var path = '/items/pending_transfers';
   var config = { params: {} }
   this.filters = filters || {};
@@ -40,8 +24,7 @@ PendingTransfersCtrl.prototype.getPendingItemTransfers = function(filters) {
   }
 
   this.apiRequests.get(path, config).then(function(response) {
-    _this.loading = false;
-
+    _this.dashbaordLoading = false;
     if (response.status == 200) {
       _this.pendingItemTransfers = response.data;
     }
@@ -52,7 +35,7 @@ PendingTransfersCtrl.prototype.getPendingItemTransfers = function(filters) {
 }
 
 
-PendingTransfersCtrl.prototype.openPullList = function() {
+DashboardCtrl.prototype.openPullList = function() {
   var url = this.rootPath() + '/items/transfer_list';
   var q = [];
   if (this.filters) {
@@ -69,5 +52,3 @@ PendingTransfersCtrl.prototype.openPullList = function() {
 
   this.window.open(url,'_blank');
 }
-
-**/
