@@ -1,6 +1,6 @@
 // extends from DashboardCtrl
 
-DashboardCtrl.prototype.filterByLocation = function(location) {
+DashboardCtrl.prototype.filterItemsInTransitForUseByLocation = function(location) {
   var _this = this;
   var filters = { location: location };
   _this.getItemsInTransitForUse(filters);
