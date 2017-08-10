@@ -1,10 +1,10 @@
-<div ng-if="order['items'].length == 0" class="empty-list-label">None selected</div>
+<div ng-if="order['item_orders'].length == 0" class="empty-list-label">None selected</div>
 
 
 
-<ul ng-if="order['items'].length > 0" class="sub-records-list items-list">
+<ul ng-if="order['item_orders'].length > 0" class="sub-records-list items-list">
 
-  <li ng-repeat="item in order['items']" ng-show="$index < calculatedItemsLimit()" data-item-id="{{ item['id'] }}">
+  <li ng-repeat="item_order in order['item_orders']" ng-init="item = item_order['item']" ng-show="$index < calculatedItemsLimit()" data-item-id="{{ item['id'] }}">
 
     <div class="row">
 
@@ -124,8 +124,8 @@
 </ul>
 
 
-<div ng-if="order['items'].length > itemsLimit">
-  <span ng-if="truncateItems" class="truncated-list-post-note">+ {{ order['items'].length - itemsLimit }} more</span>
+<div ng-if="order['item_orders'].length > itemsLimit">
+  <span ng-if="truncateItems" class="truncated-list-post-note">+ {{ order['item_orders'].length - itemsLimit }} more</span>
   <span ng-if="truncateItems" class="link" ng-click="toggleTruncateItems()">Show all</span>
   <span ng-if="!truncateItems" class="link" ng-click="toggleTruncateItems()">Show less</span>
 </div>

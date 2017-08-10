@@ -81,15 +81,15 @@ ActiveRecord::Schema.define(version: 20170807163802) do
   end
 
   create_table "item_orders", force: :cascade do |t|
-    t.integer  "item_id",            limit: 4
-    t.integer  "order_id",           limit: 4
-    t.datetime "created_at",                                       null: false
-    t.datetime "updated_at",                                       null: false
-    t.text     "archivesspace_uri",  limit: 65535
-    t.integer  "user_id",            limit: 4
-    t.boolean  "active",                           default: false, null: false
-    t.text     "detail",             limit: 65535
-    t.integer  "reproduction_pages", limit: 4
+    t.integer  "item_id",           limit: 4
+    t.integer  "order_id",          limit: 4
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+    t.text     "archivesspace_uri", limit: 65535
+    t.integer  "user_id",           limit: 4
+    t.boolean  "active",                          default: false, null: false
+    t.text     "detail",            limit: 65535
+    t.integer  "total_pages",       limit: 4
   end
 
   add_index "item_orders", ["item_id"], name: "index_item_orders_on_item_id", using: :btree

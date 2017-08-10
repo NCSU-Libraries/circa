@@ -357,8 +357,8 @@ OrderCtrl.prototype.validateOrder = function(scope) {
     scope.validationErrors['order_sub_type_id'] = "Order type must be selected";
   }
 
-  if (scope.order['items'].length == 0) {
-    scope.validationErrors['items'] = "Order must include at least one item.";
+  if (scope.order['item_orders'].length == 0) {
+    scope.validationErrors['item_orders'] = "Order must include at least one item.";
   }
   if (!scope.order['access_date_start']) {
     scope.validationErrors['access_date'] = "A date must be provided.";
@@ -647,9 +647,15 @@ OrderCtrl.prototype.getItemOrderIndex = function(itemOrders, itemId) {
 }
 
 
-OrderCtrl.prototype.addItemOrder = function(scope, itemId, archivesspace_uri) {
+// OrderCtrl.prototype.addItemOrder = function(scope, itemId, archivesspace_uri) {
+//   archivesspace_uri = archivesspace_uri ? [ archivesspace_uri ] : null;
+//   scope.order['item_orders'].push( { order_id: scope.order['id'], item_id: itemId, archivesspace_uri: archivesspace_uri } );
+// }
+
+
+OrderCtrl.prototype.addItemOrder = function(scope, item, archivesspace_uri) {
   archivesspace_uri = archivesspace_uri ? [ archivesspace_uri ] : null;
-  scope.order['item_orders'].push( { order_id: scope.order['id'], item_id: itemId, archivesspace_uri: archivesspace_uri } );
+  scope.order['item_orders'].push( { order_id: scope.order['id'], item_id: item['id'], item: item, archivesspace_uri: archivesspace_uri } );
 }
 
 
@@ -667,15 +673,17 @@ OrderCtrl.prototype.restoreItemOrder = function(scope, itemId) {
 }
 
 
+
+// THIS WILL CAUSE PROBLEMS!!!
 OrderCtrl.prototype.removeItem = function(scope, item, callback) {
   var _this = this;
 
-  var removeItemIndex = scope.order['items'].findIndex(function(element, index, array) {
-    return element['id'] == item['id'];
+  var removeItemIndex = scope.order['item_orders'].findIndex(function(item_order, index, array) {
+    return item_order['item']['id'] == item['id'];
   });
 
   if (removeItemIndex >= 0) {
-    var removeItem = scope.order['items'].splice(removeItemIndex, 1)[0];
+    var removeItem = scope.order['item_orders'].splice(removeItemIndex, 1)[0];
     scope.removedItems.push(removeItem);
     scope.itemIds.splice( scope.itemIds.indexOf(removeItem['id']), 1);
     _this.removeFromItemOrders(scope, removeItem['id']);
@@ -683,6 +691,25 @@ OrderCtrl.prototype.removeItem = function(scope, item, callback) {
     return true;
   }
 }
+
+
+// // SAFE COPY BEFORE REMOVING items FROM order
+// OrderCtrl.prototype.removeItem = function(scope, item, callback) {
+//   var _this = this;
+
+//   var removeItemIndex = scope.order['item_orders'].findIndex(function(item_order, index, array) {
+//     return item_order['item']['id'] == item['id'];
+//   });
+
+//   if (removeItemIndex >= 0) {
+//     var removeItem = scope.order['items'].splice(removeItemIndex, 1)[0];
+//     scope.removedItems.push(removeItem);
+//     scope.itemIds.splice( scope.itemIds.indexOf(removeItem['id']), 1);
+//     _this.removeFromItemOrders(scope, removeItem['id']);
+//     _this.commonUtils.executeCallback(callback, scope);
+//     return true;
+//   }
+// }
 
 
 OrderCtrl.prototype.restoreItem = function(scope, item, callback) {
@@ -693,6 +720,7 @@ OrderCtrl.prototype.restoreItem = function(scope, item, callback) {
   if (restoreItemIndex >= 0) {
     var restoreItem = scope.removedItems.splice(restoreItemIndex, 1);
     restoreItem = restoreItem[0];
+    var item_order = { order_id: scope.order['id'], item_id: }
     scope.order['items'].push(restoreItem);
     scope.itemIds.push(item['id'])
     _this.restoreItemOrder(scope, item['id']);
@@ -700,6 +728,25 @@ OrderCtrl.prototype.restoreItem = function(scope, item, callback) {
     return true;
   }
 }
+
+
+// // SAFE COPY BEFORE REMOVING items FROM order
+// OrderCtrl.prototype.restoreItem = function(scope, item, callback) {
+//   var _this = this;
+//   var restoreItemIndex = scope.removedItems.findIndex(function(element, index, array) {
+//     return element['id'] == item['id'];
+//   });
+//   if (restoreItemIndex >= 0) {
+//     var restoreItem = scope.removedItems.splice(restoreItemIndex, 1);
+//     restoreItem = restoreItem[0];
+//     scope.order['items'].push(restoreItem);
+//     scope.itemIds.push(item['id'])
+//     _this.restoreItemOrder(scope, item['id']);
+//     _this.commonUtils.executeCallback(callback, scope);
+//     return true;
+//   }
+// }
+
 
 
 OrderCtrl.prototype.orderArchivesSpaceRecords = function (scope) {
@@ -744,8 +791,12 @@ OrderCtrl.prototype.addItemsFromArchivesSpace = function(scope, callback) {
             if (scope.itemIds.indexOf(item['id']) < 0) {
               scope.itemIds.push(item['id']);
               item['archivesspace_uri'] = uri;
-              scope.order['items'].push(item);
-              _this.addItemOrder(scope, item['id'], scope.archivesSpaceRecordSelect['uri']);
+
+              // REMOVED AFTER items REMOVED FROM order
+              // scope.order['items'].push(item);
+
+              // _this.addItemOrder(scope, item['id'], scope.archivesSpaceRecordSelect['uri']);
+              _this.addItemOrder(scope, item, scope.archivesSpaceRecordSelect['uri']);
             }
             else {
               scope.archivesSpaceRecordSelect['alert'] = "One or more containers corresponding to the ArchivesSpace record is already included in the order. The ArchivesSpace URI entered will be added for reference.";
@@ -821,9 +872,13 @@ OrderCtrl.prototype.addItemFromCatalog = function(catalogRecordId, catalogItemId
 
         if (scope.itemIds.indexOf(item['id']) < 0) {
           scope.itemIds.push(item['id']);
-          scope.order['items'].push(item);
+
+          // REMOVED AFTER REMOVING items FROM order
+          // scope.order['items'].push(item);
+
           scope.catalogRecordSelect = _this.initializeCatalogRecordSelect();
-          _this.addItemOrder(scope, item['id']);
+          // _this.addItemOrder(scope, item['id']);
+          _this.addItemOrder(scope, item);
         }
         else {
           scope.catalogRecordSelect['alert'] = 'An item associated with the catalog record with id ' + catalogRecordId + ' is already included in this order.';

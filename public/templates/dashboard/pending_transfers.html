@@ -29,7 +29,7 @@
 
         <ul class="records-list items-list">
 
-          <li ng-repeat="item in order['items']" data-item-id="{{ orderId }}">
+          <li ng-repeat="item_orders in order['item_orders']" ng-init="item = item_order['item']" data-item-id="{{ orderId }}">
             <div class="row">
 
               <div class="small-10 columns">

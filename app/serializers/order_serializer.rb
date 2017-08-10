@@ -8,8 +8,8 @@ class OrderSerializer < ActiveModel::Serializer
   belongs_to :order_type
   belongs_to :order_sub_type
   belongs_to :temporary_location
-  has_many :items, serializer: OrderItemsSerializer
-  has_many :item_orders, serializer: ItemOrderSerializer
+  # has_many :items, serializer: OrderItemsSerializer
+  has_many :item_orders, serializer: ItemOrdersSerializer
   has_many :users, serializer: OrderUserSerializer
   has_many :assignees, serializer: OrderUserSerializer
   has_many :notes

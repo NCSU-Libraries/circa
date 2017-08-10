@@ -1,8 +1,8 @@
-<div ng-if="order['items'].length == 0" class="empty-list-label">None selected</div>
+<div ng-if="order['item_orders'].length == 0" class="empty-list-label">None selected</div>
 
-<ul class="sub-records-list items-list" ng-if="order['items'].length > 0">
+<ul class="sub-records-list items-list" ng-if="order['item_orders'].length > 0">
 
-  <li ng-repeat="item in order['items']" data-item-id="{{ item['id'] }}">
+  <li ng-repeat="item_order in order['item_orders']" ng-init="item = item_order['item']" data-item-id="{{ item['id'] }}">
 
     <div class="row">
 
@@ -22,7 +22,7 @@
     <div class="row" ng-if="order['order_type']['name'] == 'reproduction'">
       <div class="small-12 columns">
         <div class="heading">Specific items for reproduction</div>
-        <textarea ng-model="order['items'][$index]['detail']"/>
+        <textarea ng-model="order['item_orders'][$index]['detail']"/>
       </div>
     </div>
 
@@ -30,7 +30,7 @@
     <div class="row" ng-if="order['order_type']['name'] == 'reproduction'">
       <div class="small-12 columns">
         <div class="heading">Total pages</div>
-        <input ng-model="order['items'][$index]['reproduction_pages']" class="integer"/>
+        <input ng-model="order['item_orders'][$index]['reproduction_pages']" class="integer"/>
       </div>
     </div>
 
@@ -44,7 +44,6 @@
   <div class="heading">Removed items:</div>
 
   <ul class="sub-records-list removed-sub-records-list items-list removed">
-
     <li ng-repeat="item in removedItems" data-item-id="{{ item['id'] }}">
 
       <div class="row">
@@ -63,7 +62,6 @@
       </div>
 
     </li>
-
   </ul>
 
 </div>
