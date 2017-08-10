@@ -286,6 +286,10 @@ main {
   font-family: "UniversRoman", Arial, sans-serif;
   font-size: 0.9375rem;
 
+  .row {
+    margin-left: inherit;
+  }
+
   a, .link {
     color: $blue;
     cursor: pointer;
@@ -328,12 +332,9 @@ main {
     content: none;
   }
 
-
   .small {
     font-size: 80%;
   }
-
-
 
   h1, h2, h3, .heading {
     font-family: "GlyphaRoman", serif;
@@ -384,11 +385,10 @@ main {
     padding: 0;
   }
 
-
-
   ul, ol, dl {
     font-size: 0.9375rem;
   }
+
 
   // app header
 
@@ -431,7 +431,6 @@ main {
         }
       }
     }
-
 
     .app-nav {
       text-transform: uppercase;
@@ -833,15 +832,48 @@ span.postfix, label.postfix {
 .tabs {
 
   position: relative;
-  overflow: auto;
+  overflow: visible;
   width: 100%;
+  padding-bottom: 2px;
+  margin-bottom: 1rem !important;
 
   .tab {
+    font-size: 90%;
     float: left;
-    padding: 0.5rem;
-    border: 1px solid $gray;
-    margin-right: 2px;
+    padding: 0 2px 2px 0;
+    text-align: center;
+    border-bottom: 1px solid $grayLightest;
+
+    .link {
+      text-decoration: none;
+      color: $textColor;
+      &:hover {
+        color: $green;
+        text-decoration: underline;
+      }
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    .tab-inner {
+      padding: 1rem 1.5rem;
+      background: $grayGhost;
+      display: block;
+
+      &:hover {
+        background: $grayLightest;
+      }
+    }
+
+    &.active {
+      .tab-inner {
+        background: $white;
+      }
+    }
   }
+
 }
 
 

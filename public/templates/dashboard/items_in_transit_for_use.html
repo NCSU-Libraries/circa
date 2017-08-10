@@ -7,7 +7,7 @@
   <div ng-show="!dashboard.dashbaordLoading">
 
     <div ng-if="!dashboard.filters['location'] && dashboard.itemsInTransitForUse['locations']" class="location-filter">
-    Filter by use location: <span ng-repeat="location in dashboard.itemsInTransitForUse['locations']" class="location-filter-option" ng-class="$last ? 'last' : ''"><span ng-click="dashboard.filterByLocation(location)" class="link nowrap">{{ location }}</span></span>
+    Filter by use location: <span ng-repeat="location in dashboard.itemsInTransitForUse['locations']" class="location-filter-option" ng-class="$last ? 'last' : ''"><span ng-click="dashboard.filterItemsInTransitForUseByLocation(location)" class="link nowrap">{{ location }}</span></span>
     </div>
 
     <div ng-if="dashboard.filters['location']" class="location-filter-info">

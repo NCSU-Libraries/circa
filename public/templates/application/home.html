@@ -66,28 +66,28 @@
   <div class="tabs">
 
     <div class="tab" ng-class="dashboard.active == 'pendingTransfers' ? 'active' : ''">
-      <span ng-show="dashboard.active != 'pendingTransfers'" class="link" ng-click="dashboard.setActive('pendingTransfers')">Pending transfers</span>
-      <span ng-show="dashboard.active == 'pendingTransfers'">Pending transfers</span>
+      <span class="tab-inner link" ng-show="dashboard.active != 'pendingTransfers'" ng-click="dashboard.setActive('pendingTransfers')">Pending transfers</span>
+      <span class="tab-inner" ng-show="dashboard.active == 'pendingTransfers'">Pending transfers</span>
     </div>
 
     <div class="tab" ng-class="dashboard.active == 'returnsInTransit' ? 'active' : ''">
-      <span ng-show="dashboard.active != 'returnsInTransit'" class="link" ng-click="dashboard.setActive('returnsInTransit')">Returns in transit</span>
-      <span ng-show="dashboard.active == 'returnsInTransit'">Returns in transit</span>
+      <span class="tab-inner link" ng-show="dashboard.active != 'returnsInTransit'" ng-click="dashboard.setActive('returnsInTransit')">Returns in transit</span>
+      <span class="tab-inner" ng-show="dashboard.active == 'returnsInTransit'">Returns in transit</span>
     </div>
 
     <div class="tab" ng-class="dashboard.active == 'itemsInTransitForUse' ? 'active' : ''">
-      <span ng-show="dashboard.active != 'itemsInTransitForUse'" class="link" ng-click="dashboard.setActive('itemsInTransitForUse')">Items in transit for use</span>
-      <span ng-show="dashboard.active == 'itemsInTransitForUse'">Items in transit for use</span>
+      <span class="tab-inner link" ng-show="dashboard.active != 'itemsInTransitForUse'" ng-click="dashboard.setActive('itemsInTransitForUse')">Items in transit for use</span>
+      <span class="tab-inner" ng-show="dashboard.active == 'itemsInTransitForUse'">Items in transit for use</span>
     </div>
 
     <div class="tab" ng-class="dashboard.active == 'courseReserves' ? 'active' : ''">
-      <span ng-show="dashboard.active != 'courseReserves'" class="link" ng-click="dashboard.setActive('courseReserves')">Course reserves</span>
-      <span ng-show="dashboard.active == 'courseReserves'">Course reserves</span>
+      <span class="tab-inner link" ng-show="dashboard.active != 'courseReserves'" ng-click="dashboard.setActive('courseReserves')">Course reserves</span>
+      <span class="tab-inner" ng-show="dashboard.active == 'courseReserves'">Course reserves</span>
     </div>
 
     <div class="tab" ng-class="dashboard.active == 'digitalObjectRequests' ? 'active' : ''">
-      <span ng-show="dashboard.active != 'digitalObjectRequests'" class="link" ng-click="dashboard.setActive('digitalObjectRequests')">Digital object requests</span>
-      <span ng-show="dashboard.active == 'digitalObjectRequests'">Digital object requests</span>
+      <span class="tab-inner link" ng-show="dashboard.active != 'digitalObjectRequests'" ng-click="dashboard.setActive('digitalObjectRequests')">Digital object requests</span>
+      <span class="tab-inner" ng-show="dashboard.active == 'digitalObjectRequests'">Digital object requests</span>
     </div>
 
   </div>
