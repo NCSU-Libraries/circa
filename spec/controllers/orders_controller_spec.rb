@@ -86,10 +86,19 @@ RSpec.describe OrdersController, type: :controller do
         item_order = { item_id: i.id, archivesspace_uri: [ archivesspace_uri ] }
         item_orders << item_order
       end
-      post :create, order: { users: [ user.attributes ], item_orders: item_orders, temporary_location: { id: location.id }, primary_user_id: user.id }
+      ot = OrderType.create(name: 'test', label: 'test')
+      ost = OrderSubType.create(name: 'test', label: 'test', order_type_id: ot.id)
+      post :create, order: {
+        users: [ user.attributes ],
+        item_orders: item_orders,
+        temporary_location: { id: location.id },
+        primary_user_id: user.id,
+        order_type_id: ot.id,
+        order_sub_type_id: ost.id
+      }
       expect(response).to have_http_status(:success)
       expect { JSON.parse response.body }.not_to raise_error
-      expect(JSON.parse(response.body)['order']['items'].empty?).not_to be true
+      expect(JSON.parse(response.body)['order']['item_orders'].empty?).not_to be true
       expect(assigns(:order).archivesspace_records.include?(archivesspace_uri)).to be true
       expect(JSON.parse(response.body)['order']['users'].empty?).not_to be true
       expect(JSON.parse(response.body)['order']['primary_user_id']).to eq(user.id)

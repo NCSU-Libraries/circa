@@ -392,14 +392,22 @@ class ItemsController < ApplicationController
 
   def get_pending_transfers
     @items = get_items_in_state(:ordered, 'next_scheduled_use_date asc')
+
+    puts @items.inspect
+
     @orders = {}
     @facilities = []
 
     @items.each do |i|
       i = i.with_indifferent_access
       i[:open_order_ids].each do |oid|
-        @orders[oid] ||= { items: [] }
-        @orders[oid][:items] << i
+        @orders[oid] ||= { item_orders: [] }
+        item_order = ItemOrder.where(order_id: oid, item_id: i[:id]).first
+        if item_order
+          io = item_order.attributes
+          io['item'] = i
+          @orders[oid][:item_orders] << io
+        end
       end
 
       if i[:permanent_location]
@@ -409,6 +417,8 @@ class ItemsController < ApplicationController
       end
 
     end
+
+
     @total_items = @items.length
     @facilities.uniq!
     @orders.with_indifferent_access

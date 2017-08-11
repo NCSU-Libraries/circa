@@ -2,7 +2,7 @@
 
 <ul class="sub-records-list items-list" ng-if="order['item_orders'].length > 0">
 
-  <li ng-repeat="item_order in order['item_orders']" ng-init="item = item_order['item']" data-item-id="{{ item['id'] }}">
+  <li ng-repeat="itemOrder in order['item_orders']" ng-init="item = itemOrder['item']" data-item-id="{{ item['id'] }}">
 
     <div class="row">
 
@@ -12,7 +12,7 @@
 
       <div class="small-2 columns">
         <div class="sub-record-actions item-actions">
-          <span class="link action" ng-click="removeItem(item)">Remove</span>
+          <span class="link action" ng-click="removeItemOrder(itemOrder)">Remove</span>
         </div>
       </div>
 
@@ -39,12 +39,12 @@
 </ul>
 
 
-<div ng-show="removedItems.length > 0">
+<div ng-show="removedItemOrders.length > 0">
 
   <div class="heading">Removed items:</div>
 
   <ul class="sub-records-list removed-sub-records-list items-list removed">
-    <li ng-repeat="item in removedItems" data-item-id="{{ item['id'] }}">
+    <li ng-repeat="itemOrder in removedItemOrders" ng-init="item = itemOrder['item']" data-item-id="{{ item['id'] }}">
 
       <div class="row">
 
@@ -55,7 +55,7 @@
 
         <div class="small-2 columns">
           <div class="sub-record-actions item-actions">
-            <span class="link action" ng-click="restoreItem(item)">Restore</span>
+            <span class="link action" ng-click="restoreItemOrder(itemOrder)">Restore</span>
           </div>
         </div>
 

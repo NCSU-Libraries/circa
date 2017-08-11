@@ -216,12 +216,20 @@ var OrderCtrl = function($scope, $route, $routeParams, $location, $window, $moda
     _this.restoreUserOrAssignee($scope, 'assignees', user);
   }
 
-  $scope.removeItem = function(item) {
-    _this.removeItem($scope, item);
+  // $scope.removeItem = function(item) {
+  //   _this.removeItem($scope, item);
+  // }
+
+  // $scope.restoreItem = function(item) {
+  //   _this.restoreItem($scope, item);
+  // }
+
+  $scope.removeItemOrder = function(itemOrder) {
+    _this.removeItemOrder($scope, itemOrder);
   }
 
-  $scope.restoreItem = function(item) {
-    _this.restoreItem($scope, item);
+  $scope.restoreItemOrder = function(itemOrder) {
+    _this.restoreItemOrder($scope, itemOrder);
   }
 
   $scope.hasValidationErrors = function() {
@@ -659,38 +667,60 @@ OrderCtrl.prototype.addItemOrder = function(scope, item, archivesspace_uri) {
 }
 
 
-OrderCtrl.prototype.removeFromItemOrders = function(scope, itemId) {
-  var targetIndex = this.getItemOrderIndex(scope.order['item_orders'], itemId);
-  var itemOrder = scope.order['item_orders'].splice(targetIndex, 1)[0];
-  scope.removedItemOrders.push(itemOrder);
-}
+// OrderCtrl.prototype.removeFromItemOrders = function(scope, itemId) {
+//   var targetIndex = this.getItemOrderIndex(scope.order['item_orders'], itemId);
+//   var itemOrder = scope.order['item_orders'].splice(targetIndex, 1)[0];
+//   scope.removedItemOrders.push(itemOrder);
+// }
 
 
-OrderCtrl.prototype.restoreItemOrder = function(scope, itemId) {
-  var targetIndex = this.getItemOrderIndex(scope.removedItemOrders, itemId);
-  var itemOrder = scope.removedItemOrders.splice(targetIndex, 1)[0];
-  scope.order['item_orders'].push(itemOrder);
-}
+// OrderCtrl.prototype.restoreItemOrder = function(scope, itemId) {
+//   var targetIndex = this.getItemOrderIndex(scope.removedItemOrders, itemId);
+//   var itemOrder = scope.removedItemOrders.splice(targetIndex, 1)[0];
+//   scope.order['item_orders'].push(itemOrder);
+// }
 
 
 
-// THIS WILL CAUSE PROBLEMS!!!
-OrderCtrl.prototype.removeItem = function(scope, item, callback) {
+
+
+OrderCtrl.prototype.removeItemOrder = function(scope, itemOrder, callback) {
   var _this = this;
 
-  var removeItemIndex = scope.order['item_orders'].findIndex(function(item_order, index, array) {
-    return item_order['item']['id'] == item['id'];
+  var removeItemOrderIndex = scope.order['item_orders'].findIndex(function(element) {
+    return element['item_id'] == itemOrder['item_id'];
   });
 
-  if (removeItemIndex >= 0) {
-    var removeItem = scope.order['item_orders'].splice(removeItemIndex, 1)[0];
-    scope.removedItems.push(removeItem);
-    scope.itemIds.splice( scope.itemIds.indexOf(removeItem['id']), 1);
-    _this.removeFromItemOrders(scope, removeItem['id']);
+  if (removeItemOrderIndex >= 0) {
+    var removeItemOrder = scope.order['item_orders'].splice(removeItemOrderIndex, 1)[0];
+    scope.removedItemOrders.push(removeItemOrder);
+    scope.itemIds.splice( scope.itemIds.indexOf(removeItemOrder['item_id']), 1);
     _this.commonUtils.executeCallback(callback, scope);
     return true;
   }
 }
+
+
+
+OrderCtrl.prototype.restoreItemOrder = function(scope, itemOrder, callback) {
+  var _this = this;
+  var restoreItemOrderIndex = scope.removedItemOrders.findIndex(function(element) {
+    return element['item_id'] == itemOrder['item_id'];
+  });
+  if (restoreItemOrderIndex >= 0) {
+    var restoreItemOrder = scope.removedItemOrders.splice(restoreItemOrderIndex, 1);
+
+    // ????
+    restoreItemOrder = restoreItemOrder[0];
+
+    // var item_order = { order_id: scope.order['id'], item_id: }
+    scope.order['item_orders'].push(restoreItemOrder);
+    scope.itemIds.push(itemOrder['item_id'])
+    _this.commonUtils.executeCallback(callback, scope);
+    return true;
+  }
+}
+
 
 
 // // SAFE COPY BEFORE REMOVING items FROM order
@@ -710,24 +740,6 @@ OrderCtrl.prototype.removeItem = function(scope, item, callback) {
 //     return true;
 //   }
 // }
-
-
-OrderCtrl.prototype.restoreItem = function(scope, item, callback) {
-  var _this = this;
-  var restoreItemIndex = scope.removedItems.findIndex(function(element, index, array) {
-    return element['id'] == item['id'];
-  });
-  if (restoreItemIndex >= 0) {
-    var restoreItem = scope.removedItems.splice(restoreItemIndex, 1);
-    restoreItem = restoreItem[0];
-    var item_order = { order_id: scope.order['id'], item_id: }
-    scope.order['items'].push(restoreItem);
-    scope.itemIds.push(item['id'])
-    _this.restoreItemOrder(scope, item['id']);
-    _this.commonUtils.executeCallback(callback, scope);
-    return true;
-  }
-}
 
 
 // // SAFE COPY BEFORE REMOVING items FROM order
@@ -822,7 +834,7 @@ OrderCtrl.prototype.addItemsFromArchivesSpace = function(scope, callback) {
 }
 
 
-// 0bject used to manage selections from catalog
+// Object used to manage selections from catalog
 // { 'catalogRecordId': '', 'catalogRecordData': null, 'requestItemId': '', 'loading': false, 'alert': null };
 
 OrderCtrl.prototype.getCatalogRecord = function(scope, callback) {

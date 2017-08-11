@@ -3,18 +3,18 @@ require 'rails_helper'
 RSpec.describe Enumeration, type: :model do
 
   # merge
-  it "merges order_type values" do
-    e = Enumeration.create(name: 'order_type')
-    ev1 = EnumerationValue.create(enumeration_id: e.id, value: 'research1')
-    ev2 = EnumerationValue.create(enumeration_id: e.id, value: 'research2')
-    o1 = create(:order, order_type_id: ev1.id)
-    o2 = create(:order, order_type_id: ev2.id)
-    expect(o1.order_type_id).not_to eq(o2.order_type_id)
-    Enumeration.merge_values(ev1.id, ev2.id, 'order_type')
-    o1.reload
-    o2.reload
-    expect(o1.order_type_id).to eq(o2.order_type_id)
-  end
+  # it "merges order_type values" do
+  #   e = Enumeration.create(name: 'order_type')
+  #   ev1 = EnumerationValue.create(enumeration_id: e.id, value: 'research1')
+  #   ev2 = EnumerationValue.create(enumeration_id: e.id, value: 'research2')
+  #   o1 = create(:order, order_type_id: ev1.id)
+  #   o2 = create(:order, order_type_id: ev2.id)
+  #   expect(o1.order_type_id).not_to eq(o2.order_type_id)
+  #   Enumeration.merge_values(ev1.id, ev2.id, 'order_type')
+  #   o1.reload
+  #   o2.reload
+  #   expect(o1.order_type_id).to eq(o2.order_type_id)
+  # end
 
   it "merges location_source values" do
     e = Enumeration.create(name: 'location_source')
