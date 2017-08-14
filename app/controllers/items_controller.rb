@@ -381,8 +381,13 @@ class ItemsController < ApplicationController
     @items.each do |i|
       i = i.with_indifferent_access
       i[:open_order_ids].each do |oid|
-        @orders[oid] ||= { items: [] }
-        @orders[oid][:items] << i
+        io = ItemOrder.where(order_id: oid, item_id: i[:id]).first
+        if io
+          io = io.attributes.with_indifferent_access
+          io[:item] = i
+          @orders[oid] ||= { item_orders: [] }
+          @orders[oid][:item_orders] << io
+        end
       end
     end
     @total_items = @items.length
@@ -392,12 +397,19 @@ class ItemsController < ApplicationController
 
   def get_pending_transfers
     @items = get_items_in_state(:ordered, 'next_scheduled_use_date asc')
+    prepare_common_response_objects
+  end
 
-    puts @items.inspect
 
+  def get_returns_in_transit
+    @items = get_items_in_state(:returning_to_permanent_location)
+    prepare_common_response_objects
+  end
+
+
+  def prepare_common_response_objects
     @orders = {}
     @facilities = []
-
     @items.each do |i|
       i = i.with_indifferent_access
       i[:open_order_ids].each do |oid|
@@ -408,32 +420,6 @@ class ItemsController < ApplicationController
           io['item'] = i
           @orders[oid][:item_orders] << io
         end
-      end
-
-      if i[:permanent_location]
-        @facilities << i[:permanent_location][:facility]
-      else
-        @facilities << 'unknown'
-      end
-
-    end
-
-
-    @total_items = @items.length
-    @facilities.uniq!
-    @orders.with_indifferent_access
-  end
-
-
-  def get_returns_in_transit
-    @items = get_items_in_state(:returning_to_permanent_location)
-    @orders = {}
-    @facilities = []
-    @items.each do |i|
-      i = i.with_indifferent_access
-      i[:open_order_ids].each do |oid|
-        @orders[oid] ||= { items: [] }
-        @orders[oid][:items] << i
       end
       if i[:permanent_location]
         @facilities << i[:permanent_location][:facility]
@@ -459,7 +445,6 @@ class ItemsController < ApplicationController
 
     orders_raw.each do |o|
       oid = o['id']
-
       order = Order.find_by(id: oid)
 
       if order.temporary_location
@@ -472,20 +457,19 @@ class ItemsController < ApplicationController
         @locations << location
       end
 
-      if order && order.items.length > 0
-        @orders[oid] ||= { items: [], location: location }.with_indifferent_access
-        order.items.each do |item|
+      if order && order.item_orders.length > 0
+        @orders[oid] ||= { item_orders: [], location: location }.with_indifferent_access
+        order.item_orders.each do |item_order|
+          item = item_order.item
           if item && item.current_state == :in_transit_to_temporary_location
-            @orders[oid][:items] << item.json_data(:hash).with_indifferent_access
+            io = item_order.attributes
+            io[:item] = item.json_data(:hash).with_indifferent_access
+            @orders[oid][:item_orders] << io
             @total_items += 1
           end
         end
       end
     end
-
-    puts "***"
-    puts @orders.inspect
-
     @locations.uniq!
     @orders.with_indifferent_access
   end
@@ -496,9 +480,6 @@ class ItemsController < ApplicationController
     @params[:per_page] = 1000
     @params[:filters]['state'] = state.to_s
     @params[:sort] = sort
-
-    puts @params[:filters]
-
     get_list_via_solr('item')
   end
 

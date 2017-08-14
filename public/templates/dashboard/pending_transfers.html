@@ -27,7 +27,6 @@
           <span poptip="Generate printable 'call slip'" class="print-link print-call-slip"><a ng-href="{{ dashboard.rootPath() }}/orders/{{ orderId }}/call_slip" target="_blank"><i class="fa fa-print"></i>Print call slip</a></span>
         </h3>
 
-        {{ order['item_orders'] | json }}
         <ul class="records-list items-list">
 
           <li ng-repeat="itemOrder in order['item_orders']" ng-init="item = itemOrder['item']" data-item-id="{{ orderId }}">

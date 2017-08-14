@@ -8,30 +8,31 @@ DashboardCtrl.prototype.filterPendingTransfersByFacility = function(facility) {
 
 
 DashboardCtrl.prototype.getPendingItemTransfers = function(filters) {
+  if (!this.pendingItemTransfers) {
+    this.dashbaordLoading = true;
+    var _this = this;
 
-  this.dashbaordLoading = true;
-  var _this = this;
-
-  var path = '/items/pending_transfers';
-  var config = { params: {} }
-  this.filters = filters || {};
-  if (filters) {
-    for (var key in filters) {
-      if (filters.hasOwnProperty(key)) {
-        config.params['filters[' + key + ']'] = filters[key]
+    var path = '/items/pending_transfers';
+    var config = { params: {} }
+    this.filters = filters || {};
+    if (filters) {
+      for (var key in filters) {
+        if (filters.hasOwnProperty(key)) {
+          config.params['filters[' + key + ']'] = filters[key]
+        }
       }
     }
-  }
 
-  this.apiRequests.get(path, config).then(function(response) {
-    _this.dashbaordLoading = false;
-    if (response.status == 200) {
-      _this.pendingItemTransfers = response.data;
-    }
-    else if (response.data['error'] && response.data['error']['detail']) {
-      _this.flash = response.data['error']['detail'];
-    }
-  });
+    this.apiRequests.get(path, config).then(function(response) {
+      _this.dashbaordLoading = false;
+      if (response.status == 200) {
+        _this.pendingItemTransfers = response.data;
+      }
+      else if (response.data['error'] && response.data['error']['detail']) {
+        _this.flash = response.data['error']['detail'];
+      }
+    });
+  }
 }
 
 
