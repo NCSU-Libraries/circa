@@ -863,11 +863,6 @@ OrderCtrl.prototype.addItemFromCatalog = function(catalogRecordId, catalogItemId
   scope.catalogRecordSelect['loading'] = true;
   scope.catalogRecordSelect['alert'] = null;
 
-  // if (scope.order['catalog_records'].indexOf(catalogRecordId) >= 0) {
-  //   scope.catalogRecordSelect = _this.initializeCatalogRecordSelect();
-  //   scope.catalogRecordSelect['alert'] = 'An item associated with the catalog record with id ' + catalogRecordId + ' is already included in this order.';
-  // }
-
   if (scope.order['catalog_items'].indexOf(catalogItemId) >= 0) {
     scope.catalogRecordSelect = _this.initializeCatalogRecordSelect();
     scope.catalogRecordSelect['alert'] = 'An item associated with item ' + catalogItemId + ' from catalog record with id ' + catalogRecordId + ' is already included in this order.';

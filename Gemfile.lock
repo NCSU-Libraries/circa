@@ -9,16 +9,6 @@ GIT
       rake
 
 GIT
-  remote: git@github.ncsu.edu:NCSU-Libraries/devise_wolftech_authenticatable.git
-  revision: 90a44066acdce24091b44cb4b2ea3f5ba40095c4
-  specs:
-    devise_wolftech_authenticatable (0.0.4)
-      devise
-      highline
-      net-ldap
-      slop (= 3.6.0)
-
-GIT
   remote: git@github.ncsu.edu:trthorn2/ncsu_catalog_api_client.git
   revision: 8f04854b6dedb8be8188599615beea6c6a09be52
   specs:
@@ -42,6 +32,15 @@ GIT
   revision: 5079036ffb24792f3a1886e1e146b6f120a64bd0
   specs:
     archivesspace-api-utility (0.0.6.3)
+
+PATH
+  remote: /Users/trthorn2/webapps/gems/devise_wolftech_authenticatable
+  specs:
+    devise_wolftech_authenticatable (0.0.5)
+      devise
+      highline
+      net-ldap
+      slop (= 3.6.0)
 
 GEM
   remote: https://rubygems.org/
