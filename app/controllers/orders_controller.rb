@@ -348,7 +348,6 @@ class OrdersController < ApplicationController
     end
 
     @existing_assignees.each do |user_id|
-      puts "REMOVE ASSIGNEE: " + user_id.to_s
       @order.order_assignments.where(user_id: user_id).each { |oa| oa.destroy! }
     end
   end
@@ -378,13 +377,10 @@ class OrdersController < ApplicationController
 
 
   def send_notifications
-    puts '@new_assignees'
-    puts @new_assignees.inspect
     order_url = "#{request.host_with_port}#{relative_url_root}/#/orders/#{@order.id}"
 
     if @new_assignees && @new_assignees.length > 0
       @new_assignees.each do |a|
-        puts a.inspect
         OrderMailer.assignee_email(@order, a, order_url).deliver_later
       end
     end

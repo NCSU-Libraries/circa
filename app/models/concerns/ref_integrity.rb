@@ -58,7 +58,6 @@ module RefIntegrity
 
 
     def check_deletable
-      puts "check_deletable"
       if deletable?
 
         if respond_to?(:delete_from_index)

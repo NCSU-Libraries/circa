@@ -22,8 +22,6 @@ module AspaceUtilities
     @a = ArchivesSpaceApiUtility::ArchivesSpaceSession.new
     response = @a.get(uri, params, headers)
 
-    puts response.inspect
-
     # Response code 412 from ArchivesSpace API indicates a problem with the authenticated session
     # The cause of this is unclear, but re-connecting seems to address the problem (2017-02-15)
     if response.code.to_i == 412

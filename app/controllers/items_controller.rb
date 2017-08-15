@@ -190,7 +190,6 @@ class ItemsController < ApplicationController
 
   def obsolete
     @item.mark_as_obsolete
-    puts "IT HAPPENED"
     @item.reload
     # render json: nil, status: 204
     render json: @item

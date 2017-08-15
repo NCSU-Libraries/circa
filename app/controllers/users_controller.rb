@@ -50,7 +50,6 @@ class UsersController < ApplicationController
       if @user
         raise CircaExceptions::BadRequest, "User with email #{params[:user][:email]} already exists."
       else
-        puts 'creating user'
         params[:user][:password] ||= SecureRandom.hex(8)
         if params[:user][:agreement_confirmed]
           params[:user][:agreement_confirmed_at] = Time.now

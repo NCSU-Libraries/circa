@@ -130,7 +130,6 @@ RSpec.describe Item, type: :model do
     create(:access_session, order_id: o.id, item_id: item1.id)
     create(:access_session, order_id: o.id, item_id: item2.id)
     sessions = item1.digital_item_access_sessions
-    puts sessions.inspect
     expect(sessions.length).to eq(2)
   end
 

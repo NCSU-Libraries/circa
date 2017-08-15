@@ -142,10 +142,6 @@ RSpec.describe ItemsController, type: :controller do
       sign_in(@u)
       api_values = archivesspace_api_values.first
       archivesspace_uri = api_values[:archival_object_uri]
-
-      puts '***'
-      puts archivesspace_uri
-
       post :create_from_archivesspace, archivesspace_uri: archivesspace_uri
       expect(response).to have_http_status('200')
       expect{ JSON.parse(response.body) }.not_to raise_error
