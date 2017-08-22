@@ -144,6 +144,9 @@ class Item < ActiveRecord::Base
 
       if update_items && !update_items.empty?
         update_items.each do |item|
+          if item.current_state == :at_permanent_location
+            i[:current_location_id] = i[:permanent_location_id]
+          end
           item.update_attributes(i)
         end
       else
