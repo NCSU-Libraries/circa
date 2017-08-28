@@ -1,7 +1,7 @@
 <div record-select-trigger class="selector record-selector">
 
 
-  <div class="heading">Add...</div>
+
 
 
   <div class="instruction">Enter the image ID or URL from d.lib.ncsu.edu then click 'Get images'</div>
@@ -15,7 +15,7 @@
   <div class="row collapse" ng-hide="digitalImageSelect.loading">
 
     <div class="small-10 columns">
-      <input type="text" ng-model="digitalImageSelect.uri" placeholder="Enter image ID or d.lib.ncsu.edu URL"/>
+      <input type="text" ng-model="digitalImageSelect.getUri" placeholder="Enter image ID or d.lib.ncsu.edu URL"/>
     </div>
 
     <div class="small-2 columns">
@@ -27,10 +27,12 @@
 
   <div class="selection-display digital-image" ng-show="digitalImageSelect['images']">
 
+    <div class="heading">{{ digitalImageSelect['label'] }} ({{ digitalImageSelect['identifier'] }})</div>
+
     <ul class="small-block-grid-3 medium-block-grid-6">
       <li ng-repeat="image in digitalImageSelect['images']">
         <span><img ng-src="{{ image.thumbnail }}"></span>
-        {{ image.identifier }}
+        <span class="image-label">{{ image.identifier }}</span>
       </li>
     </ul>
 

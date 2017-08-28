@@ -163,12 +163,24 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
     padding: 1rem;
     margin-top: 1rem;
     background: $grayGhost;
+
     .record-detail {
       padding: 0;
       margin-bottom: 1rem;
     }
+
     .heading {
       margin: 1rem 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+    }
+
+    .image-label {
+      font-size: 80%;
+      line-height: 1.1em;
     }
   }
 
