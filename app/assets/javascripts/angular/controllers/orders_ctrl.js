@@ -324,13 +324,6 @@ OrderCtrl.prototype.initializeCatalogRecordSelect = function() {
   return { 'catalogRecordId': '', 'catalogRecordData': '', 'requestItemId': '', 'loading': false, 'alert': null };
 }
 
-
-// Initialize object used to manage NCSU digital image selections
-OrderCtrl.prototype.initializeDigitalImageSelect = function() {
-  return { 'imageId': '', 'manifest': null, 'requestedImages': [], 'loading': false, 'alert': null };
-}
-
-
 // Initialize object used to manage user selection
 OrderCtrl.prototype.initializeUserSelect = function(scope) {
   return { 'email': '', 'loading': false, 'alert': null };
@@ -956,23 +949,6 @@ OrderCtrl.prototype.dateSingleOrRange = function(scope) {
   }
 
   return val;
-}
-
-
-OrderCtrl.prototype.getIIIFManifest = function(scope) {
-  path = 'ncsu_iiif_manifest'
-  this.apiRequests.get(path, { 'params': { 'image_id': scope.digitalImageSelect.uri } } ).then(function(response) {
-    scope.itemEventLoading = false;
-    if (response.status == 200) {
-
-      console.log(response.data);
-
-      scope.digitalImageSelect['manifest'] = response.data;
-    }
-    else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
-    }
-  });
 }
 
 

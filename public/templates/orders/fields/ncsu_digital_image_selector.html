@@ -1,4 +1,4 @@
-<div record-select-trigger class="selector catalog-record-selector">
+<div record-select-trigger class="selector record-selector">
 
 
   <div class="heading">Add...</div>
@@ -19,15 +19,20 @@
     </div>
 
     <div class="small-2 columns">
-      <span class="button postfix" ng-click="getIIIFManifest()">Add</span>
+      <span class="button postfix" ng-click="getIIIFManifest()">Get images</span>
     </div>
 
   </div>
 
 
-  <div class="selection-display digital-image" ng-show="digitalImageSelect['manifest']">
+  <div class="selection-display digital-image" ng-show="digitalImageSelect['images']">
 
-    {{ digitalImageSelect['manifest'] | json }}
+    <ul class="small-block-grid-3 medium-block-grid-6">
+      <li ng-repeat="image in digitalImageSelect['images']">
+        <span><img ng-src="{{ image.thumbnail }}"></span>
+        {{ image.identifier }}
+      </li>
+    </ul>
 
   </div>
 
