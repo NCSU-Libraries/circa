@@ -25,16 +25,22 @@
   </div>
 
 
-  <div class="selection-display digital-image" ng-show="digitalImageSelect['images']">
+  <div class="selection-display digital-image-select" ng-show="digitalImageSelect['images']">
 
     <div class="heading">{{ digitalImageSelect['label'] }} ({{ digitalImageSelect['identifier'] }})</div>
+
+    <p>Select images to include in order <span>Select all</span></p>
 
     <ul class="small-block-grid-3 medium-block-grid-6">
       <li ng-repeat="image in digitalImageSelect['images']">
         <span><img ng-src="{{ image.thumbnail }}"></span>
-        <span class="image-label">{{ image.identifier }}</span>
+        <div class="image-label">{{ image.identifier }}</div>
       </li>
     </ul>
+
+    <div>
+      <span class="button small">Add {{ digitalImageSelect.requestedImages.length }} images to order</span>
+    </div>
 
   </div>
 

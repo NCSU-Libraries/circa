@@ -276,9 +276,9 @@ var OrderCtrl = function($scope, $route, $routeParams, $location, $window, $moda
     _this.getIIIFManifest($scope);
   }
 
-  $scope.archivesSpaceRecordSelect = this.initializeArchivesSpaceRecordSelect();
-  $scope.catalogRecordSelect = this.initializeCatalogRecordSelect();
-  $scope.digitalImageSelect = this.initializeDigitalImageSelect();
+  this.initializeArchivesSpaceRecordSelect($scope);
+  this.initializeCatalogRecordSelect($scope);
+  this.initializeDigitalImageSelect($scope);
   $scope.userSelect = this.initializeUserSelect();
   $scope.assigneeSelect = this.initializeUserSelect();
 
@@ -314,14 +314,18 @@ OrderCtrl.prototype.availableStateEvents = function(scope, item) {
 
 
 // Initialize object used to manage selections from ArchivesSpace
-OrderCtrl.prototype.initializeArchivesSpaceRecordSelect = function() {
-  return { 'uri': '', 'loading': false, 'alert': null, 'digitalObject': false };
+OrderCtrl.prototype.initializeArchivesSpaceRecordSelect = function(scope) {
+  scope.archivesSpaceRecordSelect = {
+    'uri': '', 'loading': false, 'alert': null, 'digitalObject': false
+  };
 }
 
 
 // Initialize object used to manage selections from catalog
-OrderCtrl.prototype.initializeCatalogRecordSelect = function() {
-  return { 'catalogRecordId': '', 'catalogRecordData': '', 'requestItemId': '', 'loading': false, 'alert': null };
+OrderCtrl.prototype.initializeCatalogRecordSelect = function(scope) {
+  scope.catalogRecordSelect = {
+    'catalogRecordId': '', 'catalogRecordData': '', 'requestItemId': '', 'loading': false, 'alert': null
+  };
 }
 
 // Initialize object used to manage user selection
@@ -782,7 +786,7 @@ OrderCtrl.prototype.addItemsFromArchivesSpace = function(scope, callback) {
 
 
   if (_this.orderArchivesSpaceRecords(scope).indexOf(uri) >= 0) {
-    scope.archivesSpaceRecordSelect = _this.initializeArchivesSpaceRecordSelect();
+    _this.initializeArchivesSpaceRecordSelect(scope);
     scope.archivesSpaceRecordSelect['alert'] = 'The ArchivesSpace record at ' + uri + ' is already included in this order.';
   }
   else {
@@ -813,12 +817,12 @@ OrderCtrl.prototype.addItemsFromArchivesSpace = function(scope, callback) {
           _this.commonUtils.executeCallback(callback, response.data);
         }
         else {
-          scope.archivesSpaceRecordSelect = _this.initializeArchivesSpaceRecordSelect();
+          _this.initializeArchivesSpaceRecordSelect(scope);
           scope.archivesSpaceRecordSelect['alert'] = 'The ArchivesSpace record at ' + uri + ' has no linked containers and cannot be ordered.';
         }
       }
       else {
-        scope.archivesSpaceRecordSelect = _this.initializeArchivesSpaceRecordSelect();
+        _this.initializeArchivesSpaceRecordSelect(scope);
         scope.archivesSpaceRecordSelect['alert'] = response.data['error']['detail'];
       }
     });
@@ -857,7 +861,7 @@ OrderCtrl.prototype.addItemFromCatalog = function(catalogRecordId, catalogItemId
   scope.catalogRecordSelect['alert'] = null;
 
   if (scope.order['catalog_items'].indexOf(catalogItemId) >= 0) {
-    scope.catalogRecordSelect = _this.initializeCatalogRecordSelect();
+    _this.initializeCatalogRecordSelect(scope);
     scope.catalogRecordSelect['alert'] = 'An item associated with item ' + catalogItemId + ' from catalog record with id ' + catalogRecordId + ' is already included in this order.';
   }
   else {
@@ -876,7 +880,7 @@ OrderCtrl.prototype.addItemFromCatalog = function(catalogRecordId, catalogItemId
           // REMOVED AFTER REMOVING items FROM order
           // scope.order['items'].push(item);
 
-          scope.catalogRecordSelect = _this.initializeCatalogRecordSelect();
+          _this.initializeCatalogRecordSelect(scope);
           // _this.addItemOrder(scope, item['id']);
           _this.addItemOrder(scope, item);
         }
