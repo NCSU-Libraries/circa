@@ -272,9 +272,11 @@ var OrderCtrl = function($scope, $route, $routeParams, $location, $window, $moda
     _this.setOrderSubType($scope, orderSubTypes);
   }
 
-  $scope.getIIIFManifest = function() {
-    _this.getIIIFManifest($scope);
-  }
+  // $scope.getIIIFManifest = function() {
+  //   _this.getIIIFManifest($scope);
+  // }
+
+  this.applyNCSUDigitalImageFunctions($scope);
 
   this.initializeArchivesSpaceRecordSelect($scope);
   this.initializeCatalogRecordSelect($scope);

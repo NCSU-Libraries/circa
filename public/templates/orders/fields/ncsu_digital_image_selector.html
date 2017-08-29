@@ -29,14 +29,21 @@
 
     <div class="heading">{{ digitalImageSelect['label'] }} ({{ digitalImageSelect['identifier'] }})</div>
 
-    <p>Select images to include in order <span>Select all</span></p>
+    <p>Click image to select/deselect
+    <span>({{ digitalImageSelect.requestedImages.length }} of {{ digitalImageSelect.images.length }} selected)</span>
+    </p>
+
 
     <ul class="small-block-grid-3 medium-block-grid-6">
-      <li ng-repeat="image in digitalImageSelect['images']">
-        <span><img ng-src="{{ image.thumbnail }}"></span>
+      <li ng-repeat="image in digitalImageSelect['images']" ng-click="requestedImagesToggle(image.identifier)"
+        class="digital-image-select-item" ng-class="imageRequested(image.identifier) ? 'selected' : null">
+
         <div class="image-label">{{ image.identifier }}</div>
+
+        <div class="image-wrap"><img ng-src="{{ image.thumbnail }}"></div>
       </li>
     </ul>
+
 
     <div>
       <span class="button small">Add {{ digitalImageSelect.requestedImages.length }} images to order</span>

@@ -1,3 +1,20 @@
+OrderCtrl.prototype.applyNCSUDigitalImageFunctions = function(scope) {
+  var _this = this;
+
+  scope.getIIIFManifest = function() {
+    _this.getIIIFManifest(scope);
+  }
+
+  scope.requestedImagesToggle = function(identifier) {
+    _this.requestedImagesToggle(scope, identifier);
+  }
+
+  scope.imageRequested = function(identifier) {
+    return scope.digitalImageSelect.requestedImages.indexOf(identifier) >= 0;
+  }
+}
+
+
 // Initialize object used to manage NCSU digital image selections
 OrderCtrl.prototype.initializeDigitalImageSelect = function(scope) {
   scope.digitalImageSelect = {
@@ -11,16 +28,19 @@ OrderCtrl.prototype.initializeDigitalImageSelect = function(scope) {
 
 
 OrderCtrl.prototype.applyDigitalImageSelection = function(scope) {
-  scope.order['digital_images'] = scope.order['digital_images'] || [];
-  var image = {
+  scope.order['digital_image_orders'] = scope.order['digital_image_orders'] || [];
+
+  var digitalImageOrder = {
     image_id: scope.digitalImageSelect['identifier'],
     requested_images: scope.digitalImageSelect['requestedImages']
   }
-  scope.order['digital_images'].push(image)
+  scope.order['digital_image_orders'].push(digitalImageOrder);
 }
 
 
-
+OrderCtrl.prototype.requestedImagesToggle = function(scope, identifier) {
+  this.commonUtils['toggleArrayElement'](scope.digitalImageSelect['requestedImages'], identifier);
+}
 
 
 OrderCtrl.prototype.getIIIFManifest = function(scope) {
@@ -90,11 +110,13 @@ OrderCtrl.prototype.processIIIFManifest = function(scope, manifest) {
   scope.digitalImageSelect['identifier'] = identifierFromManifest(manifest);
   scope.digitalImageSelect['label'] = manifest.label;
   scope.digitalImageSelect['images'] = [];
+
   var sequence = firstSequence(manifest);
   sequence.canvases.forEach(function(canvas) {
     var image = firstImage(canvas);
     image['thumbnail'] = thumbnailUrl(image);
     image['identifier'] = identifierFromCanvas(canvas);
     scope.digitalImageSelect['images'].push(image);
+    scope.digitalImageSelect['requestedImages'].push(image['identifier']);
   });
 }

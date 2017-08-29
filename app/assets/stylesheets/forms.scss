@@ -179,10 +179,29 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
 
     }
 
-    .image-label {
-      font-size: 80%;
-      line-height: 1.25em;
-      margin-top: 0.5rem;
+
+    .digital-image-select-item {
+
+      .image-label {
+        font-size: 80%;
+        line-height: 1.25em;
+        margin: 0 0 0.5rem 0;
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      img {
+        border: 2px solid $grayLight;
+        opacity: 0.6;
+      }
+
+      &.selected img {
+        border: 2px solid $red;
+        opacity: 1;
+      }
+
     }
 
 
