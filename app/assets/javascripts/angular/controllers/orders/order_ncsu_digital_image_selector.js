@@ -5,12 +5,20 @@ OrderCtrl.prototype.applyNCSUDigitalImageFunctions = function(scope) {
     _this.getIIIFManifest(scope);
   }
 
-  scope.requestedImagesToggle = function(identifier) {
-    _this.requestedImagesToggle(scope, identifier);
+  scope.requestedImagesToggle = function(id) {
+    _this.requestedImagesToggle(scope, id);
   }
 
-  scope.imageRequested = function(identifier) {
-    return scope.digitalImageSelect.requestedImages.indexOf(identifier) >= 0;
+  scope.imageRequested = function(id) {
+    return scope.digitalImageSelect['requestedImages'].hasOwnProperty(id);
+  }
+
+  scope.totalImages = function() {
+    return Object.keys(scope.digitalImageSelect['images']).length;
+  }
+
+  scope.totalRequestedImages = function() {
+    return Object.keys(scope.digitalImageSelect['requestedImages']).length;
   }
 }
 
@@ -18,28 +26,41 @@ OrderCtrl.prototype.applyNCSUDigitalImageFunctions = function(scope) {
 // Initialize object used to manage NCSU digital image selections
 OrderCtrl.prototype.initializeDigitalImageSelect = function(scope) {
   scope.digitalImageSelect = {
-    'identifier': '',
-    'manifest': null,
-    'requestedImages': [],
-    'loading': false,
-    'alert': null
+    identifier: '',
+    label: '',
+    manifest: null,
+    requestedImages: {},
+    images: {},
+    loading: false,
+    alert: null,
+    uri: '',
+    getUri: ''
   };
 }
 
 
 OrderCtrl.prototype.applyDigitalImageSelection = function(scope) {
   scope.order['digital_image_orders'] = scope.order['digital_image_orders'] || [];
-
   var digitalImageOrder = {
     image_id: scope.digitalImageSelect['identifier'],
-    requested_images: scope.digitalImageSelect['requestedImages']
+    requested_images: scope.digitalImageSelect['requestedImages'],
+    url: scope.digitalImageSelect['uri'],
+    label: scope.digitalImageSelect['label']
   }
   scope.order['digital_image_orders'].push(digitalImageOrder);
+  this.initializeDigitalImageSelect(scope);
 }
 
 
-OrderCtrl.prototype.requestedImagesToggle = function(scope, identifier) {
-  this.commonUtils['toggleArrayElement'](scope.digitalImageSelect['requestedImages'], identifier);
+OrderCtrl.prototype.requestedImagesToggle = function(scope, id) {
+  if (scope.digitalImageSelect['requestedImages'].hasOwnProperty(id)) {
+    console.log('remove');
+    delete scope.digitalImageSelect['requestedImages'][id];
+  }
+  else {
+    console.log('add');
+    scope.digitalImageSelect['requestedImages'][id] = scope.digitalImageSelect['images'][id];
+  }
 }
 
 
@@ -109,14 +130,14 @@ OrderCtrl.prototype.processIIIFManifest = function(scope, manifest) {
   scope.digitalImageSelect['manifest'] = manifest;
   scope.digitalImageSelect['identifier'] = identifierFromManifest(manifest);
   scope.digitalImageSelect['label'] = manifest.label;
-  scope.digitalImageSelect['images'] = [];
+  scope.digitalImageSelect['images'] = {};
 
   var sequence = firstSequence(manifest);
   sequence.canvases.forEach(function(canvas) {
     var image = firstImage(canvas);
-    image['thumbnail'] = thumbnailUrl(image);
-    image['identifier'] = identifierFromCanvas(canvas);
-    scope.digitalImageSelect['images'].push(image);
-    scope.digitalImageSelect['requestedImages'].push(image['identifier']);
+    var thumbnail = thumbnailUrl(image);
+    var imageId = identifierFromCanvas(canvas);
+    scope.digitalImageSelect['images'][imageId] = thumbnail;
+    scope.digitalImageSelect['requestedImages'][imageId] = thumbnail;
   });
 }

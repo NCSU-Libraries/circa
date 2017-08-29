@@ -338,7 +338,19 @@ OrderCtrl.prototype.initializeUserSelect = function(scope) {
 
 // Initialize a new order object
 OrderCtrl.prototype.initializeOrder = function() {
-  return { 'users': [], 'items': [], 'archivesspace_records': [], 'notes': [], 'assignees': [], 'default_location': true, 'catalog_records': [], 'catalog_items': [], 'item_orders': [] };
+  return {
+    users: [],
+    items: [],
+    archivesspace_records: [],
+    notes: [],
+    assignees: [],
+    default_location: true,
+    catalog_records: [],
+    catalog_items: [],
+    item_orders: [],
+    item_orders: [],
+    digital_image_orders: []
+  };
 }
 
 
