@@ -34,6 +34,9 @@ var addToArray = function(array, newElement) {
   }
 }
 
+var objectLength = function(object) {
+  return Object.keys(object).length;
+}
 
 var toggleArrayElement = function(array, element) {
   var index = array.indexOf(element);
@@ -198,6 +201,7 @@ circaApp.factory('commonUtils', ['$http', '$modal', '$window', function($http, $
     toggleArrayElement: toggleArrayElement,
     inArray: inArray,
     sortArrayOfObjects: sortArrayOfObjects,
+    objectLength: objectLength,
     shiftPositionOfItemInArray: shiftPositionOfItemInArray,
     urlHelpers: {
       templateUrl: templateUrl,

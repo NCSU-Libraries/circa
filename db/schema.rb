@@ -35,12 +35,13 @@ ActiveRecord::Schema.define(version: 20170829153229) do
   end
 
   create_table "digital_image_orders", force: :cascade do |t|
-    t.integer  "order_id",         limit: 4,          null: false
-    t.string   "image_id",         limit: 255,        null: false
+    t.integer  "order_id",         limit: 4,     null: false
+    t.string   "image_id",         limit: 255,   null: false
     t.text     "detail",           limit: 65535
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.text     "manifest",         limit: 4294967295
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "label",            limit: 255
+    t.string   "uri",              limit: 255
     t.text     "requested_images", limit: 65535
   end
 

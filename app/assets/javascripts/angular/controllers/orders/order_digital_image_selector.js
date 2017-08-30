@@ -1,4 +1,5 @@
 OrderCtrl.prototype.applyNCSUDigitalImageFunctions = function(scope) {
+
   var _this = this;
 
   scope.getIIIFManifest = function() {
@@ -20,6 +21,11 @@ OrderCtrl.prototype.applyNCSUDigitalImageFunctions = function(scope) {
   scope.totalRequestedImages = function() {
     return Object.keys(scope.digitalImageSelect['requestedImages']).length;
   }
+
+  scope.applyDigitalImageSelection = function() {
+    _this.applyDigitalImageSelection(scope);
+  }
+
 }
 
 
@@ -44,7 +50,7 @@ OrderCtrl.prototype.applyDigitalImageSelection = function(scope) {
   var digitalImageOrder = {
     image_id: scope.digitalImageSelect['identifier'],
     requested_images: scope.digitalImageSelect['requestedImages'],
-    url: scope.digitalImageSelect['uri'],
+    uri: scope.digitalImageSelect['uri'],
     label: scope.digitalImageSelect['label']
   }
   scope.order['digital_image_orders'].push(digitalImageOrder);

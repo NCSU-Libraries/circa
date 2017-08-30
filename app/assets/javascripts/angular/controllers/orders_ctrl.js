@@ -288,6 +288,7 @@ var OrderCtrl = function($scope, $route, $routeParams, $location, $window, $moda
   $scope.removedAssignees = [];
   $scope.removedItems = [];
   $scope.removedItemOrders = [];
+  $scope.removedDigitalImageOrders = [];
   $scope.validationErrors = {};
   $scope.hasValidationErrors = false;
 }
