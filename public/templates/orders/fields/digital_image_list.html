@@ -6,19 +6,37 @@
 
     <div class="row">
 
-      <div class="small-10 columns">
-        <strong>{{ digitalImageOrder['label'] }}</strong> ({{ digitalImageOrder['image_id'] }})<br>
-        {{ commonUtils.objectLength(digitalImageOrder['requested_images']) }} images
 
-        <p>{{ digitalImageOrder | json }}</p>
+      <div class="small-10 columns">
+
+        <div class="record-overview digital-image-overview">
+
+          <div class="overview-element">
+            {{ digitalImageOrder['label'] }} ({{ digitalImageOrder['image_id'] }})
+          </div>
+
+          <div class="overview-element">
+            {{ commonUtils.objectLength(digitalImageOrder['requested_images']) }} images
+          </div>
+
+          <div class="overview-element">
+            <a ng-href="{{ digitalImageOrder['display_uri'] }}" target="_blank">{{ digitalImageOrder['display_uri'] }}</a>
+          </div>
+
+        </div>
 
       </div>
+
 
       <div class="small-2 columns">
+
         <div class="sub-record-actions item-actions">
           <span class="link action" ng-click="removeDigitalImageOrder(digitalImageOrder)">Remove</span>
+          <span class="link action" ng-click="reloadDigitalImageSelect(digitalImageOrder)">Update image selections</span>
         </div>
+
       </div>
+
 
     </div>
 

@@ -44,6 +44,9 @@ class UtilityController < ApplicationController
     manifest = {}
     if params[:image_id]
       if (image_id = image_id_from_url(params[:image_id]))
+
+        puts image_id
+
         manifest = get_iiif_manifest(image_id) || {}
       end
     end

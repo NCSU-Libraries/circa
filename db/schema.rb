@@ -41,7 +41,8 @@ ActiveRecord::Schema.define(version: 20170829153229) do
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
     t.string   "label",            limit: 255
-    t.string   "uri",              limit: 255
+    t.string   "display_uri",      limit: 255
+    t.string   "manifest_uri",     limit: 255
     t.text     "requested_images", limit: 65535
   end
 

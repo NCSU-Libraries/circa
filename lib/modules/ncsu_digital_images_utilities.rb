@@ -3,7 +3,8 @@ module NcsuDigitalImagesUtilities
   require 'net/http'
 
   def image_id_from_url(url)
-    if url.match(/^\d*$/)
+
+    if !url.match(/\//)
       url
     else
       path_segs = url.split('/')
@@ -16,6 +17,7 @@ module NcsuDigitalImagesUtilities
         nil
       end
     end
+
   end
 
 
