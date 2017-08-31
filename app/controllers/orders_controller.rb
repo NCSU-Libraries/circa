@@ -241,6 +241,7 @@ class OrdersController < ApplicationController
   def get_association_data_from_params(params)
     @items = params[:order][:items] || []
     @item_orders = params[:order][:item_orders] || []
+    @digital_image_orders = params[:order][:digital_image_orders] || []
     @users = params[:order][:users] || []
     if @users && params[:order][:primary_user_id]
       @users.map! do |user|
@@ -280,6 +281,37 @@ class OrdersController < ApplicationController
 
     @existing_items.each do |item_id|
       @order.item_orders.where(item_id: item_id).each { |io| io.destroy! }
+    end
+  end
+
+
+  def update_digital_image_orders
+    attributes_from_params = lambda do |digital_image_order|
+      atts = {
+        order_id: @order.id,
+        image_id: digital_image_order['image_id'],
+        detail: digital_image_order['detail'],
+        label: digital_image_order['label'],
+        display_uri: digital_image_order['display_uri'],
+        manifest_uri: digital_image_order['manifest_uri'],
+        requested_images: digital_image_order['requested_images']
+      }
+    end
+
+    @existing_digital_image_orders = []
+    @order.digital_image_orders.each { |dio| @existing_digital_image_orders << dio.image_id }
+    @digital_image_orders.each do |digital_image_order|
+      # add
+      if !@existing_digital_image_orders.include?(digital_image_order['image_id'])
+        @order.digital_image_orders.create!( attributes_from_params.(digital_image_order) )
+      else
+        existing = DigitalImageOrder.find_by(order_id: @order.id, image_id: digital_image_order['image_id'])
+        existing.update_attributes(attributes_from_params.(digital_image_order))
+        @existing_digital_image_orders.delete(digital_image_order['image_id'])
+      end
+    end
+    @existing_digital_image_orders.each do |image_id|
+      @order.digital_image_orders.where(image_id: image_id).each { |dio| dio.destroy! }
     end
   end
 
@@ -372,6 +404,10 @@ class OrdersController < ApplicationController
 
     if @course_reserve
       update_course_reserve
+    end
+
+    if @digital_image_orders
+      update_digital_image_orders
     end
   end
 

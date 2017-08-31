@@ -38,7 +38,7 @@ function identifierFromCanvas(canvas) {
 }
 
 
-OrderCtrl.prototype.applyNCSUDigitalImageFunctions = function(scope) {
+OrderCtrl.prototype.applyDigitalImageFunctions = function(scope) {
 
   var _this = this;
 

@@ -209,6 +209,24 @@ ul.sub-records-list, ul.records-list {
         }
       }
     }
+
+    ul {
+      margin: 0.5rem 1rem;
+      list-style: circle;
+      border: none;
+      li {
+        border: none;
+        padding: inherit;
+        &:first-child {
+          border-top: none;
+        }
+      }
+    }
+
+    .subhead {
+      margin: 0.5rem 0;
+    }
+
   }
 
 

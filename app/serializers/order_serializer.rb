@@ -10,6 +10,7 @@ class OrderSerializer < ActiveModel::Serializer
   belongs_to :temporary_location
   # has_many :items, serializer: OrderItemsSerializer
   has_many :item_orders, serializer: ItemOrdersSerializer
+  has_many :digital_image_orders, serializer: DigitalImageOrdersSerializer
   has_many :users, serializer: OrderUserSerializer
   has_many :assignees, serializer: OrderUserSerializer
   has_many :notes

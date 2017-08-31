@@ -160,29 +160,14 @@ var OrderCtrl = function($scope, $route, $routeParams, $location, $window, $moda
     _this.getOrder($scope, page, sort);
   }
 
-  // $scope.checkOutAvailable = function() {
-  //   _this.checkOutAvailable($scope);
-  // }
-
-  $scope.addUser = function(item) {
-    _this.addUser($scope, item);
+  $scope.validateOrder = function() {
+    _this.validateOrder($scope);
   }
 
-  $scope.addAssignee = function(item) {
-    _this.addAssignee($scope, item);
+  $scope.hasValidationErrors = function() {
+    _this.hasValidationErrors($scope);
   }
 
-  $scope.addItemsFromArchivesSpace = function() {
-    _this.addItemsFromArchivesSpace($scope);
-  }
-
-  $scope.addItemFromCatalog = function(catalogRecordId, catalogItemId) {
-    _this.addItemFromCatalog(catalogRecordId, catalogItemId, $scope);
-  }
-
-  $scope.getCatalogRecord = function() {
-    _this.getCatalogRecord($scope);
-  }
 
   $scope.addNote = function() {
     _this.addNote($scope, $scope.order);
@@ -196,68 +181,12 @@ var OrderCtrl = function($scope, $route, $routeParams, $location, $window, $moda
     _this.restoreNote($scope, $scope.order, note);
   }
 
-  $scope.validateOrder = function() {
-    _this.validateOrder($scope);
-  }
-
-  $scope.removeUser = function(user) {
-    _this.removeUserOrAssignee($scope, 'users', user);
-  }
-
-  $scope.removeAssignee = function(user) {
-    _this.removeUserOrAssignee($scope, 'assignees', user);
-  }
-
-  $scope.restoreUser = function(user) {
-    _this.restoreUserOrAssignee($scope, 'users', user);
-  }
-
-  $scope.restoreAssignee = function(user) {
-    _this.restoreUserOrAssignee($scope, 'assignees', user);
-  }
-
-  // $scope.removeItem = function(item) {
-  //   _this.removeItem($scope, item);
-  // }
-
-  // $scope.restoreItem = function(item) {
-  //   _this.restoreItem($scope, item);
-  // }
-
-  $scope.removeItemOrder = function(itemOrder) {
-    _this.removeItemOrder($scope, itemOrder);
-  }
-
-  $scope.restoreItemOrder = function(itemOrder) {
-    _this.restoreItemOrder($scope, itemOrder);
-  }
-
-  $scope.hasValidationErrors = function() {
-    _this.hasValidationErrors($scope);
-  }
-
   $scope.orderTypeIdMatch = function(typeId) {
     _this.orderTypeIdMatch($scope, typeId);
   }
 
-  $scope.createAndAddUser = function() {
-    _this.createAndAddUser($scope);
-  }
-
-  $scope.createAndAddAssignee = function() {
-    _this.createAndAddAssignee($scope);
-  }
-
   $scope.availableStateEvents = function(item) {
     return _this.availableStateEvents($scope, item);
-  }
-
-  $scope.deactivateItem = function(item) {
-    _this.updateItemActivation($scope, item, 'deactivate');
-  }
-
-  $scope.activateItem = function(item) {
-    _this.updateItemActivation($scope, item, 'activate');
   }
 
   $scope.dateSingleOrRange = function() {
@@ -272,11 +201,19 @@ var OrderCtrl = function($scope, $route, $routeParams, $location, $window, $moda
     _this.setOrderSubType($scope, orderSubTypes);
   }
 
-  // $scope.getIIIFManifest = function() {
-  //   _this.getIIIFManifest($scope);
+  // $scope.checkOutAvailable = function() {
+  //   _this.checkOutAvailable($scope);
   // }
 
-  this.applyNCSUDigitalImageFunctions($scope);
+  this.applyArchivesSpaceFunctions($scope);
+
+  this.applyCatalogFunctions($scope);
+
+  this.applyUserFunctions($scope);
+
+  this.applyItemFunctions($scope);
+
+  this.applyDigitalImageFunctions($scope);
 
   this.initializeArchivesSpaceRecordSelect($scope);
   this.initializeCatalogRecordSelect($scope);
@@ -291,6 +228,7 @@ var OrderCtrl = function($scope, $route, $routeParams, $location, $window, $moda
   $scope.removedDigitalImageOrders = [];
   $scope.validationErrors = {};
   $scope.hasValidationErrors = false;
+
 }
 
 
@@ -313,27 +251,6 @@ OrderCtrl.prototype.availableStateEvents = function(scope, item) {
 
   item['statesEvents'].forEach(verifyStateEvent);
   return available;
-}
-
-
-// Initialize object used to manage selections from ArchivesSpace
-OrderCtrl.prototype.initializeArchivesSpaceRecordSelect = function(scope) {
-  scope.archivesSpaceRecordSelect = {
-    'uri': '', 'loading': false, 'alert': null, 'digitalObject': false
-  };
-}
-
-
-// Initialize object used to manage selections from catalog
-OrderCtrl.prototype.initializeCatalogRecordSelect = function(scope) {
-  scope.catalogRecordSelect = {
-    'catalogRecordId': '', 'catalogRecordData': '', 'requestItemId': '', 'loading': false, 'alert': null
-  };
-}
-
-// Initialize object used to manage user selection
-OrderCtrl.prototype.initializeUserSelect = function(scope) {
-  return { 'email': '', 'loading': false, 'alert': null };
 }
 
 
@@ -377,16 +294,17 @@ OrderCtrl.prototype.validateOrder = function(scope) {
     scope.validationErrors['order_sub_type_id'] = "Order type must be selected";
   }
 
-  if (scope.order['item_orders'].length == 0) {
+  if (scope.order['item_orders'].length == 0 && scope.order['digital_image_orders'].length == 0) {
     scope.validationErrors['item_orders'] = "Order must include at least one item.";
   }
+
   if (!scope.order['access_date_start']) {
     scope.validationErrors['access_date'] = "A date must be provided.";
   }
 
-  if (scope.order['order_type'] && (scope.order['order_type']['name'] != 'research') && !scope.order['access_date_end']) {
-    scope.validationErrors['access_date'] = "End is date required.";
-  }
+  // if (scope.order['order_type'] && (scope.order['order_type']['name'] != 'research') && !scope.order['access_date_end']) {
+  //   scope.validationErrors['access_date'] = "End is date required.";
+  // }
 
   if (scope.order['users'].length == 0 && scope.order['assignees'].length == 0) {
     scope.validationErrors['users'] = "Order must be associated with a user, assigned to a staff member, or both.";
@@ -397,6 +315,9 @@ OrderCtrl.prototype.validateOrder = function(scope) {
     valid = false;
     scope.hasValidationErrors = true;
   }
+
+  console.log(scope.validationErrors);
+
   return valid;
 }
 
@@ -419,317 +340,6 @@ OrderCtrl.prototype.orderTypeIdMatch = function(scope, typeId) {
   }
   else {
     return false;
-  }
-}
-
-
-// OrderCtrl.prototype.addNote = function(scope, callback) {
-//   if (scope.order['notes'].indexOf('') < 0) {
-//     scope.order['notes'].push( { 'content': '' } );
-//   }
-// }
-
-
-// OrderCtrl.prototype.removeNote = function(scope, index) {
-//   if (scope.order['notes'][index]) {
-//     var removed = scope.order['notes'].splice(index,1);
-//     removed = removed[0];
-//     scope.removedNotes.push(removed);
-//   }
-// }
-
-
-// OrderCtrl.prototype.restoreNote = function(scope, note) {
-//   console.log(note);
-//   var _this = this;
-//   var restoreNoteIndex = scope.removedNotes.indexOf(note);
-//   if (restoreNoteIndex >= 0) {
-//     scope.removedNotes.splice(restoreNoteIndex, 1);
-//     scope.order['notes'].push(note);
-//   }
-//   return true;
-// }
-
-
-
-
-
-OrderCtrl.prototype.addUser = function(scope, item) {
-  var _this = this;
-
-  if (item) {
-
-    // var email = scope.userSelect['email'];
-    var user = item.originalObject;
-    var email = item.originalObject['email'];
-
-    scope.userSelect['loading'] = true;
-    scope.userSelect['alert'] = null;
-
-    scope.userSelect = _this.initializeUserSelect();
-    scope.$broadcast('angucomplete-alt:clearInput', 'userSelectEmail');
-
-    if (scope.userEmails.indexOf(email) >= 0) {
-      // scope.userSelect = _this.initializeUserSelect();
-      scope.userSelect['alert'] = 'A user with email ' + email + ' is already associated with this order.';
-    }
-    else {
-      // scope.userSelect = _this.initializeUserSelect();
-      scope.order['users'].push(user);
-      scope.userEmails.push(email);
-      _this.setDefaultPrimaryUserId(scope);
-    }
-  }
-}
-
-
-OrderCtrl.prototype.openNewUserModal = function(scope) {
-  var _this = this;
-  _this.window.scroll(0,0);
-  return _this.modal.open({
-    templateUrl: _this.templateUrl('users/new_modal'),
-    controller: 'UsersNewModalInstanceCtrl',
-    scope: scope,
-    parent: 'main',
-    resolve: {
-      resolved: function() {
-        return {
-          user: _this.initializeUser(),
-          find_unity_id: ''
-        }
-      }
-    }
-  });
-}
-
-
-OrderCtrl.prototype.createAndAddUser = function(scope) {
-  var _this = this;
-
-  var scrollY = _this.window.scrollY;
-
-  var modalInstance = _this.openNewUserModal();
-
-  modalInstance.result.then(function (result) {
-
-    console.log(result);
-
-    scope.order['users'].push(result['user']);
-    scope.userEmails.push( result['user']['email'] );
-    _this.window.scroll(0,scrollY);
-  }, function () {
-    console.log('Modal dismissed at: ' + new Date());
-    _this.window.scroll(0,scrollY);
-  });
-}
-
-
-OrderCtrl.prototype.addAssignee = function(scope, item) {
-  var _this = this;
-  if (item) {
-    var assignee = item.originalObject;
-    var email = item.originalObject['email'];
-
-    scope.assigneeSelect['loading'] = true;
-    scope.assigneeSelect['alert'] = null;
-
-    scope.assigneeSelect = _this.initializeUserSelect();
-
-    if (scope.assigneeEmails.indexOf(email) >= 0) {
-      scope.assigneeSelect['alert'] = 'A user with email ' + email + ' is already associated with this order.';
-    }
-    else {
-      scope.order['assignees'].push(assignee);
-      scope.assigneeEmails.push(email);
-    }
-  }
-}
-
-
-OrderCtrl.prototype.createAndAddAssignee = function(scope) {
-  var _this = this;
-
-  var scrollY = _this.window.scrollY;
-
-  var modalInstance = _this.openNewUserModal();
-
-  modalInstance.result.then(function (result) {
-    scope.order['assignees'].push(result['user']);
-    _this.window.scroll(0,scrollY);
-  }, function () {
-    console.log('Modal dismissed at: ' + new Date());
-    _this.window.scroll(0,scrollY);
-  });
-}
-
-
-OrderCtrl.prototype.removeUserOrAssignee = function(scope, association, user, callback) {
-  var _this = this;
-
-  var removeUserIndex = scope.order[association].findIndex(function(element, index, array) {
-    return element['id'] == user['id'];
-  });
-
-  if (removeUserIndex >= 0) {
-    var removeUser = scope.order[association].splice(removeUserIndex, 1);
-    removeUser = removeUser[0];
-    if (association == 'users') {
-      scope.removedUsers.push(removeUser);
-      _this.setDefaultPrimaryUserId(scope);
-    }
-    else if (association == 'assignees') {
-      scope.removedAssignees.push(removeUser);
-    }
-
-    _this.commonUtils.executeCallback(callback, scope);
-
-    return true;
-  }
-}
-
-
-OrderCtrl.prototype.restoreUserOrAssignee = function(scope, association, user, callback) {
-  var _this = this;
-  var restoreUserIndex;
-  var findIndexCallback = function(element, index, array) {
-    return element['id'] == user['id'];
-  }
-
-  if (association == 'users') {
-    restoreUserIndex = scope.removedUsers.findIndex(findIndexCallback);
-  }
-  else if (association == 'assignees') {
-    restoreUserIndex = scope.removedAssignees.findIndex(findIndexCallback);
-  }
-
-  if (restoreUserIndex >= 0) {
-    var restoreUser;
-
-    if (association == 'users') {
-      restoreUser = scope.removedUsers.splice(restoreUserIndex, 1);
-    }
-    else if (association == 'assignees') {
-      restoreUser = scope.removedAssignees.splice(restoreUserIndex, 1);
-    }
-
-    restoreUser = restoreUser[0];
-    scope.order[association].push(restoreUser);
-    _this.commonUtils.executeCallback(callback, scope);
-    return true;
-  }
-}
-
-
-// OrderCtrl.prototype.removeUser = function(scope, user, callback) {
-//   var _this = this;
-
-//   console.log(user);
-
-//   var removeUserIndex = scope.order['users'].findIndex(function(element, index, array) {
-//     return element['id'] == user['id'];
-//   });
-
-//   console.log(removeUserIndex);
-
-//   if (removeUserIndex >= 0) {
-//     var removeUser = scope.order['users'].splice(removeUserIndex, 1);
-//     removeUser = removeUser[0];
-//     scope.removedUsers.push(removeUser);
-//     _this.setDefaultPrimaryUserId(scope);
-//     _this.commonUtils.executeCallback(callback, scope);
-
-//     console.log(scope.removedUsers);
-
-//     return true;
-//   }
-// }
-
-
-OrderCtrl.prototype.restoreUser = function(scope, user, callback) {
-  var _this = this;
-  var restoreUserIndex = scope.removedUsers.findIndex(function(element, index, array) {
-    return element['id'] == user['id'];
-  });
-  if (restoreUserIndex >= 0) {
-    var restoreUser = scope.removedUsers.splice(restoreUserIndex, 1);
-    restoreUser = restoreUser[0];
-    scope.order['users'].push(restoreUser);
-    _this.commonUtils.executeCallback(callback, scope);
-    return true;
-  }
-}
-
-
-OrderCtrl.prototype.getItemOrderIndex = function(itemOrders, itemId) {
-  return itemOrders.findIndex(function(element, index, array) {
-    return element['item_id'] == itemId;
-  });
-}
-
-
-// OrderCtrl.prototype.addItemOrder = function(scope, itemId, archivesspace_uri) {
-//   archivesspace_uri = archivesspace_uri ? [ archivesspace_uri ] : null;
-//   scope.order['item_orders'].push( { order_id: scope.order['id'], item_id: itemId, archivesspace_uri: archivesspace_uri } );
-// }
-
-
-OrderCtrl.prototype.addItemOrder = function(scope, item, archivesspace_uri) {
-  archivesspace_uri = archivesspace_uri ? [ archivesspace_uri ] : null;
-  scope.order['item_orders'].push( { order_id: scope.order['id'], item_id: item['id'], item: item, archivesspace_uri: archivesspace_uri } );
-}
-
-
-// OrderCtrl.prototype.removeFromItemOrders = function(scope, itemId) {
-//   var targetIndex = this.getItemOrderIndex(scope.order['item_orders'], itemId);
-//   var itemOrder = scope.order['item_orders'].splice(targetIndex, 1)[0];
-//   scope.removedItemOrders.push(itemOrder);
-// }
-
-
-// OrderCtrl.prototype.restoreItemOrder = function(scope, itemId) {
-//   var targetIndex = this.getItemOrderIndex(scope.removedItemOrders, itemId);
-//   var itemOrder = scope.removedItemOrders.splice(targetIndex, 1)[0];
-//   scope.order['item_orders'].push(itemOrder);
-// }
-
-
-
-
-
-OrderCtrl.prototype.removeItemOrder = function(scope, itemOrder, callback) {
-  var _this = this;
-
-  var removeItemOrderIndex = scope.order['item_orders'].findIndex(function(element) {
-    return element['item_id'] == itemOrder['item_id'];
-  });
-
-  if (removeItemOrderIndex >= 0) {
-    var removeItemOrder = scope.order['item_orders'].splice(removeItemOrderIndex, 1)[0];
-    scope.removedItemOrders.push(removeItemOrder);
-    scope.itemIds.splice( scope.itemIds.indexOf(removeItemOrder['item_id']), 1);
-    _this.commonUtils.executeCallback(callback, scope);
-    return true;
-  }
-}
-
-
-
-OrderCtrl.prototype.restoreItemOrder = function(scope, itemOrder, callback) {
-  var _this = this;
-  var restoreItemOrderIndex = scope.removedItemOrders.findIndex(function(element) {
-    return element['item_id'] == itemOrder['item_id'];
-  });
-  if (restoreItemOrderIndex >= 0) {
-    var restoreItemOrder = scope.removedItemOrders.splice(restoreItemOrderIndex, 1);
-
-    // ????
-    restoreItemOrder = restoreItemOrder[0];
-
-    // var item_order = { order_id: scope.order['id'], item_id: }
-    scope.order['item_orders'].push(restoreItemOrder);
-    scope.itemIds.push(itemOrder['item_id'])
-    _this.commonUtils.executeCallback(callback, scope);
-    return true;
   }
 }
 
@@ -772,174 +382,6 @@ OrderCtrl.prototype.restoreItemOrder = function(scope, itemOrder, callback) {
 // }
 
 
-
-OrderCtrl.prototype.orderArchivesSpaceRecords = function (scope) {
-  var records = [];
-  if ((scope.order) && scope.order['item_orders']) {
-    scope.order['item_orders'].forEach(function(orderItem) {
-      records = records.concat(orderItem['archivesspace_uri']);
-    });
-  }
-  return records;
-}
-
-
-OrderCtrl.prototype.addItemsFromArchivesSpace = function(scope, callback) {
-  var _this = this;
-
-  var uri = scope.archivesSpaceRecordSelect['uri'];
-
-  scope.archivesSpaceRecordSelect['loading'] = true;
-  scope.archivesSpaceRecordSelect['alert'] = null;
-
-  var addArchivesSpaceUriToItemOrder = function(itemId, uri) {
-    var targetIndex = _this.getItemOrderIndex(scope.order['item_orders'], itemId);
-    if (targetIndex) {
-      scope.order['item_orders'][targetIndex]['archivesspace_uri'].push(uri);
-    }
-  }
-
-
-  if (_this.orderArchivesSpaceRecords(scope).indexOf(uri) >= 0) {
-    _this.initializeArchivesSpaceRecordSelect(scope);
-    scope.archivesSpaceRecordSelect['alert'] = 'The ArchivesSpace record at ' + uri + ' is already included in this order.';
-  }
-  else {
-    _this.apiRequests.post('items/create_from_archivesspace', { 'archivesspace_uri': scope.archivesSpaceRecordSelect['uri'], 'digital_object': scope.archivesSpaceRecordSelect['digitalObject'] } ).then(function(response) {
-
-      scope.archivesSpaceRecordSelect['loading'] = false;
-
-      if (response.status == 200) {
-        if (Array.isArray(response.data['items'])) {
-          $.each(response.data['items'], function(index, item) {
-            if (scope.itemIds.indexOf(item['id']) < 0) {
-              scope.itemIds.push(item['id']);
-              item['archivesspace_uri'] = uri;
-
-              // REMOVED AFTER items REMOVED FROM order
-              // scope.order['items'].push(item);
-
-              // _this.addItemOrder(scope, item['id'], scope.archivesSpaceRecordSelect['uri']);
-              _this.addItemOrder(scope, item, scope.archivesSpaceRecordSelect['uri']);
-            }
-            else {
-              scope.archivesSpaceRecordSelect['alert'] = "One or more containers corresponding to the ArchivesSpace record is already included in the order. The ArchivesSpace URI entered will be added for reference.";
-              addArchivesSpaceUriToItemOrder(item['id'], scope.archivesSpaceRecordSelect['uri']);
-            }
-          });
-          scope.archivesSpaceRecordSelect['uri'] = null;
-          scope.archivesSpaceRecordSelect['digitalObject'] = false;
-          _this.commonUtils.executeCallback(callback, response.data);
-        }
-        else {
-          _this.initializeArchivesSpaceRecordSelect(scope);
-          scope.archivesSpaceRecordSelect['alert'] = 'The ArchivesSpace record at ' + uri + ' has no linked containers and cannot be ordered.';
-        }
-      }
-      else {
-        _this.initializeArchivesSpaceRecordSelect(scope);
-        scope.archivesSpaceRecordSelect['alert'] = response.data['error']['detail'];
-      }
-    });
-  }
-
-}
-
-
-// Object used to manage selections from catalog
-// { 'catalogRecordId': '', 'catalogRecordData': null, 'requestItemId': '', 'loading': false, 'alert': null };
-
-OrderCtrl.prototype.getCatalogRecord = function(scope, callback) {
-  var _this = this;
-  var catalogRecordId = scope.catalogRecordSelect['catalogRecordId'];
-  scope.catalogRecordSelect['loading'] = true;
-  scope.catalogRecordSelect['alert'] = null;
-
-  _this.apiRequests.get('get_ncsu_catalog_record', { 'params': { 'catalog_record_id': catalogRecordId } } ).then(function(response) {
-    scope.catalogRecordSelect['loading'] = false;
-    if (response.status == 200) {
-      scope.catalogRecordSelect['catalogRecordData'] = response.data['data'];
-    }
-  });
-}
-
-
-OrderCtrl.prototype.addItemFromCatalog = function(catalogRecordId, catalogItemId, scope, callback) {
-  var _this = this;
-
-  if (catalogRecordId.match(/\//)) {
-    var urlParts = catalogRecordId.split('/');
-    catalogRecordId = urlParts[urlParts.length - 1]
-  }
-
-  scope.catalogRecordSelect['loading'] = true;
-  scope.catalogRecordSelect['alert'] = null;
-
-  if (scope.order['catalog_items'].indexOf(catalogItemId) >= 0) {
-    _this.initializeCatalogRecordSelect(scope);
-    scope.catalogRecordSelect['alert'] = 'An item associated with item ' + catalogItemId + ' from catalog record with id ' + catalogRecordId + ' is already included in this order.';
-  }
-  else {
-    scope.order['catalog_records'].push(catalogRecordId);
-    scope.order['catalog_items'].push(catalogItemId);
-    _this.apiRequests.post('items/create_from_catalog', { 'catalog_record_id': catalogRecordId, 'catalog_item_id': catalogItemId } ).then(function(response) {
-      scope.catalogRecordSelect['loading'] = false;
-      if (response.status == 200) {
-        var item = response.data['item'];
-
-        console.log(item);
-
-        if (scope.itemIds.indexOf(item['id']) < 0) {
-          scope.itemIds.push(item['id']);
-
-          // REMOVED AFTER REMOVING items FROM order
-          // scope.order['items'].push(item);
-
-          _this.initializeCatalogRecordSelect(scope);
-          // _this.addItemOrder(scope, item['id']);
-          _this.addItemOrder(scope, item);
-        }
-        else {
-          scope.catalogRecordSelect['alert'] = 'An item associated with the catalog record with id ' + catalogRecordId + ' is already included in this order.';
-        }
-      }
-      else if (response.status == 500) {
-        scope.catalogRecordSelect['alert'] = 'A system error has occurred (500)';
-      }
-    });
-  }
-}
-
-
-OrderCtrl.prototype.updateItemActivation = function(scope, item, method) {
-  scope.itemEventLoading = true;
-  var _this = this;
-  var path = 'orders/' + scope.order.id
-  if (method == 'activate') {
-    path = path + '/activate_item';
-  }
-  else if (method == 'deactivate') {
-    path = path + '/deactivate_item';
-  }
-  else {
-    scope.flash = 'Invalid method supplied for updateItemAction';
-    return
-  }
-
-  data = { item_id: item.id };
-
-  this.apiRequests.put(path, data).then(function(response) {
-    scope.itemEventLoading = false;
-    if (response.status == 200) {
-      _this.refreshOrder(scope, response.data['order'])
-    }
-    else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
-    }
-  });
-}
-
-
 OrderCtrl.prototype.setOrderType = function(scope, orderTypes) {
   var value = this.getControlledValue(orderTypes, scope.order['order_type_id']);
   scope.order['order_type'] = value;
@@ -968,17 +410,5 @@ OrderCtrl.prototype.dateSingleOrRange = function(scope) {
   }
 
   return val;
-}
-
-
-OrderCtrl.prototype.userLabel = function(scope) {
-  var userLabels = {
-    research: 'researcher',
-    reproduction: 'requester',
-    exhibition: 'requester',
-    processing: 'user'
-  };
-
-  return scope.order['order_type'] ? userLabels[ scope.order['order_type']['name'] ] : 'user';
 }
 

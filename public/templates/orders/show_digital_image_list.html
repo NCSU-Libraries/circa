@@ -1,0 +1,40 @@
+<div ng-if="order['digital_image_orders'].length == 0" class="empty-list-label">None selected</div>
+
+<ul class="sub-records-list items-list" ng-if="order['digital_image_orders'].length > 0">
+
+  <li ng-repeat="digitalImageOrder in order['digital_image_orders']" data-image-id="{{ digitalImageOrder['image_id'] }}">
+
+    <div class="row">
+
+
+      <div class="small-12 columns">
+
+        <div class="record-overview digital-image-overview">
+
+          <div class="overview-element">
+            {{ digitalImageOrder['label'] }} ({{ digitalImageOrder['image_id'] }})
+          </div>
+
+          <div class="overview-element">
+            <a ng-href="{{ digitalImageOrder['display_uri'] }}" target="_blank">{{ digitalImageOrder['display_uri'] }}</a>
+          </div>
+
+          <div class="overview-element">
+
+            <div class="subhead">{{ commonUtils.objectLength(digitalImageOrder['requested_images']) }} images requested:</div>
+
+            <ul>
+              <li ng-repeat="imageId in digitalImageOrder['requested_images']">{{ imageId }}</li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </li>
+
+</ul>
