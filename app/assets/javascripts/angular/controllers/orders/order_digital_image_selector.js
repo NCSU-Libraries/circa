@@ -5,7 +5,6 @@ function thumbnailUrl(image) {
   var maxHeight = Math.floor(maxWidth * 1.618);
   var dimensions;
   dimensions = '!' + maxWidth + ',' + maxHeight;
-  var rotation = this.thumbnailRotation;
   var urlExtension = '/' + region + '/' +  dimensions + '/0/default.jpg';
   return serviceId + urlExtension;
 }
@@ -39,14 +38,9 @@ function identifierFromCanvas(canvas) {
 }
 
 
-
 OrderCtrl.prototype.applyNCSUDigitalImageFunctions = function(scope) {
 
   var _this = this;
-
-  // scope.getIIIFManifest = function() {
-  //   _this.getIIIFManifest(scope);
-  // }
 
   scope.getNewDigitalImage = function() {
     _this.getNewDigitalImage(scope);
@@ -60,9 +54,13 @@ OrderCtrl.prototype.applyNCSUDigitalImageFunctions = function(scope) {
     _this.reloadDigitalImageSelect(scope, digitalImageOrder);
   }
 
-  // scope.imageRequested = function(id) {
-  //   return scope.digitalImageSelect['requestedImages'].hasOwnProperty(id);
-  // }
+  scope.removeDigitalImageOrder = function(digitalImageOrder) {
+    _this.removeDigitalImageOrder(scope, digitalImageOrder);
+  }
+
+  scope.initializeDigitalImageSelect = function() {
+    _this.initializeDigitalImageSelect(scope);
+  }
 
   scope.imageRequested = function(id) {
     return scope.digitalImageSelect['requestedImages'].indexOf(id) >= 0;
@@ -72,10 +70,6 @@ OrderCtrl.prototype.applyNCSUDigitalImageFunctions = function(scope) {
     return Object.keys(scope.digitalImageSelect['images']).length;
   }
 
-  // scope.totalRequestedImages = function() {
-  //   return Object.keys(scope.digitalImageSelect['requestedImages']).length;
-  // }
-
   scope.totalRequestedImages = function() {
     return scope.digitalImageSelect['requestedImages'].length;
   }
@@ -84,29 +78,58 @@ OrderCtrl.prototype.applyNCSUDigitalImageFunctions = function(scope) {
     _this.applyDigitalImageSelection(scope);
   }
 
+  scope.orderIncludesDigitalImageOrder = function(identifier) {
+    return _this.orderIncludesDigitalImageOrder(scope, identifier);
+  }
+
+  scope.restoreDigitalImageOrder = function(digitalImageOrder) {
+    _this.restoreDigitalImageOrder(scope, digitalImageOrder);
+  }
+
 }
 
 
 OrderCtrl.prototype.editDigitalImageSelection = function(scope, digitalImageOrder) {
   this.initializeDigitalImageSelect();
-  var removedDigitalImageOrder = this.pluckDigitalImageOrder(scope, digitalImageOrder);
+  var removedDigitalImageOrder = this.getDigitalImageOrder(scope, digitalImageOrder['image_id']);
 }
 
 
-OrderCtrl.prototype.pluckDigitalImageOrder = function(scope, digitalImageOrder) {
-  var removeDigitalImageOrderIndex = scope.order['digital_image_orders'].findIndex(function(element) {
-    return element['image_id'] == digitalImageOrder['image_id'];
+OrderCtrl.prototype.getDigitalImageOrderIndex = function(scope, identifier) {
+  var digitalImageOrderIndex = scope.order['digital_image_orders'].findIndex(function(element) {
+    return element['image_id'] == identifier;
   });
+  return digitalImageOrderIndex;
+}
 
-  if (removeDigitalImageOrderIndex >= 0) {
-    return scope.order['digital_image_orders'].splice(removeDigitalImageOrderIndex, 1)[0];
+
+OrderCtrl.prototype.orderIncludesDigitalImageOrder = function(scope, identifier) {
+  var digitalImageOrderIndex = this.getDigitalImageOrderIndex(scope,identifier);
+  return digitalImageOrderIndex >= 0;
+}
+
+
+OrderCtrl.prototype.getDigitalImageOrder = function(scope, identifier) {
+  var index = this.getDigitalImageOrderIndex(scope, identifier);
+
+  if (index && index >= 0) {
+    return scope.order['digital_image_orders'][index];
   }
 }
 
 
 OrderCtrl.prototype.removeDigitalImageOrder = function(scope, digitalImageOrder) {
-  var removedDigitalImageOrder = this.pluckDigitalImageOrder(scope, digitalImageOrder);
-  scope.removedDigitalImageOrders.push(removedDigitalImageOrder);
+  var index = this.getDigitalImageOrderIndex(scope, digitalImageOrder.image_id);
+  if (index >= 0) {
+    var removedDigitalImageOrder = scope.order['digital_image_orders'].splice(index, 1)[0];
+  }
+  this.commonUtils.addToArray(scope.removedDigitalImageOrders, digitalImageOrder);
+}
+
+
+OrderCtrl.prototype.restoreDigitalImageOrder = function(scope, digitalImageOrder) {
+  this.commonUtils.removeFromArray(scope.removedDigitalImageOrders, digitalImageOrder);
+  this.commonUtils.addToArray(scope.order['digital_image_orders'], digitalImageOrder);
 }
 
 
@@ -127,12 +150,11 @@ OrderCtrl.prototype.initializeDigitalImageSelect = function(scope) {
 }
 
 
+// This binds the properties of digitalImageOrder to their corresponding properties in scope.digitalImageSelect
 OrderCtrl.prototype.reloadDigitalImageSelect = function(scope, digitalImageOrder) {
-  // this.initializeDigitalImageSelect(scope);
+  this.initializeDigitalImageSelect(scope);
 
   var _this = this;
-
-  console.log(digitalImageOrder);
 
   scope.digitalImageSelect['displayUri'] = digitalImageOrder.display_uri;
   scope.digitalImageSelect['manifestUri'] = digitalImageOrder.manifest_uri;
@@ -141,15 +163,9 @@ OrderCtrl.prototype.reloadDigitalImageSelect = function(scope, digitalImageOrder
   scope.digitalImageSelect['requestedImages'] = digitalImageOrder.requested_images;
   scope.digitalImageSelect['getId'] = digitalImageOrder.image_id;
 
-  console.log(digitalImageOrder.image_id);
-  console.log(scope.digitalImageSelect);
-
   var callback = function(scope, manifest) {
-    // scope.digitalImageSelect['getId'] = '';
     scope.digitalImageSelect['manifest'] = manifest;
     scope.digitalImageSelect['images'] = {};
-
-
 
     var sequence = firstSequence(manifest);
 
@@ -178,18 +194,6 @@ OrderCtrl.prototype.applyDigitalImageSelection = function(scope) {
 }
 
 
-// OrderCtrl.prototype.requestedImagesToggle = function(scope, id) {
-//   if (scope.digitalImageSelect['requestedImages'].hasOwnProperty(id)) {
-//     console.log('remove');
-//     delete scope.digitalImageSelect['requestedImages'][id];
-//   }
-//   else {
-//     console.log('add');
-//     scope.digitalImageSelect['requestedImages'][id] = scope.digitalImageSelect['images'][id];
-//   }
-// }
-
-
 OrderCtrl.prototype.requestedImagesToggle = function(scope, id) {
   this.commonUtils.toggleArrayElement(scope.digitalImageSelect['requestedImages'], id)
 }
@@ -208,9 +212,6 @@ OrderCtrl.prototype.getNewDigitalImage = function(scope) {
 OrderCtrl.prototype.getManifest = function(scope, callback) {
   var path = 'ncsu_iiif_manifest'
   var _this = this;
-
-  console.log(scope.digitalImageSelect);
-
   this.apiRequests.get(path, { 'params': { 'image_id': scope.digitalImageSelect.getId } } ).then(function(response) {
     scope.itemEventLoading = false;
     if (response.status == 200) {
@@ -250,7 +251,3 @@ OrderCtrl.prototype.newDigitalImageFromManifest = function(scope, manifest) {
     scope.digitalImageSelect['requestedImages'].push(imageId);
   });
 }
-
-
-
-

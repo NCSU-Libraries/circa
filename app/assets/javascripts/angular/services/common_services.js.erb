@@ -28,14 +28,17 @@ var inArray = function(array, element) {
 
 
 // Add elements to an array if not already included
-var addToArray = function(array, newElement) {
-  if (array.indexOf(newElement) < 0) {
-    array.push(newElement);
+var addToArray = function(array, element) {
+  if (array.indexOf(element) < 0) {
+    array.push(element);
   }
 }
 
-var objectLength = function(object) {
-  return Object.keys(object).length;
+var removeFromArray = function(array, element) {
+  var index = array.indexOf(element);
+  if (index >= 0) {
+    array.splice(index,1);
+  }
 }
 
 var toggleArrayElement = function(array, element) {
@@ -47,6 +50,10 @@ var toggleArrayElement = function(array, element) {
     array.push(element);
   }
   return true;
+}
+
+var objectLength = function(object) {
+  return Object.keys(object).length;
 }
 
 
@@ -198,6 +205,7 @@ circaApp.factory('commonUtils', ['$http', '$modal', '$window', function($http, $
     paginationParams: paginationParams,
     calculatePercent: calculatePercent,
     addToArray: addToArray,
+    removeFromArray: removeFromArray,
     toggleArrayElement: toggleArrayElement,
     inArray: inArray,
     sortArrayOfObjects: sortArrayOfObjects,
