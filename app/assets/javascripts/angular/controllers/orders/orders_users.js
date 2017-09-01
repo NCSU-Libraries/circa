@@ -1,5 +1,9 @@
-OrderCtrl.prototype.applyUserFunctions = function(scope) {
+OrdersCtrl.prototype.applyUserFunctions = function(scope) {
   var _this = this;
+
+  scope.setPrimaryUserId = function(userId) {
+    _this.setPrimaryUserId(scope, userId);
+  }
 
   scope.addUser = function(item) {
     _this.addUser(scope, item);
@@ -37,12 +41,12 @@ OrderCtrl.prototype.applyUserFunctions = function(scope) {
 
 
 // Initialize object used to manage user selection
-OrderCtrl.prototype.initializeUserSelect = function(scope) {
+OrdersCtrl.prototype.initializeUserSelect = function(scope) {
   return { 'email': '', 'loading': false, 'alert': null };
 }
 
 
-OrderCtrl.prototype.addUser = function(scope, item) {
+OrdersCtrl.prototype.addUser = function(scope, item) {
   var _this = this;
 
   if (item) {
@@ -71,7 +75,7 @@ OrderCtrl.prototype.addUser = function(scope, item) {
 }
 
 
-OrderCtrl.prototype.openNewUserModal = function(scope) {
+OrdersCtrl.prototype.openNewUserModal = function(scope) {
   var _this = this;
   _this.window.scroll(0,0);
   return _this.modal.open({
@@ -91,7 +95,7 @@ OrderCtrl.prototype.openNewUserModal = function(scope) {
 }
 
 
-OrderCtrl.prototype.createAndAddUser = function(scope) {
+OrdersCtrl.prototype.createAndAddUser = function(scope) {
   var _this = this;
 
   var scrollY = _this.window.scrollY;
@@ -112,7 +116,7 @@ OrderCtrl.prototype.createAndAddUser = function(scope) {
 }
 
 
-OrderCtrl.prototype.addAssignee = function(scope, item) {
+OrdersCtrl.prototype.addAssignee = function(scope, item) {
   var _this = this;
   if (item) {
     var assignee = item.originalObject;
@@ -134,7 +138,7 @@ OrderCtrl.prototype.addAssignee = function(scope, item) {
 }
 
 
-OrderCtrl.prototype.createAndAddAssignee = function(scope) {
+OrdersCtrl.prototype.createAndAddAssignee = function(scope) {
   var _this = this;
 
   var scrollY = _this.window.scrollY;
@@ -151,7 +155,7 @@ OrderCtrl.prototype.createAndAddAssignee = function(scope) {
 }
 
 
-OrderCtrl.prototype.removeUserOrAssignee = function(scope, association, user, callback) {
+OrdersCtrl.prototype.removeUserOrAssignee = function(scope, association, user, callback) {
   var _this = this;
 
   var removeUserIndex = scope.order[association].findIndex(function(element, index, array) {
@@ -176,7 +180,7 @@ OrderCtrl.prototype.removeUserOrAssignee = function(scope, association, user, ca
 }
 
 
-OrderCtrl.prototype.restoreUserOrAssignee = function(scope, association, user, callback) {
+OrdersCtrl.prototype.restoreUserOrAssignee = function(scope, association, user, callback) {
   var _this = this;
   var restoreUserIndex;
   var findIndexCallback = function(element, index, array) {
@@ -208,7 +212,7 @@ OrderCtrl.prototype.restoreUserOrAssignee = function(scope, association, user, c
 }
 
 
-// OrderCtrl.prototype.removeUser = function(scope, user, callback) {
+// OrdersCtrl.prototype.removeUser = function(scope, user, callback) {
 //   var _this = this;
 
 //   console.log(user);
@@ -233,7 +237,7 @@ OrderCtrl.prototype.restoreUserOrAssignee = function(scope, association, user, c
 // }
 
 
-OrderCtrl.prototype.restoreUser = function(scope, user, callback) {
+OrdersCtrl.prototype.restoreUser = function(scope, user, callback) {
   var _this = this;
   var restoreUserIndex = scope.removedUsers.findIndex(function(element, index, array) {
     return element['id'] == user['id'];
@@ -248,7 +252,7 @@ OrderCtrl.prototype.restoreUser = function(scope, user, callback) {
 }
 
 
-OrderCtrl.prototype.userLabel = function(scope) {
+OrdersCtrl.prototype.userLabel = function(scope) {
   var userLabels = {
     research: 'researcher',
     reproduction: 'requester',
@@ -259,3 +263,16 @@ OrderCtrl.prototype.userLabel = function(scope) {
   return scope.order['order_type'] ? userLabels[ scope.order['order_type']['name'] ] : 'user';
 }
 
+
+OrdersCtrl.prototype.setPrimaryUserId = function(scope, userId) {
+  scope.order['primary_user_id'] = userId;
+}
+
+
+OrdersCtrl.prototype.setDefaultPrimaryUserId = function(scope) {
+  if (!scope.order['primary_user_id'] && scope.order['users']) {
+    if (scope.order['users'][0]) {
+      scope.order['primary_user_id'] = scope.order['users'][0]['id'];
+    }
+  }
+}

@@ -1,4 +1,6 @@
-OrderCtrl.prototype.applyCatalogFunctions = function(scope) {
+OrdersCtrl.prototype.applyCatalogFunctions = function(scope) {
+
+  var _this = this;
 
   scope.addItemFromCatalog = function(catalogRecordId, catalogItemId) {
     _this.addItemFromCatalog(catalogRecordId, catalogItemId, scope);
@@ -12,7 +14,7 @@ OrderCtrl.prototype.applyCatalogFunctions = function(scope) {
 
 
 // Initialize object used to manage selections from catalog
-OrderCtrl.prototype.initializeCatalogRecordSelect = function(scope) {
+OrdersCtrl.prototype.initializeCatalogRecordSelect = function(scope) {
   scope.catalogRecordSelect = {
     'catalogRecordId': '', 'catalogRecordData': '', 'requestItemId': '', 'loading': false, 'alert': null
   };
@@ -22,7 +24,7 @@ OrderCtrl.prototype.initializeCatalogRecordSelect = function(scope) {
 // Object used to manage selections from catalog
 // { 'catalogRecordId': '', 'catalogRecordData': null, 'requestItemId': '', 'loading': false, 'alert': null };
 
-OrderCtrl.prototype.getCatalogRecord = function(scope, callback) {
+OrdersCtrl.prototype.getCatalogRecord = function(scope, callback) {
   var _this = this;
   var catalogRecordId = scope.catalogRecordSelect['catalogRecordId'];
   scope.catalogRecordSelect['loading'] = true;
@@ -37,7 +39,7 @@ OrderCtrl.prototype.getCatalogRecord = function(scope, callback) {
 }
 
 
-OrderCtrl.prototype.addItemFromCatalog = function(catalogRecordId, catalogItemId, scope, callback) {
+OrdersCtrl.prototype.addItemFromCatalog = function(catalogRecordId, catalogItemId, scope, callback) {
   var _this = this;
 
   if (catalogRecordId.match(/\//)) {

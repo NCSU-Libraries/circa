@@ -8,35 +8,33 @@ DashboardCtrl.prototype.filterItemsInTransitForUseByLocation = function(location
 
 
 DashboardCtrl.prototype.getItemsInTransitForUse = function(filters) {
-  if (!this.itemsInTransitForUse) {
-    this.dashbaordLoading = true;
+  this.dashbaordLoading = true;
 
-    var _this = this;
-    var path = '/items/items_in_transit_for_use';
-    var config = { params: {} };
+  var _this = this;
+  var path = '/items/items_in_transit_for_use';
+  var config = { params: {} };
 
-    this.filters = filters || {};
-    if (filters) {
-      for (var key in filters) {
-        if (filters.hasOwnProperty(key)) {
-          config.params['filters[' + key + ']'] = filters[key]
-        }
+  this.filters = filters || {};
+  if (filters) {
+    for (var key in filters) {
+      if (filters.hasOwnProperty(key)) {
+        config.params['filters[' + key + ']'] = filters[key]
       }
     }
-
-    this.apiRequests.get(path, config).then(function(response) {
-      _this.dashbaordLoading = false;
-      if (response.status == 200) {
-
-        console.log(response.data);
-
-        _this.itemsInTransitForUse = response.data;
-      }
-      else if (response.data['error'] && response.data['error']['detail']) {
-        _this.flash = response.data['error']['detail'];
-      }
-    });
   }
+
+  this.apiRequests.get(path, config).then(function(response) {
+    _this.dashbaordLoading = false;
+    if (response.status == 200) {
+
+      console.log(response.data);
+
+      _this.itemsInTransitForUse = response.data;
+    }
+    else if (response.data['error'] && response.data['error']['detail']) {
+      _this.flash = response.data['error']['detail'];
+    }
+  });
 }
 
 

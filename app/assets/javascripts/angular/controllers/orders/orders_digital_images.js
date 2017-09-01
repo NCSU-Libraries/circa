@@ -38,7 +38,7 @@ function identifierFromCanvas(canvas) {
 }
 
 
-OrderCtrl.prototype.applyDigitalImageFunctions = function(scope) {
+OrdersCtrl.prototype.applyDigitalImageFunctions = function(scope) {
 
   var _this = this;
 
@@ -89,13 +89,13 @@ OrderCtrl.prototype.applyDigitalImageFunctions = function(scope) {
 }
 
 
-OrderCtrl.prototype.editDigitalImageSelection = function(scope, digitalImageOrder) {
+OrdersCtrl.prototype.editDigitalImageSelection = function(scope, digitalImageOrder) {
   this.initializeDigitalImageSelect();
   var removedDigitalImageOrder = this.getDigitalImageOrder(scope, digitalImageOrder['image_id']);
 }
 
 
-OrderCtrl.prototype.getDigitalImageOrderIndex = function(scope, identifier) {
+OrdersCtrl.prototype.getDigitalImageOrderIndex = function(scope, identifier) {
   var digitalImageOrderIndex = scope.order['digital_image_orders'].findIndex(function(element) {
     return element['image_id'] == identifier;
   });
@@ -103,13 +103,13 @@ OrderCtrl.prototype.getDigitalImageOrderIndex = function(scope, identifier) {
 }
 
 
-OrderCtrl.prototype.orderIncludesDigitalImageOrder = function(scope, identifier) {
+OrdersCtrl.prototype.orderIncludesDigitalImageOrder = function(scope, identifier) {
   var digitalImageOrderIndex = this.getDigitalImageOrderIndex(scope,identifier);
   return digitalImageOrderIndex >= 0;
 }
 
 
-OrderCtrl.prototype.getDigitalImageOrder = function(scope, identifier) {
+OrdersCtrl.prototype.getDigitalImageOrder = function(scope, identifier) {
   var index = this.getDigitalImageOrderIndex(scope, identifier);
 
   if (index && index >= 0) {
@@ -118,7 +118,7 @@ OrderCtrl.prototype.getDigitalImageOrder = function(scope, identifier) {
 }
 
 
-OrderCtrl.prototype.removeDigitalImageOrder = function(scope, digitalImageOrder) {
+OrdersCtrl.prototype.removeDigitalImageOrder = function(scope, digitalImageOrder) {
   var index = this.getDigitalImageOrderIndex(scope, digitalImageOrder.image_id);
   if (index >= 0) {
     var removedDigitalImageOrder = scope.order['digital_image_orders'].splice(index, 1)[0];
@@ -127,14 +127,14 @@ OrderCtrl.prototype.removeDigitalImageOrder = function(scope, digitalImageOrder)
 }
 
 
-OrderCtrl.prototype.restoreDigitalImageOrder = function(scope, digitalImageOrder) {
+OrdersCtrl.prototype.restoreDigitalImageOrder = function(scope, digitalImageOrder) {
   this.commonUtils.removeFromArray(scope.removedDigitalImageOrders, digitalImageOrder);
   this.commonUtils.addToArray(scope.order['digital_image_orders'], digitalImageOrder);
 }
 
 
 // Initialize object used to manage NCSU digital image selections
-OrderCtrl.prototype.initializeDigitalImageSelect = function(scope) {
+OrdersCtrl.prototype.initializeDigitalImageSelect = function(scope) {
   scope.digitalImageSelect = {
     identifier: '',
     label: '',
@@ -151,7 +151,7 @@ OrderCtrl.prototype.initializeDigitalImageSelect = function(scope) {
 
 
 // This binds the properties of digitalImageOrder to their corresponding properties in scope.digitalImageSelect
-OrderCtrl.prototype.reloadDigitalImageSelect = function(scope, digitalImageOrder) {
+OrdersCtrl.prototype.reloadDigitalImageSelect = function(scope, digitalImageOrder) {
   this.initializeDigitalImageSelect(scope);
 
   var _this = this;
@@ -180,7 +180,7 @@ OrderCtrl.prototype.reloadDigitalImageSelect = function(scope, digitalImageOrder
 }
 
 
-OrderCtrl.prototype.applyDigitalImageSelection = function(scope) {
+OrdersCtrl.prototype.applyDigitalImageSelection = function(scope) {
   scope.order['digital_image_orders'] = scope.order['digital_image_orders'] || [];
   var digitalImageOrder = {
     image_id: scope.digitalImageSelect['identifier'],
@@ -194,12 +194,12 @@ OrderCtrl.prototype.applyDigitalImageSelection = function(scope) {
 }
 
 
-OrderCtrl.prototype.requestedImagesToggle = function(scope, id) {
+OrdersCtrl.prototype.requestedImagesToggle = function(scope, id) {
   this.commonUtils.toggleArrayElement(scope.digitalImageSelect['requestedImages'], id)
 }
 
 
-OrderCtrl.prototype.getNewDigitalImage = function(scope) {
+OrdersCtrl.prototype.getNewDigitalImage = function(scope) {
   var _this = this;
   var callback = function(scope, manifest) {
     _this.newDigitalImageFromManifest(scope, manifest);
@@ -209,7 +209,7 @@ OrderCtrl.prototype.getNewDigitalImage = function(scope) {
 }
 
 
-OrderCtrl.prototype.getManifest = function(scope, callback) {
+OrdersCtrl.prototype.getManifest = function(scope, callback) {
   var path = 'ncsu_iiif_manifest'
   var _this = this;
   this.apiRequests.get(path, { 'params': { 'image_id': scope.digitalImageSelect.getId } } ).then(function(response) {
@@ -230,7 +230,7 @@ OrderCtrl.prototype.getManifest = function(scope, callback) {
 }
 
 
-OrderCtrl.prototype.newDigitalImageFromManifest = function(scope, manifest) {
+OrdersCtrl.prototype.newDigitalImageFromManifest = function(scope, manifest) {
   var _this = this;
 
   scope.digitalImageSelect['displayUri'] = manifest.related['@id'];

@@ -1,7 +1,7 @@
-// OrdersEditCtrl - For edit view, inherits from OrderCtrl
+// OrdersEditCtrl - For edit view, inherits from OrdersCtrl
 
 var OrdersEditCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
-  OrderCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+  OrdersCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
 
   var _this = this;
 
@@ -30,7 +30,7 @@ var OrdersEditCtrl = function($scope, $route, $routeParams, $location, $window, 
 }
 
 
-OrdersEditCtrl.prototype = Object.create(OrderCtrl.prototype);
+OrdersEditCtrl.prototype = Object.create(OrdersCtrl.prototype);
 
 
 OrdersEditCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];

@@ -10,6 +10,7 @@ var DashboardCtrl = function($scope, $route, $routeParams, $location, $window, $
 
 DashboardCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 DashboardCtrl.prototype = Object.create(CircaCtrl.prototype);
+
 circaControllers.controller('DashboardCtrl', DashboardCtrl);
 
 

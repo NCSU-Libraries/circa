@@ -1,4 +1,6 @@
-OrderCtrl.prototype.applyArchivesSpaceFunctions = function(scope) {
+OrdersCtrl.prototype.applyArchivesSpaceFunctions = function(scope) {
+
+  var _this = this;
 
   scope.addItemsFromArchivesSpace = function() {
     _this.addItemsFromArchivesSpace(scope);
@@ -8,14 +10,14 @@ OrderCtrl.prototype.applyArchivesSpaceFunctions = function(scope) {
 
 
 // Initialize object used to manage selections from ArchivesSpace
-OrderCtrl.prototype.initializeArchivesSpaceRecordSelect = function(scope) {
+OrdersCtrl.prototype.initializeArchivesSpaceRecordSelect = function(scope) {
   scope.archivesSpaceRecordSelect = {
     'uri': '', 'loading': false, 'alert': null, 'digitalObject': false
   };
 }
 
 
-OrderCtrl.prototype.orderArchivesSpaceRecords = function (scope) {
+OrdersCtrl.prototype.orderArchivesSpaceRecords = function (scope) {
   var records = [];
   if ((scope.order) && scope.order['item_orders']) {
     scope.order['item_orders'].forEach(function(orderItem) {
@@ -26,7 +28,7 @@ OrderCtrl.prototype.orderArchivesSpaceRecords = function (scope) {
 }
 
 
-OrderCtrl.prototype.addItemsFromArchivesSpace = function(scope, callback) {
+OrdersCtrl.prototype.addItemsFromArchivesSpace = function(scope, callback) {
   var _this = this;
 
   var uri = scope.archivesSpaceRecordSelect['uri'];

@@ -1,7 +1,7 @@
-// OrdersNewCtrl - For new view, inherits from OrderCtrl
+// OrdersNewCtrl - For new view, inherits from OrdersCtrl
 
 var OrdersNewCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
-  OrderCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+  OrdersCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
 
   var _this = this;
 
@@ -22,7 +22,7 @@ var OrdersNewCtrl = function($scope, $route, $routeParams, $location, $window, $
 
 }
 
-OrdersNewCtrl.prototype = Object.create(OrderCtrl.prototype);
+OrdersNewCtrl.prototype = Object.create(OrdersCtrl.prototype);
 OrdersNewCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('OrdersNewCtrl', OrdersNewCtrl);
 

@@ -1,4 +1,4 @@
-OrderCtrl.prototype.applyItemFunctions = function(scope) {
+OrdersCtrl.prototype.applyItemFunctions = function(scope) {
 
   var _this = this;
 
@@ -21,20 +21,20 @@ OrderCtrl.prototype.applyItemFunctions = function(scope) {
 }
 
 
-OrderCtrl.prototype.getItemOrderIndex = function(itemOrders, itemId) {
+OrdersCtrl.prototype.getItemOrderIndex = function(itemOrders, itemId) {
   return itemOrders.findIndex(function(element, index, array) {
     return element['item_id'] == itemId;
   });
 }
 
 
-OrderCtrl.prototype.addItemOrder = function(scope, item, archivesspace_uri) {
+OrdersCtrl.prototype.addItemOrder = function(scope, item, archivesspace_uri) {
   archivesspace_uri = archivesspace_uri ? [ archivesspace_uri ] : null;
   scope.order['item_orders'].push( { order_id: scope.order['id'], item_id: item['id'], item: item, archivesspace_uri: archivesspace_uri } );
 }
 
 
-OrderCtrl.prototype.removeItemOrder = function(scope, itemOrder, callback) {
+OrdersCtrl.prototype.removeItemOrder = function(scope, itemOrder, callback) {
   var _this = this;
 
   var removeItemOrderIndex = scope.order['item_orders'].findIndex(function(element) {
@@ -51,7 +51,7 @@ OrderCtrl.prototype.removeItemOrder = function(scope, itemOrder, callback) {
 }
 
 
-OrderCtrl.prototype.restoreItemOrder = function(scope, itemOrder, callback) {
+OrdersCtrl.prototype.restoreItemOrder = function(scope, itemOrder, callback) {
   var _this = this;
   var restoreItemOrderIndex = scope.removedItemOrders.findIndex(function(element) {
     return element['item_id'] == itemOrder['item_id'];
@@ -70,7 +70,7 @@ OrderCtrl.prototype.restoreItemOrder = function(scope, itemOrder, callback) {
   }
 }
 
-OrderCtrl.prototype.updateItemActivation = function(scope, item, method) {
+OrdersCtrl.prototype.updateItemActivation = function(scope, item, method) {
   scope.itemEventLoading = true;
   var _this = this;
   var path = 'orders/' + scope.order.id
