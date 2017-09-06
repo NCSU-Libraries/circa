@@ -9,9 +9,6 @@ class Enumeration < ActiveRecord::Base
     to_value = EnumerationValue.find(to_value_id)
     if from_value && to_value && (to_value.enumeration_id == enumeration.id)
       case enumeration_name
-      when 'order_type'
-        records_to_update = Order.where(order_type_id: from_value_id)
-        attribute_name = :order_type_id
       when 'patron_type'
         records_to_update = User.where(patron_type_id: from_value_id)
         attribute_name = :patron_type_id

@@ -3,6 +3,8 @@ class ItemOrder < ActiveRecord::Base
   belongs_to :item
   belongs_to :order
   belongs_to :user
+  has_one :order_fee, as: :record
+  has_one :reproduction_spec
 
   validates :item_id, uniqueness: {scope: :order_id}
 

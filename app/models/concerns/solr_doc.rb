@@ -72,6 +72,7 @@ module SolrDoc
         end
         data[:num_items] = items.length
         data[:order_type] = order_type.attributes
+        data[:order_type_id] = order_type.id
         data[:order_sub_type] = order_sub_type.attributes
         data[:primary_user] = record_attributes.call(primary_user)
         data[:active] = active?
@@ -113,7 +114,7 @@ module SolrDoc
       case self
 
       when Order
-        [:open, :confirmed, :order_type_id, :order_sub_type_id, :location_id].each do |attr|
+        [:open, :confirmed, :order_sub_type_id, :location_id].each do |attr|
           doc[attr] = self[attr]
         end
 
@@ -125,13 +126,14 @@ module SolrDoc
         doc[:state] = current_state
 
         if order_type
-          doc[:order_type_label] = order_type[:label]
-          doc[:order_type_name] = order_type[:name]
+          doc[:order_type_id] = order_type.id
+          doc[:order_type_label] = order_type.label
+          doc[:order_type_name] = order_type.name
         end
 
         if order_sub_type
-          doc[:order_sub_type_label] = order_sub_type[:label]
-          doc[:order_sub_type_name] = order_sub_type[:name]
+          doc[:order_sub_type_label] = order_sub_type.label
+          doc[:order_sub_type_name] = order_sub_type.name
         end
 
         if temporary_location

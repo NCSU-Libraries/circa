@@ -7,8 +7,9 @@ class Order < ActiveRecord::Base
   include VersionsSupport
   include SolrDoc
 
-  belongs_to :order_type
+  # belongs_to :order_type
   belongs_to :order_sub_type
+  has_one :order_fee, as: :record
 
   has_many :order_users, -> { order 'order_users.created_at desc' }, dependent: :destroy
   has_many :users, through: :order_users, source: :user
@@ -35,6 +36,15 @@ class Order < ActiveRecord::Base
   attr_reader :archivesspace_records
 
 
+  def order_type
+    order_sub_type.order_type
+  end
+
+  def order_type_id
+    order_type.id
+  end
+
+
   def self.first_datetime
     where('created_at is not null').order('created_at asc').limit(1).pluck('created_at')[0]
   end
@@ -59,12 +69,6 @@ class Order < ActiveRecord::Base
     end
   end
 
-
-  # Returns EnumerationValue record associated with order_type_id
-  # def order_type
-  #   e = EnumerationValue.find_by_id(order_type_id)
-  #   e ? { id: e.id, value: e.value, value_short: e.value_short } : nil
-  # end
 
 
   # Returns user indicated as 'primary' for this order

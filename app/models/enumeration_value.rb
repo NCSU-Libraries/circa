@@ -13,8 +13,6 @@ class EnumerationValue < ActiveRecord::Base
     ename = enumeration_name
     records = nil
     case ename
-    when 'order_type'
-      records = Order.where(order_type_id: id)
     when 'patron_type'
       records = User.where(patron_type_id: id)
     when 'location_source'

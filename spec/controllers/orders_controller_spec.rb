@@ -71,37 +71,61 @@ RSpec.describe OrdersController, type: :controller do
 
   describe "POST #create" do
 
-    it "creates order, and adds items and users, and returns json response with http success" do
-      sign_in(@u)
-      r = UserRole.last
-      user = create(:user, user_role_id: r.id)
-      # item = create(:item)
-      location = create(:location)
-      api_values = archivesspace_api_values.first
-      archivesspace_uri = api_values[:archival_object_uri]
-      # item_records = Item.create_or_update_from_archivesspace(archivesspace_uri)
+    let(:user_role) { UserRole.last }
+    let(:user) { create(:user, user_role_id: user_role.id) }
+    let(:api_values) { archivesspace_api_values.first }
+    let(:archivesspace_uri) { api_values[:archival_object_uri] }
+    let(:location) { create(:location) }
+    let(:order_type) { OrderType.create(name: 'test', label: 'test') }
+    let(:order_sub_type) { OrderSubType.create(name: 'test', label: 'test', order_type_id: order_type.id) }
+
+    let(:item_orders) do
       item_records = create_list(:item, 3)
       item_orders = []
       item_records.each do |i|
         item_order = { item_id: i.id, archivesspace_uri: [ archivesspace_uri ] }
         item_orders << item_order
       end
-      ot = OrderType.create(name: 'test', label: 'test')
-      ost = OrderSubType.create(name: 'test', label: 'test', order_type_id: ot.id)
-      post :create, order: {
+      item_orders
+    end
+
+    let(:digital_image_orders_data) do
+      [
+        { image_id: "image1", requested_images: [ 'imagefile1-1', 'imagefile1-2' ] },
+        { image_id: "image2", requested_images: [ 'imagefile2-1', 'imagefile2-2' ] },
+      ]
+    end
+
+    let(:order_post_data) do
+      {
         users: [ user.attributes ],
-        item_orders: item_orders,
         temporary_location: { id: location.id },
         primary_user_id: user.id,
-        order_type_id: ot.id,
-        order_sub_type_id: ost.id
+        order_type_id: order_type.id,
+        order_sub_type_id: order_sub_type.id
       }
+    end
+
+    it "creates order, and adds items and users, and returns json response with http success" do
+      sign_in(@u)
+      order_data = order_post_data
+      order_data[:item_orders] = item_orders
+      post :create, order: order_data
       expect(response).to have_http_status(:success)
       expect { JSON.parse response.body }.not_to raise_error
       expect(JSON.parse(response.body)['order']['item_orders'].empty?).not_to be true
       expect(assigns(:order).archivesspace_records.include?(archivesspace_uri)).to be true
       expect(JSON.parse(response.body)['order']['users'].empty?).not_to be true
       expect(JSON.parse(response.body)['order']['primary_user_id']).to eq(user.id)
+    end
+
+    it "creates reproduction order with digital images" do
+      sign_in(@u)
+      order_data = order_post_data
+      order_data[:digital_image_orders] = digital_image_orders_data
+      post :create, order: order_data
+      expect(JSON.parse(response.body)['order']['digital_image_orders'].empty?).not_to be true
+      expect(JSON.parse(response.body)['order']['digital_image_orders'].length).to eq(2)
     end
 
   end
@@ -125,7 +149,6 @@ RSpec.describe OrdersController, type: :controller do
       o.reload
       expect(o.access_date_start).to eq(Date.parse(new_date))
     end
-
 
     it "ignores params values not permitted by safe_attributes without raising an error" do
       sign_in(@u)

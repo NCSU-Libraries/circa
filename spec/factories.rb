@@ -31,19 +31,15 @@ FactoryGirl.define do
     end_datetime DateTime.now
   end
 
+
   factory :order do
     access_date_start Date.today
 
     after(:create) do |order|
-      # user = create(:user)
-      # OrderUser.create(user_id: user.id, order_id: order.id)
-
-      # assignee = create(:user)
-      # OrderAssignment.create(user_id: assignee.id, order_id: order.id)
       ot = OrderType.create(name: 'test', label: 'test')
       ost = OrderSubType.create(name: 'test', label: 'test', order_type_id: ot.id)
       location = create(:location)
-      order.update_attributes(location_id: location.id, order_type_id: ot.id, order_sub_type_id: ost.id)
+      order.update_attributes(location_id: location.id, order_sub_type_id: ost.id)
       order.reload
     end
 
@@ -156,5 +152,11 @@ FactoryGirl.define do
   factory :item_order do
   end
 
+
+  factory :digital_image_order do
+    sequence( :image_id ) { |n| "image#{n}" }
+    requested_images [ 'imagefile0001', 'imagefile0002', 'imagefile0003' ]
+    sequence(:label) { |n| "Digital image order #{n}" }
+  end
 
 end
