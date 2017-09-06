@@ -2,12 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ItemOrder, type: :model do
 
-  let(:order_type) { OrderType.create(name: 'test', label: 'test') }
-
-  let(:order) do
-    ost = OrderSubType.create(name: 'test', label: 'test', order_type_id: order_type.id)
-    create(:order, order_sub_type_id: ost.id)
-  end
+  let(:order) { create(:order) }
 
   it "validates uniqueness of association" do
     i = create(:item)

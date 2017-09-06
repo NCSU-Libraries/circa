@@ -6,4 +6,12 @@ class ReproductionSpec < ActiveRecord::Base
     pages
   end
 
+  def item
+    item_order.item
+  end
+
+  def order
+    item_order.order
+  end
+
 end

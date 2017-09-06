@@ -66,6 +66,11 @@ class ItemOrder < ActiveRecord::Base
   end
 
 
+  def unit_total
+    reproduction_spec ? reproduction_spec.unit_total : 0
+  end
+
+
   private
 
 

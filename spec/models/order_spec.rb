@@ -2,6 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Order, type: :model do
 
+  let(:order) { create(:order) }
+  let(:u) { create(:user) }
+  let(:order_with_user_and_assignee) { create(:order_with_user_and_assignee) }
+  let(:order_with_items) { create(:order_with_items) }
+
   before(:each) do
     populate_roles
     @u = create(:user)
@@ -9,36 +14,31 @@ RSpec.describe Order, type: :model do
 
 
   it "should have user" do
-    o = create(:order_with_user_and_assignee)
-    expect(o.users.first).to be_a(User)
+    expect(order_with_user_and_assignee.users.first).to be_a(User)
   end
 
 
   it "should have assigned user" do
-    o = create(:order_with_user_and_assignee)
-    expect(o.assignees.first).to be_a(User)
+    expect(order_with_user_and_assignee.assignees.first).to be_a(User)
   end
 
 
   it "should have items" do
-    o = create(:order_with_items)
-    expect(o.items.first).to be_a(Item)
+    expect(order_with_items.items.first).to be_a(Item)
   end
 
 
   it "should have notes" do
-    o = create(:order)
     note_content = "There's a great big beautiful tomorrow"
-    o.notes.build(content: note_content)
-    o.save
-    expect(o.notes.first.content).to eq(note_content)
+    order.notes.build(content: note_content)
+    order.save
+    expect(order.notes.first.content).to eq(note_content)
   end
 
 
   it "provides an array of associated item ids" do
-    o = create(:order)
-    items = o.items
-    expect(o.item_ids).to eq(items.map { |i| i.id })
+    items = order.items
+    expect(order.item_ids).to eq(items.map { |i| i.id })
   end
 
 
@@ -56,7 +56,7 @@ RSpec.describe Order, type: :model do
 
 
   it "can recall items associated with previous version" do
-    o = create(:order_with_items)
+    o = order_with_items.clone
     first_item_id = o.items.first.id
     o.paper_trail.touch_with_version
     o.item_orders.first.destroy
@@ -122,6 +122,19 @@ RSpec.describe Order, type: :model do
     expect(u1).to be_a(User)
     u2 = o.last_updated_by_user
     expect(u2).to be_a(User)
+  end
+
+
+  it "aggregates fees for reproduction" do
+    o = create(:order)
+    create(:item_order, order_id: o.id)
+    create(:digital_image_order, order_id: o.id)
+    create(:order_fee, record_type: 'ItemOrder', record_id: item_order.id)
+    create(:order_fee, record_type: 'DigitalImageOrder', record_id: digital_image_order.id)
+    order_fees = o.order_fees
+    expect(order_fees).to be_a(Array)
+    expect(order_fees.length).to eq(2)
+    expect(order_fees.first).to be_a(OrderFee)
   end
 
 end

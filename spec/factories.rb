@@ -32,14 +32,32 @@ FactoryGirl.define do
   end
 
 
+  factory :location do
+    sequence( :uri ) { |n| "/repositories/2/resources/1234#{n}" }
+    source_id Location.archivesspace_location_source_id
+  end
+
+
+  factory :order_type do
+    name 'test'
+    label 'test'
+  end
+
+
+  factory :order_sub_type do
+    name 'test'
+    label 'test'
+    order_type
+  end
+
+
   factory :order do
     access_date_start Date.today
+    order_sub_type
 
     after(:create) do |order|
-      ot = OrderType.create(name: 'test', label: 'test')
-      ost = OrderSubType.create(name: 'test', label: 'test', order_type_id: ot.id)
       location = create(:location)
-      order.update_attributes(location_id: location.id, order_sub_type_id: ost.id)
+      order.update_attributes(location_id: location.id)
       order.reload
     end
 
@@ -138,18 +156,14 @@ FactoryGirl.define do
   end
 
 
-  factory :location do
-    sequence( :uri ) { |n| "/repositories/2/resources/1234#{n}" }
-    source_id Location.archivesspace_location_source_id
-  end
-
-
   factory :note do
     content "Mr Leopold Bloom ate with relish the inner organs of beasts and fowls."
   end
 
 
   factory :item_order do
+    order
+    item
   end
 
 
@@ -157,6 +171,22 @@ FactoryGirl.define do
     sequence( :image_id ) { |n| "image#{n}" }
     requested_images [ 'imagefile0001', 'imagefile0002', 'imagefile0003' ]
     sequence(:label) { |n| "Digital image order #{n}" }
+    order
   end
+
+
+  factory :reproduction_spec do
+  end
+
+
+  factory :reproduction_format do
+  end
+
+
+  factory :order_fee do
+    per_unit_fee 1.00
+    per_order_fee 1.00
+  end
+
 
 end
