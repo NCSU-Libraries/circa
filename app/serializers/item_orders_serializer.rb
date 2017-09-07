@@ -1,5 +1,5 @@
 class ItemOrdersSerializer < ActiveModel::Serializer
-  attributes :id, :order_id, :item_id, :archivesspace_uri, :user_id, :item
+  attributes :id, :order_id, :item_id, :archivesspace_uri, :user_id, :item, :order_fee, :reproduction_spec
 
   def item
     i = object.item
