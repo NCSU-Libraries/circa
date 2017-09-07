@@ -90,8 +90,6 @@ RSpec.describe Order, type: :model do
   end
 
 
-
-
   it "will not add duplicate items" do
     o = create(:order)
     i = create(:item)
@@ -100,7 +98,6 @@ RSpec.describe Order, type: :model do
     expect(add1).to be_a(ItemOrder)
     expect(add2).to eq(add1)
   end
-
 
 
   it "adds items created from ArchivesSpace URIs" do
@@ -127,10 +124,10 @@ RSpec.describe Order, type: :model do
 
   it "aggregates fees for reproduction" do
     o = create(:order)
-    create(:item_order, order_id: o.id)
-    create(:digital_image_order, order_id: o.id)
-    create(:order_fee, record_type: 'ItemOrder', record_id: item_order.id)
-    create(:order_fee, record_type: 'DigitalImageOrder', record_id: digital_image_order.id)
+    io = create(:item_order, order_id: o.id)
+    dio = create(:digital_image_order, order_id: o.id)
+    create(:order_fee, record_type: 'ItemOrder', record_id: io.id)
+    create(:order_fee, record_type: 'DigitalImageOrder', record_id: dio.id)
     order_fees = o.order_fees
     expect(order_fees).to be_a(Array)
     expect(order_fees.length).to eq(2)

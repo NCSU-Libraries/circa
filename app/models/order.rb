@@ -40,6 +40,7 @@ class Order < ActiveRecord::Base
     order_sub_type.order_type
   end
 
+
   def order_type_id
     order_type.id
   end
@@ -70,12 +71,10 @@ class Order < ActiveRecord::Base
   end
 
 
-
   # Returns user indicated as 'primary' for this order
   def primary_user
     order_users.where(primary: true).first
   end
-
 
 
   def association_data
@@ -277,7 +276,6 @@ class Order < ActiveRecord::Base
   end
 
 
-
   def item_ids
     items.map { |i| i.id }
   end
@@ -295,5 +293,14 @@ class Order < ActiveRecord::Base
     has_digital_items
   end
 
+
+  def order_fees
+    fees_for_collection = lambda do |collection|
+      collection.map { |x| x.order_fee ? x.order_fee : nil }
+    end
+    fees = [item_orders.to_a, digital_image_orders.to_a].flat_map { |x| fees_for_collection.(x) }
+    fees.delete_if { |f| f.nil? }
+    fees
+  end
 
 end
