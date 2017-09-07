@@ -266,16 +266,25 @@ class OrdersController < ApplicationController
     # detail and reproduction_pages will come in as attributes of items, but they actually belong to the item_order
     # so look for those, then add them to the correct record in @item_orders
 
+
+
+
     @item_orders.each do |item_order|
       # add item to order
       if !@existing_items.include?(item_order['item_id'].to_i)
-        @order.item_orders.create!(item_id: item_order['item_id'], archivesspace_uri: item_order['archivesspace_uri'], user_id: current_user.id, active: true)
+        item_order_record = @order.item_orders.create!(item_id: item_order['item_id'], archivesspace_uri: item_order['archivesspace_uri'], user_id: current_user.id, active: true)
       else
-        existing_item_order = @order.item_orders.where(item_id: item_order['item_id']).first
-        existing_item_order.update_attributes(archivesspace_uri: item_order['archivesspace_uri'])
+        item_order_record = @order.item_orders.where(item_id: item_order['item_id']).first
+        item_order_record.update_attributes(archivesspace_uri: item_order['archivesspace_uri'])
         @order.reload
         # delete id from @existing_items array to track associations to be deleted
         @existing_items.delete(item_order['item_id'])
+      end
+      if item_order['reproduction_spec']
+        create_or_update_reproduction_spec(item_order_record.id, item_order['reproduction_spec'])
+      end
+      if item_order['order_fee']
+        create_or_update_order_fee(item_order_record.id, 'ItemOrder', item_order['order_fee'])
       end
     end
 
@@ -285,9 +294,41 @@ class OrdersController < ApplicationController
   end
 
 
+  def create_or_update_reproduction_spec(item_order_id, reproduction_spec_data)
+    atts = {
+      detail: reproduction_spec_data['detail'],
+      pages: reproduction_spec_data['pages'],
+      reproduction_format_id: reproduction_spec_data['reproduction_format_id']
+    }
+    existing_reproduction_spec = ReproductionSpec.find_by(item_order_id: item_order_id)
+    if existing_reproduction_spec
+      existing_reproduction_spec.update_attributes(atts)
+    else
+      atts[:item_order_id] = item_order_id
+      ReproductionSpec.create!(atts)
+    end
+  end
+
+
+  def create_or_update_order_fee(record_id, record_type, order_fee_data)
+    atts = {
+      per_unit_fee: order_fee_data['per_unit_fee'],
+      per_order_fee: order_fee_data['per_unit_fee'],
+      note: order_fee_data['note']
+    }
+    existing_order_fee = OrderFee.find_by(record_id: record_id, record_type: record_type)
+    if existing_order_fee
+      existing_order_fee.update_attributes(atts)
+    else
+      atts.merge!({ record_id: record_id, record_type: record_type })
+      OrderFee.create!(atts)
+    end
+  end
+
+
   def update_digital_image_orders
     attributes_from_params = lambda do |digital_image_order|
-      atts = {
+      {
         order_id: @order.id,
         image_id: digital_image_order['image_id'],
         detail: digital_image_order['detail'],

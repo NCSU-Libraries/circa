@@ -104,7 +104,7 @@ FactoryGirl.define do
     sequence( :email ) { |n| "person#{n}@example.com" }
     password Devise::Encryptor.digest(User, 'password')
     agreement_confirmed_at Time.now
-    user_role_id { create(:user_role).id }
+    user_role
 
     factory :user_with_role do
       after(:create) do |user|

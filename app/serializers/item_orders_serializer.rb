@@ -1,6 +1,16 @@
 class ItemOrdersSerializer < ActiveModel::Serializer
   attributes :id, :order_id, :item_id, :archivesspace_uri, :user_id, :item, :order_fee, :reproduction_spec
 
+  def order_fee
+    if object.order_fee
+      atts = object.order_fee.attributes
+      atts['per_unit_fee'] = atts['per_unit_fee'].to_f
+      atts['per_order_fee'] = atts['per_order_fee'].to_f
+      atts
+    end
+  end
+
+
   def item
     i = object.item
     atts = i.attributes
