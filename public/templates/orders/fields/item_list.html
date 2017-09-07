@@ -22,7 +22,7 @@
     <div class="row" ng-if="order['order_type']['name'] == 'reproduction'">
       <div class="small-12 columns">
         <div class="heading">Specific items for reproduction</div>
-        <textarea ng-model="order['item_orders'][$index]['detail']"/>
+        <textarea ng-model="order['item_orders'][$index]['reproduction_spec']['detail']"/>
       </div>
     </div>
 
@@ -30,7 +30,7 @@
     <div class="row" ng-if="order['order_type']['name'] == 'reproduction'">
       <div class="small-12 columns">
         <div class="heading">Total pages</div>
-        <input ng-model="order['item_orders'][$index]['reproduction_pages']" class="integer"/>
+        <input ng-model="order['item_orders'][$index]['reproduction_spec']['pages']" class="integer"/>
       </div>
     </div>
 

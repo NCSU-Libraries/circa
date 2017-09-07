@@ -148,8 +148,9 @@ RSpec.describe OrdersController, type: :controller do
 
     let(:digital_image_orders_data) do
       [
-        { image_id: "image1", requested_images: [ 'imagefile1-1', 'imagefile1-2' ] },
-        { image_id: "image2", requested_images: [ 'imagefile2-1', 'imagefile2-2' ] },
+        { image_id: "image1", requested_images: [ 'imagefile1-1', 'imagefile1-2' ],
+          order_fee: { per_unit_fee: 1.23 }
+        }
       ]
     end
 
@@ -186,12 +187,14 @@ RSpec.describe OrdersController, type: :controller do
       expect(r['order']['item_orders'][0]['order_fee']['per_unit_fee']).to eq(1.23)
     end
 
-    it "creates reproduction order with digital images" do
+    it "creates reproduction order with digital images with fees" do
       order_data = order_post_data
       order_data[:digital_image_orders] = digital_image_orders_data
       post :create, order: order_data
-      expect(JSON.parse(response.body)['order']['digital_image_orders'].empty?).not_to be true
-      expect(JSON.parse(response.body)['order']['digital_image_orders'].length).to eq(2)
+      r = JSON.parse(response.body)
+      expect(r['order']['digital_image_orders'].empty?).not_to be true
+      expect(r['order']['digital_image_orders'].length).to eq(1)
+      expect(r['order']['digital_image_orders'][0]['order_fee']['per_unit_fee']).to eq(1.23)
     end
 
   end

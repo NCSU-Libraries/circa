@@ -344,12 +344,17 @@ class OrdersController < ApplicationController
     @digital_image_orders.each do |digital_image_order|
       # add
       if !@existing_digital_image_orders.include?(digital_image_order['image_id'])
-        @order.digital_image_orders.create!( attributes_from_params.(digital_image_order) )
+        digital_image_order_record = @order.digital_image_orders.create!( attributes_from_params.(digital_image_order) )
       else
-        existing = DigitalImageOrder.find_by(order_id: @order.id, image_id: digital_image_order['image_id'])
-        existing.update_attributes(attributes_from_params.(digital_image_order))
+        digital_image_order_record = DigitalImageOrder.find_by(order_id: @order.id, image_id: digital_image_order['image_id'])
+        digital_image_order_record.update_attributes(attributes_from_params.(digital_image_order))
         @existing_digital_image_orders.delete(digital_image_order['image_id'])
       end
+
+      if digital_image_order['order_fee']
+        create_or_update_order_fee(digital_image_order_record.id, 'DigitalImageOrder', digital_image_order['order_fee'])
+      end
+
     end
     @existing_digital_image_orders.each do |image_id|
       @order.digital_image_orders.where(image_id: image_id).each { |dio| dio.destroy! }
