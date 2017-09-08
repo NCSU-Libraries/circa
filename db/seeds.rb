@@ -120,3 +120,44 @@ enumerations.each do |enumeration, values|
     end
   end
 end
+
+
+reproduction_formats = [
+  {
+    name: "photocopy/low-res scan (150 dpi)",
+    default_unit_fee_internal: 0.25,
+    default_unit_fee_external: 0.50,
+    description: nil
+  },
+  {
+    name: "digital scan",
+    default_unit_fee_internal: 5.00,
+    default_unit_fee_external: 15.00,
+    description: nil
+  },
+  {
+    name: "digital camera/cell phone image",
+    default_unit_fee_internal: nil,
+    default_unit_fee_external: nil,
+    description: "No charge. In-person only."
+  },
+  {
+    name: "oversize digital scan",
+    default_unit_fee_internal: 10.00,
+    default_unit_fee_external: 20.00,
+    description: "A $35 set-up and processing fee may be added."
+  },
+  {
+    name: "A/V digitization",
+    default_unit_fee_internal: nil,
+    default_unit_fee_external: nil,
+    description: "Fees are determined on a case-by-case basis; an estimate will be given before the order is finalized. A $35 set-up and processing fee may be added."
+  }
+]
+
+# Only run if the table is empty
+if ReproductionFormat.count == 0
+  reproduction_formats.each do |atts|
+    ReproductionFormat.create!(atts)
+  end
+end

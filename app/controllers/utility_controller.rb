@@ -139,7 +139,7 @@ class UtilityController < ApplicationController
   #  * order_sub_types
   #  * patron_type (from enumeration_values)
   def controlled_values
-    @values = { order_type: [], order_sub_type: [], patron_type: [] }
+    @values = { order_type: [], order_sub_type: [], patron_type: [], reproduction_format: [] }
 
     #order_type
     OrderType.find_each do |ot|
@@ -156,6 +156,13 @@ class UtilityController < ApplicationController
     EnumerationValue.where(enumeration_id: patron_type_enumeration.id).find_each do |ev|
       @values[:patron_type] << { id: ev.id, value: ev.value, value_short: ev.value_short }
     end
+
+    # reproduction_format
+    ReproductionFormat.find_each do |rf|
+      @values[:reproduction_format] << { id: rf.id, name: rf.name, description: rf.description,
+        default_unit_fee_internal: rf.default_unit_fee_internal, default_unit_fee_external: rf.default_unit_fee_external }
+    end
+
     render json: { controlled_values: @values }
   end
 

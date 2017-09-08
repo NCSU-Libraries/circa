@@ -6,9 +6,14 @@
 <div ng-show="loading" ng-include="templateUrl('common/processing')"/>
 
 <div ng-hide="loading">
+
   <div ng-include="templateUrl('orders/form_fields')"/>
-  <button class="button" ng-click="createOrder()">Create order</button>
-  <button class="button" ng-click="goto('/orders')">Cancel</button>
+
+  <div ng-show="order['order_type'] && order['order_sub_type']">
+    <button class="button" ng-click="createOrder()">Create order</button>
+    <button class="button" ng-click="goto('/orders')">Cancel</button>
+  </div>
+
 </div>
 
 

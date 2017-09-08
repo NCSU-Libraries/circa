@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170906163509) do
+ActiveRecord::Schema.define(version: 20170908134249) do
 
   create_table "access_sessions", force: :cascade do |t|
     t.integer  "item_id",        limit: 4,                null: false
@@ -38,12 +38,12 @@ ActiveRecord::Schema.define(version: 20170906163509) do
     t.integer  "order_id",         limit: 4,     null: false
     t.string   "image_id",         limit: 255,   null: false
     t.text     "detail",           limit: 65535
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
     t.string   "label",            limit: 255
     t.string   "display_uri",      limit: 255
     t.string   "manifest_uri",     limit: 255
     t.text     "requested_images", limit: 65535
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   add_index "digital_image_orders", ["image_id"], name: "by_image_id", using: :btree
@@ -53,9 +53,9 @@ ActiveRecord::Schema.define(version: 20170906163509) do
     t.integer  "enumeration_id", limit: 4
     t.string   "value",          limit: 255
     t.string   "value_short",    limit: 255
+    t.integer  "order",          limit: 4
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
-    t.integer  "order",          limit: 4
   end
 
   add_index "enumeration_values", ["enumeration_id"], name: "index_enumeration_values_on_enumeration_id", using: :btree
@@ -87,11 +87,11 @@ ActiveRecord::Schema.define(version: 20170906163509) do
   create_table "item_orders", force: :cascade do |t|
     t.integer  "item_id",           limit: 4
     t.integer  "order_id",          limit: 4
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
     t.text     "archivesspace_uri", limit: 65535
     t.integer  "user_id",           limit: 4
     t.boolean  "active",                          default: false, null: false
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
   end
 
   add_index "item_orders", ["item_id"], name: "index_item_orders_on_item_id", using: :btree
@@ -105,13 +105,13 @@ ActiveRecord::Schema.define(version: 20170906163509) do
     t.string   "uri",                   limit: 255
     t.integer  "permanent_location_id", limit: 4
     t.integer  "current_location_id",   limit: 4
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
     t.string   "barcode",               limit: 255
     t.boolean  "digital_object",                      default: false, null: false
     t.boolean  "unprocessed",                         default: false, null: false
     t.text     "digital_object_title",  limit: 65535
     t.boolean  "obsolete"
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
   end
 
   add_index "items", ["current_location_id"], name: "index_items_on_current_location_id", using: :btree
@@ -122,14 +122,14 @@ ActiveRecord::Schema.define(version: 20170906163509) do
   create_table "locations", force: :cascade do |t|
     t.string   "title",             limit: 255
     t.string   "uri",               limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
     t.integer  "source_id",         limit: 4
     t.boolean  "default",                         default: false, null: false
     t.string   "catalog_item_id",   limit: 255
     t.text     "catalog_item_data", limit: 65535
     t.text     "notes",             limit: 65535
     t.string   "facility",          limit: 255
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
   end
 
   add_index "locations", ["uri"], name: "index_locations_on_uri", using: :btree
@@ -184,9 +184,9 @@ ActiveRecord::Schema.define(version: 20170906163509) do
   create_table "order_users", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
     t.integer  "order_id",   limit: 4
+    t.boolean  "primary"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
-    t.boolean  "primary"
   end
 
   add_index "order_users", ["order_id"], name: "index_order_users_on_order_id", using: :btree
@@ -194,8 +194,6 @@ ActiveRecord::Schema.define(version: 20170906163509) do
 
   create_table "orders", force: :cascade do |t|
     t.date     "access_date_start"
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
     t.boolean  "open",                        default: true,  null: false
     t.boolean  "confirmed",                   default: false, null: false
     t.integer  "location_id",       limit: 4
@@ -203,15 +201,19 @@ ActiveRecord::Schema.define(version: 20170906163509) do
     t.boolean  "deleted",                     default: false, null: false
     t.integer  "order_sub_type_id", limit: 4
     t.integer  "order_type_id_old", limit: 4
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
   end
 
   add_index "orders", ["location_id"], name: "fk_rails_5b9551c291", using: :btree
 
   create_table "reproduction_formats", force: :cascade do |t|
-    t.string   "name",             limit: 255
-    t.decimal  "default_unit_fee",             precision: 7, scale: 2
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
+    t.string   "name",                      limit: 255
+    t.decimal  "default_unit_fee_internal",               precision: 7, scale: 2
+    t.decimal  "default_unit_fee_external",               precision: 7, scale: 2
+    t.text     "description",               limit: 65535
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
   end
 
   create_table "reproduction_specs", force: :cascade do |t|
@@ -231,10 +233,10 @@ ActiveRecord::Schema.define(version: 20170906163509) do
     t.boolean  "current"
     t.integer  "user_id",     limit: 4
     t.text     "metadata",    limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
     t.integer  "order_id",    limit: 4
     t.integer  "location_id", limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   add_index "state_transitions", ["record_id"], name: "index_state_transitions_on_record_id", using: :btree
@@ -269,8 +271,6 @@ ActiveRecord::Schema.define(version: 20170906163509) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",     limit: 255
     t.string   "last_sign_in_ip",        limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
     t.string   "unity_id",               limit: 255
     t.string   "position",               limit: 255
     t.string   "affiliation",            limit: 255
@@ -289,6 +289,8 @@ ActiveRecord::Schema.define(version: 20170906163509) do
     t.integer  "patron_type_id",         limit: 4
     t.string   "role_old",               limit: 255
     t.integer  "user_role_id",           limit: 4
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -300,8 +302,8 @@ ActiveRecord::Schema.define(version: 20170906163509) do
     t.string   "event",            limit: 255,        null: false
     t.string   "whodunnit",        limit: 255
     t.text     "object",           limit: 4294967295
-    t.datetime "created_at"
     t.text     "association_data", limit: 65535
+    t.datetime "created_at"
   end
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree

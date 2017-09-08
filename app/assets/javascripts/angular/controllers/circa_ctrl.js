@@ -58,6 +58,7 @@ CircaCtrl.prototype.processCache = function(cache, scope) {
   scope.currentUser = cache.get('currentUser');
   scope.assignableRoles = cache.get('currentUser')['assignable_roles'];
   scope.currentUserIsAdmin = scope.currentUser['is_admin'] ? true : false;
+  this.controlledValues = cache.get('controlledValues');
   scope.controlledValues = cache.get('controlledValues');
   scope.circaLocations = cache.get('circaLocations');
   scope.orderStatesEvents = cache.get('orderStatesEvents');

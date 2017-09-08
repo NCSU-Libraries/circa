@@ -41,12 +41,9 @@ var OrdersCtrl = function($scope, $route, $routeParams, $location, $window, $mod
     _this.restoreNote($scope, $scope.order, note);
   }
 
-
-
   $scope.availableStateEvents = function(item) {
     return _this.availableStateEvents($scope, item);
   }
-
 
 
   // $scope.checkOutAvailable = function() {
@@ -69,7 +66,7 @@ var OrdersCtrl = function($scope, $route, $routeParams, $location, $window, $mod
 
   this.initializeFormComponents($scope);
 
-
+  this.applyReproductionFunctions($scope);
 
 }
 
