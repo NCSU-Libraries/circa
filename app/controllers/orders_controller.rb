@@ -266,9 +266,6 @@ class OrdersController < ApplicationController
     # detail and reproduction_pages will come in as attributes of items, but they actually belong to the item_order
     # so look for those, then add them to the correct record in @item_orders
 
-
-
-
     @item_orders.each do |item_order|
       # add item to order
       if !@existing_items.include?(item_order['item_id'].to_i)

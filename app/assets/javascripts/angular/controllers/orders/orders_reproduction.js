@@ -18,10 +18,6 @@ OrdersCtrl.prototype.applyReproductionFunctions = function(scope) {
 
 
 OrdersCtrl.prototype.setReproductionFormat = function(scope, record) {
-
-  console.log(record['reproduction_spec']['reproduction_format_id']);
-  console.log(this.controlledValues['reproduction_format']);
-
   var formatId = record['reproduction_spec']['reproduction_format_id'];
 
   var format = this.controlledValues['reproduction_format'].find(function(element) {
@@ -33,9 +29,24 @@ OrdersCtrl.prototype.setReproductionFormat = function(scope, record) {
   if (format) {
     record['reproduction_format'] = format;
     record['order_fee'] = {};
-    record['order_fee']['per_unit_fee'] = format['default_unit_fee_internal'] || null;
+    this.setUnitFeeOptions(record, format);
   }
+}
 
+
+OrdersCtrl.prototype.setUnitFeeOptions = function(record, reproductionFormat) {
+  var options = [];
+  if (reproductionFormat.default_unit_fee) {
+    options.push({ name: 'default', value: reproductionFormat.default_unit_fee });
+  }
+  if (reproductionFormat.default_unit_fee_internal && reproductionFormat.default_unit_fee_external) {
+    options.push({ name: 'default_internal', value: reproductionFormat.default_unit_fee_internal });
+    options.push({ name: 'default_external', value: reproductionFormat.default_unit_fee_external });
+  }
+  if (options.length > 0) {
+    record['order_fee']['per_unit_fee'] = options[0]['value'];
+  }
+  record['order_fee']['unit_fee_options'] = options;
 }
 
 

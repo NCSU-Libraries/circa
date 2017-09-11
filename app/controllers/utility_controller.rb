@@ -159,8 +159,14 @@ class UtilityController < ApplicationController
 
     # reproduction_format
     ReproductionFormat.find_each do |rf|
-      @values[:reproduction_format] << { id: rf.id, name: rf.name, description: rf.description,
-        default_unit_fee_internal: rf.default_unit_fee_internal, default_unit_fee_external: rf.default_unit_fee_external }
+      @values[:reproduction_format] << {
+        id: rf.id,
+        name: rf.name,
+        description: rf.description,
+        default_unit_fee: rf.default_unit_fee,
+        default_unit_fee_internal: rf.default_unit_fee_internal,
+        default_unit_fee_external: rf.default_unit_fee_external
+      }
     end
 
     render json: { controlled_values: @values }
