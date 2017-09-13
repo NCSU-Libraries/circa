@@ -9,19 +9,17 @@
           <div ng-if="itemOrder['order_fee']['unit_fee_options'].length > 0">
 
             <span ng-repeat="option in itemOrder['order_fee']['unit_fee_options']" class="radio-inline">
-              <input type="radio" ng-model="itemOrder['order_fee']['per_unit_fee']" ng-value="option['value']"
-                ng-change="hideCustomUnitFee(itemOrder)"/>
+              <input type="radio" ng-model="itemOrder['order_fee']['type']" ng-value="option['name']"
+                ng-change="setUnitFee(itemOrder, option['value'])"/>
               <span ng-if="option['name'] == 'default_internal'">NCSU:</span>
               <span ng-if="option['name'] == 'default_external'">non-NCSU:</span>
               ${{ option['value'] | number : 2  }}
             </span>
 
             <span class="radio-inline">
-              <input type="radio" ng-model="itemOrder['order_fee']['per_unit_fee']" ng-change="showCustomUnitFee(itemOrder)"/>
+              <input type="radio" ng-model="itemOrder['order_fee']['type']" value="custom" />
               Custom fee amount
-              <span ng-show="itemOrder['order_fee']['showCustom']">$
-                <input type="text" style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_unit_fee']"/>
-              </span>
+              $ <input type="text" style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_unit_fee']" />
             </span>
 
           </div>
@@ -30,6 +28,7 @@
           <div ng-if="itemOrder['order_fee']['unit_fee_options'].length == 0">
             $ <input type="text" style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_unit_fee']"/>
           </div>
+
 
         </div>
       </div>

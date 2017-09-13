@@ -7,11 +7,19 @@ OrdersCtrl.prototype.applyReproductionFunctions = function(scope) {
   }
 
   scope.showCustomUnitFee = function(record) {
-    _this.showCustomUnitFee(scope, record);
+    _this.showCustomUnitFee(record);
   }
 
   scope.hideCustomUnitFee = function(record) {
-    _this.hideCustomUnitFee(scope, record);
+    _this.hideCustomUnitFee(record);
+  }
+
+  scope.updateCustomUnitFee = function(record) {
+    _this.updateCustomUnitFee(record);
+  }
+
+  scope.setUnitFee = function(record, fee) {
+    _this.setUnitFee(record, fee);
   }
 
 }
@@ -43,18 +51,22 @@ OrdersCtrl.prototype.setUnitFeeOptions = function(record, reproductionFormat) {
     options.push({ name: 'default_internal', value: reproductionFormat.default_unit_fee_internal });
     options.push({ name: 'default_external', value: reproductionFormat.default_unit_fee_external });
   }
-  if (options.length > 0) {
-    record['order_fee']['per_unit_fee'] = options[0]['value'];
-  }
   record['order_fee']['unit_fee_options'] = options;
 }
 
 
-OrdersCtrl.prototype.showCustomUnitFee = function(scope, record) {
+OrdersCtrl.prototype.showCustomUnitFee = function(record) {
   record['order_fee']['showCustom'] = true;
+  record['order_fee']['custom'] = record['order_fee']['custom'] || record['order_fee']['per_unit_fee'];
+  record['order_fee']['per_unit_fee'] = record['order_fee']['custom'];
 }
 
 
-OrdersCtrl.prototype.hideCustomUnitFee = function(scope, record) {
+OrdersCtrl.prototype.hideCustomUnitFee = function(record) {
   delete record['order_fee']['showCustom'];
+}
+
+
+OrdersCtrl.prototype.setUnitFee = function(record, fee) {
+  record['order_fee']['per_unit_fee'] = Number(fee).toFixed(2);
 }
