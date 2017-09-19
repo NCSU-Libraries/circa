@@ -51,6 +51,53 @@ class Order < ActiveRecord::Base
   end
 
 
+  def spawn(sub_type_id = nil)
+    sub_type_id ||= order_sub_type_id
+    spawned_order = Order.create!(order_sub_type_id: sub_type_id)
+    association_atts = { order_id: spawned_order.id }
+
+    item_orders.each do |io|
+      atts = association_atts.merge({
+        item_id: io.item_id,
+        archivesspace_uri: io.archivesspace_uri,
+        user_id: io.user_id
+      })
+      ItemOrder.create!(atts)
+    end
+
+    order_users.each do |ou|
+      atts = association_atts.merge({
+        user_id: ou.user_id,
+        primary: ou.primary
+      })
+      OrderUser.create!(atts)
+    end
+
+    if spawned_order.order_type.name == 'reproduction'
+      digital_image_orders.each do |dio|
+        atts = association_atts.merge({
+          image_id: dio.image_id,
+          detail: dio.detail,
+          label: dio.label,
+          display_uri: dio.display_uri,
+          manifest_uri: dio.manifest_uri,
+          requested_images: dio.requested_images
+        })
+        DigitalImageOrder.create!(atts)
+      end
+    end
+
+    if course_reserve && spawned_order.order_sub_type.name == 'course_reserve'
+      atts = association_atts.merge({
+        course_number: course_reserve.course_number,
+        course_name: course_reserve.course_name
+      })
+      CourseReserve.create!(atts)
+    end
+    spawned_order.reload
+  end
+
+
   # As a failsafe, we don't actually destroy orders
   # We mark them as deleted, add a 'deleted' event to versions, and destroy associations
   def destroy

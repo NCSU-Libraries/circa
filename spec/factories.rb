@@ -7,7 +7,8 @@ FactoryGirl.define do
 
 
   factory :course_reserve, :class => 'CourseReserve' do
-
+    course_number '1234'
+    course_name 'course reserve name'
   end
 
 
