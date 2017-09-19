@@ -19,7 +19,7 @@ RSpec.describe Order, type: :model do
 
   it "can spawn course reserve" do
     o = course_reserve_order
-    cr = create(:course_reserve, course_number: 'uncle', order_id: o.id)
+    create(:course_reserve, course_number: 'uncle', order_id: o.id)
     new_order = o.spawn
     expect(new_order.order_sub_type_id).to eq(course_reserve_order_sub_type.id)
     expect(new_order.course_reserve).not_to be_nil

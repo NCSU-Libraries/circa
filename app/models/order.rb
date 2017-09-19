@@ -94,6 +94,7 @@ class Order < ActiveRecord::Base
       })
       CourseReserve.create!(atts)
     end
+
     spawned_order.reload
   end
 

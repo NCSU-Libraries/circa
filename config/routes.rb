@@ -73,9 +73,9 @@ Rails.application.routes.draw do
 
 
   get 'orders/course_reserves' => 'orders#course_reserves'
-
   get 'orders/:id/call_slip' => 'orders#call_slip'
   get 'orders/:id/history' => 'orders#history'
+
   put 'orders/:id/update_state' => 'orders#update_state'
   put 'orders/:id/deactivate_item' => 'orders#deactivate_item'
   put 'orders/:id/activate_item' => 'orders#activate_item'
@@ -86,6 +86,7 @@ Rails.application.routes.draw do
   post 'orders/:id/assignees' => 'orders#add_associations'
   post 'orders/:id/notes' => 'orders#add_associations'
   post 'orders/:id/associations' => 'orders#add_associations'
+  post 'orders/:id/spawn' => 'orders#spawn'
 
   delete 'orders/:id/items' => 'orders#delete_associations'
   delete 'orders/:id/users' => 'orders#delete_associations'

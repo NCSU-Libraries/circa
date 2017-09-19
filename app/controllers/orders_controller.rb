@@ -3,7 +3,7 @@ class OrdersController < ApplicationController
   include SolrUtilities
 
   before_action :set_order, only: [
-    :show, :edit, :update, :destroy, :update_state, :add_associations, :call_slip, :deactivate_item, :activate_item, :history
+    :show, :edit, :update, :destroy, :update_state, :add_associations, :call_slip, :deactivate_item, :activate_item, :history, :spawn
   ]
 
   def index
@@ -25,6 +25,15 @@ class OrdersController < ApplicationController
     else
       render json: @order
     end
+  end
+
+
+  def spawn
+    if params['order'] && params['order']['spawn']
+      @order_sub_type_id = params['order']['spawn']['order_sub_type_id']
+    end
+    @spawned_order = @order.spawn(@order_sub_type_id)
+    render json: @spawned_order
   end
 
 
