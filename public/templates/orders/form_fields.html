@@ -14,8 +14,8 @@ Please fix the problems noted below.
 
 
   <!-- users -->
-  <div ng-include="templateUrl('orders/fields/research_users')" ng-show="order['order_type']['name'] == 'research'"></div>
-  <div ng-include="templateUrl('orders/fields/reproduction_user')" ng-show="order['order_type']['name'] == 'reproduction'"></div>
+  <div ng-include="templateUrl('orders/fields/users')"></div>
+
 
   <!-- items -->
   <div ng-include="templateUrl('orders/fields/items')" ng-show="order['order_type']['name'] != 'reproduction'"></div>
