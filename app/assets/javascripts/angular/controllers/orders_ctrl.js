@@ -1,78 +1,78 @@
 var OrdersCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
 
-  var _this = this;
-
   $scope.section = 'orders';
 
   CircaCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
 
-
-
-
-  $scope.setDateFilter = function() {
-    _this.setDateFilter($scope);
-  }
-
   this.initializeFilterConfig($scope);
 
-
-
-  $scope.triggerEvent = function(event) {
-    _this.triggerEvent($scope, event);
-    _this.setStatesEvents($scope);
-  }
-
-  $scope.getOrder = function(page, sort) {
-    _this.getOrder($scope, page, sort);
-  }
-
-
-
-
-  $scope.addNote = function() {
-    _this.addNote($scope, $scope.order);
-  }
-
-  $scope.removeNote = function(index) {
-    _this.removeNote($scope, $scope.order, index);
-  }
-
-  $scope.restoreNote = function(note) {
-    _this.restoreNote($scope, $scope.order, note);
-  }
-
-  $scope.availableStateEvents = function(item) {
-    return _this.availableStateEvents($scope, item);
-  }
-
-
-  // $scope.checkOutAvailable = function() {
-  //   _this.checkOutAvailable($scope);
-  // }
-
-  this.applyArchivesSpaceFunctions($scope);
-
-  this.applyCatalogFunctions($scope);
-
-  this.applyUserFunctions($scope);
-
-  this.applyItemFunctions($scope);
-
-  this.applyDigitalImageFunctions($scope);
-
-  this.applyValidationFunctions($scope);
-
-  this.applyFormUtilityFunctions($scope);
-
-  this.initializeFormComponents($scope);
-
-  this.applyReproductionFunctions($scope);
-
+  // this.applyFunctionsToScope($scope);
 }
 
 OrdersCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 
 OrdersCtrl.prototype = Object.create(CircaCtrl.prototype);
+
+OrdersCtrl.prototype.applyFunctionsToScope = function(scope) {
+
+  var _this = this;
+
+  // scope.checkOutAvailable = function() {
+  //   _this.checkOutAvailable(scope);
+  // }
+
+  scope.setDateFilter = function() {
+    _this.setDateFilter(scope);
+  }
+
+  scope.triggerEvent = function(event) {
+    _this.triggerEvent(scope, event);
+    _this.setStatesEvents(scope);
+  }
+
+  scope.getOrder = function(page, sort) {
+    _this.getOrder(scope, page, sort);
+  }
+
+  scope.addNote = function() {
+    _this.addNote(scope.order);
+  }
+
+  scope.removeNote = function(index) {
+    _this.removeNote(scope, scope.order, index);
+  }
+
+  scope.restoreNote = function(note) {
+    _this.restoreNote($scope, scope.order, note);
+  }
+
+  scope.availableStateEvents = function(item) {
+    return _this.availableStateEvents(scope, item);
+  }
+
+  scope.createOrder = function() {
+    _this.createOrder(scope);
+  }
+
+  this.applyArchivesSpaceFunctions(scope);
+
+  this.applyCatalogFunctions(scope);
+
+  this.applyUserFunctions(scope);
+
+  this.applyItemFunctions(scope);
+
+  this.applyDigitalImageFunctions(scope);
+
+  this.applyValidationFunctions(scope);
+
+  this.applyFormUtilityFunctions(scope);
+
+  this.initializeFormComponents(scope);
+
+  this.applyReproductionFunctions(scope);
+
+}
 
 
 OrdersCtrl.prototype.initializeFormComponents = function(scope) {
@@ -131,7 +131,33 @@ OrdersCtrl.prototype.getOrders = function(scope, page) {
 }
 
 
+OrdersCtrl.prototype.createOrder = function(scope) {
+  var _this = this;
 
+  console.log('create');
+
+  if (scope.order['default_location']) {
+    scope.order['temporary_location'] = scope.defaultLocation;
+  }
+
+  if (_this.validateOrder(scope)) {
+    scope.loading = true;
+    _this.apiRequests.post("orders", { 'order': scope.order }).then(function(response) {
+      if (response.status == 200) {
+        scope.order = response.data['order'];
+        _this.goto('/orders/' + scope.order['id']);
+        scope.loading = false;
+      }
+      else if (response.data['error'] && response.data['error']['detail']) {
+        scope.flash = response.data['error']['detail'];
+      }
+    });
+  }
+  else {
+    _this.window.scroll(0,0);
+  }
+
+}
 
 
 OrdersCtrl.prototype.availableStateEvents = function(scope, item) {
@@ -161,7 +187,6 @@ OrdersCtrl.prototype.initializeOrder = function() {
     default_location: true,
     catalog_records: [],
     catalog_items: [],
-    item_orders: [],
     item_orders: [],
     digital_image_orders: []
   };

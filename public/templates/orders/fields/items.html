@@ -1,8 +1,8 @@
-<div class="form-section" ng-class="validationErrors['item_orders'] ? 'has-error' : ''">
+<div class="form-section" ng-class="validationErrors['items'] ? 'has-error' : ''">
 
   <h2>Items</h2>
 
-  <div ng-if="validationErrors['item_orders']" class="validation-error field-validation-error">{{ validationErrors['items'] }}</div>
+  <div ng-if="validationErrors['items']" class="validation-error field-validation-error">{{ validationErrors['items'] }}</div>
 
   <div ng-include="templateUrl('orders/fields/item_list')"></div>
 

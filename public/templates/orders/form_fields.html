@@ -7,10 +7,10 @@ Please fix the problems noted below.
 <div ng-include="templateUrl('orders/fields/order_type_sub_type')"></div>
 
 
-<div ng-show="order['order_type'] && order['order_sub_type']">
+<div ng-show="order['order_type']">
 
   <!-- course info - for course reserves only -->
-  <div ng-include="templateUrl('orders/fields/course_info')" ng-show="order['order_sub_type']['name'] == 'course_reserve'"></div>
+  <div ng-include="templateUrl('orders/fields/course_info')" ng-show="order['order_sub_type'] && order['order_sub_type']['name'] == 'course_reserve'"></div>
 
 
   <!-- users -->

@@ -1,5 +1,7 @@
 <div class="form-section" ng-class="validationErrors['access_date'] ? 'has-error' : ''">
 
+  <div ng-if="validationErrors['access_date']" class="validation-error field-validation-error">{{ validationErrors['access_date'] }}</div>
+
   <h2 ng-switch="order['order_type']['name']">
     <span ng-switch-when="research">{{ order['order_sub_type']['name'] == 'course_reserve' ? 'Visit dates' : 'Visit date' }}</span>
     <span ng-switch-when="reproduction">Due date</span>

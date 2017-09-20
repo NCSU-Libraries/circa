@@ -1,7 +1,8 @@
 <div ng-include="templateUrl('common/app_header')"></div>
 
-<h1>New order</h1>
-
+<h1>New order
+<span class="subhead" ng-if="clonedFromOrderId">Cloned from Order {{clonedFromOrderId}}</span>
+</h1>
 
 <div ng-show="loading" ng-include="templateUrl('common/processing')"/>
 

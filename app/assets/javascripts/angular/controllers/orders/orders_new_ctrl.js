@@ -9,9 +9,7 @@ var OrdersNewCtrl = function($scope, $route, $routeParams, $location, $window, $
 
   this.newOrder($scope);
 
-  $scope.createOrder = function() {
-    _this.createOrder($scope, $location);
-  }
+
 
   if ($routeParams.userId) {
     var addUserToNewOrder = function(scope) {
@@ -19,6 +17,8 @@ var OrdersNewCtrl = function($scope, $route, $routeParams, $location, $window, $
     }
     this.getUser($scope, $routeParams.userId, addUserToNewOrder);
   }
+
+  this.applyFunctionsToScope($scope);
 
 }
 

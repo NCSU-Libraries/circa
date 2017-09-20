@@ -38,6 +38,8 @@ var OrdersShowCtrl = function($scope, $route, $routeParams, $location, $window, 
     _this.toggleTruncateItems($scope);
   }
 
+  this.applyFunctionsToScope($scope);
+
 }
 
 

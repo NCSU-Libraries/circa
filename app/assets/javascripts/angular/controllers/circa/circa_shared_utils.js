@@ -273,7 +273,7 @@ CircaCtrl.prototype.listRequestConfig = function(scope) {
 }
 
 
-CircaCtrl.prototype.addNote = function(scope, record, callback) {
+CircaCtrl.prototype.addNote = function(record, callback) {
   if (record['notes'].indexOf('') < 0) {
     record['notes'].push( { 'content': '' } );
   }
