@@ -9,7 +9,7 @@
           <div ng-if="itemOrder['order_fee']['unit_fee_options'].length > 0">
 
             <span ng-repeat="option in itemOrder['order_fee']['unit_fee_options']" class="radio-inline">
-              <input type="radio" ng-model="itemOrder['order_fee']['type']" ng-value="option['name']"
+              <input type="radio" ng-model="itemOrder['order_fee']['unit_fee_type']" ng-value="option['name']"
                 ng-change="setUnitFee(itemOrder, option['value'])"/>
               <span ng-if="option['name'] == 'default_internal'">NCSU:</span>
               <span ng-if="option['name'] == 'default_external'">non-NCSU:</span>
@@ -17,16 +17,18 @@
             </span>
 
             <span class="radio-inline">
-              <input type="radio" ng-model="itemOrder['order_fee']['type']" value="custom" />
+              <input type="radio" ng-model="itemOrder['order_fee']['unit_fee_type']" value="custom" />
               Custom fee amount
-              $ <input type="text" style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_unit_fee']" />
+              <span ng-show="itemOrder['order_fee']['unit_fee_type'] == 'custom'">
+                $ <input type="number" step="0.01" style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_unit_fee']" />
+              </span>
             </span>
 
           </div>
 
 
           <div ng-if="itemOrder['order_fee']['unit_fee_options'].length == 0">
-            $ <input type="text" style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_unit_fee']"/>
+            $ <input type="number" step="0.01" style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_unit_fee']" />
           </div>
 
 
@@ -43,11 +45,21 @@
 
   <div class="row">
 
-    <div class="small-12 columns">
-      <div class="heading">Additional fee</div>
+    <div class="small-4 columns">
+      <div class="heading">Additional fee (per order)</div>
 
       <div>
-      $ <input type="text" style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_order_fee']"/>
+      $ <input type="number" step="0.01" style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_order_fee']" />
+      </div>
+
+    </div>
+
+
+    <div class="small-8 columns">
+      <div class="heading">Fee note</div>
+
+      <div>
+        <textarea ng-model="itemOrder['order_fee']['note']"/>
       </div>
 
     </div>

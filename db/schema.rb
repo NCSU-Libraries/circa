@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170911145824) do
+ActiveRecord::Schema.define(version: 20170925202456) do
 
   create_table "access_sessions", force: :cascade do |t|
     t.integer  "item_id",        limit: 4,                null: false
@@ -162,6 +162,7 @@ ActiveRecord::Schema.define(version: 20170911145824) do
     t.text     "note",          limit: 65535
     t.datetime "created_at",                                          null: false
     t.datetime "updated_at",                                          null: false
+    t.string   "unit_fee_type", limit: 255
   end
 
   create_table "order_sub_types", force: :cascade do |t|
@@ -209,12 +210,12 @@ ActiveRecord::Schema.define(version: 20170911145824) do
 
   create_table "reproduction_formats", force: :cascade do |t|
     t.string   "name",                      limit: 255
+    t.decimal  "default_unit_fee",                        precision: 7, scale: 2
     t.decimal  "default_unit_fee_internal",               precision: 7, scale: 2
     t.decimal  "default_unit_fee_external",               precision: 7, scale: 2
     t.datetime "created_at",                                                      null: false
     t.datetime "updated_at",                                                      null: false
     t.text     "description",               limit: 65535
-    t.decimal  "default_unit_fee",                        precision: 7, scale: 2
   end
 
   create_table "reproduction_specs", force: :cascade do |t|

@@ -1,6 +1,6 @@
 @media print, screen {
 
-  .print-list, .call-slip, .pending-transfers {
+  .print {
 
     font-family: "UniversRoman", Helvetica, Arial, sans-serif;
     line-height: 1.25em;
@@ -63,7 +63,6 @@
       padding-right: 1rem;
     }
 
-
     .notes {
       .note {
         margin: 0 0 0.5rem 0;
@@ -89,6 +88,26 @@
         list-style: none;
         padding: 0;
         margin: 0 0 1.5rem 0;
+      }
+    }
+
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-bottom: 1px solid #ccc;
+
+      th {
+        background: #333;
+        color: white;
+      }
+
+      th, td {
+        text-align: left;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-bottom-width: 0;
+        vertical-align: top;
       }
     }
 

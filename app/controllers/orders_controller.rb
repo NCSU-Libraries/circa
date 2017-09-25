@@ -3,7 +3,7 @@ class OrdersController < ApplicationController
   include SolrUtilities
 
   before_action :set_order, only: [
-    :show, :edit, :update, :destroy, :update_state, :add_associations, :call_slip, :deactivate_item, :activate_item, :history, :spawn
+    :show, :edit, :update, :destroy, :update_state, :add_associations, :call_slip, :deactivate_item, :activate_item, :history, :spawn, :invoice
   ]
 
   def index
@@ -210,6 +210,14 @@ class OrdersController < ApplicationController
     else
       @items = @order.items
     end
+    render layout: 'layouts/print'
+  end
+
+
+  def invoice
+    @user = @order.primary_user
+    @item_orders = @order.item_orders.includes(:order_fee, :item, :reproduction_spec)
+    @digital_image_orders = @order.digital_image_orders.includes(:order_fees)
     render layout: 'layouts/print'
   end
 

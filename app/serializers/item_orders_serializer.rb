@@ -6,6 +6,33 @@ class ItemOrdersSerializer < ActiveModel::Serializer
       atts = object.order_fee.attributes
       atts['per_unit_fee'] = atts['per_unit_fee'].to_f
       atts['per_order_fee'] = atts['per_order_fee'].to_f
+      atts['unit_fee_options'] = unit_fee_options
+      atts
+    end
+  end
+
+
+  def unit_fee_options
+    options = []
+    reproduction_format = object.reproduction_spec.reproduction_format
+
+    if reproduction_format.default_unit_fee
+      options << { name: 'default', value: reproduction_format.default_unit_fee }
+    end
+
+    if (reproduction_format.default_unit_fee_internal && reproduction_format.default_unit_fee_external)
+      options << { name: 'default_internal', value: reproduction_format.default_unit_fee_internal }
+      options << { name: 'default_external', value: reproduction_format.default_unit_fee_external }
+    end
+
+    options
+  end
+
+
+  def reproduction_spec
+    if object.reproduction_spec
+      atts = object.reproduction_spec.attributes
+      atts['reproduction_format'] = object.reproduction_spec.reproduction_format
       atts
     end
   end

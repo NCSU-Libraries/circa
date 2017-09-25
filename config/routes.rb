@@ -36,8 +36,6 @@ Rails.application.routes.draw do
     unlocks: 'users/unlocks'
   }
 
-
-
   get 'current_user' => 'utility#user_data'
 
   get 'archivesspace_redirect(/*archivesspace_path)' => 'utility#archivesspace_redirect'
@@ -75,6 +73,7 @@ Rails.application.routes.draw do
   get 'orders/course_reserves' => 'orders#course_reserves'
   get 'orders/:id/call_slip' => 'orders#call_slip'
   get 'orders/:id/history' => 'orders#history'
+  get 'orders/:id/invoice' => 'orders#invoice'
 
   put 'orders/:id/update_state' => 'orders#update_state'
   put 'orders/:id/deactivate_item' => 'orders#deactivate_item'

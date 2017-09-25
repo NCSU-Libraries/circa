@@ -1,0 +1,82 @@
+<div class="invoice">
+
+  <h1>Invoice</h1>
+
+
+  <section class="invoice-from">
+
+  </section>
+
+
+
+  <section class="invoice-to">
+
+  </section>
+
+
+
+  <section class="invoice-items">
+
+    <table>
+      <thead>
+
+        <tr>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Unit price</th>
+          <th>Total</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <% @item_orders.each do |io| %>
+
+          <% if io.order_fee.per_unit_fee %>
+            <tr>
+
+              <td>
+
+                <div>
+                  <%= io.item.resource_title %>
+                  (<%= io.item.resource_identifier %>)
+                </div>
+
+                <div>
+                  <%= io.item.container %>
+                </div>
+
+                <div>
+                  <%= io.reproduction_spec.detail %>
+                </div>
+
+                <div>
+                  <%= io.reproduction_spec.reproduction_format.name %>
+                </div>
+
+              </td>
+
+
+              <td><%= io.reproduction_spec.pages %></td>
+
+
+
+            </tr>
+          <% end %>
+
+
+          <% if io.order_fee.per_order_fee %>
+
+          <% end %>
+
+        <% end %>
+      </tbody>
+
+    </table>
+
+  </section>
+
+
+
+</div>

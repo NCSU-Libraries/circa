@@ -35,7 +35,7 @@ OrdersCtrl.prototype.setReproductionFormat = function(scope, record) {
   console.log(format);
 
   if (format) {
-    record['reproduction_format'] = format;
+    record['reproduction_spec']['reproduction_format'] = format;
     record['order_fee'] = {};
     this.setUnitFeeOptions(record, format);
   }
