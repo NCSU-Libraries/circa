@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe OrderFee, type: :model do
 
+  let(:order) { create(:order) }
   let(:item_order) { create(:item_order) }
   let(:reproduction_spec) { create(:reproduction_spec, item_order: item_order, pages: 3) }
   let(:dio) { create(:digital_image_order, requested_images: [ 'a','b','c']) }

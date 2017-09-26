@@ -1,7 +1,7 @@
 class OrderSerializer < ActiveModel::Serializer
 
   attributes :id, :access_date_start, :access_date_end, :order_type_id, :order_sub_type_id, :confirmed, :open, :created_at, :updated_at,
-    :archivesspace_records, :catalog_records, :catalog_items,
+    :archivesspace_records, :catalog_records, :catalog_items, :order_fee,
     :current_state, :permitted_events, :available_events, :states_events,
     :default_location, :num_items, :primary_user_id, :primary_user_id, :num_items_ready, :created_by_user, :deletable, :item_ids_in_use
 

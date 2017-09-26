@@ -327,7 +327,8 @@ class OrdersController < ApplicationController
   def create_or_update_order_fee(record_id, record_type, order_fee_data)
     atts = {
       per_unit_fee: order_fee_data['per_unit_fee'],
-      per_order_fee: order_fee_data['per_unit_fee'],
+      per_order_fee: order_fee_data['per_order_fee'],
+      per_order_fee_description: order_fee_data['per_order_fee_description'],
       note: order_fee_data['note']
     }
     existing_order_fee = OrderFee.find_by(record_id: record_id, record_type: record_type)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170925202456) do
+ActiveRecord::Schema.define(version: 20170926194445) do
 
   create_table "access_sessions", force: :cascade do |t|
     t.integer  "item_id",        limit: 4,                null: false
@@ -155,14 +155,15 @@ ActiveRecord::Schema.define(version: 20170925202456) do
   add_index "order_assignments", ["user_id"], name: "index_order_assignments_on_user_id", using: :btree
 
   create_table "order_fees", force: :cascade do |t|
-    t.integer  "record_id",     limit: 4
-    t.string   "record_type",   limit: 255
-    t.decimal  "per_unit_fee",                precision: 7, scale: 2
-    t.decimal  "per_order_fee",               precision: 7, scale: 2
-    t.text     "note",          limit: 65535
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
-    t.string   "unit_fee_type", limit: 255
+    t.integer  "record_id",                 limit: 4
+    t.string   "record_type",               limit: 255
+    t.decimal  "per_unit_fee",                            precision: 7, scale: 2
+    t.decimal  "per_order_fee",                           precision: 7, scale: 2
+    t.text     "note",                      limit: 65535
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
+    t.string   "unit_fee_type",             limit: 255
+    t.string   "per_order_fee_description", limit: 255
   end
 
   create_table "order_sub_types", force: :cascade do |t|

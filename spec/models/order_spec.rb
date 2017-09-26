@@ -122,16 +122,38 @@ RSpec.describe Order, type: :model do
   end
 
 
-  it "aggregates fees for reproduction" do
-    o = create(:order)
-    io = create(:item_order, order_id: o.id)
-    dio = create(:digital_image_order, order_id: o.id)
-    create(:order_fee, record_type: 'ItemOrder', record_id: io.id)
-    create(:order_fee, record_type: 'DigitalImageOrder', record_id: dio.id)
-    order_fees = o.order_fees
-    expect(order_fees).to be_a(Array)
-    expect(order_fees.length).to eq(2)
-    expect(order_fees.first).to be_a(OrderFee)
+  describe "order fees" do
+
+    let(:o) { create(:order) }
+    let(:io) { create(:item_order, order_id: o.id) }
+    let(:dio) { create(:digital_image_order, order_id: o.id) }
+    let!(:reproduction_spec) { create(:reproduction_spec, item_order_id: io.id, pages: 3) }
+    # $1 x 3 pages + $1 per order = $4
+    let!(:fee1) { create(:order_fee, record_type: 'ItemOrder', record_id: io.id, ) }
+    # $1 x 3 files + $1 per order = $4
+    let!(:fee2) { create(:order_fee, record_type: 'DigitalImageOrder', record_id: dio.id) }
+    # $1 per order = $1
+    let!(:fee3) { create(:order_fee, record_type: 'Order', record_id: o.id) }
+
+    it "aggregates fees for reproduction" do
+      order_fees = o.order_fees
+      expect(order_fees).to be_a(Array)
+      expect(order_fees.length).to eq(3)
+      expect(order_fees.first).to be_a(OrderFee)
+    end
+
+    it "calculates total fees" do
+      total = o.order_fees_total
+      expect(total).to eq(9.00)
+    end
+
+    it "doesn't fail if total called without associated fees" do
+      o = build(:order)
+      expect { o.order_fees }.not_to raise_error
+      expect { o.order_fees_total }.not_to raise_error
+      expect(o.order_fees_total).to eq(0)
+    end
+
   end
 
 end

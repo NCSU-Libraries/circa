@@ -45,6 +45,11 @@
                   <span class="label">Additional fee:</span>
                   <span class="value">{{ digitalImageOrder['order_fee']['per_order_fee'] | currency }}</span>
                 </div>
+
+                <div class="inline detail-element" ng-if="digitalImageOrder['order_fee']['per_order_fee']">
+                  <span class="label">Additional fee description:</span>
+                  <span class="value">{{ digitalImageOrder['order_fee']['per_order_fee_description'] }}</span>
+                </div>
               </div>
 
               <div ng-if="digitalImageOrder['order_fee']['note']" class="detail-element">

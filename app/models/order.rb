@@ -20,6 +20,7 @@ class Order < ActiveRecord::Base
   has_many :notes, as: :noted
   has_one :course_reserve
   has_many :digital_image_orders
+  has_one :order_fee, as: :record
 
   has_many :access_sessions do
     def active
@@ -348,42 +349,16 @@ class Order < ActiveRecord::Base
     end
     fees = [item_orders.to_a, digital_image_orders.to_a].flat_map { |x| fees_for_collection.(x) }
     fees.delete_if { |f| f.nil? }
+    if self.order_fee
+      fees << self.order_fee
+    end
+
     fees
   end
 
 
   def order_fees_total
-
-    fee_data = lambda do |records|
-      records.map do |record|
-        if record.order_fee
-          {
-            per_unit_fee: record.order_fee.per_unit_fee,
-            per_order_fee: record.order_fee.per_unit_fee,
-            unit_total: record.unit_total
-          }
-        end
-      end
-    end
-
-    fees = [item_orders.to_a, digital_image_orders.to_a].flat_map { |x| fee_data.(x) }
-
-    total = fees.reduce(0) do |total, fee_data|
-      subtotal = 0
-      if fee_data[:unit_total] && fee_data[:per_unit_fee]
-        subtotal += (fee_data[:unit_total] * fee_data[:per_unit_fee])
-      end
-      if fee_data[:per_order_fee]
-        subtotal += fee_data[:per_order_fee]
-      end
-      puts subtotal
-      total + subtotal
-    end
-
-    puts total
-
-    total
-
+    order_fees.reduce(0) { |sum, fee| sum + fee.total }
   end
 
 end
