@@ -1,19 +1,36 @@
 <div class="row">
 
-  <div class="small-12 columns">
+
+  <div class="small-3 columns">
 
     <div class="heading">Fee per file</div>
 
     <div>
-      $ <input type="text" style="display: inline; width: 7em;" ng-model="digitalImageOrder['order_fee']['per_unit_fee']"/>
+      <input type="text" format-as-currency style="display: inline; width: 7em;" ng-model="digitalImageOrder['order_fee']['per_unit_fee']"/>
     </div>
+
+  </div>
+
+
+  <div class="small-3 columns">
 
     <div class="heading">Additional fee</div>
 
     <div>
-      $ <input type="text" style="display: inline; width: 7em;" ng-model="digitalImageOrder['order_fee']['per_order_fee']"/>
+      <input type="text" format-as-currency style="display: inline; width: 7em;" ng-model="digitalImageOrder['order_fee']['per_order_fee']"/>
     </div>
 
   </div>
+
+
+  <div class="small-6 columns">
+    <div class="heading">Fee note</div>
+
+    <div>
+      <textarea ng-model="digitalImageOrder['order_fee']['note']"/>
+    </div>
+
+  </div>
+
 
 </div>

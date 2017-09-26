@@ -26,7 +26,7 @@
 //= require_tree ./angular/services
 //= require_tree ./angular/directives
 //= require_tree ./angular/filters
-
+//= require format-as-currency
 //= require angular/controllers/circa_ctrl
 //= require_tree ./angular/controllers/circa
 //= require angular/controllers/circa_modal_instance_ctrl

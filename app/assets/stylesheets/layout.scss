@@ -36,12 +36,7 @@ section {
   z-index: -999;
 }
 
-
-
-
-
 .alert-box {
-
   border-width: 0;
 
   &.notice, &.info {
@@ -52,7 +47,6 @@ section {
     background-color: $orange;
   }
 }
-
 
 .record-show-actions, .record-list-actions,
 table .record-list-actions {
@@ -68,10 +62,7 @@ table .record-list-actions {
   .admin-override {
     float: right;
   }
-
 }
-
-
 
 button, .button {
   background: linear-gradient(to bottom, $red 0%, $red2 100%);
@@ -93,15 +84,12 @@ button, .button {
   }
 }
 
-
 td .button, td button,
 .record-actions button, .record-actions .button {
   margin-bottom: 0;
 }
 
-
 .record-overview, .record-detail {
-
   .row {
     margin-left: 0;
   }
@@ -167,7 +155,6 @@ td .button, td button,
   }
 }
 
-
 ul.actions-list {
   li {
     white-space: nowrap;
@@ -175,7 +162,6 @@ ul.actions-list {
     line-height: 1.25em;
   }
 }
-
 
 ul.sub-records-list, ul.records-list {
 
@@ -199,7 +185,7 @@ ul.sub-records-list, ul.records-list {
       .action {
         text-transform: uppercase;
         font-size: 80%;
-        line-height: 1.1em;
+        line-height: 1.1em !important;
         margin-bottom: 1em;
         div {
           display: inline;
@@ -224,17 +210,27 @@ ul.sub-records-list, ul.records-list {
     }
 
     .subhead {
-      margin: 0.5rem 0;
+      margin: 0.5rem 0 0.25rem 0;
     }
 
-  }
+    .columns, .column {
+      padding-left: 0.5rem !important;
+      padding-right: 1.25rem !important;
+    }
 
+    .row .row {
+      margin-left: 0 !important;
+      .columns, .column {
+        padding-left: 0 !important;
+        padding-right: 1.875rem !important;
+      }
+    }
+  }
 
   &.notes-list li {
     border: 0;
     padding: 0 0 .5rem 0;
   }
-
 
   &.users-list {
     li {
@@ -244,7 +240,6 @@ ul.sub-records-list, ul.records-list {
     }
   }
 
-
   &.removed {
     li {
       background: $grayGhost;
@@ -252,13 +247,9 @@ ul.sub-records-list, ul.records-list {
   }
 }
 
-
 ul.records-list {
   margin-bottom: 1rem;
 }
-
-
-
 
 .empty-list-label, .empty-content {
   font-style: italic;
@@ -266,21 +257,15 @@ ul.records-list {
   color: $grayLight;
 }
 
-
 .truncated-list-post-note {
   color: $gray;
   font-size: 0.8em;
   text-transform: uppercase;
 }
 
-
-
-
-
 .positive {
   color: $green;
 }
-
 
 .negative {
   color: $red;
@@ -291,8 +276,6 @@ ul.records-list {
   font-weight: normal;
   text-transform: uppercase;
 }
-
-
 
 main {
 
@@ -474,23 +457,13 @@ main {
       right: 0;
       text-transform: none;
     }
-
-
-
   }
-
-
-
 }
-
 
 .admin-override {
   font-size: 80%;
   text-transform: uppercase;
 }
-
-
-
 
 // Big Nav
 
@@ -504,10 +477,6 @@ main {
   }
 }
 
-
-
-
-
 .pagination, ul.pagination {
   margin: 0 0 0.5rem 0;
   width: 100%;
@@ -519,7 +488,6 @@ main {
     padding-right: 0;
   }
 }
-
 
 .list-sort {
   margin: 0 0 1rem 0;
@@ -542,7 +510,6 @@ main {
     font-weight: bold;
   }
 }
-
 
 .search-info {
 
@@ -570,7 +537,6 @@ main {
   }
 }
 
-
 .sortable {
   .sort-choice, .sort-order {
     &:hover {
@@ -586,12 +552,8 @@ main {
       cursor: default;
       color: inherit;
     }
-
   }
-
 }
-
-
 
 .filters {
 
@@ -614,9 +576,7 @@ main {
     .date-range-point {
       padding-right: 1rem;
     }
-
   }
-
 
   .filter-toggle {
     padding: 3px;
@@ -633,12 +593,10 @@ main {
     font-size: 80%;
   }
 
-
   .button {
     margin: 0;
   }
 }
-
 
 .active-filters {
   background: $grayDark;
@@ -673,10 +631,6 @@ main {
   }
 }
 
-
-
-
-
 .data-panel {
   @extend .panel;
   height: 10rem;
@@ -684,9 +638,6 @@ main {
   background: $grayLightest;
   margin: 2rem 0;
 }
-
-
-
 
 table {
 
@@ -748,10 +699,6 @@ table {
 
 }
 
-
-
-
-
 .loading {
   background-image: image-url("loading.gif");
   background-position: center top;
@@ -771,14 +718,9 @@ span.postfix, label.postfix {
   color: $white;
 }
 
-
-
-
 .date-range-delimeter {
   padding: 0 0.5rem;
 }
-
-
 
 .block {
   display: block;
@@ -834,7 +776,6 @@ span.postfix, label.postfix {
   }
 }
 
-
 .flash {
   background: $yellow;
   padding: 0.5rem;
@@ -845,7 +786,6 @@ span.postfix, label.postfix {
   // margin-left: -250px;
   // z-index: 1000;
 }
-
 
 .tabs {
 
@@ -893,7 +833,6 @@ span.postfix, label.postfix {
   }
 
 }
-
 
 dl.tabs {
   dd {

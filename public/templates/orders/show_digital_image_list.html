@@ -19,14 +19,40 @@
             <a ng-href="{{ digitalImageOrder['display_uri'] }}" target="_blank">{{ digitalImageOrder['display_uri'] }}</a>
           </div>
 
-          <div class="overview-element">
 
-            <div class="subhead">{{ commonUtils.objectLength(digitalImageOrder['requested_images']) }} images requested:</div>
 
-            <ul>
-              <li ng-repeat="imageId in digitalImageOrder['requested_images']">{{ imageId }}</li>
-            </ul>
-          </div>
+          <div class="reproduction-detail record-detail">
+
+            <div class="detail-element">
+
+              <div class="subhead">{{ commonUtils.objectLength(digitalImageOrder['requested_images']) }} images requested:</div>
+
+              <ul>
+                <li ng-repeat="imageId in digitalImageOrder['requested_images']">{{ imageId }}</li>
+              </ul>
+            </div>
+
+
+            <div ng-if="digitalImageOrder['order_fee']">
+
+              <div>
+                <div class="inline detail-element" ng-if="digitalImageOrder['order_fee']['per_unit_fee']">
+                  <span class="label">Fee per file:</span>
+                  <span class="value">{{ digitalImageOrder['order_fee']['per_unit_fee'] | currency }}</span>
+                </div>
+
+                <div class="inline detail-element" ng-if="digitalImageOrder['order_fee']['per_order_fee']">
+                  <span class="label">Additional fee:</span>
+                  <span class="value">{{ digitalImageOrder['order_fee']['per_order_fee'] | currency }}</span>
+                </div>
+              </div>
+
+              <div ng-if="digitalImageOrder['order_fee']['note']" class="detail-element">
+                <span class="label">Fee note:</span>
+                <span class="value">{{ digitalImageOrder['order_fee']['note'] }}</span>
+              </div>
+
+            </div>
 
         </div>
 

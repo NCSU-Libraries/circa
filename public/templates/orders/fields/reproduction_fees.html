@@ -13,14 +13,14 @@
                 ng-change="setUnitFee(itemOrder, option['value'])"/>
               <span ng-if="option['name'] == 'default_internal'">NCSU:</span>
               <span ng-if="option['name'] == 'default_external'">non-NCSU:</span>
-              ${{ option['value'] | number : 2  }}
+              {{ option['value'] | currency  }}
             </span>
 
             <span class="radio-inline">
               <input type="radio" ng-model="itemOrder['order_fee']['unit_fee_type']" value="custom" />
               Custom fee amount
               <span ng-show="itemOrder['order_fee']['unit_fee_type'] == 'custom'">
-                $ <input type="number" step="0.01" style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_unit_fee']" />
+                <input type="text" format-as-currency style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_unit_fee']" />
               </span>
             </span>
 
@@ -28,7 +28,7 @@
 
 
           <div ng-if="itemOrder['order_fee']['unit_fee_options'].length == 0">
-            $ <input type="number" step="0.01" style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_unit_fee']" />
+            <input type="text" format-as-currency  style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_unit_fee']" />
           </div>
 
 
@@ -49,7 +49,7 @@
       <div class="heading">Additional fee (per order)</div>
 
       <div>
-      $ <input type="number" step="0.01" style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_order_fee']" />
+      <input type="text" format-as-currency style="display: inline; width: 7em;" ng-model="itemOrder['order_fee']['per_order_fee']" />
       </div>
 
     </div>

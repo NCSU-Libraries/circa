@@ -15,12 +15,19 @@
             {{ digitalImageOrder['label'] }} ({{ digitalImageOrder['image_id'] }})
           </div>
 
-          <div class="overview-element">
-            {{ commonUtils.objectLength(digitalImageOrder['requested_images']) }} images
-          </div>
 
           <div class="overview-element">
             <a ng-href="{{ digitalImageOrder['display_uri'] }}" target="_blank">{{ digitalImageOrder['display_uri'] }}</a>
+          </div>
+
+
+          <div>
+            <div class="inline overview-element">
+              {{ commonUtils.objectLength(digitalImageOrder['requested_images']) }} images
+            </div>
+            <div class="inline overview-element">
+              <span class="link action" ng-click="reloadDigitalImageSelect(digitalImageOrder)">Update image selections</span>
+            </div>
           </div>
 
         </div>
@@ -34,7 +41,6 @@
 
         <div class="sub-record-actions item-actions">
           <div><span class="link action" ng-click="removeDigitalImageOrder(digitalImageOrder)">Remove</span></div>
-          <div><span class="link action" ng-click="reloadDigitalImageSelect(digitalImageOrder)">Update image selections</span></div>
         </div>
 
       </div>

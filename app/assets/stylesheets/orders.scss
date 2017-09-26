@@ -118,3 +118,17 @@ ul.records-list.orders-list {
     padding-right: 1rem;
   }
 }
+
+.reproduction-detail {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+
+  ul li {
+    background: none;
+  }
+
+  .subhead {
+    margin-top: 0 !important;
+  }
+
+}
