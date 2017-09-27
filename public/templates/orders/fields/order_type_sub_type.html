@@ -2,27 +2,13 @@
 
   <h2>Order type</h2>
 
-<!--
-  <div ng-if="mode == 'new'">
-    <select
-      ng-model="order['order_type_id']"
-      ng-change="setOrderType(controlledValues['order_type'])">
-
-      <option ng-repeat="orderType in controlledValues['order_type']" value="{{ orderType.id }}" ng-selected="orderType.id == order['order_type_id']">{{ orderType.label }}</option>
-    </select>
-    <div ng-if="validationErrors['order_type_id']" class="validation-error field-validation-error">{{ validationErrors['order_type_id'] }}</div>
-  </div>
-
-
-  <div ng-if="mode == 'edit'" class="form-field">{{ order.order_type.label }}</div>
- -->
-
   <div>
     <select
       ng-model="order['order_type_id']"
-      ng-change="setOrderType(controlledValues['order_type'])">
+      ng-change="setOrderType(controlledValues['order_type'])"
+      ng-options="orderType.id as orderType.label for orderType in controlledValues['order_type']"
+      >
 
-      <option ng-repeat="orderType in controlledValues['order_type']" value="{{ orderType.id }}" ng-selected="orderType.id == order['order_type_id']">{{ orderType.label }}</option>
     </select>
     <div ng-if="validationErrors['order_type_id']" class="validation-error field-validation-error">{{ validationErrors['order_type_id'] }}</div>
   </div>

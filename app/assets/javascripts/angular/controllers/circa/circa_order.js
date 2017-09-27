@@ -30,7 +30,7 @@ CircaCtrl.prototype.getOrder = function(scope, id, callback) {
   scope.loading = true;
   this.apiRequests.get(path).then(function(response) {
     if (response.status == 200) {
-      scope.loading = false;
+
       _this.refreshOrder(scope, response.data['order'], callback)
       // scope.order = response.data['order'];
       // _this.collectItemIds(scope, response.data['order']);
@@ -39,6 +39,7 @@ CircaCtrl.prototype.getOrder = function(scope, id, callback) {
       // _this.setStatesEvents(scope);
       // _this.setCheckOutAvailable(scope);
       // _this.commonUtils.executeCallback(callback, scope);
+      scope.loading = false;
     }
     else if (response.data['error'] && response.data['error']['detail']) {
       scope.errorCode = response.status;

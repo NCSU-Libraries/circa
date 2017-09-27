@@ -18,16 +18,21 @@ var OrdersEditCtrl = function($scope, $route, $routeParams, $location, $window, 
   }
 
   // For edit views, load record after cache is loaded to ensure that controlled/enumerable values are ready
-  $scope.processCache = function(cache) {
+  var processCache = function(cache) {
     _this.processCache(cache, $scope);
     _this.getOrder($scope, $routeParams.orderId, callback);
   }
 
-  var cache = sessionCache.init($scope.processCache);
+  var cache = sessionCache.init(processCache);
 
   $scope.updateOrder = function() {
     _this.updateOrder($scope, $location);
   }
+
+  $scope.enableUpdateOrderType = function() {
+    _this.enableUpdateOrderType($scope);
+  }
+
 }
 
 
@@ -63,4 +68,9 @@ OrdersEditCtrl.prototype.updateOrder = function(scope) {
   else {
     _this.window.scroll(0,0);
   }
+}
+
+
+OrdersEditCtrl.prototype.enableUpdateOrderType = function(scope) {
+  scope.order['updateOrderTypeEnabled'] = true;
 }
