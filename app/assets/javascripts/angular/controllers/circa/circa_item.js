@@ -46,6 +46,22 @@ CircaCtrl.prototype.applyItemFunctions = function(scope) {
     _this.bulkTriggerItemEvent(scope, event);
   }
 
+  scope.addAllItemOrdersToBulkEventsList = function() {
+    _this.addAllItemOrdersToBulkEventsList(scope);
+  }
+
+  scope.clearBulkEventsList = function() {
+    _this.clearBulkEventsList(scope);
+  }
+
+  scope.toggleItemOrderIdInBulkEventsList = function(itemOrder) {
+    _this.toggleItemOrderIdInBulkEventsList(scope, itemOrder);
+  }
+
+  scope.availableStateEvents = function(item) {
+    return _this.availableStateEvents(scope, item);
+  }
+
 }
 
 
@@ -99,44 +115,133 @@ CircaCtrl.prototype.triggerItemEvent = function(scope, itemId, event, callback) 
 }
 
 
+CircaCtrl.prototype.availableStateEvents = function(scope, item) {
+  var available = [];
+  function verifyStateEvent(stateEvent, index) {
+
+    var availableEvents = item.available_events_per_order[scope.order.id];
+
+    if (availableEvents && availableEvents.indexOf(stateEvent['event']) >= 0) {
+      available.push(stateEvent);
+    }
+  }
+
+  item['statesEvents'].forEach(verifyStateEvent);
+
+  console.log(available);
+
+  return available;
+}
+
+
 CircaCtrl.prototype.bulkTriggerItemEvent = function(scope, event) {
   var _this = this;
   if (scope.order && scope.order['item_orders']) {
-    scope.order['item_orders'].forEach(function(item_order) {
-      var item = item_order['item'];
-      if (item['permitted_events'].indexOf(event) >= 0) {
-        if (event == 'receive_at_temporary_location') {
-          _this.receiveItemAtTemporaryLocation(scope, item)
+    scope.order['item_orders'].forEach(function(itemOrder) {
+
+      if (scope.order['bulkEventsList'].indexOf(itemOrder.id) >= 0) {
+        var item = itemOrder['item'];
+
+        if (item['permitted_events'].indexOf(event) >= 0) {
+          if (event == 'receive_at_temporary_location') {
+            _this.receiveItemAtTemporaryLocation(scope, item)
+          }
+          else {
+            _this.triggerItemEvent(scope, item['id'], event);
+          }
         }
-        else {
-          _this.triggerItemEvent(scope, item['id'], event);
-        }
+
       }
     });
   }
 }
 
 
-CircaCtrl.prototype.bulkItemEvents = function(scope) {
-  var skipEvents = [ 'report_not_found', 'check_out' ]
+CircaCtrl.prototype.updateBulkItemEvents = function(scope) {
+  var _this = this;
+
+  var skipEvents = [ 'report_not_found', 'check_out' ];
+
   if (scope.order && scope.order['item_orders']) {
     var bulkEvents = {};
-    scope.order['item_orders'].forEach(function(item_order) {
-      var item = item_order['item'];
-      if (!item['obsolete']) {
-        item['permitted_events'].forEach(function(event) {
-          if (skipEvents.indexOf(event) < 0) {
-            if (!bulkEvents[event]) {
-              bulkEvents[event] = 1;
+
+    scope.order['item_orders'].forEach(function(itemOrder) {
+
+      if (scope.order['bulkEventsList'].indexOf(itemOrder.id) >= 0) {
+
+        var item = itemOrder['item'];
+        if (!item['obsolete']) {
+
+          var availableEvents = _this.availableStateEvents(scope, item).map(function(stateEvent) {
+            return stateEvent['event'];
+          });
+
+          // item['permitted_events'].forEach(function(event) {
+          availableEvents.forEach(function(event) {
+            if (skipEvents.indexOf(event) < 0) {
+              if (!bulkEvents[event]) {
+                bulkEvents[event] = 1;
+              }
+              else {
+                bulkEvents[event]++;
+              }
             }
-            else {
-              bulkEvents[event]++;
-            }
-          }
-        });
+          });
+        }
+
       }
+
     });
-    return bulkEvents;
+
+    scope.order['bulkItemEvents'] = bulkEvents;
+  }
+}
+
+
+CircaCtrl.prototype.addItemOrderIdToBulkEventsList = function(scope, itemOrder) {
+  if (scope.order) {
+
+    if (!scope.order['bulkEventsList']) {
+      scope.order['bulkEventsList'] = [];
+    }
+
+    scope.order['bulkEventsList'].push(itemOrder.id);
+  }
+  this.updateBulkItemEvents(scope);
+}
+
+
+CircaCtrl.prototype.removeItemOrderIdFromBulkEventsList = function(scope, itemOrder) {
+  if (scope.order && scope.order['bulkEventsList']) {
+    this.commonUtils.removeFromArray(scope.order['bulkEventsList'], itemOrder.id);
+  }
+  this.updateBulkItemEvents(scope);
+}
+
+
+CircaCtrl.prototype.addAllItemOrdersToBulkEventsList = function(scope) {
+  var _this = this;
+  if (scope.order && scope.order['item_orders']) {
+    scope.order['item_orders'].forEach(function(itemOrder) {
+      _this.addItemOrderIdToBulkEventsList(scope, itemOrder);
+    });
+  }
+  this.updateBulkItemEvents(scope);
+}
+
+
+CircaCtrl.prototype.clearBulkEventsList = function(scope) {
+  scope.order['bulkEventsList'] = [];
+  this.updateBulkItemEvents(scope);
+}
+
+
+CircaCtrl.prototype.toggleItemOrderIdInBulkEventsList =function(scope, itemOrder) {
+  if (scope.order['bulkEventsList'].indexOf(itemOrder.id) < 0) {
+    this.addItemOrderIdToBulkEventsList(scope, itemOrder);
+  }
+  else {
+    this.removeItemOrderIdFromBulkEventsList(scope, itemOrder);
   }
 }
 

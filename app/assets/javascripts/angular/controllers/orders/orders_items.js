@@ -1,4 +1,4 @@
-OrdersCtrl.prototype.applyItemFunctions = function(scope) {
+OrdersCtrl.prototype.applyOrderItemFunctions = function(scope) {
 
   var _this = this;
 

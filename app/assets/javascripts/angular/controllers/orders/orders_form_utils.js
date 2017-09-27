@@ -1,4 +1,4 @@
-OrdersCtrl.prototype.applyFormUtilityFunctions = function(scope) {
+OrdersCtrl.prototype.applyOrderFormUtilityFunctions = function(scope) {
 
   var _this = this;
 

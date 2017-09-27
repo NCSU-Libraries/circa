@@ -36,15 +36,15 @@ var CircaCtrl = function($scope, $route, $routeParams, $location, $window, $moda
 
   this.assignUtilitiesToScope($scope);
 
-  this.applySharedUtilityFunctions($scope);
+  this.applyItemFunctions($scope);
+
+  this.applyLocationFunctions($scope);
 
   this.applyOrderFunctions($scope);
 
-  this.applyItemFunctions($scope);
+  this.applySharedUtilityFunctions($scope);
 
   this.applyUserFunctions($scope);
-
-  this.applyLocationFunctions($scope);
 
 };
 

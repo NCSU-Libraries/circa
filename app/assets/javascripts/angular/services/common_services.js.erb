@@ -23,7 +23,9 @@ var objectMerge = function(target, source) {
 
 
 var inArray = function(array, element) {
-  return array.indexOf(element) >= 0
+  if (array) {
+    return array.indexOf(element) >= 0;
+  }
 }
 
 

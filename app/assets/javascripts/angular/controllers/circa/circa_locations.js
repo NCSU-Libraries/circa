@@ -10,6 +10,8 @@ CircaCtrl.prototype.applyLocationFunctions = function(scope) {
     _this.editLocation(locationId);
   }
 
+  console.log('locations');
+
 }
 
 

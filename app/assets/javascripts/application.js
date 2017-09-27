@@ -27,8 +27,10 @@
 //= require_tree ./angular/directives
 //= require_tree ./angular/filters
 //= require format-as-currency
+
 //= require angular/controllers/circa_ctrl
 //= require_tree ./angular/controllers/circa
+
 //= require angular/controllers/circa_modal_instance_ctrl
 
 //= require angular/controllers/home_ctrl
@@ -44,6 +46,7 @@
 //= require angular/controllers/settings_ctrl
 //= require angular/controllers/enumeration_values_ctrl
 //= require angular/controllers/user_roles_ctrl
+
 //= require_tree ./angular/controllers/items
 //= require_tree ./angular/controllers/locations
 //= require_tree ./angular/controllers/users

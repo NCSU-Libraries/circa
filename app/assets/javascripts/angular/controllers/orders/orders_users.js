@@ -1,4 +1,4 @@
-OrdersCtrl.prototype.applyUserFunctions = function(scope) {
+OrdersCtrl.prototype.applyOrderUserFunctions = function(scope) {
   var _this = this;
 
   scope.setPrimaryUserId = function(userId) {

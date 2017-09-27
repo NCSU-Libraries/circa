@@ -1,4 +1,4 @@
-OrdersCtrl.prototype.applyValidationFunctions = function(scope) {
+OrdersCtrl.prototype.applyOrderValidationFunctions = function(scope) {
 
   var _this = this;
 

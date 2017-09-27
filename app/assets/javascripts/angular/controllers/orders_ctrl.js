@@ -46,10 +46,6 @@ OrdersCtrl.prototype.applyFunctionsToScope = function(scope) {
     _this.restoreNote($scope, scope.order, note);
   }
 
-  scope.availableStateEvents = function(item) {
-    return _this.availableStateEvents(scope, item);
-  }
-
   scope.createOrder = function() {
     _this.createOrder(scope);
   }
@@ -58,24 +54,24 @@ OrdersCtrl.prototype.applyFunctionsToScope = function(scope) {
 
   this.applyCatalogFunctions(scope);
 
-  this.applyUserFunctions(scope);
+  this.applyOrderUserFunctions(scope);
 
-  this.applyItemFunctions(scope);
+  this.applyOrderItemFunctions(scope);
 
   this.applyDigitalImageFunctions(scope);
 
-  this.applyValidationFunctions(scope);
+  this.applyOrderValidationFunctions(scope);
 
-  this.applyFormUtilityFunctions(scope);
+  this.applyOrderFormUtilityFunctions(scope);
 
-  this.initializeFormComponents(scope);
+  this.initializeOrderFormComponents(scope);
 
   this.applyReproductionFunctions(scope);
 
 }
 
 
-OrdersCtrl.prototype.initializeFormComponents = function(scope) {
+OrdersCtrl.prototype.initializeOrderFormComponents = function(scope) {
   this.initializeArchivesSpaceRecordSelect(scope);
   this.initializeCatalogRecordSelect(scope);
   this.initializeDigitalImageSelect(scope);
@@ -89,11 +85,6 @@ OrdersCtrl.prototype.initializeFormComponents = function(scope) {
   scope.validationErrors = {};
   scope.hasValidationErrors = false;
 }
-
-
-
-
-
 
 
 OrdersCtrl.prototype.getPage = function(scope, page) {
@@ -157,22 +148,6 @@ OrdersCtrl.prototype.createOrder = function(scope) {
     _this.window.scroll(0,0);
   }
 
-}
-
-
-OrdersCtrl.prototype.availableStateEvents = function(scope, item) {
-  var available = [];
-  function verifyStateEvent(stateEvent, index) {
-
-    var availableEvents = item.available_events_per_order[scope.order.id];
-
-    if (availableEvents && availableEvents.indexOf(stateEvent['event']) >= 0) {
-      available.push(stateEvent);
-    }
-  }
-
-  item['statesEvents'].forEach(verifyStateEvent);
-  return available;
 }
 
 

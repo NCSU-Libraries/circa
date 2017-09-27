@@ -8,64 +8,21 @@
 
     <div class="row">
 
-      <div class="small-10 columns">
+      <div class="small-1 columns checkbox-column">
+        <input
+            type="checkbox"
+            ng-checked="commonUtils.inArray(order['bulkEventsList'], itemOrder.id)"
+            ng-click="toggleItemOrderIdInBulkEventsList(itemOrder)">
+      </div>
+
+      <div class="small-9 columns">
 
         <div ng-include="templateUrl('items/item_overview')"></div>
 
         <div poptip="Generate printable 'call slip' for this item only" class="record-action" ng-if="!item['obsolete']"><a ng-href="{{ rootPath() }}/orders/{{ order['id'] }}/call_slip?item_id={{ item['id'] }}" target="_blank"><i class="fa fa-print"></i>Print item call slip</a></div>
 
 
-        <div class="reproduction-detail record-detail" ng-if="itemOrder['reproduction_spec']">
-
-
-          <div class="detail-element">
-            <span class="label">Specific items for reproduction:</span>
-            <span class="value">{{ itemOrder['reproduction_spec']['detail'] }}</span>
-          </div>
-
-
-          <div>
-            <div class="inline detail-element">
-              <span class="label">Pages:</span>
-              <span class="value">{{ itemOrder['reproduction_spec']['pages'] }}</span>
-            </div>
-
-            <div class="inline detail-element">
-              <span class="label">Format:</span>
-              <span class="value">{{ itemOrder['reproduction_spec']['reproduction_format']['name'] }}</span>
-            </div>
-          </div>
-
-
-
-          <div ng-if="itemOrder['order_fee']">
-
-            <div>
-              <div class="inline detail-element" ng-if="itemOrder['order_fee']['per_unit_fee']">
-                <span class="label">Fee per page/unit:</span>
-                <span class="value">{{ itemOrder['order_fee']['per_unit_fee'] | currency }}</span>
-              </div>
-
-              <div class="inline detail-element" ng-if="itemOrder['order_fee']['per_order_fee']">
-                <span class="label">Additional fee:</span>
-                <span class="value">{{ itemOrder['order_fee']['per_order_fee'] | currency }}</span>
-              </div>
-
-              <div class="inline detail-element" ng-if="itemOrder['order_fee']['per_order_fee']">
-                <span class="label">Additional fee description:</span>
-                <span class="value">{{ itemOrder['order_fee']['per_order_fee_description'] }}</span>
-              </div>
-            </div>
-
-
-            <div ng-if="itemOrder['order_fee']['note']" class="detail-element">
-              <span class="label">Fee note:</span>
-              <span class="value">{{ itemOrder['order_fee']['note'] }}</span>
-            </div>
-
-          </div>
-
-        </div>
+        <div ng-include="templateUrl('orders/item_order_reproduction_details')"></div>
 
 
 

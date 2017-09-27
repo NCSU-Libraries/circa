@@ -163,6 +163,13 @@ ul.actions-list {
   }
 }
 
+.sub-records-list-header {
+  padding: .5rem;
+  margin: 0;
+  border: 1px solid $grayLight;
+  border-bottom: 0;
+}
+
 ul.sub-records-list, ul.records-list {
 
   padding: 0;
@@ -216,6 +223,14 @@ ul.sub-records-list, ul.records-list {
     .columns, .column {
       padding-left: 0.5rem !important;
       padding-right: 1.25rem !important;
+
+      &.checkbox-column {
+        padding-right: 0 !important;
+        input[type="checkbox"] {
+          margin: 0 !important;
+          cursor: pointer;
+        }
+      }
     }
 
     .row .row {

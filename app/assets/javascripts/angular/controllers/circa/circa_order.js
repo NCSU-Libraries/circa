@@ -14,6 +14,8 @@ CircaCtrl.prototype.applyOrderFunctions = function(scope) {
     _this.triggerOrderEvent(scope, orderId, event, callback);
   }
 
+
+
 }
 
 
@@ -53,6 +55,7 @@ CircaCtrl.prototype.refreshOrder = function(scope, order, callback) {
   this.collectAssigneeEmails(scope, order);
   this.setStatesEvents(scope);
   this.setCheckOutAvailable(scope);
+  this.addAllItemOrdersToBulkEventsList(scope);
   this.commonUtils.executeCallback(callback, scope);
 }
 
@@ -81,3 +84,6 @@ CircaCtrl.prototype.triggerOrderEvent = function(scope, orderId, event, callback
     }
   });
 }
+
+
+
