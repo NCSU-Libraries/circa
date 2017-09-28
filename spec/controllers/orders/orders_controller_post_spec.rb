@@ -65,7 +65,7 @@ RSpec.describe OrdersController, type: :controller do
 
     let(:digital_image_orders_data) do
       [
-        { image_id: "image1", requested_images: [ 'imagefile1-1', 'imagefile1-2' ],
+        { resource_identifier: "image1", requested_images: [ 'imagefile1-1', 'imagefile1-2' ],
           order_fee: { per_unit_fee: 1.23 }
         }
       ]

@@ -232,9 +232,11 @@ ul.sub-records-list, ul.records-list {
         }
       }
     }
+    .row, .row .row {
+      margin-left: 0 !important;
+    }
 
     .row .row {
-      margin-left: 0 !important;
       .columns, .column {
         padding-left: 0 !important;
         padding-right: 1.875rem !important;

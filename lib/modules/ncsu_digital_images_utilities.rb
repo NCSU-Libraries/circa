@@ -2,7 +2,7 @@ module NcsuDigitalImagesUtilities
 
   require 'net/http'
 
-  def image_id_from_url(url)
+  def resource_identifier_from_url(url)
 
     if !url.match(/\//)
       url
@@ -21,13 +21,13 @@ module NcsuDigitalImagesUtilities
   end
 
 
-  def manifest_url(image_id)
-    "https://d.lib.ncsu.edu/collections/catalog/#{image_id}/manifest"
+  def manifest_url(resource_identifier)
+    "https://d.lib.ncsu.edu/collections/catalog/#{resource_identifier}/manifest"
   end
 
 
-  def get_iiif_manifest(image_id)
-    url = manifest_url(image_id)
+  def get_iiif_manifest(resource_identifier)
+    url = manifest_url(resource_identifier)
     if ( response = Net::HTTP.get_response(URI(url)) )
       JSON.parse(response.body)
     end

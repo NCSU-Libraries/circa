@@ -91,13 +91,13 @@ OrdersCtrl.prototype.applyDigitalImageFunctions = function(scope) {
 
 OrdersCtrl.prototype.editDigitalImageSelection = function(scope, digitalImageOrder) {
   this.initializeDigitalImageSelect();
-  var removedDigitalImageOrder = this.getDigitalImageOrder(scope, digitalImageOrder['image_id']);
+  var removedDigitalImageOrder = this.getDigitalImageOrder(scope, digitalImageOrder['resource_identifier']);
 }
 
 
 OrdersCtrl.prototype.getDigitalImageOrderIndex = function(scope, identifier) {
   var digitalImageOrderIndex = scope.order['digital_image_orders'].findIndex(function(element) {
-    return element['image_id'] == identifier;
+    return element['resource_identifier'] == identifier;
   });
   return digitalImageOrderIndex;
 }
@@ -119,7 +119,7 @@ OrdersCtrl.prototype.getDigitalImageOrder = function(scope, identifier) {
 
 
 OrdersCtrl.prototype.removeDigitalImageOrder = function(scope, digitalImageOrder) {
-  var index = this.getDigitalImageOrderIndex(scope, digitalImageOrder.image_id);
+  var index = this.getDigitalImageOrderIndex(scope, digitalImageOrder.resource_identifier);
   if (index >= 0) {
     var removedDigitalImageOrder = scope.order['digital_image_orders'].splice(index, 1)[0];
   }
@@ -137,7 +137,7 @@ OrdersCtrl.prototype.restoreDigitalImageOrder = function(scope, digitalImageOrde
 OrdersCtrl.prototype.initializeDigitalImageSelect = function(scope) {
   scope.digitalImageSelect = {
     identifier: '',
-    label: '',
+    resource_title: '',
     manifest: null,
     requestedImages: [],
     images: {},
@@ -158,10 +158,10 @@ OrdersCtrl.prototype.reloadDigitalImageSelect = function(scope, digitalImageOrde
 
   scope.digitalImageSelect['displayUri'] = digitalImageOrder.display_uri;
   scope.digitalImageSelect['manifestUri'] = digitalImageOrder.manifest_uri;
-  scope.digitalImageSelect['identifier'] = digitalImageOrder.image_id;
-  scope.digitalImageSelect['label'] = digitalImageOrder.label;
+  scope.digitalImageSelect['identifier'] = digitalImageOrder.resource_identifier;
+  scope.digitalImageSelect['resource_title'] = digitalImageOrder.resource_title;
   scope.digitalImageSelect['requestedImages'] = digitalImageOrder.requested_images;
-  scope.digitalImageSelect['getId'] = digitalImageOrder.image_id;
+  scope.digitalImageSelect['getId'] = digitalImageOrder.resource_identifier;
 
   var callback = function(scope, manifest) {
     scope.digitalImageSelect['manifest'] = manifest;
@@ -183,11 +183,11 @@ OrdersCtrl.prototype.reloadDigitalImageSelect = function(scope, digitalImageOrde
 OrdersCtrl.prototype.applyDigitalImageSelection = function(scope) {
   scope.order['digital_image_orders'] = scope.order['digital_image_orders'] || [];
   var digitalImageOrder = {
-    image_id: scope.digitalImageSelect['identifier'],
+    resource_identifier: scope.digitalImageSelect['identifier'],
     requested_images: scope.digitalImageSelect['requestedImages'],
     display_uri: scope.digitalImageSelect['displayUri'],
     manifest_uri: scope.digitalImageSelect['manifestUri'],
-    label: scope.digitalImageSelect['label']
+    resource_title: scope.digitalImageSelect['resource_title']
   }
   scope.order['digital_image_orders'].push(digitalImageOrder);
   this.initializeDigitalImageSelect(scope);
@@ -212,7 +212,7 @@ OrdersCtrl.prototype.getNewDigitalImage = function(scope) {
 OrdersCtrl.prototype.getManifest = function(scope, callback) {
   var path = 'ncsu_iiif_manifest'
   var _this = this;
-  this.apiRequests.get(path, { 'params': { 'image_id': scope.digitalImageSelect.getId } } ).then(function(response) {
+  this.apiRequests.get(path, { 'params': { 'resource_identifier': scope.digitalImageSelect.getId } } ).then(function(response) {
     scope.itemEventLoading = false;
     if (response.status == 200) {
       var manifest = response.data;
@@ -238,7 +238,7 @@ OrdersCtrl.prototype.newDigitalImageFromManifest = function(scope, manifest) {
   scope.digitalImageSelect['getId'] = '';
   scope.digitalImageSelect['manifest'] = manifest;
   scope.digitalImageSelect['identifier'] = identifierFromManifest(manifest);
-  scope.digitalImageSelect['label'] = manifest.label;
+  scope.digitalImageSelect['resource_title'] = manifest.resource_title;
   scope.digitalImageSelect['images'] = {};
 
   var sequence = firstSequence(manifest);

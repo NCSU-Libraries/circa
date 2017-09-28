@@ -217,7 +217,8 @@ class OrdersController < ApplicationController
   def invoice
     @user = @order.primary_user
     @item_orders = @order.item_orders.includes(:order_fee, :item, :reproduction_spec)
-    @digital_image_orders = @order.digital_image_orders.includes(:order_fees)
+    @digital_image_orders = @order.digital_image_orders.includes(:order_fee)
+    @order_fees_total = @order.order_fees_total
     render layout: 'layouts/print'
   end
 
@@ -345,9 +346,9 @@ class OrdersController < ApplicationController
     attributes_from_params = lambda do |digital_image_order|
       {
         order_id: @order.id,
-        image_id: digital_image_order['image_id'],
+        resource_identifier: digital_image_order['resource_identifier'],
         detail: digital_image_order['detail'],
-        label: digital_image_order['label'],
+        resource_title: digital_image_order['resource_title'],
         display_uri: digital_image_order['display_uri'],
         manifest_uri: digital_image_order['manifest_uri'],
         requested_images: digital_image_order['requested_images']
@@ -355,15 +356,15 @@ class OrdersController < ApplicationController
     end
 
     @existing_digital_image_orders = []
-    @order.digital_image_orders.each { |dio| @existing_digital_image_orders << dio.image_id }
+    @order.digital_image_orders.each { |dio| @existing_digital_image_orders << dio.resource_identifier }
     @digital_image_orders.each do |digital_image_order|
       # add
-      if !@existing_digital_image_orders.include?(digital_image_order['image_id'])
+      if !@existing_digital_image_orders.include?(digital_image_order['resource_identifier'])
         digital_image_order_record = @order.digital_image_orders.create!( attributes_from_params.(digital_image_order) )
       else
-        digital_image_order_record = DigitalImageOrder.find_by(order_id: @order.id, image_id: digital_image_order['image_id'])
+        digital_image_order_record = DigitalImageOrder.find_by(order_id: @order.id, resource_identifier: digital_image_order['resource_identifier'])
         digital_image_order_record.update_attributes(attributes_from_params.(digital_image_order))
-        @existing_digital_image_orders.delete(digital_image_order['image_id'])
+        @existing_digital_image_orders.delete(digital_image_order['resource_identifier'])
       end
 
       if digital_image_order['order_fee']
@@ -371,8 +372,8 @@ class OrdersController < ApplicationController
       end
 
     end
-    @existing_digital_image_orders.each do |image_id|
-      @order.digital_image_orders.where(image_id: image_id).each { |dio| dio.destroy! }
+    @existing_digital_image_orders.each do |resource_identifier|
+      @order.digital_image_orders.where(resource_identifier: resource_identifier).each { |dio| dio.destroy! }
     end
   end
 

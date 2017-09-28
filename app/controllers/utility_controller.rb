@@ -42,12 +42,12 @@ class UtilityController < ApplicationController
 
   def get_ncsu_iiif_manifest
     manifest = {}
-    if params[:image_id]
-      if (image_id = image_id_from_url(params[:image_id]))
+    if params[:resource_identifier]
+      if (resource_identifier = resource_identifier_from_url(params[:resource_identifier]))
 
-        puts image_id
+        puts resource_identifier
 
-        manifest = get_iiif_manifest(image_id) || {}
+        manifest = get_iiif_manifest(resource_identifier) || {}
       end
     end
     render json: manifest

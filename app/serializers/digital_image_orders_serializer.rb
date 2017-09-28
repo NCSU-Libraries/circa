@@ -1,5 +1,5 @@
 class DigitalImageOrdersSerializer < ActiveModel::Serializer
-  attributes :order_id, :image_id, :detail, :label, :display_uri, :manifest_uri, :requested_images, :order_fee
+  attributes :order_id, :resource_identifier, :detail, :resource_title, :display_uri, :manifest_uri, :requested_images, :order_fee
 
   def order_fee
     if object.order_fee

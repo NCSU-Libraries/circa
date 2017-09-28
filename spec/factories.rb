@@ -169,7 +169,7 @@ FactoryGirl.define do
 
 
   factory :digital_image_order do
-    sequence( :image_id ) { |n| "image#{n}" }
+    sequence( :resource_identifier ) { |n| "image#{n}" }
     requested_images [ 'imagefile0001', 'imagefile0002', 'imagefile0003' ]
     sequence(:label) { |n| "Digital image order #{n}" }
     order

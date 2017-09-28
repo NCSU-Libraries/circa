@@ -2,7 +2,7 @@
 
 <ul class="sub-records-list items-list" ng-if="order['digital_image_orders'].length > 0">
 
-  <li ng-repeat="digitalImageOrder in order['digital_image_orders']" data-image-id="{{ digitalImageOrder['image_id'] }}">
+  <li ng-repeat="digitalImageOrder in order['digital_image_orders']" data-image-id="{{ digitalImageOrder['resource_identifier'] }}">
 
     <div class="row">
 
@@ -12,7 +12,7 @@
         <div class="record-overview digital-image-overview">
 
           <div class="overview-element">
-            {{ digitalImageOrder['label'] }} ({{ digitalImageOrder['image_id'] }})
+            {{ digitalImageOrder['resource_title'] }} ({{ digitalImageOrder['resource_identifier'] }})
           </div>
 
 
@@ -58,7 +58,7 @@
   <div class="heading">Removed items:</div>
 
   <ul class="sub-records-list removed-sub-records-list items-list removed">
-    <li ng-repeat="digitalImageOrder in removedDigitalImageOrders" data-image-id="{{ digitalImageOrder['image_id'] }}">
+    <li ng-repeat="digitalImageOrder in removedDigitalImageOrders" data-image-id="{{ digitalImageOrder['resource_identifier'] }}">
 
       <div class="row">
 
@@ -67,7 +67,7 @@
           <div class="record-overview digital-image-overview">
 
             <div class="overview-element">
-              {{ digitalImageOrder['label'] }} ({{ digitalImageOrder['image_id'] }})
+              {{ digitalImageOrder['resource_title'] }} ({{ digitalImageOrder['resource_identifier'] }})
             </div>
 
             <div class="overview-element">

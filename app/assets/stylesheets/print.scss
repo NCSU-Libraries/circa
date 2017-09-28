@@ -106,12 +106,46 @@
         text-align: left;
         padding: 0.5rem;
         border: 1px solid #ccc;
-        border-bottom-width: 0;
+        border-bottom: 0;
         vertical-align: top;
+        &.indent {
+          padding-left: 1.5rem;
+        }
+        &.numeric {
+          text-align: right;
+        }
+
+        &.total-due {
+          text-align: right;
+        }
+        &.total, &.total-due  {
+          font-size: 125%;
+          font-weight: bold;
+          padding-top: 0.75rem;
+          border: 0;
+          border-top: 1px solid #ccc;
+        }
+
       }
+
+      tr.sub-row td {
+        padding-top: 0;
+        padding-bottom: 0.25rem;
+        border-top: 0;
+      }
+
+      &.invoice {
+        border-bottom: 0;
+        th, td {
+          vertical-align: bottom;
+        }
+      }
+
     }
 
   }
+
+
 
   .truncated-list-post-note {
     color: #999;

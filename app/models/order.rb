@@ -77,7 +77,7 @@ class Order < ActiveRecord::Base
     if spawned_order.order_type.name == 'reproduction'
       digital_image_orders.each do |dio|
         atts = association_atts.merge({
-          image_id: dio.image_id,
+          resource_identifier: dio.resource_identifier,
           detail: dio.detail,
           label: dio.label,
           display_uri: dio.display_uri,

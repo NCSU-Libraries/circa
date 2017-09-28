@@ -40,7 +40,7 @@ RSpec.describe Order, type: :model do
     dio = create(:digital_image_order, order_id: o.id)
     new_order = o.spawn
     expect(new_order.digital_image_orders.length).to eq(o.digital_image_orders.length)
-    expect(new_order.digital_image_orders.first.image_id).to eq(dio.image_id)
+    expect(new_order.digital_image_orders.first.resource_identifier).to eq(dio.resource_identifier)
   end
 
 end
