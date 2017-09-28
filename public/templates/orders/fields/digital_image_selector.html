@@ -1,4 +1,4 @@
-<div record-select-trigger class="selector record-selector">
+<div record-select-trigger class="selector record-selector" ng-show="digitalImageSelect['mode'] != 'update'">
 
 
   <div class="heading">Add images from NCSU Digital Collections</div>
@@ -31,26 +31,13 @@
 
     <div class="heading">{{ digitalImageSelect['resource_title'] }} ({{ digitalImageSelect['identifier'] }})</div>
 
-    <p>Click image to select/deselect
-    <span>({{ totalRequestedImages() }} of
-    {{ totalImages() }} selected)</span>
-    </p>
 
 
-    <ul class="small-block-grid-3 medium-block-grid-6">
-      <li ng-repeat="(id, thumbnail) in digitalImageSelect['images']" ng-click="requestedImagesToggle(id)"
-        class="digital-image-select-item" ng-class="imageRequested(id) ? 'selected' : null">
-
-        <div class="image-label">{{ id }}</div>
-
-        <div class="image-wrap"><img ng-src="{{ thumbnail }}"></div>
-      </li>
-    </ul>
-
+    <div ng-include="templateUrl('orders/fields/digital_image_selector_thumbnails')"></div>
 
     <div>
       <span ng-hide="orderIncludesDigitalImageOrder(digitalImageSelect['identifier'])" class="button small" ng-click="applyDigitalImageSelection()">Add {{ totalRequestedImages() }} images to order</span>
-      <span ng-show="orderIncludesDigitalImageOrder(digitalImageSelect['identifier'])" class="button small" ng-click="initializeDigitalImageSelect()">OK</span>
+      <span class="button small" ng-click="initializeDigitalImageSelect()">Cancel</span>
     </div>
 
   </div>

@@ -3,16 +3,38 @@
   <h1>Invoice</h1>
 
 
-  <section class="invoice-from">
+  <div class="row">
 
-  </section>
+    <section class="invoice-to print-2 columns">
+      <h2>To</h2>
+      <%= @user.display_name %><br>
+      <% if !@user.address1.blank? %>
+        <%= @user.address1 %><br>
+      <% end %>
+      <% if !@user.address2.blank? %>
+        <%= @user.address2 %><br>
+      <% end %>
+      <% if !@user.city.blank? %>
+        <%= @user.city %><%= @user.state ? ',' : '' %>
+      <% end %>
+      <% if !@user.state.blank? %>
+        <%= @user.state %>
+      <% end %>
+      <% if !@user.zip.blank? %>
+        <%= @user.zip %>
+      <% end %>
+      <% if !@user.phone.blank? %>
+        <br><%= @user.phone %>
+      <% end %>
+    </section>
 
 
+    <section class="invoice-from print-2 columns">
+      <h2>From</h2>
+      <%= render partial: "invoice_from_address" %>
+    </section>
 
-  <section class="invoice-to">
-
-  </section>
-
+  </div>
 
 
   <section class="invoice-items">

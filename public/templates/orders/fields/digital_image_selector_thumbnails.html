@@ -1,0 +1,16 @@
+<p>
+Click image to select/deselect
+<span>({{ totalRequestedImages() }} of
+{{ totalImages() }} selected)</span>
+</p>
+
+
+<ul class="small-block-grid-3 medium-block-grid-6">
+  <li ng-repeat="(id, thumbnail) in digitalImageSelect['images']" ng-click="requestedImagesToggle(id)"
+      class="digital-image-select-item" ng-class="imageRequested(id) ? 'selected' : null">
+
+    <div class="image-label">{{ id }}</div>
+
+    <div class="image-wrap"><img ng-src="{{ thumbnail }}"></div>
+  </li>
+</ul>

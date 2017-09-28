@@ -41,7 +41,7 @@ class OrderSerializer < ActiveModel::Serializer
 
   def primary_user_id
     primary_user = object.primary_user
-    primary_user ? primary_user.user.id : nil
+    primary_user ? primary_user.id : nil
   end
 
 

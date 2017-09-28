@@ -122,7 +122,8 @@ class Order < ActiveRecord::Base
 
   # Returns user indicated as 'primary' for this order
   def primary_user
-    order_users.where(primary: true).first || order_users.first
+    primary_order_user = order_users.where(primary: true).first || order_users.first
+    primary_order_user ? primary_order_user.user : nil
   end
 
 

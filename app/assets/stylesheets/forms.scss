@@ -138,6 +138,8 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
   border: 1px solid $grayLighter;
   margin: 2px 0 1rem 0;
 
+
+
   .heading {
     font-size: 110%;
     font-weight: bold;
@@ -176,7 +178,6 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
       &:first-child {
         margin-top: 0;
       }
-
     }
 
 
@@ -201,10 +202,7 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
         border: 2px solid $red;
         opacity: 1;
       }
-
     }
-
-
   }
 
   .alert {
@@ -214,6 +212,20 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
     color: $white;
     font-weight: bold;
   }
+
+  ul {
+    margin-left: 0 !important;
+
+    li ul {
+      margin-left: 0 !important;
+    }
+
+    li {
+      background: none !important;
+    }
+  }
+
+
 }
 
 

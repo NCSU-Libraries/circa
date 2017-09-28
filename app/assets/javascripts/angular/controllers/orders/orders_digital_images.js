@@ -134,7 +134,8 @@ OrdersCtrl.prototype.restoreDigitalImageOrder = function(scope, digitalImageOrde
 
 
 // Initialize object used to manage NCSU digital image selections
-OrdersCtrl.prototype.initializeDigitalImageSelect = function(scope) {
+OrdersCtrl.prototype.initializeDigitalImageSelect = function(scope, mode) {
+  mode = (mode == 'update') ? mode : 'new';
   scope.digitalImageSelect = {
     identifier: '',
     resource_title: '',
@@ -145,14 +146,15 @@ OrdersCtrl.prototype.initializeDigitalImageSelect = function(scope) {
     alert: null,
     uri: '',
     getId: '',
-    getIdValue: ''
+    getIdValue: '',
+    mode: mode
   };
 }
 
 
 // This binds the properties of digitalImageOrder to their corresponding properties in scope.digitalImageSelect
 OrdersCtrl.prototype.reloadDigitalImageSelect = function(scope, digitalImageOrder) {
-  this.initializeDigitalImageSelect(scope);
+  this.initializeDigitalImageSelect(scope, 'update');
 
   var _this = this;
 
@@ -205,7 +207,10 @@ OrdersCtrl.prototype.getNewDigitalImage = function(scope) {
     _this.newDigitalImageFromManifest(scope, manifest);
   }
   scope.digitalImageSelect.getId = scope.digitalImageSelect.getIdValue;
-  this.getManifest(scope, callback);
+  if (scope.digitalImageSelect.getId) {
+    this.getManifest(scope, callback);
+  }
+
 }
 
 
@@ -238,7 +243,7 @@ OrdersCtrl.prototype.newDigitalImageFromManifest = function(scope, manifest) {
   scope.digitalImageSelect['getId'] = '';
   scope.digitalImageSelect['manifest'] = manifest;
   scope.digitalImageSelect['identifier'] = identifierFromManifest(manifest);
-  scope.digitalImageSelect['resource_title'] = manifest.resource_title;
+  scope.digitalImageSelect['resource_title'] = manifest.label;
   scope.digitalImageSelect['images'] = {};
 
   var sequence = firstSequence(manifest);

@@ -1,5 +1,23 @@
 @media print, screen {
 
+  section {
+    margin: 1rem 0;
+  }
+
+  .row {
+    margin: 1rem 0;
+    position: relative;
+    overflow: auto;
+    width: 100%;
+
+    .columns.print-2 {
+      width: 45%;
+      float: left;
+      margin-right: 2rem;
+    }
+  }
+
+
   .print {
 
     font-family: "UniversRoman", Helvetica, Arial, sans-serif;
