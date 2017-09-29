@@ -20,22 +20,21 @@
   </div>
 
 
-
   <div ng-if="itemOrder['order_fee']">
 
     <div>
       <div class="inline detail-element" ng-if="itemOrder['order_fee']['per_unit_fee']">
-        <span class="label">Fee per page/unit:</span>
+        <span class="label">Fee per page:</span>
         <span class="value">{{ itemOrder['order_fee']['per_unit_fee'] | currency }}</span>
       </div>
 
       <div class="inline detail-element" ng-if="itemOrder['order_fee']['per_order_fee']">
-        <span class="label">Additional fee:</span>
+        <span class="label">Additional/other fee:</span>
         <span class="value">{{ itemOrder['order_fee']['per_order_fee'] | currency }}</span>
       </div>
 
       <div class="inline detail-element" ng-if="itemOrder['order_fee']['per_order_fee']">
-        <span class="label">Additional fee description:</span>
+        <span class="label">Fee description:</span>
         <span class="value">{{ itemOrder['order_fee']['per_order_fee_description'] }}</span>
       </div>
     </div>
@@ -47,5 +46,6 @@
     </div>
 
   </div>
+
 
 </div>

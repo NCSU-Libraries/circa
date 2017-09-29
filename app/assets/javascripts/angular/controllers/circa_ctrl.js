@@ -125,7 +125,7 @@ CircaCtrl.prototype.setStatesEvents = function(scope) {
     if (scope.order['item_orders']) {
       scope.order['item_orders'].forEach( function(item_order, i) {
         var item = item_order['item'];
-        scope.order['item_orders'][i]['item']['statesEvents'] = processStatesEvents(item);
+        scope.order['item_orders'][i]['item']['states_events'] = processStatesEvents(item);
       });
     }
   }

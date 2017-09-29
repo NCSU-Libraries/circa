@@ -36,7 +36,6 @@
 
         <div ng-show="!itemEventLoading" ng-if="order['id']" ng-hide="commonUtils.inArray(checkOutItemIds, item['id'])" class="sub-record-actions item-actions">
 
-
           <div ng-repeat="stateEvent in availableStateEvents(item)" class="action">
 
             <div ng-switch on="stateEvent['event']">

@@ -188,6 +188,9 @@ CircaCtrl.prototype.updateBulkItemEvents = function(scope) {
         }
       }
     });
+
+    console.log(bulkEvents);
+
     scope.order['bulkItemEvents'] = bulkEvents;
   }
 }

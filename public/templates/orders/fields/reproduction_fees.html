@@ -1,7 +1,7 @@
 <div class="row">
 
     <div class="small-12 columns">
-      <div class="heading">Fee per page/unit</div>
+      <div class="heading">Fee per page</div>
 
       <div class="row">
         <div class="small-12 columns">
@@ -24,6 +24,12 @@
               </span>
             </span>
 
+            <span class="radio-inline">
+              <input type="radio" ng-model="itemOrder['order_fee']['unit_fee_type']" value="none"
+                  ng-change="setUnitFee(itemOrder, 0)"/>
+              None
+            </span>
+
           </div>
 
           <div ng-if="itemOrder['order_fee']['unit_fee_options'].length == 0">
@@ -40,9 +46,9 @@
 
   <div class="row">
 
-    <div class="small-12 medium-2 columns">
+    <div class="small-12 medium-3 columns">
 
-      <div class="heading">Additional fee</div>
+      <div class="heading">Additional/other fee</div>
 
       <div>
         <input type="text" format-as-currency style="display: inline;" ng-model="itemOrder['order_fee']['per_order_fee']" />
@@ -51,9 +57,9 @@
     </div>
 
 
-    <div class="small-12 medium-10 columns">
+    <div class="small-12 medium-9 columns">
 
-      <div class="heading">Additional fee description</div>
+      <div class="heading">Additional/other fee description</div>
 
       <div>
         <input type="text" style="display: inline;" ng-model="itemOrder['order_fee']['per_order_fee_description']" />

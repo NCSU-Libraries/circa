@@ -8,7 +8,8 @@
 
     <% if record_type == 'item_order' %>
       <div>
-        <%= item.container %>; <%= record.reproduction_spec.detail %>
+        <%= item.container %><%= item.container && record.reproduction_spec.detail ? ';' : '' %>
+        <%= record.reproduction_spec.detail %>
       </div>
     <% end %>
 

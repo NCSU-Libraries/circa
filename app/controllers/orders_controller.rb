@@ -174,38 +174,6 @@ class OrdersController < ApplicationController
   end
 
 
-
-  def delete_associations
-    response = {}
-    status = 200
-    message = nil
-    if params[:items]
-      # TK
-
-    elsif params[:users]
-      # TK
-
-    elsif params[:assignees]
-      # TK
-
-    elsif params[:notes]
-      # TK
-
-    else
-      status = 400
-      message = "No valid associations provided"
-    end
-
-    if status == 400
-      response[:error] = { status: 403, detail: "Bad request: #{message}" }
-    elsif status == 500
-      response[:error] = { status: 500, detail: "Internal server error" }
-    end
-
-    render json: response, status: status
-  end
-
-
   def call_slip
     @current_user = current_user
     if params[:item_id]
@@ -274,6 +242,7 @@ class OrdersController < ApplicationController
     @course_reserve = params[:order][:course_reserve]
     @new_assignees = []
     @new_users = []
+    @order_fee = params[:order][:order_fee] || nil
   end
 
 
@@ -332,7 +301,8 @@ class OrdersController < ApplicationController
       per_unit_fee: order_fee_data['per_unit_fee'],
       per_order_fee: order_fee_data['per_order_fee'],
       per_order_fee_description: order_fee_data['per_order_fee_description'],
-      note: order_fee_data['note']
+      note: order_fee_data['note'],
+      unit_fee_type: order_fee_data['unit_fee_type']
     }
     existing_order_fee = OrderFee.find_by(record_id: record_id, record_type: record_type)
     if existing_order_fee
@@ -449,6 +419,20 @@ class OrdersController < ApplicationController
   end
 
 
+  def update_order_fee
+    @existing_order_fee = @order.order_fee
+    if @existing_order_fee && @order_fee
+      @existing_order_fee.update_attributes(@order_fee)
+    elsif @existing_order_fee && !@order_fee
+      @existing_order_fee.destroy
+    elsif @order_fee && !@existing_order_fee
+      atts = { record_type: 'Order', record_id: @order.id }
+      atts.merge!(@order_fee)
+      OrderFee.create!(@order_fee)
+    end
+  end
+
+
   def update_associations
     if @users
       update_users
@@ -473,6 +457,8 @@ class OrdersController < ApplicationController
     if @digital_image_orders
       update_digital_image_orders
     end
+
+    update_order_fee
   end
 
 

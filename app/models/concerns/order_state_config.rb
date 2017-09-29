@@ -193,8 +193,10 @@ module OrderStateConfig
 
     # Triggers the :fulfill event for this Order if all of its Items are ready for use
     def fulfill_if_items_ready(metadata)
-      if available_events.include?(:fulfill) && all_items_ready?
-        trigger(:fulfill, metadata)
+      if order_type.name != 'reproduction'
+        if available_events.include?(:fulfill) && all_items_ready?
+          trigger(:fulfill, metadata)
+        end
       end
     end
 
