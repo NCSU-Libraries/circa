@@ -248,7 +248,7 @@ class OrdersController < ApplicationController
 
 
   def order_params
-    params.require(:order).permit(:access_date_start, :access_date_end, :type, :location_id, :order_sub_type_id, :user_id)
+    params.require(:order).permit(:access_date_start, :access_date_end, :type, :location_id, :order_sub_type_id, :user_id, :cloned_order_id)
   end
 
 

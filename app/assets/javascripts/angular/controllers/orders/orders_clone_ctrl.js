@@ -60,6 +60,8 @@ OrdersCloneCtrl.prototype.cloneOrder = function(scope, id, callback) {
         'permitted_events', 'available_events', 'states_events',
         'created_by_user', 'assignees'];
 
+      order['cloned_order_id'] = id;
+
       for (var i = 0; i < deleteKeys.length; i++) {
         delete order[deleteKeys[i]];
       }

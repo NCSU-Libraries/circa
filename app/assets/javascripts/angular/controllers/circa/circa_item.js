@@ -126,7 +126,7 @@ CircaCtrl.prototype.availableStateEvents = function(scope, item) {
     }
   }
 
-  item['statesEvents'].forEach(verifyStateEvent);
+  item['states_events'].forEach(verifyStateEvent);
 
   return available;
 }

@@ -57,6 +57,7 @@ CircaCtrl.prototype.refreshOrder = function(scope, order, callback) {
   this.setStatesEvents(scope);
   this.setCheckOutAvailable(scope);
   this.addAllItemOrdersToBulkEventsList(scope);
+  this.setDateSingleOrRange(scope);
   this.commonUtils.executeCallback(callback, scope);
 }
 

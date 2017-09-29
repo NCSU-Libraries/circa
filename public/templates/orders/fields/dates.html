@@ -9,12 +9,12 @@
   </h2>
 
 
-  <div ng-if="dateSingleOrRange == 'single'">
+  <div ng-if="order.dateSingleOrRange == 'single'">
     <input type="text" datepicker ng-model="order['access_date_start']" class="datepicker-input"/>
   </div>
 
 
-  <div ng-if="dateSingleOrRange == 'range'" class="row">
+  <div ng-if="order.dateSingleOrRange == 'range'" class="row">
     <div class="date-range-field small-12 medium-3 columns">
       <label>Start:</label>
       <input type="text" datepicker ng-model="order['access_date_start']" class="datepicker-input"/>

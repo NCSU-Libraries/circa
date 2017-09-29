@@ -14,9 +14,9 @@ OrdersCtrl.prototype.applyOrderFormUtilityFunctions = function(scope) {
     _this.setOrderSubType(scope, orderSubTypes);
   }
 
-  scope.dateSingleOrRange = function() {
-    return _this.dateSingleOrRange(scope);
-  }
+  // scope.dateSingleOrRange = function() {
+  //   return _this.dateSingleOrRange(scope);
+  // }
 
 }
 
@@ -36,7 +36,7 @@ OrdersCtrl.prototype.setOrderType = function(scope, orderTypes) {
   scope.order['order_type'] = value;
   scope.order['order_sub_type'] = null;
   scope.order['order_sub_type_id'] = null;
-  scope.dateSingleOrRange = this.dateSingleOrRange(scope);
+  this.setDateSingleOrRange(scope);
   scope.userLabel = this.userLabel(scope);
 }
 
@@ -44,11 +44,8 @@ OrdersCtrl.prototype.setOrderType = function(scope, orderTypes) {
 OrdersCtrl.prototype.setOrderSubType = function(scope, orderSubTypes) {
   var value =
       this.getControlledValue(orderSubTypes, scope.order['order_sub_type_id']);
-
-  console.log(value);
-
   scope.order['order_sub_type'] = value;
-  scope.dateSingleOrRange = this.dateSingleOrRange(scope);
+  this.setDateSingleOrRange(scope);
 }
 
 
@@ -66,4 +63,9 @@ OrdersCtrl.prototype.dateSingleOrRange = function(scope) {
   }
 
   return val;
+}
+
+
+OrdersCtrl.prototype.setDateSingleOrRange = function(scope) {
+  scope.order['dateSingleOrRange'] = this.dateSingleOrRange(scope);
 }

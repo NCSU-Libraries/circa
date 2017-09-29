@@ -13,7 +13,13 @@
 
   <div ng-if="order">
 
-    <h1>Order #{{ order['id'] }}</h1>
+    <h1>
+      Order #{{ order['id'] }}
+      <span class="subhead" ng-if="order.cloned_order_id">Cloned from Order
+        <span ng-if="order.id" class="link" ng-click="showOrder(order.cloned_order_id)">{{order.cloned_order_id}}</span>
+        <span ng-if="!order.id">{{order.cloned_order_id}}</span>
+      </span>
+    </h1>
 
 
     <div ng-if="order.open || adminOverrideEnabled" ng-include="templateUrl('orders/workflow_controls')"></div>
