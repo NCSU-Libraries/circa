@@ -117,10 +117,9 @@ CircaCtrl.prototype.triggerItemEvent = function(scope, itemId, event, callback) 
 
 CircaCtrl.prototype.availableStateEvents = function(scope, item) {
   var available = [];
+
   function verifyStateEvent(stateEvent, index) {
-
     var availableEvents = item.available_events_per_order[scope.order.id];
-
     if (availableEvents && availableEvents.indexOf(stateEvent['event']) >= 0) {
       available.push(stateEvent);
     }
@@ -188,8 +187,6 @@ CircaCtrl.prototype.updateBulkItemEvents = function(scope) {
         }
       }
     });
-
-    console.log(bulkEvents);
 
     scope.order['bulkItemEvents'] = bulkEvents;
   }

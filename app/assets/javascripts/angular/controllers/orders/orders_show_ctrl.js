@@ -6,7 +6,6 @@ var OrdersShowCtrl = function($scope, $route, $routeParams, $location, $window, 
   var _this = this;
 
   var callback = function(scope) {
-    _this.setStatesEvents(scope);
     _this.initializeCheckOut(scope);
     _this.setDefaultPrimaryUserId(scope);
   }

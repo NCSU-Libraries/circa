@@ -96,11 +96,17 @@ CircaCtrl.prototype.setStatesEvents = function(scope) {
   var processStatesEvents = function(record) {
     var processedStatesEvents = [];
     var statesEvents = record['states_events'];
+
+    // console.log(statesEvents);
+
     var currentStateIndex = statesEvents.length - 1;
+    var currentStateIndex;
     var currentState = record['current_state'];
     var availableEvents = record['available_events'];
     var permittedEvents = record['permitted_events'];
+
     $.each(statesEvents, function(i, array) {
+
       var stateEvent = {
         state: array[0],
         event: array[1],
