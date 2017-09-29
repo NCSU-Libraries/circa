@@ -93,7 +93,7 @@ RSpec.describe OrdersController, type: :controller do
 
     it "includes digital_image_orders in response" do
       expect(@r['order']['digital_image_orders'].length).to eq(1)
-      expect(@r['order']['digital_image_orders'][0]['image_id']).to eq(@digital_image_order.image_id)
+      expect(@r['order']['digital_image_orders'][0]['resource_identifier']).to eq(@digital_image_order.resource_identifier)
     end
 
 

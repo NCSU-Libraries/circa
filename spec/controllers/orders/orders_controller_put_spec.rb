@@ -50,6 +50,23 @@ RSpec.describe OrdersController, type: :controller do
       expect { put :update, id: o.id, order: { foo: 'boo' } }.not_to raise_error
     end
 
+
+    describe "update order_type from 'reproduction" do
+      let(:order_type) { create(:order_type, name: 'reproduction') }
+      let(:order_sub_type) { create(:order_sub_type, order_type_id: order_type.id) }
+      let(:other_order_sub_type) { create(:order_sub_type) }
+      let(:o) { create(:order, order_sub_type_id: order_sub_type.id) }
+      let!(:dio) { create(:digital_image_order, order_id: o.id) }
+
+      it "removes reproduction associations when order-type is changed" do
+        order = o.clone
+        expect(o.digital_image_orders.length).to eq(1)
+        put :update, id: order.id, order: { order_sub_type_id: other_order_sub_type.id }
+        order.reload
+        expect(o.digital_image_orders.length).to eq(0)
+      end
+    end
+
   end
 
 

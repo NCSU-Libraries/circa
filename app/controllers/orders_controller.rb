@@ -59,7 +59,11 @@ class OrdersController < ApplicationController
     if params['order']['temporary_location']
       params['order']['location_id'] = params['order']['temporary_location']['id']
     end
+
     get_association_data_from_params(params)
+
+    set_cleanup_reproduction_associations()
+
     @order.update!(order_params)
 
     update_associations
@@ -240,9 +244,7 @@ class OrdersController < ApplicationController
   end
 
 
-
   private
-
 
 
   def order_params
@@ -481,6 +483,17 @@ class OrdersController < ApplicationController
       @new_assignees.each do |a|
         OrderMailer.assignee_email(@order, a, order_url).deliver_later
       end
+    end
+  end
+
+
+  # If the order_type has changed from reproduction to something else,
+  #   we need to delete associations specific to reproduction orders
+  def set_cleanup_reproduction_associations
+    @cleanup_reproduction_associations = nil
+    if @order.order_type.name == 'reproduction' &&
+        params[:order][:order_type_id] != @order.order_type_id
+      @cleanup_reproduction_associations = true
     end
   end
 

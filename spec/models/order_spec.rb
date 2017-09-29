@@ -124,7 +124,10 @@ RSpec.describe Order, type: :model do
 
   describe "order fees" do
 
-    let(:o) { create(:order) }
+    let(:order_type) { create(:order_type, name: 'reproduction') }
+    let(:order_sub_type) { create(:order_sub_type, order_type_id: order_type.id) }
+    let(:other_order_sub_type) { create(:order_sub_type) }
+    let(:o) { create(:order, order_sub_type_id: order_sub_type.id) }
     let(:io) { create(:item_order, order_id: o.id) }
     let(:dio) { create(:digital_image_order, order_id: o.id) }
     let!(:reproduction_spec) { create(:reproduction_spec, item_order_id: io.id, pages: 3) }
@@ -152,6 +155,26 @@ RSpec.describe Order, type: :model do
       expect { o.order_fees }.not_to raise_error
       expect { o.order_fees_total }.not_to raise_error
       expect(o.order_fees_total).to eq(0)
+    end
+
+
+    describe "cleanup_reproduction_associations" do
+
+      it "will not remove associations for reproduction orders" do
+        o.cleanup_reproduction_associations
+        expect(o.order_fees.length).to eq(3)
+        expect(o.digital_image_orders.length).to eq(1)
+      end
+
+      it "will remove associations for non-reproduction orders" do
+        order = o.clone
+        order.update_attributes(order_sub_type_id: other_order_sub_type.id)
+        order.cleanup_reproduction_associations
+        order.reload
+        expect(order.order_fees.length).to eq(0)
+        expect(order.digital_image_orders.length).to eq(0)
+      end
+
     end
 
   end

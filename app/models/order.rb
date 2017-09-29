@@ -362,4 +362,17 @@ class Order < ActiveRecord::Base
     order_fees.reduce(0) { |sum, fee| sum + fee.total }
   end
 
+
+  def cleanup_reproduction_associations
+    if order_type.name != 'reproduction'
+      order_fees.each { |of| of.destroy! }
+      digital_image_orders.each { |dio| dio.destroy! }
+      item_orders.each do |io|
+        if io.reproduction_spec
+          io.reproduction_spec.destroy!
+        end
+      end
+    end
+  end
+
 end
