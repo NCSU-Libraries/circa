@@ -12,7 +12,8 @@
         <input
             type="checkbox"
             ng-checked="commonUtils.inArray(order['bulkEventsList'], itemOrder.id)"
-            ng-click="toggleItemOrderIdInBulkEventsList(itemOrder)">
+            ng-model="itemOrder['inBulkEventsList']"
+            ng-change="toggleItemOrderIdInBulkEventsList(itemOrder)">
       </div>
 
       <div ng-class="order['num_items'] > 1 ? 'small-9 columns' : 'small-10 columns'">

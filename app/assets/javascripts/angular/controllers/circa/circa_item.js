@@ -128,8 +128,6 @@ CircaCtrl.prototype.availableStateEvents = function(scope, item) {
 
   item['statesEvents'].forEach(verifyStateEvent);
 
-  console.log(available);
-
   return available;
 }
 
@@ -188,11 +186,8 @@ CircaCtrl.prototype.updateBulkItemEvents = function(scope) {
             }
           });
         }
-
       }
-
     });
-
     scope.order['bulkItemEvents'] = bulkEvents;
   }
 }
@@ -200,12 +195,11 @@ CircaCtrl.prototype.updateBulkItemEvents = function(scope) {
 
 CircaCtrl.prototype.addItemOrderIdToBulkEventsList = function(scope, itemOrder) {
   if (scope.order) {
-
     if (!scope.order['bulkEventsList']) {
       scope.order['bulkEventsList'] = [];
     }
-
     scope.order['bulkEventsList'].push(itemOrder.id);
+    itemOrder['inBulkEventsList'] = true;
   }
   this.updateBulkItemEvents(scope);
 }
@@ -214,6 +208,7 @@ CircaCtrl.prototype.addItemOrderIdToBulkEventsList = function(scope, itemOrder) 
 CircaCtrl.prototype.removeItemOrderIdFromBulkEventsList = function(scope, itemOrder) {
   if (scope.order && scope.order['bulkEventsList']) {
     this.commonUtils.removeFromArray(scope.order['bulkEventsList'], itemOrder.id);
+    itemOrder['inBulkEventsList'] = false;
   }
   this.updateBulkItemEvents(scope);
 }

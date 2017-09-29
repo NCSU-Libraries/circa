@@ -9,7 +9,6 @@ var OrdersShowCtrl = function($scope, $route, $routeParams, $location, $window, 
     _this.setStatesEvents(scope);
     _this.initializeCheckOut(scope);
     _this.setDefaultPrimaryUserId(scope);
-    _this.addAllItemOrdersToBulkEventsList(scope);
   }
 
   this.getOrder($scope, $routeParams.orderId, callback);
