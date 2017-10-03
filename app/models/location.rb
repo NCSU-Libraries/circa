@@ -11,6 +11,7 @@ class Location < ActiveRecord::Base
   has_many :permanent_items, class_name: "Item", foreign_key: 'permanent_location_id'
   has_many :current_items, class_name: "Item", foreign_key: 'current_location_id'
   has_many :orders
+  has_many :order_sub_types, foreign_key: 'default_location_id'
 
   after_create do
     if !self.uri

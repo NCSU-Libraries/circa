@@ -1,0 +1,2 @@
+class OrderSubTypesController < ApplicationController
+end
