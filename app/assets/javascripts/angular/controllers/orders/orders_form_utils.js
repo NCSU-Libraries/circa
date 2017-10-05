@@ -45,8 +45,6 @@ OrdersCtrl.prototype.setOrderSubType = function(scope, orderSubTypes) {
   var orderSubType =
       this.getControlledValue(orderSubTypes, scope.order['order_sub_type_id']);
 
-  console.log(orderSubType);
-
   scope.order['order_sub_type'] = orderSubType;
   var defaultLocationId = orderSubType.default_location_id;
   scope.order['location_id'] = defaultLocationId;

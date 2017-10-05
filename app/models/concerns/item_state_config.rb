@@ -336,7 +336,7 @@ module ItemStateConfig
     def finish_applicable_orders(metadata={})
       puts "***"; puts "finish_applicable_orders"; puts "***"
       open_orders.each do |o|
-        if o.finished?
+        if o.finished? && o.order_type.name != 'reproduction'
           o.trigger(:finish, metadata)
         end
       end

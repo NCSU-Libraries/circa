@@ -155,8 +155,11 @@ module OrderStateConfig
       when :activate
         current_state == :fulfilled
       when :finish
-        # current_state == :active
-        (current_state == :fulfilled) && finished?
+        if order_type.name == 'reproduction'
+          current_state == :fulfilled
+        else
+          (current_state == :fulfilled) && finished?
+        end
       end
     end
 

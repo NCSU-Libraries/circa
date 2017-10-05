@@ -3,7 +3,11 @@ OrdersCtrl.prototype.applyReproductionFunctions = function(scope) {
   var _this = this;
 
   scope.setReproductionFormat = function(record) {
-    _this.setReproductionFormat(scope, record);
+    _this.setReproductionFormat(record);
+  }
+
+  scope.setUnitFee = function(record, fee) {
+    _this.setUnitFee(record, fee);
   }
 
   scope.showCustomUnitFee = function(record) {
@@ -18,21 +22,15 @@ OrdersCtrl.prototype.applyReproductionFunctions = function(scope) {
     _this.updateCustomUnitFee(record);
   }
 
-  scope.setUnitFee = function(record, fee) {
-    _this.setUnitFee(record, fee);
-  }
-
 }
 
 
-OrdersCtrl.prototype.setReproductionFormat = function(scope, record) {
+OrdersCtrl.prototype.setReproductionFormat = function(record) {
   var formatId = record['reproduction_spec']['reproduction_format_id'];
 
   var format = this.controlledValues['reproduction_format'].find(function(element) {
     return element.id == formatId;
   });
-
-  console.log(format);
 
   if (format) {
     record['reproduction_spec']['reproduction_format'] = format;
@@ -55,6 +53,11 @@ OrdersCtrl.prototype.setUnitFeeOptions = function(record, reproductionFormat) {
 }
 
 
+OrdersCtrl.prototype.setUnitFee = function(record, fee) {
+  record['order_fee']['per_unit_fee'] = Number(fee).toFixed(2);
+}
+
+
 OrdersCtrl.prototype.showCustomUnitFee = function(record) {
   record['order_fee']['showCustom'] = true;
   record['order_fee']['custom'] = record['order_fee']['custom'] || record['order_fee']['per_unit_fee'];
@@ -64,9 +67,4 @@ OrdersCtrl.prototype.showCustomUnitFee = function(record) {
 
 OrdersCtrl.prototype.hideCustomUnitFee = function(record) {
   delete record['order_fee']['showCustom'];
-}
-
-
-OrdersCtrl.prototype.setUnitFee = function(record, fee) {
-  record['order_fee']['per_unit_fee'] = Number(fee).toFixed(2);
 }

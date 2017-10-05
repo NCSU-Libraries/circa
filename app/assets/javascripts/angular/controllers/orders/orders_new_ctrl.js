@@ -30,12 +30,6 @@ circaControllers.controller('OrdersNewCtrl', OrdersNewCtrl);
 OrdersNewCtrl.prototype.createOrder = function(scope) {
   var _this = this;
 
-  console.log('create');
-
-  // if (scope.order['default_location']) {
-  //   scope.order['temporary_location'] = scope.defaultLocation;
-  // }
-
   if (_this.validateOrder(scope)) {
     scope.loading = true;
     _this.apiRequests.post("orders", { 'order': scope.order }).then(function(response) {

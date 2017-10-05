@@ -11,6 +11,7 @@ var OrdersEditCtrl = function($scope, $route, $routeParams, $location, $window, 
     _this.setStatesEvents(scope);
     _this.setDefaultPrimaryUserId(scope);
     _this.applyFunctionsToScope(scope);
+
     // if (!scope.order['temporary_location']) {
     //   scope.order['temporary_location'] = scope.defaultLocation;
     //   scope.order['default_location'] = true;
