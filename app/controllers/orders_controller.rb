@@ -38,7 +38,7 @@ class OrdersController < ApplicationController
 
 
   def create
-    params['order']['location_id'] = params['order']['temporary_location'] ? params['order']['temporary_location']['id'] : nil
+    # params['order']['location_id'] = params['order']['temporary_location'] ? params['order']['temporary_location']['id'] : nil
 
     get_association_data_from_params(params)
     @order = Order.create!(order_params)
@@ -56,9 +56,9 @@ class OrdersController < ApplicationController
 
 
   def update
-    if params['order']['temporary_location']
-      params['order']['location_id'] = params['order']['temporary_location']['id']
-    end
+    # if params['order']['temporary_location']
+    #   params['order']['location_id'] = params['order']['temporary_location']['id']
+    # end
 
     get_association_data_from_params(params)
 

@@ -46,6 +46,7 @@
 //= require angular/controllers/settings_ctrl
 //= require angular/controllers/enumeration_values_ctrl
 //= require angular/controllers/user_roles_ctrl
+//= require angular/controllers/order_sub_types_ctrl
 
 //= require_tree ./angular/controllers/items
 //= require_tree ./angular/controllers/locations
@@ -55,6 +56,7 @@
 //= require_tree ./angular/controllers/modals
 //= require_tree ./angular/controllers/enumeration_values
 //= require_tree ./angular/controllers/user_roles
+//= require_tree ./angular/controllers/order_sub_types
 
 
 // $(function(){ $(document).foundation(); });

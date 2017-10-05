@@ -20,13 +20,6 @@ class Location < ActiveRecord::Base
   end
 
 
-  before_save do
-    if self.default
-      Location.where(default: true).where.not(id: self.id).find_each { |l| l.update_attributes(default: false) }
-    end
-  end
-
-
   def self.create_or_update_from_archivesspace(archivesspace_uri)
     data = aspace_api_get(archivesspace_uri)
     location = Location.find_by(uri: archivesspace_uri)

@@ -5,13 +5,13 @@
 <h1>Edit {{ enumerationName | removeUnderscores }}</h1>
 
 <div ng-hide="loading">
-<div ng-include="templateUrl('enumeration_values/form_fields')"/>
+  <div ng-include="templateUrl('enumeration_values/form_fields')"/>
   <button class="button" ng-click="updateEnumerationValue()">Save changes</button>
   <button class="button" ng-click="goto('/settings/enumeration_values/list/' + enumerationValue.enumeration_name)">Cancel</button>
 </div>
 
-<!--
+
 <div ng-if="debug" class="data-panel">
 {{ enumerationValue | json }}
 </div>
- -->
+

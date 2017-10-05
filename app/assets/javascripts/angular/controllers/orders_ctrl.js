@@ -125,11 +125,11 @@ OrdersCtrl.prototype.getOrders = function(scope, page) {
 OrdersCtrl.prototype.createOrder = function(scope) {
   var _this = this;
 
-  console.log('create');
+  // console.log('create');
 
-  if (scope.order['default_location']) {
-    scope.order['temporary_location'] = scope.defaultLocation;
-  }
+  // if (scope.order['default_location']) {
+  //   scope.order['temporary_location'] = scope.defaultLocation;
+  // }
 
   if (_this.validateOrder(scope)) {
     scope.loading = true;
@@ -159,7 +159,6 @@ OrdersCtrl.prototype.initializeOrder = function() {
     archivesspace_records: [],
     notes: [],
     assignees: [],
-    default_location: true,
     catalog_records: [],
     catalog_items: [],
     item_orders: [],
@@ -171,7 +170,6 @@ OrdersCtrl.prototype.initializeOrder = function() {
 OrdersCtrl.prototype.newOrder = function(scope) {
   scope.order = this.initializeOrder();
   // scope.order['order_type_id'] = this.orderTypeId('research');
-  scope.order['temporary_location'] = scope.defaultLocation;
   scope.itemIds = [];
   scope.userEmails = [];
   scope.assigneeEmails = [];

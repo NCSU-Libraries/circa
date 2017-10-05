@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171003201328) do
+ActiveRecord::Schema.define(version: 20171005183146) do
 
   create_table "access_sessions", force: :cascade do |t|
     t.integer  "item_id",        limit: 4,                null: false
@@ -122,10 +122,9 @@ ActiveRecord::Schema.define(version: 20171003201328) do
   create_table "locations", force: :cascade do |t|
     t.string   "title",             limit: 255
     t.string   "uri",               limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "source_id",         limit: 4
-    t.boolean  "default",                         default: false, null: false
     t.string   "catalog_item_id",   limit: 255
     t.text     "catalog_item_data", limit: 65535
     t.text     "notes",             limit: 65535

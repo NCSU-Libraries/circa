@@ -14,10 +14,10 @@ var OrdersCloneCtrl = function($scope, $route, $routeParams, $location, $window,
     _this.setDefaultPrimaryUserId(scope);
     _this.applyFunctionsToScope(scope);
     scope.dateSingleOrRange = _this.dateSingleOrRange(scope);
-    if (!scope.order['temporary_location']) {
-      scope.order['temporary_location'] = scope.defaultLocation;
-      scope.order['default_location'] = true;
-    }
+    // if (!scope.order['temporary_location']) {
+    //   scope.order['temporary_location'] = scope.defaultLocation;
+    //   scope.order['default_location'] = true;
+    // }
   }
 
   // For clone/edit views, load record after cache is loaded to ensure that

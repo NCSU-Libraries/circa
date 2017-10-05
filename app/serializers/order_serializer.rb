@@ -4,7 +4,7 @@ class OrderSerializer < ActiveModel::Serializer
       :order_sub_type_id, :confirmed, :open, :created_at, :updated_at,
       :cloned_order_id, :archivesspace_records, :catalog_records,
       :catalog_items, :order_fee, :current_state, :permitted_events,
-      :available_events, :states_events, :default_location, :num_items,
+      :available_events, :states_events, :num_items,
       :primary_user_id, :primary_user_id, :num_items_ready, :created_by_user,
       :deletable, :item_ids_in_use
 
@@ -27,13 +27,6 @@ class OrderSerializer < ActiveModel::Serializer
 
   def updated_at
     object.created_at.strftime('%FT%T%:z')
-  end
-
-
-  def default_location
-    if object.temporary_location
-      object.temporary_location.default
-    end
   end
 
 

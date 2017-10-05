@@ -11,10 +11,10 @@ var OrdersEditCtrl = function($scope, $route, $routeParams, $location, $window, 
     _this.setStatesEvents(scope);
     _this.setDefaultPrimaryUserId(scope);
     _this.applyFunctionsToScope(scope);
-    if (!scope.order['temporary_location']) {
-      scope.order['temporary_location'] = scope.defaultLocation;
-      scope.order['default_location'] = true;
-    }
+    // if (!scope.order['temporary_location']) {
+    //   scope.order['temporary_location'] = scope.defaultLocation;
+    //   scope.order['default_location'] = true;
+    // }
   }
 
   // For edit views, load record after cache is loaded to ensure that controlled/enumerable values are ready
@@ -48,9 +48,9 @@ circaControllers.controller('OrdersEditCtrl', OrdersEditCtrl);
 OrdersEditCtrl.prototype.updateOrder = function(scope) {
   var _this = this;
 
-  if (scope.order['default_location']) {
-    scope.order['temporary_location'] = scope.defaultLocation;
-  }
+  // if (scope.order['default_location']) {
+  //   scope.order['temporary_location'] = scope.defaultLocation;
+  // }
 
   if (_this.validateOrder(scope)) {
     scope.loading = true;

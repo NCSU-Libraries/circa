@@ -42,9 +42,15 @@ OrdersCtrl.prototype.setOrderType = function(scope, orderTypes) {
 
 
 OrdersCtrl.prototype.setOrderSubType = function(scope, orderSubTypes) {
-  var value =
+  var orderSubType =
       this.getControlledValue(orderSubTypes, scope.order['order_sub_type_id']);
-  scope.order['order_sub_type'] = value;
+
+  console.log(orderSubType);
+
+  scope.order['order_sub_type'] = orderSubType;
+  var defaultLocationId = orderSubType.default_location_id;
+  scope.order['location_id'] = defaultLocationId;
+
   this.setDateSingleOrRange(scope);
 }
 

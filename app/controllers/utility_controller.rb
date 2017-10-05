@@ -148,7 +148,7 @@ class UtilityController < ApplicationController
 
     #order_sub_type
     OrderSubType.find_each do |ost|
-      @values[:order_sub_type] << { id: ost.id, name: ost.name, label: ost.label, order_type_id: ost.order_type_id }
+      @values[:order_sub_type] << { id: ost.id, name: ost.name, label: ost.label, order_type_id: ost.order_type_id, default_location_id: ost.default_location_id, default_location: ost.default_location }
     end
 
     #patron_type

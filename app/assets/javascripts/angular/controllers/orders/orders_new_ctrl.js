@@ -32,9 +32,9 @@ OrdersNewCtrl.prototype.createOrder = function(scope) {
 
   console.log('create');
 
-  if (scope.order['default_location']) {
-    scope.order['temporary_location'] = scope.defaultLocation;
-  }
+  // if (scope.order['default_location']) {
+  //   scope.order['temporary_location'] = scope.defaultLocation;
+  // }
 
   if (_this.validateOrder(scope)) {
     scope.loading = true;

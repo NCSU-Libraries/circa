@@ -64,13 +64,6 @@ CircaCtrl.prototype.processCache = function(cache, scope) {
   scope.orderStatesEvents = cache.get('orderStatesEvents');
   scope.itemStatesEvents = cache.get('itemStatesEvents');
   scope.options = cache.get('options');
-
-  for (var i = 0; i < scope.circaLocations.length; i++) {
-    if (scope.circaLocations[i]['default'] == true) {
-      scope.defaultLocation = scope.circaLocations[i];
-      return;
-    }
-  }
 }
 
 
