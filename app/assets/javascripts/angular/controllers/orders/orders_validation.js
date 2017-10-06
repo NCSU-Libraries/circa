@@ -113,6 +113,15 @@ OrdersCtrl.prototype.validateReproductionSpec = function(scope) {
           itemOrder['reproduction_spec']['reproduction_format_id'].length == 0) {
         scope.validationErrors['reproduction_spec_format'] = "Format must be selected";
       }
+
+      if (itemOrder['order_fee']) {
+        if (itemOrder['order_fee']['per_order_fee'] && itemOrder['order_fee']['per_order_fee'].length > 0) {
+          if (!itemOrder['order_fee']['per_order_fee_description'] ||
+              itemOrder['order_fee']['per_order_fee_description'].length == 0) {
+            scope.validationErrors['order_fee_other_description'] = "Description must be provided if other fee is specified";
+          }
+        }
+      }
     });
   }
 }

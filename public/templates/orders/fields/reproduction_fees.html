@@ -59,10 +59,17 @@
 
     <div class="small-12 medium-9 columns">
 
-      <div class="heading">Additional/other fee description</div>
+      <div ng-class="validationErrors['order_fee_other_description'] ? 'has-error' : ''">
 
-      <div>
-        <input type="text" style="display: inline;" ng-model="itemOrder['order_fee']['per_order_fee_description']" />
+        <div ng-if="validationErrors['order_fee_other_description']"
+            class="validation-error field-validation-error">{{ validationErrors['order_fee_other_description'] }}</div>
+
+        <div class="heading">Additional/other fee description</div>
+
+        <div>
+          <input type="text" style="display: inline;" ng-model="itemOrder['order_fee']['per_order_fee_description']" />
+        </div>
+
       </div>
 
     </div>
