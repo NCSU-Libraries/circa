@@ -42,6 +42,8 @@ OrdersCtrl.prototype.validateOrder = function(scope) {
   //   scope.validationErrors['access_date'] = "End is date required.";
   // }
 
+  this.validateReproductionSpec(scope);
+
   if (scope.order['users'].length == 0 && scope.order['assignees'].length == 0) {
     scope.validationErrors['users'] = "Order must be associated with a user, assigned to a staff member, or both.";
     scope.validationErrors['assignees'] = "Order must be associated with a user, assigned to a staff member, or both.";
@@ -75,7 +77,7 @@ OrdersCtrl.prototype.validateOrderSubType = function(scope) {
 OrdersCtrl.prototype.validateItems = function(scope) {
   if (scope.order['order_type']['name'] == 'reproduction') {
     if (scope.order['item_orders'].length == 0 && scope.order['digital_image_orders'].length == 0) {
-      scope.validationErrors['items'] = "Order must include at least one item or digital image.";
+      scope.validationErrors['items'] = "Order must include at least one item or digital image";
     }
   }
   else {
@@ -88,7 +90,30 @@ OrdersCtrl.prototype.validateItems = function(scope) {
 
 OrdersCtrl.prototype.validateAccessDate = function(scope) {
   if (!scope.order['access_date_start']) {
-    scope.validationErrors['access_date'] = "A date must be provided.";
+    scope.validationErrors['access_date'] = "A date must be provided";
+  }
+}
+
+
+
+OrdersCtrl.prototype.validateReproductionSpec = function(scope) {
+  if (scope.order['order_type']['name'] == 'reproduction') {
+    scope.order['item_orders'].forEach(function(itemOrder) {
+      if (!itemOrder['reproduction_spec']['detail'] ||
+          itemOrder['reproduction_spec']['detail'].length == 0) {
+        scope.validationErrors['reproduction_spec_detail'] = "Details of items for reproduction must be provided";
+      }
+
+      if (!itemOrder['reproduction_spec']['pages'] ||
+          itemOrder['reproduction_spec']['pages'].length == 0) {
+        scope.validationErrors['reproduction_spec_pages'] = "Number of pages must be provided";
+      }
+
+      if (!itemOrder['reproduction_spec']['reproduction_format_id'] ||
+          itemOrder['reproduction_spec']['reproduction_format_id'].length == 0) {
+        scope.validationErrors['reproduction_spec_format'] = "Format must be selected";
+      }
+    });
   }
 }
 

@@ -30,7 +30,12 @@ OrdersCtrl.prototype.getItemOrderIndex = function(itemOrders, itemId) {
 
 OrdersCtrl.prototype.addItemOrder = function(scope, item, archivesspace_uri) {
   archivesspace_uri = archivesspace_uri ? [ archivesspace_uri ] : null;
-  scope.order['item_orders'].push( { order_id: scope.order['id'], item_id: item['id'], item: item, archivesspace_uri: archivesspace_uri } );
+  var itemOrder = { order_id: scope.order['id'], item_id: item['id'],
+      item: item, archivesspace_uri: archivesspace_uri };
+  if (scope.order['order_type']['name'] == 'reproduction') {
+    itemOrder['reproduction_spec'] = {};
+  }
+  scope.order['item_orders'].push( itemOrder );
 }
 
 

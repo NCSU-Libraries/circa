@@ -9,6 +9,14 @@ namespace :users do
   end
 
 
+  desc "get ldap record"
+  task :ldap_record, [:unity_id] => :environment do |t, args|
+    if args[:unity_id]
+      User.attributes_from_ldap(args[:unity_id])
+    end
+  end
+
+
   desc "create generic admin user for initial "
   task :create_admin => :environment do |t, args|
     admin_role = UserRole.where(name: 'admin').first
