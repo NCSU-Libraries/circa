@@ -96,7 +96,7 @@ group :development, :test do
   gem 'factory_girl_rails', ">= 4.0", :require => false
   gem 'database_cleaner', ">= 1.0.0"
 
-  gem "jasmine", github: "pivotal/jasmine-gem"
+  gem "jasmine", git: "https://github.com/pivotal/jasmine-gem.git"
   gem 'sinon-rails'
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

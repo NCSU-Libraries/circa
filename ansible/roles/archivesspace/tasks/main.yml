@@ -1,0 +1,50 @@
+- name: Ensure unzip is installed
+  become: yes
+  yum:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - unzip
+    - git
+
+#https://github.com/archivesspace/archivesspace/releases/download/v2.1.2/archivesspace-v2.1.2.zip
+- name: Ensure Archives Space directory exists
+  file:
+    path: "{{ansible_env.HOME}}/archivesspace"
+    state: directory
+
+- name: Download and unzip Archives Space
+  unarchive:
+    src: https://github.com/archivesspace/archivesspace/releases/download/v2.1.2/archivesspace-v2.1.2.zip
+    dest: "{{ansible_env.HOME}}"
+    mode: 0700
+    remote_src: yes
+    creates: "{{ansible_env.HOME}}/archivesspace/archivesspace.sh"
+
+# - name: Download ncsu_aspace_utilities
+#   git:
+#     repo: git@github.ncsu.edu:trthorn2/ncsu_aspace_utilities.git
+#     dest: "{{ansible_env.HOME}}/archivesspace/plugins/ncsu_aspace_utilities"
+#     accept_hostkey: true
+
+# - name: Enable plugin
+#   lineinfile:
+#     path: "{{ansible_env.HOME}}/archivesspace/config/config.rb"
+#     insertafter: "^#AppConfig[:plugins]"
+#     line: "AppConfig[:plugins] = ['ncsu_aspace_utilities']"
+
+- name: Ensure Archives Space is not already running
+  command: "./archivesspace.sh stop"
+  args:
+    chdir: "{{ansible_env.HOME}}/archivesspace"
+
+- name: Start ArchivesSpace
+  command: "./archivesspace.sh start"
+  args:
+    chdir: "{{ansible_env.HOME}}/archivesspace"
+
+- name: Waiting for ArchivesSpace to start
+  wait_for:
+    host: "localhost"
+    port: 8081
+    state: started
