@@ -38,12 +38,11 @@ var OrdersCloneCtrl = function($scope, $route, $routeParams, $location, $window,
 }
 
 OrdersCloneCtrl.prototype = Object.create(OrdersCtrl.prototype);
+
 OrdersCloneCtrl.$inject = ['$scope', '$route', '$routeParams', '$location',
-  '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils',
-  'formUtils'];
+    '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils',
+    'formUtils'];
 circaControllers.controller('OrdersCloneCtrl', OrdersCloneCtrl);
-
-
 
 OrdersCloneCtrl.prototype.cloneOrder = function(scope, id, callback) {
   var path = '/orders/' + id;
@@ -59,6 +58,10 @@ OrdersCloneCtrl.prototype.cloneOrder = function(scope, id, callback) {
         'confirmed', 'open', 'created_at', 'updated_at', 'current_state',
         'permitted_events', 'available_events', 'states_events',
         'created_by_user', 'assignees'];
+
+      order['users'] = order['users'].filter(function(user) {
+        return user['id'] == order['primary_user_id'];
+      });
 
       order['cloned_order_id'] = id;
 
