@@ -55,9 +55,9 @@ OrdersCloneCtrl.prototype.cloneOrder = function(scope, id, callback) {
       var order = response.data['order'];
 
       var deleteKeys = ['id', 'access_date_start', 'access_date_end',
-        'confirmed', 'open', 'created_at', 'updated_at', 'current_state',
-        'permitted_events', 'available_events', 'states_events',
-        'created_by_user', 'assignees'];
+          'confirmed', 'open', 'created_at', 'updated_at', 'current_state',
+          'permitted_events', 'available_events', 'states_events',
+          'created_by_user', 'assignees'];
 
       order['users'] = order['users'].filter(function(user) {
         return user['id'] == order['primary_user_id'];

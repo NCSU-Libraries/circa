@@ -57,4 +57,9 @@
 </div>
 
 
-<div ng-show="itemOrder['reproduction_spec']['reproduction_format']" ng-include="templateUrl('orders/fields/reproduction_fees')"></div>
+<div ng-show="order['order_sub_type']['name'] == 'reproduction_fee'">
+
+  <div ng-show="itemOrder['reproduction_spec']['reproduction_format']"
+      ng-include="templateUrl('orders/fields/reproduction_fees')"></div>
+
+</div>

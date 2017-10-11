@@ -33,8 +33,8 @@ exhibition_order_type = OrderType.where(name: 'exhibition').first
 order_sub_types = [
   { name: 'independent_research', label: 'independent research', order_type_id: research_order_type.id },
   { name: 'course_reserve', label: 'course reserve', order_type_id: research_order_type.id },
-  { name: 'reproduction_internal', label: 'reproduction request (internal)', order_type_id: reproduction_order_type.id },
-  { name: 'reproduction_external', label: 'reproduction request (external)', order_type_id: reproduction_order_type.id },
+  { name: 'reproduction_no_fee', label: 'reproduction request, no fee', order_type_id: reproduction_order_type.id },
+  { name: 'reproduction_fee', label: 'reproduction request, fee required', order_type_id: reproduction_order_type.id },
   { name: 'preservation', label: 'preservation treatment ', order_type_id: processing_order_type.id },
   { name: 'processing', label: 'processing', order_type_id: processing_order_type.id },
   { name: 'bulk_digitization', label: 'bulk digitization', order_type_id: processing_order_type.id },

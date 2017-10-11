@@ -50,6 +50,10 @@ OrdersCtrl.prototype.setOrderSubType = function(scope, orderSubTypes) {
   scope.order['location_id'] = defaultLocationId;
 
   this.setDateSingleOrRange(scope);
+
+  if (orderSubType['name'] == 'reproduction_fee') {
+    this.enableFees(scope);
+  }
 }
 
 

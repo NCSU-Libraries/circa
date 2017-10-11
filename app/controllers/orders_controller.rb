@@ -216,7 +216,8 @@ class OrdersController < ApplicationController
 
 
   def order_params
-    params.require(:order).permit(:access_date_start, :access_date_end, :type, :location_id, :order_sub_type_id, :user_id, :cloned_order_id)
+    params.require(:order).permit(:access_date_start, :access_date_end, :type,
+        :location_id, :order_sub_type_id, :user_id, :cloned_order_id)
   end
 
 
@@ -227,22 +228,53 @@ class OrdersController < ApplicationController
 
 
   def get_association_data_from_params(params)
-    @items = params[:order][:items] || []
-    @item_orders = params[:order][:item_orders] || []
-    @digital_image_orders = params[:order][:digital_image_orders] || []
-    @users = params[:order][:users] || []
-    if @users && params[:order][:primary_user_id]
+    order = params[:order]
+    @items = order[:items] || []
+    @item_orders = order[:item_orders] || []
+    @digital_image_orders = order[:digital_image_orders] || []
+    @users = order[:users] || []
+    if @users && order[:primary_user_id]
       @users.map! do |user|
-        user[:primary] = params[:order][:primary_user_id] == user[:id] ? true : nil
+        user[:primary] = order[:primary_user_id] == user[:id] ? true : nil
         user
       end
     end
-    @assignees = params[:order][:assignees] || []
-    @notes = params[:order][:notes] || []
-    @course_reserve = params[:order][:course_reserve]
+    @assignees = order[:assignees] || []
+    @notes = order[:notes] || []
+    @course_reserve = order[:course_reserve]
     @new_assignees = []
-    @new_users = []
-    @order_fee = params[:order][:order_fee] || nil
+    @order_sub_type_name = OrderSubType.name_from_id(order[:order_sub_type_id])
+    @order_fee = (@order_sub_type_name == 'reproduction_fee' && order[:order_fee]) ?
+        order[:order_fee] : nil
+  end
+
+
+  def update_associations
+    if @users
+      update_users
+    end
+
+    if @items
+      update_items
+    end
+
+    if @notes
+      update_notes
+    end
+
+    if @assignees
+      update_assignees
+    end
+
+    if @course_reserve
+      update_course_reserve
+    end
+
+    if @digital_image_orders
+      update_digital_image_orders
+    end
+
+    update_order_fee
   end
 
 
@@ -266,11 +298,20 @@ class OrdersController < ApplicationController
         # delete id from @existing_items array to track associations to be deleted
         @existing_items.delete(item_order['item_id'])
       end
+
       if item_order['reproduction_spec']
         create_or_update_reproduction_spec(item_order_record.id, item_order['reproduction_spec'])
       end
-      if item_order['order_fee']
-        create_or_update_order_fee(item_order_record.id, 'ItemOrder', item_order['order_fee'])
+
+      # handle fees
+      if @order_sub_type_name == 'reproduction_fee'
+        if item_order['order_fee']
+          create_or_update_order_fee(item_order_record.id, 'ItemOrder', item_order['order_fee'])
+        end
+      else
+        # delete any existing fee for this item_order if it exists
+        OrderFee.where(record_id: item_order_record.id,
+            record_type: 'ItemOrder').each { |f| f.destroy! }
       end
     end
 
@@ -430,35 +471,6 @@ class OrdersController < ApplicationController
       atts.merge!(@order_fee)
       OrderFee.create!(@order_fee)
     end
-  end
-
-
-  def update_associations
-    if @users
-      update_users
-    end
-
-    if @items
-      update_items
-    end
-
-    if @notes
-      update_notes
-    end
-
-    if @assignees
-      update_assignees
-    end
-
-    if @course_reserve
-      update_course_reserve
-    end
-
-    if @digital_image_orders
-      update_digital_image_orders
-    end
-
-    update_order_fee
   end
 
 
