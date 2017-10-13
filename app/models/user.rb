@@ -43,6 +43,12 @@ class User < ActiveRecord::Base
 
   before_destroy :deletable?
 
+  before_create do
+    if self.user_role_id.blank?
+      self.user_role_id = UserRole.lowest.id
+    end
+  end
+
   before_save do
     if self.display_name.blank?
       self.display_name = "#{self.first_name} #{self.last_name}"

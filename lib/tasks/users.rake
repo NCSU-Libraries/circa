@@ -1,9 +1,8 @@
 namespace :users do
 
   desc "create user with Unity ID"
-  task :unity_create, [:unity_id, :role] => :environment do |t, args|
+  task :unity_create, [:unity_id] => :environment do |t, args|
     if args[:unity_id]
-      options = { role: args[:role] }
       User.create_from_ldap(args[:unity_id], options)
     end
   end
@@ -29,7 +28,7 @@ namespace :users do
         puts "An admin user already exists with email '#{ existing_admin_user.email }'"
       end
     else
-      puts "Admin role does not yet exist. Run 'rake user_roles:populate'"
+      puts "Admin role does not yet exist. Run 'rake db:seed' to generate this and other required values in the database"
     end
   end
 
