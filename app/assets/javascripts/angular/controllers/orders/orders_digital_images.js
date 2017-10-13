@@ -86,6 +86,23 @@ OrdersCtrl.prototype.applyDigitalImageFunctions = function(scope) {
     _this.restoreDigitalImageOrder(scope, digitalImageOrder);
   }
 
+  scope.requestedImagesSelectAll = function() {
+    _this.requestedImagesSelectAll(scope);
+  }
+
+  scope.requestedImagesSelectNone = function() {
+    _this.requestedImagesSelectNone(scope);
+  }
+
+  scope.showThumbnails = function() {
+    _this.showThumbnails(scope);
+  }
+
+  scope.hideThumbnails = function() {
+    _this.hideThumbnails(scope);
+  }
+
+
 }
 
 
@@ -187,6 +204,7 @@ OrdersCtrl.prototype.applyDigitalImageSelection = function(scope) {
   var digitalImageOrder = {
     resource_identifier: scope.digitalImageSelect['identifier'],
     requested_images: scope.digitalImageSelect['requestedImages'],
+    requested_images_detail: scope.digitalImageSelect['requestedImagesDetail'],
     display_uri: scope.digitalImageSelect['displayUri'],
     manifest_uri: scope.digitalImageSelect['manifestUri'],
     resource_title: scope.digitalImageSelect['resource_title']
@@ -201,6 +219,26 @@ OrdersCtrl.prototype.requestedImagesToggle = function(scope, id) {
 }
 
 
+OrdersCtrl.prototype.requestedImagesSelectAll = function(scope) {
+  scope.digitalImageSelect['requestedImages'] = scope.digitalImageSelect['allImages'];
+}
+
+
+OrdersCtrl.prototype.requestedImagesSelectNone = function(scope) {
+  scope.digitalImageSelect['requestedImages'] = [];
+}
+
+
+OrdersCtrl.prototype.showThumbnails = function(scope) {
+  scope.digitalImageSelect['showThumbnails'] = true;
+}
+
+
+OrdersCtrl.prototype.hideThumbnails = function(scope) {
+  scope.digitalImageSelect['showThumbnails'] = false;
+}
+
+
 OrdersCtrl.prototype.getNewDigitalImage = function(scope) {
   var _this = this;
   var callback = function(scope, manifest) {
@@ -210,7 +248,6 @@ OrdersCtrl.prototype.getNewDigitalImage = function(scope) {
   if (scope.digitalImageSelect.getId) {
     this.getManifest(scope, callback);
   }
-
 }
 
 
@@ -247,12 +284,15 @@ OrdersCtrl.prototype.newDigitalImageFromManifest = function(scope, manifest) {
   scope.digitalImageSelect['images'] = {};
 
   var sequence = firstSequence(manifest);
-
+  var images = [];
   sequence.canvases.forEach(function(canvas) {
     var image = firstImage(canvas);
     var thumbnail = thumbnailUrl(image);
     var imageId = identifierFromCanvas(canvas);
     scope.digitalImageSelect['images'][imageId] = thumbnail;
-    scope.digitalImageSelect['requestedImages'].push(imageId);
+    images.push(imageId);
   });
+  scope.digitalImageSelect['requestedImages'] = [];
+  scope.digitalImageSelect['allImages'] = images;
+  scope.digitalImageSelect['showThumbnails'] = images.length <= 30 ? true : false;
 }

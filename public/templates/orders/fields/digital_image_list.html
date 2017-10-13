@@ -24,10 +24,13 @@
 
           <div>
 
-            <div class="inline overview-element">
-              {{ commonUtils.objectLength(digitalImageOrder['requested_images']) }} images
+            <div class="inline overview-element" ng-if="digitalImageOrder['requested_images_detail']">
+              digitalImageOrder['requested_images_detail']
             </div>
 
+            <div class="inline overview-element" ng-if="commonUtils.objectLength(digitalImageOrder['requested_images']) > 0">
+              {{ commonUtils.objectLength(digitalImageOrder['requested_images']) }} images
+            </div>
 
             <div class="inline overview-element">
               <span ng-show="digitalImageSelect['mode'] != 'update'" class="link action" ng-click="reloadDigitalImageSelect(digitalImageOrder)">Update image selections</span>
