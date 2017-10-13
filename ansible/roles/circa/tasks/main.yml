@@ -50,3 +50,10 @@
 
 - name: generating secrets
   command: bundle exec rake circa:generate_secrets
+
+- name: run rake scripts
+  command: bundle exec rake {{item}}
+  with_items:
+    - db:schema:load
+    - db:seed
+    - users:create_admin

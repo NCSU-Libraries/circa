@@ -21,17 +21,22 @@
     remote_src: yes
     creates: "{{ansible_env.HOME}}/archivesspace/archivesspace.sh"
 
-# - name: Download ncsu_aspace_utilities
-#   git:
-#     repo: git@github.ncsu.edu:trthorn2/ncsu_aspace_utilities.git
-#     dest: "{{ansible_env.HOME}}/archivesspace/plugins/ncsu_aspace_utilities"
-#     accept_hostkey: true
+- name: Download archivesspace plugins
+  git:
+    repo: "{{item.src}}"
+    dest: "{{ansible_env.HOME}}/archivesspace/plugins/{{item.name}}"
+    accept_hostkey: true
+  with_items:
+    - name: display_uri
+      src: https://github.com/NCSU-Libraries/archivesspace_display_uri_plugin.git
+    - name: delete_button_context
+      src: https://github.com/NCSU-Libraries/archivesspace_delete_button_context_plugin.git
 
-# - name: Enable plugin
-#   lineinfile:
-#     path: "{{ansible_env.HOME}}/archivesspace/config/config.rb"
-#     insertafter: "^#AppConfig[:plugins]"
-#     line: "AppConfig[:plugins] = ['ncsu_aspace_utilities']"
+- name: Enable plugins
+  lineinfile:
+    path: "{{ansible_env.HOME}}/archivesspace/config/config.rb"
+    insertafter: "^#AppConfig[:plugins]"
+    line: "AppConfig[:plugins] = ['display_uri', 'delete_button_context']"
 
 - name: Ensure Archives Space is not already running
   command: "./archivesspace.sh stop"
