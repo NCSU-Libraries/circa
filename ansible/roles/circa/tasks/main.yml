@@ -32,20 +32,17 @@
     dest: "/vagrant/config/solr.yml"
     mode: 0700
 
-# - name: generating secrets
-#   command: bundle exec rake secret
-#   register: secret_key_base
-
-# - name: adding secrets.yml config
-#   template:
-#     src: templates/secrets.j2
-#     dest: "/vagrant/config/secrets.yml"
-#     mode: 0700
+- name: install executable-hooks
+  gem:
+    name: executable-hooks
+    state: present
+    user_install: yes
 
 - name: bundle install
   bundler:
     state: present
-    executable: "~/.rvm/gems/{{ruby_version}}/bin/bundle"
+    executable: "~/.rvm/gems/{{ruby_version}}/wrappers/bundle"    
+    # executable: "~/.rvm/gems/{{ruby_version}}/bin/bundle"
     chdir: "/vagrant"
 
 - name: generating secrets

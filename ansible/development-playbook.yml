@@ -28,7 +28,7 @@
 
     - role: geerlingguy.solr
       become: yes
-      solr_version: "6.1.0"
+      solr_version: "6.6.0"
       solr_create_user: true
       solr_user: "{{ansible_user}}"
       solr_remove_cruft: true
