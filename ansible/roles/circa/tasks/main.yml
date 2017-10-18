@@ -32,24 +32,23 @@
     dest: "/vagrant/config/solr.yml"
     mode: 0700
 
-- name: install executable-hooks
-  gem:
-    name: executable-hooks
-    state: present
-    user_install: yes
+# - name: install executable-hooks
+#   gem:
+#     name: executable-hooks
+#     state: present
+#     user_install: yes
 
 - name: bundle install
   bundler:
     state: present
-    executable: "~/.rvm/gems/{{ruby_version}}/wrappers/bundle"    
-    # executable: "~/.rvm/gems/{{ruby_version}}/bin/bundle"
+    executable: "{{bundler_executable_path}}"
     chdir: "/vagrant"
 
 - name: generating secrets
-  command: bundle exec rake circa:generate_secrets
+  command: "{{bundler_executable_path}} exec rake circa:generate_secrets"
 
 - name: run rake scripts
-  command: bundle exec rake {{item}}
+  command: "{{bundler_executable_path}} exec rake {{item}}"
   with_items:
     - db:schema:load
     - db:seed

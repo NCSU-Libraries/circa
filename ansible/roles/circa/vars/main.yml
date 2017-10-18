@@ -54,3 +54,4 @@ solr_port: '8983'
 solr_core_name: 'circa'
 solr_core_path: /solr/circa/
 #==========================================================
+bundler_executable_path: "~/.rvm/gems/{{ruby_version}}/wrappers/bundle"
