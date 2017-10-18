@@ -1,9 +1,9 @@
 GIT
-  remote: git://github.com/pivotal/jasmine-gem.git
-  revision: 8f5ee63235931442e1bd91f7c6a73a1fce0b2062
+  remote: https://github.com/pivotal/jasmine-gem.git
+  revision: ec36ed246c308eda1fb4beb60310371b535559c7
   specs:
-    jasmine (2.6.1)
-      jasmine-core (>= 2.6.0, < 3.0.0)
+    jasmine (2.8.0)
+      jasmine-core (>= 2.8.0, < 3.0.0)
       phantomjs
       rack (>= 1.2.1)
       rake
@@ -140,7 +140,7 @@ GEM
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     i18n (0.8.6)
-    jasmine-core (2.6.4)
+    jasmine-core (2.8.0)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
@@ -359,4 +359,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.14.3
+   1.15.4
