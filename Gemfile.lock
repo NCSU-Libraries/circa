@@ -1,5 +1,11 @@
 GIT
-  remote: git://github.com/pivotal/jasmine-gem.git
+  remote: git@github.com:NCSU-Libraries/archivesspace-api-utility.git
+  revision: 0df30fd9d5885d402e128c44b0e15c5682bcffaf
+  specs:
+    archivesspace-api-utility (0.0.7)
+
+GIT
+  remote: https://github.com/pivotal/jasmine-gem.git
   revision: ec36ed246c308eda1fb4beb60310371b535559c7
   specs:
     jasmine (2.8.0)
@@ -7,12 +13,6 @@ GIT
       phantomjs
       rack (>= 1.2.1)
       rake
-
-GIT
-  remote: git@github.com:NCSU-Libraries/archivesspace-api-utility.git
-  revision: 0df30fd9d5885d402e128c44b0e15c5682bcffaf
-  specs:
-    archivesspace-api-utility (0.0.7)
 
 GIT
   remote: https://github.com/rails-api/active_model_serializers.git
@@ -66,12 +66,12 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     arel (6.0.4)
     bcrypt (3.1.11)
-    binding_of_caller (0.7.2)
+    binding_of_caller (0.7.3)
       debug_inspector (>= 0.0.1)
     bower-rails (0.11.0)
     builder (3.2.3)
     byebug (9.1.0)
-    capistrano (3.9.1)
+    capistrano (3.10.0)
       airbrussh (>= 1.0.0)
       i18n
       rake (>= 10.0.0)

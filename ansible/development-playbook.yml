@@ -1,0 +1,40 @@
+---
+- hosts: circa
+  gather_facts: yes
+  vars:
+    - ruby_version: ruby-2.4.2
+    - project_name: circa
+  roles:
+    # - role: mariadb
+    #   become: yes
+    #   databases:
+    #     - "{{project_name}}"
+    #     - "{{project_name}}_test"
+
+    - role: rvm_io.ruby
+      tags: ruby
+      rvm1_rubies:
+        - "{{ ruby_version }}"
+      rvm1_bundler_install: True
+      rvm1_user: "{{ansible_user}}"
+      rvm1_rvm_version: 'stable'
+      rvm1_autolib_mode: 3
+
+    - role: geerlingguy.java
+      become: yes
+      when: "ansible_os_family == 'RedHat'"
+      java_packages:
+        - java-1.8.0-openjdk
+
+    - role: geerlingguy.solr
+      become: yes
+      solr_version: "6.6.0"
+      solr_create_user: true
+      solr_user: "{{ansible_user}}"
+      solr_remove_cruft: true
+      solr_port: "8983"
+      solr_cores:
+        - circa
+    
+    - role: archivesspace
+    - role: circa
