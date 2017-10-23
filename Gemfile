@@ -13,7 +13,7 @@ gem 'sqlite3'
 
 gem 'devise'
 
-gem 'archivesspace-api-utility', git: "https://github.com/trevorthornton/archivesspace-api-utility.git"
+gem 'archivesspace-api-utility', git: "git@github.com:NCSU-Libraries/archivesspace-api-utility.git"
 
 gem 'paper_trail'
 gem 'formtastic'

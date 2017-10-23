@@ -19,11 +19,11 @@ class Location < ActiveRecord::Base
   end
 
 
-  before_save do
-    if self.default
-      Location.where(default: true).where.not(id: self.id).find_each { |l| l.update_attributes(default: false) }
-    end
-  end
+  # before_save do
+  #   if self.default
+  #     Location.where(default: true).where.not(id: self.id).find_each { |l| l.update_attributes(default: false) }
+  #   end
+  # end
 
 
   def self.create_or_update_from_archivesspace(archivesspace_uri)

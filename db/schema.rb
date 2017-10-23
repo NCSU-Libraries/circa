@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608140909) do
+ActiveRecord::Schema.define(version: 20171023133636) do
 
   create_table "access_sessions", force: :cascade do |t|
     t.integer  "item_id",        limit: 4,                null: false
@@ -33,6 +33,22 @@ ActiveRecord::Schema.define(version: 20170608140909) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
   end
+
+  create_table "digital_image_orders", force: :cascade do |t|
+    t.integer  "order_id",                limit: 4,     null: false
+    t.string   "resource_identifier",     limit: 255,   null: false
+    t.text     "detail",                  limit: 65535
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.string   "resource_title",          limit: 255
+    t.string   "display_uri",             limit: 255
+    t.string   "manifest_uri",            limit: 255
+    t.text     "requested_images",        limit: 65535
+    t.text     "requested_images_detail", limit: 65535
+  end
+
+  add_index "digital_image_orders", ["order_id"], name: "by_order_id", using: :btree
+  add_index "digital_image_orders", ["resource_identifier"], name: "by_image_id", using: :btree
 
   create_table "enumeration_values", force: :cascade do |t|
     t.integer  "enumeration_id", limit: 4
@@ -97,6 +113,7 @@ ActiveRecord::Schema.define(version: 20170608140909) do
     t.boolean  "unprocessed",                         default: false, null: false
     t.text     "digital_object_title",  limit: 65535
     t.boolean  "obsolete"
+    t.string   "old_uri",               limit: 255
   end
 
   add_index "items", ["current_location_id"], name: "index_items_on_current_location_id", using: :btree
@@ -107,10 +124,9 @@ ActiveRecord::Schema.define(version: 20170608140909) do
   create_table "locations", force: :cascade do |t|
     t.string   "title",             limit: 255
     t.string   "uri",               limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "source_id",         limit: 4
-    t.boolean  "default",                         default: false, null: false
     t.string   "catalog_item_id",   limit: 255
     t.text     "catalog_item_data", limit: 65535
     t.text     "notes",             limit: 65535
@@ -139,12 +155,25 @@ ActiveRecord::Schema.define(version: 20170608140909) do
   add_index "order_assignments", ["order_id"], name: "index_order_assignments_on_order_id", using: :btree
   add_index "order_assignments", ["user_id"], name: "index_order_assignments_on_user_id", using: :btree
 
+  create_table "order_fees", force: :cascade do |t|
+    t.integer  "record_id",                 limit: 4
+    t.string   "record_type",               limit: 255
+    t.decimal  "per_unit_fee",                            precision: 7, scale: 2
+    t.decimal  "per_order_fee",                           precision: 7, scale: 2
+    t.text     "note",                      limit: 65535
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
+    t.string   "unit_fee_type",             limit: 255
+    t.string   "per_order_fee_description", limit: 255
+  end
+
   create_table "order_sub_types", force: :cascade do |t|
-    t.string   "name",          limit: 255, null: false
-    t.string   "label",         limit: 255, null: false
-    t.integer  "order_type_id", limit: 4,   null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string   "name",                limit: 255, null: false
+    t.string   "label",               limit: 255, null: false
+    t.integer  "order_type_id",       limit: 4,   null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "default_location_id", limit: 4
   end
 
   add_index "order_sub_types", ["order_type_id"], name: "fk_rails_db7b89e182", using: :btree
@@ -169,7 +198,6 @@ ActiveRecord::Schema.define(version: 20170608140909) do
 
   create_table "orders", force: :cascade do |t|
     t.date     "access_date_start"
-    t.integer  "order_type_id",     limit: 4, default: 1
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
     t.boolean  "open",                        default: true,  null: false
@@ -179,10 +207,29 @@ ActiveRecord::Schema.define(version: 20170608140909) do
     t.boolean  "deleted",                     default: false, null: false
     t.integer  "order_sub_type_id", limit: 4
     t.integer  "order_type_id_old", limit: 4
+    t.integer  "cloned_order_id",   limit: 4
   end
 
   add_index "orders", ["location_id"], name: "fk_rails_5b9551c291", using: :btree
-  add_index "orders", ["order_type_id"], name: "index_orders_on_order_type_id", using: :btree
+
+  create_table "reproduction_formats", force: :cascade do |t|
+    t.string   "name",                      limit: 255
+    t.decimal  "default_unit_fee_internal",               precision: 7, scale: 2
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
+    t.text     "description",               limit: 65535
+    t.decimal  "default_unit_fee_external",               precision: 7, scale: 2
+    t.decimal  "default_unit_fee",                        precision: 7, scale: 2
+  end
+
+  create_table "reproduction_specs", force: :cascade do |t|
+    t.integer  "item_order_id",          limit: 4
+    t.text     "detail",                 limit: 65535
+    t.integer  "pages",                  limit: 4
+    t.integer  "reproduction_format_id", limit: 4
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
 
   create_table "state_transitions", force: :cascade do |t|
     t.integer  "record_id",   limit: 4,     null: false

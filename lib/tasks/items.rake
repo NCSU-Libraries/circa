@@ -9,4 +9,10 @@ namespace :items do
     end
   end
 
+  desc "get new ArchivesSpace top container URI"
+  task :populate_top_container_uris => :environment do |t, args|
+    puts "getting top container URIs from ArchivesSpace"
+    Item.add_archivesspace_top_container_uris
+  end
+
 end
