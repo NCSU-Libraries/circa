@@ -28,7 +28,7 @@ namespace :users do
         puts "An admin user already exists with email '#{ existing_admin_user.email }'"
       end
     else
-      puts "Admin role does not yet exist. Run 'rake db:seed' to generate this and other required values in the database"
+      puts "Admin role does not yet exist. Run 'rake db:seed' to generate this and other required values in the database."
     end
   end
 

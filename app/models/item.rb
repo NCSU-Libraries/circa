@@ -30,7 +30,8 @@ class Item < ActiveRecord::Base
       where(active: true)
     end
   end
-  has_one :active_access_session, -> { where active: true }, class_name: 'AccessSession'
+  has_one :active_access_session, -> { where active: true },
+      class_name: 'AccessSession'
   has_many :access_users, through: :access_sessions
 
   attr_accessor :archivesspace_records
@@ -46,14 +47,31 @@ class Item < ActiveRecord::Base
   end
 
 
+  def self.container_from_top_container(top_container)
+    container = nil
+    type = top_container['type']
+    indicator = top_container['indicator']
+    if !type.blank?
+      container = type.gsub(/_/,' ')
+      if !indicator.blank?
+        container += " #{indicator}"
+      end
+    end
+    container
+  end
+
+
   # Retrieve ArchivesSpace API response corresponding to an ArchivalObject URI
   #   and create one or more Item records based on instances included in response
   # Because a single ArchivesSpace can represent materials in multiple containers,
   #   this method returns an array of Item objects
-  def self.create_or_update_from_archivesspace(archivesspace_uri, options = { digital_object: nil } )
+  def self.create_or_update_from_archivesspace(archivesspace_uri,
+      options = { digital_object: nil } )
+
     items_attributes = []
     items = []
-    data = aspace_api_get(archivesspace_uri, { resolve: ['linked_instances','resource', 'digital_object'] })
+    data = aspace_api_get(archivesspace_uri, { resolve:
+        ['linked_instances','resource', 'digital_object', 'top_container'] })
 
     if data
       attributes = {}
@@ -65,29 +83,25 @@ class Item < ActiveRecord::Base
         attributes[:resource_uri] = data['resource']['ref']
         resource = data['resource']['_resolved']
       end
+
       attributes[:resource_title] = resource['title']
       attributes[:resource_identifier] = resource['id_0']
-
 
       get_physical_item_attributes = Proc.new do
         data['instances'].each do |i|
           item_attributes = attributes.clone
+
           # if i['container'] condition skips digital object instances
-          if i['container']
-            type = i['container']['type_1']
-            indicator = i['container']['indicator_1']
-            if !type.blank?
-              item_attributes[:container] = type.gsub(/_/,' ')
-              item_attributes[:uri] = attributes[:resource_uri] + "/#{type}"
-              if !indicator.blank?
-                item_attributes[:container] += " #{indicator}"
-                item_attributes[:uri] += "/#{indicator}"
-              end
-            end
+          if i['sub_container'] && i['sub_container']['top_container'] &&
+              i['sub_container']['top_container']['_resolved']
 
-            item_attributes[:barcode] = i['container']['barcode_1']
+            top_container = i['sub_container']['top_container']['_resolved']
+            item_attributes[:uri]  = i['sub_container']['top_container']['ref']
+            item_attributes[:container] =
+                container_from_top_container(top_container)
+            item_attributes[:barcode] = top_container['barcode']
 
-            locations = i['container']['container_locations']
+            locations = top_container['container_locations']
 
             add_location = Proc.new do |location_uri|
               location = Location.create_or_update_from_archivesspace(location_uri)
@@ -108,14 +122,14 @@ class Item < ActiveRecord::Base
         end
       end
 
-
       get_digitial_item_attributes = Proc.new do
         data['instances'].each do |i|
           item_attributes = attributes.clone
           if i['digital_object']
             item_attributes[:digital_object] = true
             item_attributes[:uri] = i['digital_object']['ref']
-            item_attributes[:digital_object_title] = i['digital_object']['_resolved']['title']
+            item_attributes[:digital_object_title] =
+                i['digital_object']['_resolved']['title']
             items_attributes << item_attributes
           end
         end
@@ -127,7 +141,6 @@ class Item < ActiveRecord::Base
           items_attributes << item_attributes
         end
       end
-
 
       if options[:digital_object]
         get_digitial_item_attributes.call
@@ -156,14 +169,17 @@ class Item < ActiveRecord::Base
       end
 
       update_items.each do |item|
-        ItemArchivesspaceRecord.find_or_create_by(item_id: item.id, archivesspace_uri: archivesspace_uri)
+        ItemArchivesspaceRecord.find_or_create_by(item_id: item.id,
+            archivesspace_uri: archivesspace_uri)
 
-        # reload to ensure that ItemArchivesspaceRecord is included when items are returned to controller
+        # reload to ensure that ItemArchivesspaceRecord is included when items
+        #   are returned to controller
         item.reload
 
-        # Need to update the index here to make sure the 'source' attribute set correctly,
-        # based on the existence of associated AS or catalog record,
-        # which are not present when the item is created (and added to index after_save)
+        # Need to update the index here to make sure the 'source' attribute
+        #   set correctly, based on the existence of associated AS or
+        #   catalog record, which are not present when the item is created
+        #   (and added to index after_save)
         item.update_index
 
         items << item
@@ -350,7 +366,8 @@ class Item < ActiveRecord::Base
   end
 
 
-  # For items for which the ArchivesSpace top container no longer exists due to re-processing
+  # For items for which the ArchivesSpace top container no longer exists
+  #   due to re-processing
   def mark_as_obsolete
     replacement_items = []
 
@@ -360,7 +377,8 @@ class Item < ActiveRecord::Base
     end
 
     eligible_for_obsolete = !replacement_items.include?(self)
-    puts eligible_for_obsolete ? "Item is eligible to be made obsolete" : "Item is NOT eligible to be made obsolete"
+    puts eligible_for_obsolete ? "Item is eligible to be made obsolete" :
+        "Item is NOT eligible to be made obsolete"
 
     if eligible_for_obsolete
       update_columns(current_location_id: nil, permanent_location_id: nil, obsolete: true)
@@ -370,8 +388,9 @@ class Item < ActiveRecord::Base
       update_index
     else
       raise CircaExceptions::BadRequest,
-        "The item could not be marked as obsolete because one or more of the ArchivesSpace URIs
-        associated with it still return a record with container information matching that of the item."
+        "The item could not be marked as obsolete because one or more of the
+        ArchivesSpace URIs associated with it still return a record with
+        container information matching that of the item."
     end
   end
 
@@ -427,7 +446,9 @@ class Item < ActiveRecord::Base
     case source
     when 'archivesspace'
       archivesspace_uris = []
-      item_archivesspace_records.each { |iar| archivesspace_uris << iar.archivesspace_uri }
+      item_archivesspace_records.each do |iar|
+        archivesspace_uris << iar.archivesspace_uri
+      end
       archivesspace_uris.each do |uri|
         options = { digital_object: digital_object }
         options[:force_update] = digital_object ? true : nil
@@ -439,6 +460,73 @@ class Item < ActiveRecord::Base
       end
     end
   end
+
+
+  # Added to handle conversion to new AS top container model
+  #   should only be run once, but non-destructive
+  def self.add_archivesspace_top_container_uris
+
+    generate_old_uri = lambda do |data, top_container|
+      type = top_container['type']
+      indicator = top_container['indicator']
+      if !type.blank?
+        if data['resource'] && data['resource']['ref']
+          uri = data['resource']['ref'] + "/#{type}"
+          if !indicator.blank?
+            uri += "/#{indicator}"
+          end
+        end
+      end
+      return uri
+    end
+
+    get_old_and_new_uri = lambda do |data, instance|
+      uris = nil
+      if instance['sub_container'] &&
+          instance['sub_container']['top_container'] &&
+          instance['sub_container']['top_container']['_resolved']
+        tc = instance['sub_container']['top_container']['_resolved']
+        old_uri = generate_old_uri.(data, tc)
+        new_uri = instance['sub_container']['top_container']['ref']
+        uris = [old_uri, new_uri]
+      end
+      return uris
+    end
+
+    process_instances = lambda do |data|
+      if data['instances']
+        data['instances'].each do |instance|
+          uris = get_old_and_new_uri.(data, instance)
+          if uris
+            item = Item.find_by(old_uri: uris[0])
+            if item
+              puts "Item #{ item.id }: #{uris[0]} => #{uris[1]}"
+              item.update_attributes(uri: uris[1])
+            end
+          end
+        end
+      end
+    end
+
+    find_each do |i|
+      if i.source == 'archivesspace'
+        archivesspace_uris = []
+        i.item_archivesspace_records.each do |iar|
+          archivesspace_uris << iar.archivesspace_uri
+        end
+        archivesspace_uris.each do |uri|
+          data = aspace_api_get(uri,
+              { resolve: ['linked_instances','resource', 'digital_object',
+                'top_container'] })
+          if data
+            process_instances.(data)
+          end
+        end
+      end
+    end
+
+  end
+
 
 
   private
@@ -458,6 +546,8 @@ class Item < ActiveRecord::Base
   def location_attributes(location)
     location.attributes.with_indifferent_access
   end
+
+
 
 
 end

@@ -19,7 +19,6 @@ class Location < ActiveRecord::Base
     end
   end
 
-
   def self.create_or_update_from_archivesspace(archivesspace_uri)
     data = aspace_api_get(archivesspace_uri)
     location = Location.find_by(uri: archivesspace_uri)

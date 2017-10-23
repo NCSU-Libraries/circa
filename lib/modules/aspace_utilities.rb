@@ -20,6 +20,7 @@ module AspaceUtilities
   # Returns response body as Ruby hash, or nil
   def aspace_api_get(uri, params={}, headers={})
     @a = ArchivesSpaceApiUtility::ArchivesSpaceSession.new
+
     response = @a.get(uri, params, headers)
 
     # Response code 412 from ArchivesSpace API indicates a problem with the authenticated session

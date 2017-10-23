@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171013192731) do
+ActiveRecord::Schema.define(version: 20171023133636) do
 
   create_table "access_sessions", force: :cascade do |t|
     t.integer  "item_id",        limit: 4,                null: false
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 20171013192731) do
     t.boolean  "unprocessed",                         default: false, null: false
     t.text     "digital_object_title",  limit: 65535
     t.boolean  "obsolete"
+    t.string   "old_uri",               limit: 255
   end
 
   add_index "items", ["current_location_id"], name: "index_items_on_current_location_id", using: :btree
