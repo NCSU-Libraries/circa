@@ -28,6 +28,13 @@
   }
 }
 
+.text-block {
+  margin: 1rem 0;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
 
 input.datepicker-input {
   width: 10em;

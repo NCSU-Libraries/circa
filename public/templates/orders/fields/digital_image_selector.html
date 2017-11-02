@@ -27,20 +27,7 @@
 
 
 
-  <div class="selection-display digital-image-select" ng-show="totalImages() > 0">
-
-    <div class="heading">{{ digitalImageSelect['resource_title'] }} ({{ digitalImageSelect['identifier'] }})</div>
-
-
-
-    <div ng-include="templateUrl('orders/fields/digital_image_selector_thumbnails')"></div>
-
-    <div>
-      <span ng-hide="orderIncludesDigitalImageOrder(digitalImageSelect['identifier'])" class="button small" ng-click="applyDigitalImageSelection()">Add {{ totalRequestedImages() }} images to order</span>
-      <span class="button small" ng-click="initializeDigitalImageSelect()">Cancel</span>
-    </div>
-
-  </div>
+  <div ng-include="templateUrl('orders/fields/digital_image_selector_items')"></div>
 
 
 

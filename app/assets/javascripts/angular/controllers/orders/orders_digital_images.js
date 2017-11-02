@@ -71,7 +71,7 @@ OrdersCtrl.prototype.applyDigitalImageFunctions = function(scope) {
   }
 
   scope.totalRequestedImages = function() {
-    return scope.digitalImageSelect['requestedImages'].length;
+    return _this.totalRequestedImages(scope);
   }
 
   scope.applyDigitalImageSelection = function() {
@@ -102,9 +102,19 @@ OrdersCtrl.prototype.applyDigitalImageFunctions = function(scope) {
     _this.hideThumbnails(scope);
   }
 
+  scope.setDigitalImageSelectMode = function(mode) {
+    _this.setDigitalImageSelectMode(scope, mode);
+  }
 
+  scope.digitalImageSelectSubmitText = function() {
+    return _this.digitalImageSelectSubmitText(scope);
+  }
 }
 
+
+OrdersCtrl.prototype.totalRequestedImages = function(scope) {
+  return scope.digitalImageSelect['requestedImages'].length;
+}
 
 OrdersCtrl.prototype.editDigitalImageSelection = function(scope, digitalImageOrder) {
   this.initializeDigitalImageSelect();
@@ -184,17 +194,9 @@ OrdersCtrl.prototype.reloadDigitalImageSelect = function(scope, digitalImageOrde
 
   var callback = function(scope, manifest) {
     scope.digitalImageSelect['manifest'] = manifest;
-    scope.digitalImageSelect['images'] = {};
-
-    var sequence = firstSequence(manifest);
-
-    sequence.canvases.forEach(function(canvas) {
-      var image = firstImage(canvas);
-      var thumbnail = thumbnailUrl(image);
-      var imageId = identifierFromCanvas(canvas);
-      scope.digitalImageSelect['images'][imageId] = thumbnail;
-    });
+    _this.setDigitalImageSelectImages(scope, manifest);
   }
+
   this.getManifest(scope, callback);
 }
 
@@ -273,16 +275,20 @@ OrdersCtrl.prototype.getManifest = function(scope, callback) {
 
 
 OrdersCtrl.prototype.newDigitalImageFromManifest = function(scope, manifest) {
-  var _this = this;
-
   scope.digitalImageSelect['displayUri'] = manifest.related['@id'];
   scope.digitalImageSelect['manifestUri'] = manifest['@id'];
   scope.digitalImageSelect['getId'] = '';
   scope.digitalImageSelect['manifest'] = manifest;
   scope.digitalImageSelect['identifier'] = identifierFromManifest(manifest);
   scope.digitalImageSelect['resource_title'] = manifest.label;
-  scope.digitalImageSelect['images'] = {};
+  scope.digitalImageSelect['requestedImages'] = [];
 
+  this.setDigitalImageSelectImages(scope, manifest);
+}
+
+
+OrdersCtrl.prototype.setDigitalImageSelectImages = function(scope, manifest) {
+  scope.digitalImageSelect['images'] = {};
   var sequence = firstSequence(manifest);
   var images = [];
   sequence.canvases.forEach(function(canvas) {
@@ -292,7 +298,29 @@ OrdersCtrl.prototype.newDigitalImageFromManifest = function(scope, manifest) {
     scope.digitalImageSelect['images'][imageId] = thumbnail;
     images.push(imageId);
   });
-  scope.digitalImageSelect['requestedImages'] = [];
   scope.digitalImageSelect['allImages'] = images;
-  scope.digitalImageSelect['showThumbnails'] = images.length <= 30 ? true : false;
+  scope.digitalImageSelect['showThumbnails'] = images.length <= 30 ?
+      true : false;
+  scope.digitalImageSelect['imageSelectMode'] = images.length <= 30 ?
+      'thumbnails' : 'text';
+}
+
+
+OrdersCtrl.prototype.setDigitalImageSelectMode = function(scope, mode) {
+  if (mode == 'text' || mode == 'thumbnails') {
+    scope.digitalImageSelect['imageSelectMode'] = mode;
+  }
+}
+
+
+OrdersCtrl.prototype.digitalImageSelectSubmitText = function(scope) {
+  var mode = scope.digitalImageSelect['imageSelectMode'];
+  var text;
+  if (mode == 'thumbnails') {
+    text = "Add " + this.totalRequestedImages(scope) + " images to order";
+  }
+  else {
+    text = "Add specified images to order";
+  }
+  return text;
 }

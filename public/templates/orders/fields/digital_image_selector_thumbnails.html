@@ -1,48 +1,20 @@
-<div ng-if="digitalImageSelect['allImages'].length > 30">
-
-  <p>
-    Thumbnails are not displayed because the resource includes more than 30 images.
-    Use the field below to specify which images to include,
-    or click 'Show thumbnails' to show all {{ digitalImageSelect['allImages'].length }}
-    thumbnail images and select them individually.
-  </p>
-
-  <div class="heading">Specific items for reproduction</div>
-      <textarea ng-model="digitalImageSelect['requestedImagesDetail']"></textarea>
-
-  <p ng-if="!digitalImageSelect['showThumbnails']">
-    <span class="link" ng-click="showThumbnails()">Show thumbnails</span>
-  </p>
-
+<div class="text-block">
+  Click image to select/deselect
+  <span>({{ totalRequestedImages() }} of
+  {{ totalImages() }} selected)</span>
+  <br>
+  <span class="link" ng-click="requestedImagesSelectAll()">Select all</span>
+  |
+  <span class="link" ng-click="requestedImagesSelectNone()">Deselect all</span>
 </div>
 
 
-<div ng-if="digitalImageSelect['showThumbnails']">
+<ul class="small-block-grid-3 medium-block-grid-6">
+  <li ng-repeat="(id, thumbnail) in digitalImageSelect['images']" ng-click="requestedImagesToggle(id)"
+      class="digital-image-select-item" ng-class="imageRequested(id) ? 'selected' : null">
 
-  <p>
-    Click image to select/deselect
-    <span>({{ totalRequestedImages() }} of
-    {{ totalImages() }} selected)</span>
-  </p>
+    <div class="image-label">{{ id }}</div>
 
-  <p>
-    <span class="link" ng-click="requestedImagesSelectAll()">Select all</span>
-    |
-    <span class="link" ng-click="requestedImagesSelectNone()">Deselect all</span>
-  </p>
-
-  <p ng-if="digitalImageSelect['allImages'].length > 30">
-    <span class="link" ng-click="hideThumbnails()">Hide thumbnails</span>
-  </p>
-
-  <ul class="small-block-grid-3 medium-block-grid-6">
-    <li ng-repeat="(id, thumbnail) in digitalImageSelect['images']" ng-click="requestedImagesToggle(id)"
-        class="digital-image-select-item" ng-class="imageRequested(id) ? 'selected' : null">
-
-      <div class="image-label">{{ id }}</div>
-
-      <div class="image-wrap"><img ng-src="{{ thumbnail }}"></div>
-    </li>
-  </ul>
-
-</div>
+    <div class="image-wrap"><img ng-src="{{ thumbnail }}"></div>
+  </li>
+</ul>
