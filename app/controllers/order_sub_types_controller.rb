@@ -25,7 +25,7 @@ class OrderSubTypesController < ApplicationController
 
 
   def order_sub_type_params
-    params.require(:order_sub_type).permit(:label, :default_location_id)
+    params.require(:order_sub_type).permit(:label, :default_location_id, :default)
   end
 
 

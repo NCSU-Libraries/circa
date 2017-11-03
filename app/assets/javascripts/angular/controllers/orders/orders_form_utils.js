@@ -34,8 +34,8 @@ OrdersCtrl.prototype.orderTypeIdMatch = function(scope, typeId) {
 OrdersCtrl.prototype.setOrderType = function(scope, orderTypes) {
   var value = this.getControlledValue(orderTypes, scope.order['order_type_id']);
   scope.order['order_type'] = value;
-  scope.order['order_sub_type'] = null;
-  scope.order['order_sub_type_id'] = null;
+  scope.order['order_sub_type'] = value['default_order_sub_type'] || null;
+  scope.order['order_sub_type_id'] = value['default_order_sub_type_id'] || null;
   this.setDateSingleOrRange(scope);
   scope.userLabel = this.userLabel(scope);
 }

@@ -8,6 +8,11 @@
   input {
     margin-bottom: 0;
   }
+
+  .label.inline, label.inline {
+    display: inline !important;
+    padding: 0;
+  }
 }
 
 .form-field-note {

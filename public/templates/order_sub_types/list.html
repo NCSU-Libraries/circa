@@ -25,7 +25,11 @@
 
     <tbody>
       <tr ng-repeat="orderSubType in orderSubTypes">
-        <td>{{ orderSubType.order_type['label'] }}</td>
+        <td>
+          {{ orderSubType.order_type['label'] }}
+          <i ng-if="orderSubType.default"
+              class="fa fa-check" aria-hidden="true"></i>
+        </td>
         <td>{{ orderSubType.name }}</td>
         <td>{{ orderSubType.label }}</td>
         <td>{{ orderSubType.default_location['title'] }}</td>

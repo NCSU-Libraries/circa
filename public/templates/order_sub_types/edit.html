@@ -19,9 +19,16 @@
 
 
   <div class="form-field">
+    <input type="checkbox" ng-model="orderSubType['default']" value="true"/>
+    <span class="label inline">Default for
+      {{orderSubType['order_type']['name']}} order type?</span>
+  </div>
+
+
+  <div class="form-field">
     <div class="label">Default location</div>
     <select ng-model="orderSubType['default_location_id']" convert-to-number>
-      <option ng-repeat="location in circaLocations" value="{{ location['id'] }}">{{ location['title'] }}</option>
+      <option ng-repeat="location in circaLocations" value="{{ location['id'] }}">{{location['title']}}</option>
     </select>
   </div>
 

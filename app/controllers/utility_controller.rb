@@ -32,7 +32,9 @@ class UtilityController < ApplicationController
       record = { data: data }
 
       if !data
-        raise CircaExceptions::BadRequest("No catalog record found matching the id or url provided.")
+        raise CircaExceptions::BadRequest(
+          "No catalog record found matching the id or url provided."
+        )
       else
         render json: record
       end
@@ -43,10 +45,8 @@ class UtilityController < ApplicationController
   def get_ncsu_iiif_manifest
     manifest = {}
     if params[:resource_identifier]
-      if (resource_identifier = resource_identifier_from_url(params[:resource_identifier]))
-
-        puts resource_identifier
-
+      if (resource_identifier =
+          resource_identifier_from_url(params[:resource_identifier]))
         manifest = get_iiif_manifest(resource_identifier) || {}
       end
     end
@@ -57,7 +57,8 @@ class UtilityController < ApplicationController
   def archivesspace_data
     case params[:request]
     when 'resources_per_accession'
-      return_data = params[:identifier] ? archivesspace_resources_per_accession(params[:identifier]) : {}
+      return_data = params[:identifier] ?
+          archivesspace_resources_per_accession(params[:identifier]) : {}
     end
     render json: return_data
   end
@@ -76,15 +77,18 @@ class UtilityController < ApplicationController
 
   def archivesspace_redirect
     url_protocol = ENV['archivesspace_https'] ? 'https://' : 'http://'
-    redirect_url = url_protocol + ENV['archivesspace_url_host'] + ':' + ENV['archivesspace_frontend_port'] + '/'
-    redirect_url += params[:archivesspace_path] ? params[:archivesspace_path] : ''
+    redirect_url = url_protocol + ENV['archivesspace_url_host'] + ':' +
+        ENV['archivesspace_frontend_port'] + '/'
+    redirect_url += params[:archivesspace_path] ?
+        params[:archivesspace_path] : ''
     redirect_to redirect_url
   end
 
 
   def archivesspace_resolver
     url_protocol = ENV['archivesspace_https'] ? 'https://' : 'http://'
-    redirect_url = url_protocol + ENV['archivesspace_host'] + ':' + ENV['archivesspace_frontend_port']
+    redirect_url = url_protocol + ENV['archivesspace_host'] + ':' +
+        ENV['archivesspace_frontend_port']
     redirect_url += '/resolve/readonly?uri=/'
     redirect_url += params[:archivesspace_uri]
     redirect_to redirect_url
@@ -96,7 +100,8 @@ class UtilityController < ApplicationController
     solr_params = { lucene: true, filters: { 'record_type' => 'user'} }
     if params[:q].length > 0
       q = URI.unescape(params[:q])
-      solr_params[:q] = "first_name:#{q}* last_name:#{q}* first_name_t:#{q}* last_name_t:#{q}* email:#{q}* email_t:#{q}*"
+      solr_params[:q] =
+      "first_name:#{q}* last_name:#{q}* first_name_t:#{q}* last_name_t:#{q}* email:#{q}* email_t:#{q}*"
       s = Search.new(solr_params)
       solr_response = s.execute
       @api_response = {
@@ -139,16 +144,22 @@ class UtilityController < ApplicationController
   #  * order_sub_types
   #  * patron_type (from enumeration_values)
   def controlled_values
-    @values = { order_type: [], order_sub_type: [], patron_type: [], reproduction_format: [] }
+    @values = { order_type: [], order_sub_type: [], patron_type: [],
+        reproduction_format: [] }
 
     #order_type
     OrderType.find_each do |ot|
-      @values[:order_type] << { id: ot.id, name: ot.name, label: ot.label }
+      @values[:order_type] << { id: ot.id, name: ot.name, label: ot.label,
+      default_order_sub_type: ot.default_order_sub_type,
+      default_order_sub_type_id: ot.default_order_sub_type_id }
     end
 
     #order_sub_type
     OrderSubType.find_each do |ost|
-      @values[:order_sub_type] << { id: ost.id, name: ost.name, label: ost.label, order_type_id: ost.order_type_id, default_location_id: ost.default_location_id, default_location: ost.default_location }
+      @values[:order_sub_type] << { id: ost.id, name: ost.name,
+          label: ost.label, order_type_id: ost.order_type_id,
+          default_location_id: ost.default_location_id,
+          default_location: ost.default_location }
     end
 
     #patron_type
