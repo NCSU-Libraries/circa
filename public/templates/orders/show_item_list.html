@@ -1,10 +1,15 @@
-<div ng-if="order['item_orders'].length == 0" class="empty-list-label">None selected</div>
-
+<div ng-if="order['item_orders'].length == 0" class="empty-list-label">
+  None selected
+</div>
 
 
 <ul ng-if="order['item_orders'].length > 0" class="sub-records-list items-list">
 
-  <li ng-repeat="itemOrder in order['item_orders']" ng-init="item = itemOrder['item']" ng-show="$index < calculatedItemsLimit()" data-item-id="{{ item['id'] }}">
+  <li
+      ng-repeat="itemOrder in order['item_orders']"
+      ng-init="item = itemOrder['item']"
+      ng-show="$index < calculatedItemsLimit()"
+      data-item-id="{{ item['id'] }}">
 
     <div class="row">
 
@@ -20,7 +25,13 @@
 
         <div ng-include="templateUrl('items/item_overview')"></div>
 
-        <div poptip="Generate printable 'call slip' for this item only" class="record-action" ng-if="!item['obsolete']"><a ng-href="{{ rootPath() }}/orders/{{ order['id'] }}/call_slip?item_id={{ item['id'] }}" target="_blank"><i class="fa fa-print"></i>Print item call slip</a></div>
+        <div
+            poptip="Generate printable 'call slip' for this item only"
+            class="record-action"
+            ng-if="!item['obsolete']">
+          <a ng-href="{{ rootPath() }}/orders/{{ order['id'] }}/call_slip?item_id={{ item['id'] }}" target="_blank">
+          <i class="fa fa-print"></i>Print item call slip</a>
+        </div>
 
 
         <div ng-include="templateUrl('orders/item_order_reproduction_details')"></div>

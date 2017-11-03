@@ -355,7 +355,7 @@ main {
     font-size: 80%;
   }
 
-  h1, h2, h3, .heading {
+  h1, h2, h3, h4, .heading {
     font-family: "GlyphaRoman", serif;
     font-weight: bold;
   }
@@ -396,7 +396,7 @@ main {
   h3 {
     font-size: 1.25rem;
     font-weight: bold;
-    margin: 0.5rem 0;
+    margin: 0.5rem 0 0.2rem 0;
   }
 
   p {
@@ -872,4 +872,9 @@ dl.tabs dd > a {
 p.warning, div.warning, span.warning {
   color: $red;
   font-weight: bold;
+}
+
+.inline-action {
+  font-size: 80%;
+  padding-left: 0.5rem;
 }

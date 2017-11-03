@@ -1,0 +1,15 @@
+<ul class="sub-records-list users-list">
+
+  <li ng-repeat="user in order['users'] | limitTo: calculatedUsersLimit()">
+    <span class="link" ng-click="showUser(user['id'])">{{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})</span>
+    <span ng-if="user['id'] == order['primary_user_id']">[primary]</span>
+    <span ng-if="!user['agreement_confirmed']" class="callout alert">This user has not signed the policies agreement <span class="link" ng-click="goto('users/' + user['id'] + '/edit')">Edit user</span></span>
+  </li>
+
+</ul>
+
+<div ng-if="order['users'].length > usersLimit">
+  <span ng-if="truncateUsers" class="truncated-list-post-note">+ {{ order['users'].length - usersLimit }} more</span>
+  <span ng-if="truncateUsers" class="link" ng-click="toggleTruncateUsers()">Show all</span>
+  <span ng-if="!truncateUsers" class="link" ng-click="toggleTruncateUsers()">Show less</span>
+</div>

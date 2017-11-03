@@ -3,7 +3,8 @@ class OrdersController < ApplicationController
   include SolrUtilities
 
   before_action :set_order, only: [
-    :show, :edit, :update, :destroy, :update_state, :add_associations, :call_slip, :deactivate_item, :activate_item, :history, :spawn, :invoice
+    :show, :edit, :update, :destroy, :update_state, :add_associations,
+    :call_slip, :deactivate_item, :activate_item, :history, :spawn, :invoice
   ]
 
   def index
@@ -56,17 +57,18 @@ class OrdersController < ApplicationController
 
 
   def update
-    # if params['order']['temporary_location']
-    #   params['order']['location_id'] = params['order']['temporary_location']['id']
-    # end
-
     get_association_data_from_params(params)
-
     set_cleanup_reproduction_associations()
+
+    post_update_event = params[:event]
 
     @order.update!(order_params)
 
     update_associations
+
+    if post_update_event
+      @order.trigger(post_update_event.to_sym)
+    end
 
     @order.reload
 
@@ -74,7 +76,6 @@ class OrdersController < ApplicationController
 
     render json: @order
   end
-
 
 
   def update_state
@@ -217,7 +218,8 @@ class OrdersController < ApplicationController
 
   def order_params
     params.require(:order).permit(:access_date_start, :access_date_end, :type,
-        :location_id, :order_sub_type_id, :user_id, :cloned_order_id)
+        :location_id, :order_sub_type_id, :user_id, :cloned_order_id,
+        :invoice_date)
   end
 
 

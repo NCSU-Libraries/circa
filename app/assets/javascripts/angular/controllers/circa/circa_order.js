@@ -18,8 +18,12 @@ CircaCtrl.prototype.applyOrderFunctions = function(scope) {
     _this.refreshCurrentOrder(scope, callback);
   }
 
-  scope.updateOrder = function() {
-    _this.updateOrder(scope, $location);
+  scope.updateOrder = function(event) {
+    _this.updateOrder(scope, event);
+  }
+
+  scope.updateOrderAndTriggerEvent = function(event) {
+    _this.updateOrderAndTriggerEvent(scope, event);
   }
 
 }
@@ -64,6 +68,8 @@ CircaCtrl.prototype.refreshOrder = function(scope, order, callback) {
   this.setCheckOutAvailable(scope);
   this.addAllItemOrdersToBulkEventsList(scope);
   this.setDateSingleOrRange(scope);
+  scope.order['editInvoiceDate'] = !scope.order['invoice_date'] ?
+    true : false;
   this.commonUtils.executeCallback(callback, scope);
 }
 
@@ -103,14 +109,20 @@ CircaCtrl.prototype.triggerOrderEvent = function(scope, orderId, event, callback
 }
 
 
-CircaCtrl.prototype.updateOrder = function(scope) {
+CircaCtrl.prototype.updateOrder = function(scope, event, callback) {
   var _this = this;
   scope.loading = true;
 
-  this.apiRequests.put("orders/" + scope.order['id'], { 'order': scope.order }).then(function(response) {
+  var data = { 'order': scope.order };
+  if (event) {
+    data['event'] = event;
+  }
+
+  this.apiRequests.put("orders/" + scope.order['id'], data).then(function(response) {
     if (response.status == 200) {
       scope.order = response.data['order'];
       _this.goto('orders/' + scope.order['id']);
+      _this.commonUtils.executeCallback(callback, response.data);
       scope.loading = false;
     }
     else if (response.data['error'] && response.data['error']['detail']) {
@@ -122,6 +134,6 @@ CircaCtrl.prototype.updateOrder = function(scope) {
 
 CircaCtrl.prototype.updateOrderAndTriggerEvent = function(scope, event, callback) {
   if (scope.order) {
-    // this.updateOrder;
+    this.updateOrder(scope, event, callback);
   }
 }

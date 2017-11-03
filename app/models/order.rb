@@ -358,6 +358,11 @@ class Order < ActiveRecord::Base
   end
 
 
+  def has_fees
+    !order_fees.empty? ? true : false;
+  end
+
+
   def order_fees_total
     order_fees.reduce(0) { |sum, fee| sum + fee.total }
   end
