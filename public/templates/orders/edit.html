@@ -13,7 +13,7 @@
   <div ng-include="templateUrl('orders/form_fields')"/>
 
   <div ng-show="order['order_type'] && order['order_sub_type']">
-    <button class="button" ng-click="updateOrder()">Save changes</button>
+    <button class="button" ng-click="validateAndUpdateOrder()">Save changes</button>
     <button class="button" ng-click="goto('/orders/' + order['id'])">Cancel</button>
   </div>
 
@@ -24,4 +24,3 @@
 <div ng-if="debug" class="data-panel">
 {{ order | json }}
 </div>
-

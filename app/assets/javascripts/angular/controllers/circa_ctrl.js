@@ -2,7 +2,8 @@ var circaControllers = angular.module('circaControllers', []);
 
 // Base prototype with methods/properties shared by all controllers
 
-var CircaCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var CircaCtrl = function($scope, $route, $routeParams, $location, $window,
+    $modal, apiRequests, sessionCache, commonUtils, formUtils) {
 
   var _this = this;
 
@@ -49,7 +50,8 @@ var CircaCtrl = function($scope, $route, $routeParams, $location, $window, $moda
 };
 
 
-CircaCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+CircaCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window',
+  '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 
 circaControllers.controller('CircaCtrl', CircaCtrl);
 

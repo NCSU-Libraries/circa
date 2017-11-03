@@ -14,7 +14,13 @@ CircaCtrl.prototype.applyOrderFunctions = function(scope) {
     _this.triggerOrderEvent(scope, orderId, event, callback);
   }
 
+  scope.refreshCurrentOrder = function(callback) {
+    _this.refreshCurrentOrder(scope, callback);
+  }
 
+  scope.updateOrder = function() {
+    _this.updateOrder(scope, $location);
+  }
 
 }
 
@@ -62,11 +68,20 @@ CircaCtrl.prototype.refreshOrder = function(scope, order, callback) {
 }
 
 
-CircaCtrl.prototype.updateOrder = function(scope, callback) {
+CircaCtrl.prototype.refreshCurrentOrder = function(scope, callback) {
   if (scope.order) {
-    this.getOrder(scope, scope.order['id'], callback);
+    var orderId = scope.order['id'];
+    this.getOrder(scope, orderId, callback);
   }
 }
+
+
+// DEPRICATED AS DUPLICATE - use refreshCurrentOrder
+// CircaCtrl.prototype.updateOrder = function(scope, callback) {
+//   if (scope.order) {
+//     this.getOrder(scope, scope.order['id'], callback);
+//   }
+// }
 
 
 // Trigger event for order and reset $scope.order['states_events']
@@ -88,4 +103,25 @@ CircaCtrl.prototype.triggerOrderEvent = function(scope, orderId, event, callback
 }
 
 
+CircaCtrl.prototype.updateOrder = function(scope) {
+  var _this = this;
+  scope.loading = true;
 
+  this.apiRequests.put("orders/" + scope.order['id'], { 'order': scope.order }).then(function(response) {
+    if (response.status == 200) {
+      scope.order = response.data['order'];
+      _this.goto('orders/' + scope.order['id']);
+      scope.loading = false;
+    }
+    else if (response.data['error'] && response.data['error']['detail']) {
+      scope.flash = response.data['error']['detail'];
+    }
+  });
+}
+
+
+CircaCtrl.prototype.updateOrderAndTriggerEvent = function(scope, event, callback) {
+  if (scope.order) {
+    // this.updateOrder;
+  }
+}

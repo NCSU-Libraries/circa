@@ -103,7 +103,7 @@ CircaCtrl.prototype.triggerItemEvent = function(scope, itemId, event, callback) 
         scope.order = response.data['order'];
       }
       else if (scope.order && !response.data['order']) {
-        _this.updateOrder(scope);
+        _this.refreshCurrentOrder(scope, callback);
       }
 
       _this.commonUtils.executeCallback(callback, response.data);

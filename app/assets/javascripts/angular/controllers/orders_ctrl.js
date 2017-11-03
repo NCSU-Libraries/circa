@@ -1,15 +1,18 @@
-var OrdersCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var OrdersCtrl = function($scope, $route, $routeParams, $location, $window,
+    $modal, apiRequests, sessionCache, commonUtils, formUtils) {
 
   $scope.section = 'orders';
 
-  CircaCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+  CircaCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal,
+      apiRequests, sessionCache, commonUtils, formUtils);
 
   this.initializeFilterConfig($scope);
 
   // this.applyFunctionsToScope($scope);
 }
 
-OrdersCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+OrdersCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window',
+    '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 
 OrdersCtrl.prototype = Object.create(CircaCtrl.prototype);
 
@@ -25,6 +28,7 @@ OrdersCtrl.prototype.applyFunctionsToScope = function(scope) {
     _this.setDateFilter(scope);
   }
 
+  // DEPRECATED - use triggerOrderEvent
   scope.triggerEvent = function(event) {
     _this.triggerEvent(scope, event);
     _this.setStatesEvents(scope);

@@ -2,30 +2,45 @@
 
   <div ng-show="orderEventLoading" ng-include="templateUrl('common/processing')"/>
 
-  <div ng-show="!orderEventLoading" ng-repeat="stateEvent in statesEvents" class="workflow-event {{ 'of-' + statesEvents.length }}">
+  <div
+      ng-show="!orderEventLoading"
+      ng-repeat="stateEvent in statesEvents"
+      class="workflow-event {{ 'of-' + statesEvents.length }}">
 
     <div class="workflow-event-inner
-    {{ stateEvent['current'] ? 'current' : '' }}
-    {{ $last ? ' last' : '' }}
-    {{ $first ? ' first' : '' }}
-    {{ stateEvent['permitted'] ? 'permitted' : 'not_permitted' }}
-    {{ stateEvent['complete'] ? 'complete' : 'incomplete' }}">
+      {{ stateEvent['current'] ? 'current' : '' }}
+      {{ $last ? ' last' : '' }}
+      {{ $first ? ' first' : '' }}
+      {{ stateEvent['permitted'] ? 'permitted' : 'not_permitted' }}
+      {{ stateEvent['complete'] ? 'complete' : 'incomplete' }}">
 
-      <span ng-if="(stateEvent['permitted'] || adminOverrideEnabled) && !stateEvent['current']">
+      <span
+          ng-if="(stateEvent['permitted'] || adminOverrideEnabled) && !stateEvent['current']">
 
-        <span class="link" ng-click="triggerOrderEvent(order['id'], stateEvent['event'])" poptip="{{ stateEvent['eventDescription'] }}">
-          <span ng-if="$first || stateEvent['complete']">{{ stateEvent['state'] }}</span>
-          <span ng-if="!$first && !stateEvent['complete']">{{ stateEvent['event'] }}</span>
+        <span
+            class="link"
+            ng-click="triggerOrderEvent(order['id'], stateEvent['event'])"
+            poptip="{{ stateEvent['eventDescription'] }}">
+
+          <span ng-if="$first || stateEvent['complete']">
+            {{ stateEvent['state'] }}
+          </span>
+
+          <span ng-if="!$first && !stateEvent['complete']">
+            {{ stateEvent['event'] }}
+          </span>
+
         </span>
 
       </span>
 
-      <span ng-if="(!stateEvent['permitted'] && !adminOverrideEnabled) || stateEvent['current']">{{ ($first || stateEvent['complete']) ? stateEvent['state'] : stateEvent['event'] }}</span>
+      <span
+          ng-if="(!stateEvent['permitted'] && !adminOverrideEnabled) || stateEvent['current']">
+        {{ ($first || stateEvent['complete']) ? stateEvent['state'] : stateEvent['event'] }}
+      </span>
 
     </div>
 
   </div>
-
-
 
 </div>
