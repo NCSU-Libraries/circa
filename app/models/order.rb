@@ -271,6 +271,12 @@ class Order < ActiveRecord::Base
   end
 
 
+  def clone_order_ids
+    ids = Order.where(cloned_order_id: id).pluck(:id)
+    !ids.empty? ? ids : nil
+  end
+
+
   # Returns true if the order can be destroyed,
   #   which is only permitted if the order has not yet reached the 'fulfilled' state
   #   and if the items on the order have not been transferred

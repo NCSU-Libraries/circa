@@ -9,18 +9,18 @@ GIT
       rake
 
 GIT
-  remote: git@github.com:NCSU-Libraries/archivesspace-api-utility.git
-  revision: 0df30fd9d5885d402e128c44b0e15c5682bcffaf
-  specs:
-    archivesspace-api-utility (0.0.7)
-
-GIT
   remote: git@github.ncsu.edu:trthorn2/ncsu_catalog_api_client.git
   revision: 8f04854b6dedb8be8188599615beea6c6a09be52
   specs:
     ncsu_catalog_api_client (1.2.2)
       activesupport
       nokogiri (>= 1.6)
+
+GIT
+  remote: https://github.com/NCSU-Libraries/archivesspace-api-utility.git
+  revision: 0df30fd9d5885d402e128c44b0e15c5682bcffaf
+  specs:
+    archivesspace-api-utility (0.0.7)
 
 GIT
   remote: https://github.com/rails-api/active_model_serializers.git
