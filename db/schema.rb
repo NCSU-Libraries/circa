@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(version: 20171023133636) do
     t.text     "catalog_item_data", limit: 65535
     t.text     "notes",             limit: 65535
     t.string   "facility",          limit: 255
+    t.boolean  "default",                         default: false, null: false
   end
 
   add_index "locations", ["uri"], name: "index_locations_on_uri", using: :btree
