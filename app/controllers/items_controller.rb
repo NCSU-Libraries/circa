@@ -16,6 +16,9 @@ class ItemsController < ApplicationController
 
   before_action :verify_event_permitted, only: [ :check_in, :update_state ]
 
+  before_action :set_paper_trail_whodunnit
+
+
   def index
     @params = params
     @params[:sort] ||= 'resource_title asc'

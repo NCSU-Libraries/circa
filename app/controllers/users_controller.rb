@@ -4,6 +4,8 @@ class UsersController < ApplicationController
   include SolrUtilities
   include NCSULdapUtils
 
+  before_action :set_paper_trail_whodunnit
+
   # See Devise users controllers for new, create, edit, update, destroy
 
   def index

@@ -6,10 +6,11 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   include EnumerationUtilities
+  # app/models/concerns/ref_integrity.rb
   include RefIntegrity
-  include VersionsSupport
-  # include UserRoles
+  # app/models/concerns/solr_doc.rb
   include SolrDoc
+  include VersionsSupport
 
   include NCSULdap
   require 'campus-ldap.rb'

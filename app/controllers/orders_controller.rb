@@ -7,6 +7,8 @@ class OrdersController < ApplicationController
     :call_slip, :deactivate_item, :activate_item, :history, :spawn, :invoice
   ]
 
+  before_action :set_paper_trail_whodunnit
+
   def index
     @params = params
     @params[:sort] ||= 'access_date_start desc'

@@ -1,7 +1,9 @@
 class ItemSerializer < ActiveModel::Serializer
   attributes :id, :resource_title, :resource_identifier, :resource_uri,
-  :container, :uri, :digital_object, :unprocessed, :barcode, :obsolete, :created_at, :updated_at, :open_orders, :active_order_id,
-  :current_state, :available_events, :permitted_events, :in_use?, :source, :last_accessed, :digital_object_title, :access_sessions
+  :container, :uri, :digital_object, :unprocessed, :barcode, :obsolete,
+  :created_at, :updated_at, :open_orders, :active_order_id, :current_state,
+  :available_events, :permitted_events, :in_use?, :source, :last_accessed,
+  :digital_object_title, :access_sessions
 
   def created_at
     object.created_at.strftime('%FT%T%:z')
