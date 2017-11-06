@@ -271,9 +271,12 @@ class Order < ActiveRecord::Base
   end
 
 
-  def clone_order_ids
-    ids = Order.where(cloned_order_id: id).pluck(:id)
-    !ids.empty? ? ids : nil
+  def clone_orders
+    orders = []
+    Order.where(cloned_order_id: id).each do |o|
+      orders << { id: o.id, order_sub_type: o.order_sub_type }
+    end
+    !orders.empty? ? orders : nil
   end
 
 

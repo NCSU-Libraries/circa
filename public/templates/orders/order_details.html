@@ -59,11 +59,11 @@
 </div>
 
 
-<div ng-if="order['clone_order_ids']">
+<div ng-if="order['clone_orders']">
   <div class="inline detail-element">
     <span class="label">Clone {{ order['clone_order_ids'].length > 1 ? 'orders' : 'order'}}:</span>
-    <span ng-repeat="id in order['clone_order_ids']">
-      <span class="link" ng-click="showOrder(id)">{{ id }}</span><span
+    <span ng-repeat="clone in order['clone_orders']">
+      <span class="link" ng-click="showOrder(clone.id)">{{ clone.id }} ({{ clone.order_sub_type.label }})</span><span
           ng-if="!$last">; </span>
     </span>
   </div>
