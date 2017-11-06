@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:NCSU-Libraries/archivesspace-api-utility.git
+  remote: https://github.com/NCSU-Libraries/archivesspace-api-utility.git
   revision: 0df30fd9d5885d402e128c44b0e15c5682bcffaf
   specs:
     archivesspace-api-utility (0.0.7)
