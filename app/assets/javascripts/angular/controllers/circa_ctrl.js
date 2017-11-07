@@ -20,9 +20,9 @@ var CircaCtrl = function($scope, $route, $routeParams, $location, $window,
   this.sessionCache = sessionCache;
 
   // set debug to true for development only!
-  if (this.commonUtils.railsEnv() == 'development') {
-    $scope.debug = true;
-  }
+  // if (this.commonUtils.railsEnv() == 'development') {
+  //   $scope.debug = true;
+  // }
 
   // for angucomplete-alt
   $scope.angucompleteRequestFormatter = function(str) {

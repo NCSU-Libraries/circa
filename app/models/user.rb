@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :wolftech_authenticatable, :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
   include EnumerationUtilities
@@ -17,8 +17,8 @@ class User < ActiveRecord::Base
   has_many :item_orders
   has_many :notes, as: :noted
 
-  include NCSULdap
-  require 'campus-ldap.rb'
+  # include NCSULdap
+  # require 'campus-ldap.rb'
 
   has_many :orders, through: :order_users do
     def open

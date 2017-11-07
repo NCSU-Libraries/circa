@@ -37,8 +37,8 @@ gem 'foundation-will_paginate'
 
 
 # NCSU only
-gem 'devise_wolftech_authenticatable', git: "git@github.ncsu.edu:NCSU-Libraries/devise_wolftech_authenticatable.git"
-gem 'ncsu_catalog_api_client', git: "git@github.ncsu.edu:trthorn2/ncsu_catalog_api_client.git"
+# gem 'devise_wolftech_authenticatable', git: "git@github.ncsu.edu:NCSU-Libraries/devise_wolftech_authenticatable.git"
+# gem 'ncsu_catalog_api_client', git: "git@github.ncsu.edu:trthorn2/ncsu_catalog_api_client.git"
 # END - NCSU only
 
 

@@ -9,24 +9,6 @@ GIT
       rake
 
 GIT
-  remote: git@github.ncsu.edu:NCSU-Libraries/devise_wolftech_authenticatable.git
-  revision: db68cc034320e90cb051bb705e34273e062caecd
-  specs:
-    devise_wolftech_authenticatable (0.0.5)
-      devise
-      highline
-      net-ldap
-      slop (= 3.6.0)
-
-GIT
-  remote: git@github.ncsu.edu:trthorn2/ncsu_catalog_api_client.git
-  revision: 8f04854b6dedb8be8188599615beea6c6a09be52
-  specs:
-    ncsu_catalog_api_client (1.2.2)
-      activesupport
-      nokogiri (>= 1.6)
-
-GIT
   remote: https://github.com/NCSU-Libraries/archivesspace-api-utility.git
   revision: 0df30fd9d5885d402e128c44b0e15c5682bcffaf
   specs:
@@ -158,7 +140,6 @@ GEM
     foundation-will_paginate (0.0.1)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
-    highline (1.7.8)
     i18n (0.9.0)
       concurrent-ruby (~> 1.0)
     jasmine-core (2.8.0)
@@ -189,7 +170,6 @@ GEM
     multi_json (1.12.2)
     multipart-post (2.0.0)
     mysql2 (0.3.21)
-    net-ldap (0.16.1)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.2.0)
@@ -293,7 +273,6 @@ GEM
       tilt (>= 1.3, < 3)
     sinon-rails (1.15.0)
       railties (>= 3.1)
-    slop (3.6.0)
     spring (2.0.2)
       activesupport (>= 4.2)
     sprockets (3.7.1)
@@ -349,7 +328,6 @@ DEPENDENCIES
   compass-rails
   database_cleaner (>= 1.0.0)
   devise
-  devise_wolftech_authenticatable!
   factory_girl_rails (>= 4.0)
   font-awesome-sass
   formtastic
@@ -361,7 +339,6 @@ DEPENDENCIES
   jquery-ui-rails
   modernizr-rails
   mysql2 (~> 0.3.18)
-  ncsu_catalog_api_client!
   paper_trail
   quiet_assets
   rails (= 4.2.8)
