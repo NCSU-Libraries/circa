@@ -4,13 +4,14 @@ class ItemsController < ApplicationController
 
   before_action :set_item, only: [
     :show, :edit, :update, :destroy, :update_state, :check_out, :check_in,
-    :receive_at_temporary_location, :history, :obsolete, :change_active_order,
-    :update_from_source
+    :receive_at_temporary_location, :obsolete, :change_active_order,
+    :update_from_source, :movement_history, :modification_history
   ]
 
   before_action :set_params
 
-  before_action :verify_order_id, :verify_check_out_permitted, :verify_users, only: [ :check_out ]
+  before_action :verify_order_id, :verify_check_out_permitted, :verify_users,
+      only: [ :check_out ]
 
   before_action :get_active_access_session, only: [ :check_in ]
 
@@ -113,7 +114,8 @@ class ItemsController < ApplicationController
   # end
 
 
-  # Will create one or more items from the ArchivesSpace record corresponding to params[:archivesspace_uri]
+  # Will create one or more items from the ArchivesSpace record
+  # corresponding to params[:archivesspace_uri]
   # If any item already exists it will be updated
   # Returns array of item records (including both new and updated records)
   def create_from_archivesspace
@@ -123,12 +125,15 @@ class ItemsController < ApplicationController
         render json: @items ? @items : {}
         return
       else
-        render json: { error: { detail: 'Bad request: No ArchivesSpace URI provided' } }, status: 400
+        render json: { error: { detail: 'Bad request: No ArchivesSpace URI provided' } },
+            status: 400
         return
       end
     rescue Exception => e
       logger.error e
-      render json: { error: { detail: "Internal server error: #{e.message} - #{e.backtrace.inspect}" } }, status: 500
+      error = { detail: "Internal server error: #{e.message} -
+          #{e.backtrace.inspect}" }
+      render json: { error: error }, status: 500
     end
   end
 
@@ -138,11 +143,14 @@ class ItemsController < ApplicationController
   # Returns single item record
   def create_from_catalog
     if (params[:catalog_record_id].blank? || params[:catalog_item_id].blank?)
-      raise CircaExceptions::BadRequest, "Catalog record id and item id were not provided."
+      raise CircaExceptions::BadRequest,
+          "Catalog record id and item id were not provided."
     else
-      @item = Item.create_or_update_from_catalog(params[:catalog_record_id], params[:catalog_item_id])
+      @item = Item.create_or_update_from_catalog(params[:catalog_record_id],
+          params[:catalog_item_id])
       if !@item
-        raise CircaExceptions::BadRequest, "No catalog record found matching the id provided."
+        raise CircaExceptions::BadRequest,
+            "No catalog record found matching the id provided."
       else
         render json: @item
       end
@@ -246,8 +254,23 @@ class ItemsController < ApplicationController
   end
 
 
-  def history
-    render json: @item, serializer: ItemHistorySerializer
+  def movement_history
+    response = {
+      item: {
+        movement_history: @item.movement_history
+      }
+    }
+    render json: response
+  end
+
+
+  def modification_history
+    response = {
+      item: {
+        modification_history: @item.modification_history
+      }
+    }
+    render json: response
   end
 
 

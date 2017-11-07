@@ -3,7 +3,7 @@ class ItemSerializer < ActiveModel::Serializer
   :container, :uri, :digital_object, :unprocessed, :barcode, :obsolete,
   :created_at, :updated_at, :open_orders, :active_order_id, :current_state,
   :available_events, :permitted_events, :in_use?, :source, :last_accessed,
-  :digital_object_title, :access_sessions
+  :digital_object_title, :access_sessions, :has_modification_history
 
   def created_at
     object.created_at.strftime('%FT%T%:z')
@@ -49,6 +49,11 @@ class ItemSerializer < ActiveModel::Serializer
       sessions << session
     end
     sessions
+  end
+
+
+  def has_modification_history
+    object.versions.length > 0
   end
 
 

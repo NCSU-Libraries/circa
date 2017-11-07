@@ -66,7 +66,8 @@ Rails.application.routes.draw do
   get 'items/items_in_transit_for_use' => 'items#items_in_transit_for_use'
   get 'items/items_in_transit_for_use_list' => 'items#items_in_transit_for_use_list'
   get 'items/:id/update_from_source' => 'items#update_from_source'
-  get 'items/:id/history' => 'items#history'
+  get 'items/:id/movement_history' => 'items#movement_history'
+  get 'items/:id/modification_history' => 'items#modification_history'
 
   post 'items/create_from_archivesspace' => 'items#create_from_archivesspace'
   post 'items/create_from_catalog' => 'items#create_from_catalog'
