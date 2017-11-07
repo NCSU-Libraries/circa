@@ -1,28 +1,12 @@
 namespace :users do
 
-  desc "create user with Unity ID"
-  task :unity_create, [:unity_id] => :environment do |t, args|
-    if args[:unity_id]
-      User.create_from_ldap(args[:unity_id], options)
-    end
-  end
-
-
-  desc "get ldap record"
-  task :ldap_record, [:unity_id] => :environment do |t, args|
-    if args[:unity_id]
-      User.attributes_from_ldap(args[:unity_id])
-    end
-  end
-
-
-  desc "create generic admin user for initial "
+  desc "create generic admin user"
   task :create_admin => :environment do |t, args|
     admin_role = UserRole.where(name: 'admin').first
     if admin_role
       existing_admin_user = User.where(user_role_id: admin_role.id).first
       if !existing_admin_user
-        user = User.create!(email: 'admin@circa', password: 'circa_admin', user_role_id: admin_role.id)
+        User.create!(email: 'admin@circa', password: 'circa_admin', user_role_id: admin_role.id)
         puts "Admin user created. email: admin@circa, password: circa_admin"
       else
         puts "An admin user already exists with email '#{ existing_admin_user.email }'"

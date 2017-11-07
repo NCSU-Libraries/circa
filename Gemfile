@@ -14,7 +14,6 @@ gem 'devise'
 
 gem 'archivesspace-api-utility', git: "https://github.com/NCSU-Libraries/archivesspace-api-utility.git"
 
-
 gem 'paper_trail'
 gem 'formtastic'
 # Using 0.10.0.rc3
@@ -39,9 +38,7 @@ gem 'foundation-will_paginate'
 
 # NCSU only
 # gem 'devise_wolftech_authenticatable', git: "git@github.ncsu.edu:NCSU-Libraries/devise_wolftech_authenticatable.git"
-gem 'devise_wolftech_authenticatable', path: "/Users/trthorn2/webapps/gems/devise_wolftech_authenticatable"
-
-gem 'ncsu_catalog_api_client', git: "git@github.ncsu.edu:trthorn2/ncsu_catalog_api_client.git"
+# gem 'ncsu_catalog_api_client', git: "git@github.ncsu.edu:trthorn2/ncsu_catalog_api_client.git"
 # END - NCSU only
 
 

@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :wolftech_authenticatable, :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
   include EnumerationUtilities
@@ -11,9 +11,6 @@ class User < ActiveRecord::Base
   # app/models/concerns/solr_doc.rb
   include SolrDoc
   include VersionsSupport
-
-  include NCSULdap
-  require 'campus-ldap.rb'
 
   belongs_to :user_role
   has_many :order_users
