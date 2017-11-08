@@ -1,18 +1,42 @@
-<div ng-if="order['items'].length == 0" class="empty-list-label">None selected</div>
+<div ng-if="order['item_orders'].length == 0" class="empty-list-label">
+  None selected
+</div>
 
 
+<ul ng-if="order['item_orders'].length > 0" class="sub-records-list items-list">
 
-<ul ng-if="order['items'].length > 0" class="sub-records-list items-list">
-
-  <li ng-repeat="item in order['items']" ng-show="$index < calculatedItemsLimit()" data-item-id="{{ item['id'] }}">
+  <li
+      ng-repeat="itemOrder in order['item_orders']"
+      ng-init="item = itemOrder['item']"
+      ng-show="$index < calculatedItemsLimit()"
+      data-item-id="{{ item['id'] }}">
 
     <div class="row">
 
-      <div class="small-10 columns">
+      <div ng-if="order['num_items'] > 1" class="small-1 columns checkbox-column">
+        <input
+            type="checkbox"
+            ng-checked="commonUtils.inArray(order['bulkEventsList'], itemOrder.id)"
+            ng-model="itemOrder['inBulkEventsList']"
+            ng-change="toggleItemOrderIdInBulkEventsList(itemOrder)">
+      </div>
+
+      <div ng-class="order['num_items'] > 1 ? 'small-9 columns' : 'small-10 columns'">
 
         <div ng-include="templateUrl('items/item_overview')"></div>
 
-        <div poptip="Generate printable 'call slip' for this item only" class="record-action" ng-if="!item['obsolete']"><a ng-href="{{ rootPath() }}/orders/{{ order['id'] }}/call_slip?item_id={{ item['id'] }}" target="_blank"><i class="fa fa-print"></i>Print item call slip</a></div>
+        <div
+            poptip="Generate printable 'call slip' for this item only"
+            class="record-action"
+            ng-if="!item['obsolete']">
+          <a ng-href="{{ rootPath() }}/orders/{{ order['id'] }}/call_slip?item_id={{ item['id'] }}" target="_blank">
+          <i class="fa fa-print"></i>Print item call slip</a>
+        </div>
+
+
+        <div ng-include="templateUrl('orders/item_order_reproduction_details')"></div>
+
+
 
       </div>
 
@@ -22,7 +46,6 @@
         <div ng-show="itemEventLoading" ng-include="templateUrl('common/processing')"/>
 
         <div ng-show="!itemEventLoading" ng-if="order['id']" ng-hide="commonUtils.inArray(checkOutItemIds, item['id'])" class="sub-record-actions item-actions">
-
 
           <div ng-repeat="stateEvent in availableStateEvents(item)" class="action">
 
@@ -124,8 +147,8 @@
 </ul>
 
 
-<div ng-if="order['items'].length > itemsLimit">
-  <span ng-if="truncateItems" class="truncated-list-post-note">+ {{ order['items'].length - itemsLimit }} more</span>
+<div ng-if="order['item_orders'].length > itemsLimit">
+  <span ng-if="truncateItems" class="truncated-list-post-note">+ {{ order['item_orders'].length - itemsLimit }} more</span>
   <span ng-if="truncateItems" class="link" ng-click="toggleTruncateItems()">Show all</span>
   <span ng-if="!truncateItems" class="link" ng-click="toggleTruncateItems()">Show less</span>
 </div>

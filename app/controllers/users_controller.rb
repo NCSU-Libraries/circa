@@ -4,6 +4,8 @@ class UsersController < ApplicationController
   include SolrUtilities
   include NCSULdapUtils
 
+  before_action :set_paper_trail_whodunnit
+
   # See Devise users controllers for new, create, edit, update, destroy
 
   def index
@@ -50,7 +52,6 @@ class UsersController < ApplicationController
       if @user
         raise CircaExceptions::BadRequest, "User with email #{params[:user][:email]} already exists."
       else
-        puts 'creating user'
         params[:user][:password] ||= SecureRandom.hex(8)
         if params[:user][:agreement_confirmed]
           params[:user][:agreement_confirmed_at] = Time.now

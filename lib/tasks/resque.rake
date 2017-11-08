@@ -3,9 +3,6 @@
 require 'resque/tasks'
 require 'resque/scheduler/tasks'
 
-# I GOT THIS FROM HERE:
-# http://drou.in/post/55836815291/how-to-start-and-restart-resque-workers-with
-
 namespace :resque do
 
   task :work
@@ -53,26 +50,6 @@ namespace :resque do
   end
 
 
-  # def store_pids(pids, mode)
-  #   pids_to_store = pids
-  #   pids_to_store += read_pids if mode == :append
-
-  #   # Make sure the pid file is writable.
-  #   File.open(File.expand_path('tmp/pids/resque.pid', Rails.root), 'w') do |f|
-  #     f <<  pids_to_store.join(',')
-  #   end
-  # end
-
-
-  # def read_pids
-  #   pid_file_path = File.expand_path('tmp/pids/resque.pid', Rails.root)
-  #   return []  if ! File.exists?(pid_file_path)
-
-  #   File.open(pid_file_path, 'r') do |f|
-  #     f.read
-  #   end.split(',').collect {|p| p.to_i }
-  # end
-
 
   def show_workers
     puts "#{ Resque.workers.length } registered workers:"
@@ -104,20 +81,6 @@ namespace :resque do
   end
 
 
-  # def stop_workers
-  #   pids = read_pids
-
-  #   if pids.empty?
-  #     puts "No workers to kill"
-  #   else
-  #     syscmd = "kill -s QUIT #{pids.join(' ')}"
-  #     puts "$ #{syscmd}"
-  #     `#{syscmd}`
-  #     store_pids([], :write)
-  #   end
-  # end
-
-
   # I feel really bad about this method name :(
   # it's accurate w/r/t what it does, but it's also just wrong
   def kill_unregistered_workers
@@ -146,11 +109,8 @@ namespace :resque do
       pid = spawn(env_vars, "rake resque:work", ops)
       Process.detach(pid)
       puts "Started worker with PID #{ pid }"
-
-      # pids << pid
     end
 
-    # store_pids(pids, :append)
   end
 
 

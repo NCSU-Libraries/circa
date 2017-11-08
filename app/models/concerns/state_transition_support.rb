@@ -6,7 +6,7 @@ module StateTransitionSupport
 
   included do
 
-    # self.states_events, self.initial_state, self.event_callbacks and event_permitted must be specified for model in app/models/concerns/[model_name]_state_config.rb
+    # self.states_events, self.initial_state, self.event_callbacks, states_events_config and event_permitted must be specified for model in app/models/concerns/[model_name]_state_config.rb
 
 
     # Returns hash of state/event pairs with event as key and state as value

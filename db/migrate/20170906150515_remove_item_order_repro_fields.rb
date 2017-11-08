@@ -1,0 +1,6 @@
+class RemoveItemOrderReproFields < ActiveRecord::Migration
+  def change
+    remove_column :item_orders, :detail
+    remove_column :item_orders, :total_pages
+  end
+end

@@ -19,6 +19,7 @@ ENV.update YAML.load_file('config/archivesspace.yml')[Rails.env] rescue {}
 ENV.update YAML.load_file('config/solr.yml')[Rails.env] rescue {}
 ENV.update YAML.load_file('config/email.yml')[Rails.env] rescue {}
 ENV.update YAML.load_file('config/options.yml')[Rails.env] rescue {}
+ENV.update YAML.load_file('config/wolftech.yml')[Rails.env] rescue {}
 
 module Circa
   class Application < Rails::Application

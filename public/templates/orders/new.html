@@ -1,18 +1,33 @@
 <div ng-include="templateUrl('common/app_header')"></div>
 
-<h1>New order</h1>
-
+<h1>New order
+  <span class="subhead" ng-if="order.cloned_order_id">Cloned from Order
+    <span ng-if="order.id" class="link" ng-click="showOrder(order.cloned_order_id)">{{order.cloned_order_id}}</span>
+    <span ng-if="!order.id">{{order.cloned_order_id}}</span>
+  </span>
+</h1>
 
 <div ng-show="loading" ng-include="templateUrl('common/processing')"/>
 
 <div ng-hide="loading">
+
   <div ng-include="templateUrl('orders/form_fields')"/>
-  <button class="button" ng-click="createOrder()">Create order</button>
-  <button class="button" ng-click="goto('/orders')">Cancel</button>
+
+  <div ng-show="order['order_type'] && order['order_sub_type']">
+    <button class="button" ng-click="createOrder()">Create order</button>
+    <button class="button" ng-click="goto('/orders')">Cancel</button>
+  </div>
+
 </div>
 
-<!--
+
 <div ng-if="debug" class="data-panel">
-{{ order | json }}
+  <p>order</p>
+  {{ order | json }}
 </div>
- -->
+
+
+<div ng-if="debug" class="data-panel">
+  <p>digitalImageSelect</p>
+  {{ digitalImageSelect | json }}
+</div>

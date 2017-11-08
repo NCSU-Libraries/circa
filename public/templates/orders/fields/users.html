@@ -1,0 +1,23 @@
+<div class="form-section" ng-class="validationErrors['users'] ? 'has-error' : ''">
+
+
+  <h2 ng-if="order['order_type']['name'] == 'research'">Researchers</h2>
+  <h2 ng-if="order['order_type']['name'] != 'research'">Requester</h2>
+
+
+  <div ng-if="validationErrors['users']" class="validation-error field-validation-error">{{ validationErrors['users'] }}</div>
+
+
+  <div ng-include="templateUrl('orders/user_list')"></div>
+
+
+  <div ng-hide="order['order_type']['name'] == 'reproduction' && order['users'].length > 0">
+    <div ng-include="templateUrl('orders/fields/user_selector')"></div>
+    <div>
+      <span class="link" ng-click="createAndAddUser()">Create and add new
+      {{ order['order_type']['name'] == 'research' ? 'researcher' : 'user' }}</span>
+    </div>
+  </div>
+
+
+</div>

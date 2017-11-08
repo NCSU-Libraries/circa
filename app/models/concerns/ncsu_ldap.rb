@@ -11,7 +11,6 @@ module NCSULdap
       if !user
         attributes = attributes_from_ldap(unity_id)
         if attributes
-          attributes[:role] = options[:role]
           user = create!(attributes)
         end
       end
