@@ -1,9 +1,4 @@
 GIT
-<<<<<<< HEAD
-  remote: https://github.com/pivotal/jasmine-gem.git
-  revision: ec36ed246c308eda1fb4beb60310371b535559c7
-  specs:
-=======
   remote: https://github.com/NCSU-Libraries/archivesspace-api-utility.git
   revision: 0df30fd9d5885d402e128c44b0e15c5682bcffaf
   specs:
@@ -13,7 +8,6 @@ GIT
   remote: https://github.com/pivotal/jasmine-gem.git
   revision: ec36ed246c308eda1fb4beb60310371b535559c7
   specs:
->>>>>>> upstream/master
     jasmine (2.8.0)
       jasmine-core (>= 2.8.0, < 3.0.0)
       phantomjs
@@ -152,12 +146,8 @@ GEM
     foundation-will_paginate (0.0.1)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
-<<<<<<< HEAD
-    i18n (0.8.6)
-=======
     i18n (0.9.0)
       concurrent-ruby (~> 1.0)
->>>>>>> upstream/master
     jasmine-core (2.8.0)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
@@ -378,8 +368,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-<<<<<<< HEAD
-   1.15.4
-=======
    1.14.6
->>>>>>> upstream/master
