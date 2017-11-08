@@ -8,15 +8,25 @@
 
   <div ng-show="!dashboard.dashbaordLoading">
 
-    <div ng-if="!dashboard.filters['permanent_location_facility'] && dashboard.returnsInTransit['facilities']" class="facility-filter">
+    <!-- filters -->
+    <div ng-if="!dashboard.filters['permanent_location_facility'] && dashboard.returnsInTransit['facilities'].length > 0" class="facility-filter">
     Filter by facility: <span ng-repeat="facility in dashboard.returnsInTransit['facilities']" class="facility-filter-option" ng-class="$last ? 'last' : ''"><span ng-click="dashboard.filterReturnsInTransitByFacility(facility)" class="link">{{ facility }}</span></span>
     </div>
 
-    <div ng-if="dashboard.filters['permanent_location_facility']" class="facility-filter-info">
+    <div ng-if="dashboard.filters['permanent_location_facility']" class="facility-filter-info text-block">
     Showing only items from {{ dashboard.filters['permanent_location_facility'] }} <span ng-click="dashboard.getReturnsInTransit()" class="link">Show all</span>
     </div>
+    <!-- END filters -->
 
 
+    <!-- no results -->
+    <div ng-show="dashboard.returnsInTransit['total_orders'] == 0" class="text-block">
+      <strong>There are no returns in transit, or none matching filters.</strong>
+    </div>
+    <!-- END no results -->
+
+
+    <!-- results -->
     <div ng-show="dashboard.returnsInTransit['total_orders'] > 0">
 
       <div class="print-list">
@@ -50,6 +60,7 @@
       </div>
 
     </div>
+    <!-- END results -->
 
   </div>
 
