@@ -15,12 +15,6 @@ GIT
       rake
 
 GIT
-  remote: https://github.com/NCSU-Libraries/archivesspace-api-utility.git
-  revision: 0df30fd9d5885d402e128c44b0e15c5682bcffaf
-  specs:
-    archivesspace-api-utility (0.0.7)
-
-GIT
   remote: https://github.com/rails-api/active_model_serializers.git
   revision: 4d7c2457d736993ff5b91afb9480980cd77853b0
   branch: 0-10-stable
