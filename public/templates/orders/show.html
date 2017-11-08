@@ -39,11 +39,6 @@
     </section>
 
 
-    <section ng-show="order.has_fees">
-      <div ng-include="templateUrl('orders/order_invoice_date')"></div>
-    </section>
-
-
 
     <section>
       <h2>Researchers</h2>
@@ -75,6 +70,19 @@
         {{ note['content'] }}
       </div>
 
+    </section>
+
+
+    <section ng-show="order.has_fees" class="invoice-section">
+      <div class="row">
+        <div class="small-12 medium-6 columns">
+          <div ng-include="templateUrl('orders/fields/invoice_date')"></div>
+        </div>
+
+        <div class="small-12 medium-6 columns end">
+          <div ng-include="templateUrl('orders/fields/invoice_payment_date')"></div>
+        </div>
+      </div>
     </section>
 
 

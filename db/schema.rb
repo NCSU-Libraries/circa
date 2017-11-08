@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171103142835) do
+ActiveRecord::Schema.define(version: 20171108192803) do
 
   create_table "access_sessions", force: :cascade do |t|
     t.integer  "item_id",        limit: 4,                null: false
@@ -199,17 +199,18 @@ ActiveRecord::Schema.define(version: 20171103142835) do
 
   create_table "orders", force: :cascade do |t|
     t.date     "access_date_start"
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
-    t.boolean  "open",                        default: true,  null: false
-    t.boolean  "confirmed",                   default: false, null: false
-    t.integer  "location_id",       limit: 4
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.boolean  "open",                           default: true,  null: false
+    t.boolean  "confirmed",                      default: false, null: false
+    t.integer  "location_id",          limit: 4
     t.date     "access_date_end"
-    t.boolean  "deleted",                     default: false, null: false
-    t.integer  "order_sub_type_id", limit: 4
-    t.integer  "order_type_id_old", limit: 4
-    t.integer  "cloned_order_id",   limit: 4
+    t.boolean  "deleted",                        default: false, null: false
+    t.integer  "order_sub_type_id",    limit: 4
+    t.integer  "order_type_id_old",    limit: 4
+    t.integer  "cloned_order_id",      limit: 4
     t.date     "invoice_date"
+    t.date     "invoice_payment_date"
   end
 
   add_index "orders", ["location_id"], name: "fk_rails_5b9551c291", using: :btree

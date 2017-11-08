@@ -8,17 +8,11 @@
 <div ng-show="order.editInvoiceDate"
     class="form-field">
 
-  <div class="instruction small">
-    Enter the date invoice was sent. Click "Save" to update the order.
-    <span ng-show="commonUtils.inArray(order.permitted_events, 'finish')">
-      Click "Save and finish" to close the order after updating.
-    </span>
-  </div>
-
   <input type="text" datepicker ng-model="order['invoice_date']" class="datepicker-input"/>
-  <button class="button tiny" ng-click="updateOrder()">Save</button>
+  <button class="button tiny" ng-click="updateAndRefreshOrder()">Save</button>
   <button
     ng-show="commonUtils.inArray(order.permitted_events, 'finish')"
     class="button tiny"
-    ng-click="updateOrder('finish')">Save and finish</button>
+    ng-click="updateAndRefreshOrder('finish')">Save and finish order</button>
+
 </div>

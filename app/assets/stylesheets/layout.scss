@@ -192,12 +192,12 @@ ul.sub-records-list, ul.records-list {
   li {
     padding: .5rem;
     margin: 0;
-    border: 1px solid $grayLight;
+    border: 1px solid $grayLightest;
     border-top: 0;
     background: $bodyBackground;
 
     &:first-child {
-      border-top: 1px solid $grayLight;
+      border-top: 1px solid $grayLightest;
     }
 
     .sub-record-actions, .record-actions {
