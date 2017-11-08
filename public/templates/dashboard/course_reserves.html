@@ -5,31 +5,45 @@
   <div ng-show="dashboard.dashbaordLoading" ng-include="dashboard.templateUrl('common/processing')"/>
 
   <div ng-show="!dashboard.dashbaordLoading">
-    <table>
 
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Course number</th>
-          <th>Course name</th>
-          <th>Total researchers</th>
-          <th>Total items</th>
-          <th>Start/end dates</th>
-        </tr>
-      </thead>
 
-      <tbody>
-        <tr ng-repeat="order in dashboard.course_reserves">
-          <td><span class="link" ng-click="showOrder(order.id)">{{ order.id }}</span></td>
-          <td>{{ order.course_number }}</td>
-          <td>{{ order.course_name }}</td>
-          <td>{{ order.users.length }}</td>
-          <td>{{ order.num_items }}</td>
-          <td>{{ order.access_date_start }}/{{ order.access_date_end }}</td>
-        </tr>
-      </tbody>
+    <!-- no results -->
+    <div ng-show="dashboard.course_reserves.length == 0" class="text-block">
+      <strong>There are no active course reserves.</strong>
+    </div>
+    <!-- END no results -->
 
-    </table>
+
+    <!-- results -->
+    <div ng-if="dashboard.course_reserves.length > 0">
+      <table>
+
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Course number</th>
+            <th>Course name</th>
+            <th>Total researchers</th>
+            <th>Total items</th>
+            <th>Start/end dates</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr ng-repeat="order in dashboard.course_reserves">
+            <td><span class="link" ng-click="showOrder(order.id)">{{ order.id }}</span></td>
+            <td>{{ order.course_number }}</td>
+            <td>{{ order.course_name }}</td>
+            <td>{{ order.users.length }}</td>
+            <td>{{ order.num_items }}</td>
+            <td>{{ order.access_date_start }}/{{ order.access_date_end }}</td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+    <!-- END results -->
+
 
   </div>
 

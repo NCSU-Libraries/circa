@@ -6,15 +6,25 @@
 
   <div ng-show="!dashboard.dashbaordLoading">
 
-    <div ng-if="!dashboard.filters['location'] && dashboard.itemsInTransitForUse['locations']" class="location-filter">
+    <!-- filters -->
+    <div ng-if="!dashboard.filters['location'] && dashboard.itemsInTransitForUse['locations'].length > 0" class="location-filter">
     Filter by use location: <span ng-repeat="location in dashboard.itemsInTransitForUse['locations']" class="location-filter-option" ng-class="$last ? 'last' : ''"><span ng-click="dashboard.filterItemsInTransitForUseByLocation(location)" class="link nowrap">{{ location }}</span></span>
     </div>
 
-    <div ng-if="dashboard.filters['location']" class="location-filter-info">
+    <div ng-if="dashboard.filters['location']" class="location-filter-info text-block">
     Showing only items for {{ dashboard.filters['location'] }} <span ng-click="dashboard.getItemsInTransitForUse()" class="link">Show all</span>
     </div>
+    <!-- END filters -->
 
 
+    <!-- no results -->
+    <div ng-show="dashboard.itemsInTransitForUse['total_orders'] == 0" class="text-block">
+      <strong>There are no items in transit for use, or none matching filters.</strong>
+    </div>
+    <!-- END no results -->
+
+
+    <!-- results -->
     <div ng-show="dashboard.itemsInTransitForUse['total_orders'] > 0">
 
       <div class="print-list">
@@ -48,6 +58,7 @@
       </div>
 
     </div>
+    <!-- END results -->
 
   </div>
 

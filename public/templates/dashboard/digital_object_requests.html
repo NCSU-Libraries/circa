@@ -8,10 +8,14 @@
 
   <div ng-show="!dashboard.dashbaordLoading">
 
+    <!-- no results -->
     <div ng-show="dashboard.digitalObjectRequests['total_orders'] == 0">
       <strong>There are no pending requests for digital materials, or all have been fulfilled.</strong>
     </div>
+    <!-- END no results -->
 
+
+    <!-- results -->
     <div ng-show="dashboard.digitalObjectRequests['total_orders'] > 0">
 
       <div ng-repeat="(orderId, order) in dashboard.digitalObjectRequests['orders']" class="pending-transfers-order">
@@ -43,6 +47,7 @@
       </div>
 
     </div>
+    <!-- END results -->
 
   </div>
 
