@@ -38,4 +38,11 @@ Please fix the problems noted below.
   <!-- notes -->
   <div ng-include="templateUrl('orders/fields/notes')"></div>
 
+
+  <!-- invoice ATTN: -->
+  <div
+      ng-show="order['order_sub_type']['name'] == 'reproduction_fee'"
+      ng-include="templateUrl('orders/fields/invoice_attn')"></div>
+
+
 </div>
