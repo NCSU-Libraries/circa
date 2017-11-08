@@ -1,29 +1,47 @@
-<div class="record-overview item-overview">
+<div class="record-overview item-overview version-overview">
 
   <div ng-if="$index == 0">
     <div class="inline overview-element">
-      <span class="label">Current version</span>
+      <span class="label current">Current version</span>
     </div>
   </div>
 
 
-  <div>
+  <!-- version update info -->
+  <div ng-if="!$last" class="version-update-info">
     <div class="inline overview-element">
-      <span class="label">Last updated:</span>
-      <span class="value">{{ version['updated_at'] }}
+      <span class="label">Updated:</span>
+      <span class="value">{{ version['updated_at'] | date: 'yyyy-MM-dd HH:mm:ss a' }}
     </div>
 
     <div class="inline overview-element">
-      <span class="label">Last updated by:</span>
+      <span class="label">Updated by:</span>
       <span class="value">{{ version['user']['display_name'] }}
     </div>
   </div>
 
 
+  <div ng-if="$last" class="version-update-info">
+    <div class="inline overview-element">
+      <span class="label">Created:</span>
+      <span class="value">{{ version['created_at'] | date: 'yyyy-MM-dd HH:mm:ss a' }}
+    </div>
+  </div>
+  <!-- END version update info -->
+
+
+  <div ng-if="version['resource_identifier']">
+    <div class="inline overview-element">
+      <span class="label">Resource identifier:</span>
+      <span class="value">{{ version['resource_identifier'] }}</span>
+    </div>
+  </div>
+
+
   <div>
     <div class="inline overview-element">
-      <span ng-if="version['resource_identifier']">{{ version['resource_identifier'] }} – </span>
-      {{ version['resource_title'] }}
+      <span class="label">Resource title:</span>
+      <span class="value">{{ version['resource_title'] }}</span>
     </div>
   </div>
 
@@ -77,6 +95,14 @@
       <span class="value">{{ version['item_catalog_record']['catalog_item_id'] }}</span>
     </div>
 
+  </div>
+
+
+  <div>
+    <div class="inline overview-element nowrap">
+      <span class="label">Permanent location:</span>
+      <span class="value">{{ version['permanent_location']['title'] }}</span>
+    </div>
   </div>
 
 

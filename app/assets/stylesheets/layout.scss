@@ -145,6 +145,19 @@ td .button, td button,
 
 }
 
+
+.version-overview {
+
+  .label.current {
+    font-weight: bold;
+  }
+
+  .version-update-info {
+    margin-bottom: 0.5rem;
+  }
+
+}
+
 .record-detail {
   background: $grayGhost;
   padding: 1rem;
