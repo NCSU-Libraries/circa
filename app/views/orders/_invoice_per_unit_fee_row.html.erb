@@ -1,0 +1,21 @@
+<tr class="sub-row">
+
+  <td class="indent">
+    <div>
+      <%= record.unit_total %>
+          <%= record_type == 'item_order' ? 'pages' : 'files' %>
+
+      <% if record_type == 'item_order' %>
+      , <%= record.reproduction_spec.reproduction_format.name %>
+      <% end %>
+
+    </div>
+  </td>
+
+  <td class="numeric"><%= record.unit_total %></td>
+
+  <td class="numeric"><%= number_to_currency(record.order_fee.per_unit_fee) %></td>
+
+  <td class="numeric"><%= number_to_currency(record.order_fee.per_unit_total) %></td>
+
+</tr>

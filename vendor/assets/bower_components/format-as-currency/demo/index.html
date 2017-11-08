@@ -1,0 +1,110 @@
+<!doctype html>
+<html
+  ng-app="demo"
+  ng-controller="demo"
+  ng-controller-as="demo"
+>
+<head>
+
+  <meta charset="utf-8">
+  <title>bcherny/format-as-currency demo</title>
+
+  <style>
+
+    * { border: 0; margin: 0; outline: 0; padding: 0 }
+
+    body,
+    input {
+      font: 100 18px/24px Helvetica, Arial, sans-serif;
+    }
+
+    input {
+      border: 1px solid #eee;
+      display: inline-block;
+      margin-left: 10px;
+      padding: 20px;
+    }
+
+    .ng-invalid.ng-touched {
+      border-color: red;
+    }
+
+    label {
+      display: block;
+      height: 18px;
+      margin: auto;
+      position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+      text-align: right;
+      width: 400px;
+    }
+
+    #view {
+      transform: translateY(-40px);
+    }
+
+    #model {
+      transform: translateY(40px);
+    }
+
+    #model,
+    #model input {
+      color: #999;
+    }
+
+  </style>
+
+</head>
+<body>
+
+  <label id="view">
+
+    Type a number:
+
+    <input
+      format-as-currency
+      currency-filter="'foo'"
+      ng-init="demo.value = 42"
+      ng-model="demo.value"
+      type="text"
+    >
+
+  </label>
+  <label id="model">
+
+    Model value:
+
+    <input
+      ng-model="demo.value"
+      type="text"
+    >
+
+  </label>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+  <script src="../dist/format-as-currency.js"></script>
+  <script>
+
+  angular
+  .module('demo', [
+    'bcherny/formatAsCurrency'
+  ])
+  .filter('foo', function () {
+    return function (value) {
+      return '*' + value + '*'
+    }
+  })
+  .controller('demo', function () {
+
+    this.value = null
+
+  })
+
+  </script>
+
+</body>
+</html>

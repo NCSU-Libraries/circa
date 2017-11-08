@@ -8,6 +8,7 @@
     "angular-animate": "~1.6.4",
     "angucomplete-alt": "~3.0.0",
     "angular-foundation": "~0.8.0",
-    "ng-country-select": "~0.1.4"
+    "ng-country-select": "~0.1.4",
+    "format-as-currency": "latest"
   }
 }

@@ -3,17 +3,35 @@
 var DashboardCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
   CircaCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
 
-  // Each inheritor controller must define this.getDashboardRecords
-  // this.getDashboardRecords = function() { return null; }
-  // this.getDashboardRecords();
+  this.active = 'pendingTransfers'
+  this.getPendingItemTransfers();
+
 }
 
 DashboardCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 DashboardCtrl.prototype = Object.create(CircaCtrl.prototype);
+
 circaControllers.controller('DashboardCtrl', DashboardCtrl);
 
-// DashboardCtrl.prototype.filterByFacility = function(facility) {
-//   var _this = this;
-//   var filters = { permanent_location_facility: facility };
-//   _this.getDashboardRecords();
-// }
+
+DashboardCtrl.prototype.setActive = function(dashboardName) {
+  this.active = dashboardName;
+  var _this = this;
+  switch (dashboardName) {
+  case 'pendingTransfers':
+    this.getPendingItemTransfers();
+    break;
+  case 'returnsInTransit':
+    this.getReturnsInTransit();
+    break;
+  case 'itemsInTransitForUse':
+    this.getItemsInTransitForUse();
+    break;
+  case 'courseReserves':
+    this.getCourseReserves();
+    break;
+  case 'digitalObjectRequests':
+    this.getDigitalObjectRequests();
+    break;
+  }
+}

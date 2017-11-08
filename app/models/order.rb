@@ -7,8 +7,9 @@ class Order < ActiveRecord::Base
   include VersionsSupport
   include SolrDoc
 
-  belongs_to :order_type
+  # belongs_to :order_type
   belongs_to :order_sub_type
+  has_one :order_fee, as: :record
 
   has_many :order_users, -> { order 'order_users.created_at desc' }, dependent: :destroy
   has_many :users, through: :order_users, source: :user
@@ -18,6 +19,8 @@ class Order < ActiveRecord::Base
   has_many :items, through: :item_orders
   has_many :notes, as: :noted
   has_one :course_reserve
+  has_many :digital_image_orders
+  has_one :order_fee, as: :record
 
   has_many :access_sessions do
     def active
@@ -34,8 +37,66 @@ class Order < ActiveRecord::Base
   attr_reader :archivesspace_records
 
 
+  def order_type
+    order_sub_type.order_type
+  end
+
+
+  def order_type_id
+    order_type.id
+  end
+
+
   def self.first_datetime
     where('created_at is not null').order('created_at asc').limit(1).pluck('created_at')[0]
+  end
+
+
+  def spawn(sub_type_id = nil)
+    sub_type_id ||= order_sub_type_id
+    spawned_order = Order.create!(order_sub_type_id: sub_type_id)
+    association_atts = { order_id: spawned_order.id }
+
+    item_orders.each do |io|
+      atts = association_atts.merge({
+        item_id: io.item_id,
+        archivesspace_uri: io.archivesspace_uri,
+        user_id: io.user_id
+      })
+      ItemOrder.create!(atts)
+    end
+
+    order_users.each do |ou|
+      atts = association_atts.merge({
+        user_id: ou.user_id,
+        primary: ou.primary
+      })
+      OrderUser.create!(atts)
+    end
+
+    if spawned_order.order_type.name == 'reproduction'
+      digital_image_orders.each do |dio|
+        atts = association_atts.merge({
+          resource_identifier: dio.resource_identifier,
+          detail: dio.detail,
+          label: dio.label,
+          display_uri: dio.display_uri,
+          manifest_uri: dio.manifest_uri,
+          requested_images: dio.requested_images
+        })
+        DigitalImageOrder.create!(atts)
+      end
+    end
+
+    if course_reserve && spawned_order.order_sub_type.name == 'course_reserve'
+      atts = association_atts.merge({
+        course_number: course_reserve.course_number,
+        course_name: course_reserve.course_name
+      })
+      CourseReserve.create!(atts)
+    end
+
+    spawned_order.reload
   end
 
 
@@ -59,18 +120,11 @@ class Order < ActiveRecord::Base
   end
 
 
-  # Returns EnumerationValue record associated with order_type_id
-  # def order_type
-  #   e = EnumerationValue.find_by_id(order_type_id)
-  #   e ? { id: e.id, value: e.value, value_short: e.value_short } : nil
-  # end
-
-
   # Returns user indicated as 'primary' for this order
   def primary_user
-    order_users.where(primary: true).first
+    primary_order_user = order_users.where(primary: true).first || order_users.first
+    primary_order_user ? primary_order_user.user : nil
   end
-
 
 
   def association_data
@@ -217,6 +271,15 @@ class Order < ActiveRecord::Base
   end
 
 
+  def clone_orders
+    orders = []
+    Order.where(cloned_order_id: id).each do |o|
+      orders << { id: o.id, order_sub_type: o.order_sub_type }
+    end
+    !orders.empty? ? orders : nil
+  end
+
+
   # Returns true if the order can be destroyed,
   #   which is only permitted if the order has not yet reached the 'fulfilled' state
   #   and if the items on the order have not been transferred
@@ -272,7 +335,6 @@ class Order < ActiveRecord::Base
   end
 
 
-
   def item_ids
     items.map { |i| i.id }
   end
@@ -290,5 +352,41 @@ class Order < ActiveRecord::Base
     has_digital_items
   end
 
+
+  def order_fees
+    fees_for_collection = lambda do |collection|
+      collection.map { |x| x.order_fee ? x.order_fee : nil }
+    end
+    fees = [item_orders.to_a, digital_image_orders.to_a].flat_map { |x| fees_for_collection.(x) }
+    fees.delete_if { |f| f.nil? }
+    if self.order_fee
+      fees << self.order_fee
+    end
+
+    fees
+  end
+
+
+  def has_fees
+    !order_fees.empty? ? true : false;
+  end
+
+
+  def order_fees_total
+    order_fees.reduce(0) { |sum, fee| sum + fee.total }
+  end
+
+
+  def cleanup_reproduction_associations
+    if order_type.name != 'reproduction'
+      order_fees.each { |of| of.destroy! }
+      digital_image_orders.each { |dio| dio.destroy! }
+      item_orders.each do |io|
+        if io.reproduction_spec
+          io.reproduction_spec.destroy!
+        end
+      end
+    end
+  end
 
 end

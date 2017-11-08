@@ -4,7 +4,8 @@
   <div>
 
     <div class="inline overview-element">
-      <span ng-if="item['resource_identifier']">{{ item['resource_identifier'] }} – </span>{{ item['resource_title'] }}
+      <span ng-if="item['resource_identifier']">{{ item['resource_identifier'] }} – </span>
+      {{ item['resource_title'] }}
     </div>
 
   </div>
@@ -15,7 +16,12 @@
 
     <div class="inline overview-element">
       <span class="label">Digital Object:</span>
-      <span class="value"><span ng-click="openArchivesSpaceRecord(item['uri'])" class="link" poptip="{{ item['uri'] }}">{{ item['digital_object_title'] }}</span></span>
+      <span class="value">
+        <span
+            ng-click="openArchivesSpaceRecord(item['uri'])"
+            class="link"
+            poptip="{{ item['uri'] }}">{{ item['digital_object_title'] }}</span>
+        </span>
     </div>
 
   </div>
@@ -65,9 +71,13 @@
       <span class="value" ng-show="itemLocationChangeEnabled != item['id']">
         <span ng-if="item['current_location']">{{ item['current_location']['title'] }}</span>
         <span ng-if="!item['current_location']">[ in transit ]</span>
-        <span ng-if="(section == 'orders') && (item['current_state'] != 'at_permanent_location') && (itemLocationChangeEnabled != item['id'])" class="link nowrap" ng-click="enableItemLocationChange(item)">Change location</span>
+        <span ng-if="(section == 'orders') && (item['current_state'] != 'at_permanent_location') && (itemLocationChangeEnabled != item['id'])"
+            class="link nowrap inline-action"
+            ng-click="enableItemLocationChange(item)">Change location</span>
       </span>
-      <div ng-show="itemLocationChangeEnabled == item['id']" ng-include="templateUrl('items/location_selector')"/>
+      <div
+          ng-show="itemLocationChangeEnabled == item['id']"
+          ng-include="templateUrl('items/location_selector')"/>
     </div>
 
   </div>

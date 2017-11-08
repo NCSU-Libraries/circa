@@ -29,6 +29,8 @@ var OrdersListCtrl = function($scope, $route, $routeParams, $location, $window, 
     return _this.getControlledValueLabel(values, id);
   }
 
+  this.applyFunctionsToScope($scope);
+
 }
 
 

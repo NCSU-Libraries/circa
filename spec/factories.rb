@@ -7,7 +7,8 @@ FactoryGirl.define do
 
 
   factory :course_reserve, :class => 'CourseReserve' do
-
+    course_number '1234'
+    course_name 'course reserve name'
   end
 
 
@@ -32,16 +33,30 @@ FactoryGirl.define do
   end
 
 
+  factory :location do
+    sequence( :uri ) { |n| "/repositories/2/resources/1234#{n}" }
+    source_id Location.archivesspace_location_source_id
+  end
+
+
+  factory :order_type do
+    name 'test'
+    label 'test'
+  end
+
+
+  factory :order_sub_type do
+    name 'test'
+    label 'test'
+    order_type
+  end
+
+
   factory :order do
     access_date_start Date.today
+    order_sub_type
 
     after(:create) do |order|
-      # user = create(:user)
-      # OrderUser.create(user_id: user.id, order_id: order.id)
-
-      # assignee = create(:user)
-      # OrderAssignment.create(user_id: assignee.id, order_id: order.id)
-
       location = create(:location)
       order.update_attributes(location_id: location.id)
       order.reload
@@ -90,7 +105,7 @@ FactoryGirl.define do
     sequence( :email ) { |n| "person#{n}@example.com" }
     password Devise::Encryptor.digest(User, 'password')
     agreement_confirmed_at Time.now
-    user_role_id { create(:user_role).id }
+    user_role
 
     factory :user_with_role do
       after(:create) do |user|
@@ -142,18 +157,37 @@ FactoryGirl.define do
   end
 
 
-  factory :location do
-    sequence( :uri ) { |n| "/repositories/2/resources/1234#{n}" }
-    source_id Location.archivesspace_location_source_id
-  end
-
-
   factory :note do
     content "Mr Leopold Bloom ate with relish the inner organs of beasts and fowls."
   end
 
 
   factory :item_order do
+    order
+    item
+  end
+
+
+  factory :digital_image_order do
+    sequence( :resource_identifier ) { |n| "image#{n}" }
+    requested_images [ 'imagefile0001', 'imagefile0002', 'imagefile0003' ]
+    sequence(:resource_title) { |n| "Digital image order #{n}" }
+    order
+  end
+
+
+  factory :reproduction_format do
+  end
+
+
+  factory :reproduction_spec do
+    reproduction_format
+  end
+
+
+  factory :order_fee do
+    per_unit_fee 1.00
+    per_order_fee 1.00
   end
 
 

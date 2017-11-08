@@ -1,6 +1,24 @@
 @media print, screen {
 
-  .print-list, .call-slip, .pending-transfers {
+  section {
+    margin: 1rem 0;
+  }
+
+  .row {
+    margin: 1rem 0;
+    position: relative;
+    overflow: auto;
+    width: 100%;
+
+    .columns.print-2 {
+      width: 45%;
+      float: left;
+      margin-right: 2rem;
+    }
+  }
+
+
+  .print {
 
     font-family: "UniversRoman", Helvetica, Arial, sans-serif;
     line-height: 1.25em;
@@ -63,7 +81,6 @@
       padding-right: 1rem;
     }
 
-
     .notes {
       .note {
         margin: 0 0 0.5rem 0;
@@ -92,7 +109,61 @@
       }
     }
 
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-bottom: 1px solid #ccc;
+
+      th {
+        background: #333;
+        color: white;
+      }
+
+      th, td {
+        text-align: left;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-bottom: 0;
+        vertical-align: top;
+        &.indent {
+          padding-left: 1.5rem;
+        }
+        &.numeric {
+          text-align: right;
+        }
+
+        &.total-due {
+          text-align: right;
+        }
+        &.total, &.total-due  {
+          font-size: 125%;
+          font-weight: bold;
+          padding-top: 0.75rem;
+          border: 0;
+          border-top: 1px solid #ccc;
+        }
+
+      }
+
+      tr.sub-row td {
+        padding-top: 0;
+        padding-bottom: 0.25rem;
+        border-top: 0;
+      }
+
+      &.invoice {
+        border-bottom: 0;
+        th, td {
+          vertical-align: bottom;
+        }
+      }
+
+    }
+
   }
+
+
 
   .truncated-list-post-note {
     color: #999;

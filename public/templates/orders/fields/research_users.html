@@ -1,0 +1,13 @@
+<div class="form-section" ng-class="validationErrors['users'] ? 'has-error' : ''">
+
+  <h2>Researchers</h2>
+
+  <div ng-if="validationErrors['users']" class="validation-error field-validation-error">{{ validationErrors['users'] }}</div>
+
+  <div ng-include="templateUrl('orders/user_list')"></div>
+
+  <div ng-include="templateUrl('orders/fields/user_selector')"></div>
+
+  <div><span class="link" ng-click="createAndAddUser()">Create and add new researcher</span></div>
+
+</div>

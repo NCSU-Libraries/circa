@@ -1,0 +1,20 @@
+<tr>
+  <td>
+
+    <div>
+      <%= item.resource_title %>
+      (<%= item.resource_identifier %>)
+    </div>
+
+    <% if record_type == 'item_order' %>
+      <div>
+        <%= item.container %><%= item.container && record.reproduction_spec.detail ? ';' : '' %>
+        <%= record.reproduction_spec.detail %>
+      </div>
+    <% end %>
+
+  </td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr>

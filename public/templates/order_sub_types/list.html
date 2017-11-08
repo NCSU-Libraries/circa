@@ -1,0 +1,50 @@
+<div ng-include="templateUrl('common/app_header')"></div>
+
+<h1>Order sub-types</h1>
+
+<!-- <div class="record-list-actions">
+<span class="link" ng-click="goto('/settings/order_sub_types/new')"><i class="fa fa-plus"></i>Create new order sub-type</span>
+</div> -->
+
+
+<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+
+<div ng-hide="loading">
+
+  <table cellspacing="0" class="hover">
+
+    <thead>
+      <tr>
+        <th>Order type</th>
+        <th>Sub-type name</th>
+        <th>Sub-type label</th>
+        <th>Default location</th>
+        <th class="table-actions edit" width="1%">&nbsp;</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr ng-repeat="orderSubType in orderSubTypes">
+        <td>
+          {{ orderSubType.order_type['label'] }}
+          <i ng-if="orderSubType.default"
+              class="fa fa-check" aria-hidden="true"></i>
+        </td>
+        <td>{{ orderSubType.name }}</td>
+        <td>{{ orderSubType.label }}</td>
+        <td>{{ orderSubType.default_location['title'] }}</td>
+        <td class="text-right" width="1%">
+          <span class="button tiny edit" ng-click="goto('/settings/order_sub_types/' + orderSubType.id + '/edit')">Edit</span>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+
+</div>
+
+<!--
+<div ng-if="debug" class="data-panel">
+{{ orderSubTypes | json }}
+</div>
+ -->
