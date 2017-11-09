@@ -19,6 +19,7 @@ class OrderSerializer < ActiveModel::Serializer
   has_many :assignees, serializer: OrderUserSerializer
   has_many :notes
   has_one :course_reserve
+  has_one :order_fee, as: :record
 
 
   def created_at

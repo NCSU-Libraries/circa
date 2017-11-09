@@ -467,14 +467,10 @@ class OrdersController < ApplicationController
 
   def update_order_fee
     @existing_order_fee = @order.order_fee
-    if @existing_order_fee && @order_fee
-      @existing_order_fee.update_attributes(@order_fee)
-    elsif @existing_order_fee && !@order_fee
+    if @existing_order_fee && !@order_fee
       @existing_order_fee.destroy
-    elsif @order_fee && !@existing_order_fee
-      atts = { record_type: 'Order', record_id: @order.id }
-      atts.merge!(@order_fee)
-      OrderFee.create!(@order_fee)
+    elsif @order_fee
+      create_or_update_order_fee(@order.id, 'Order', @order_fee)
     end
   end
 
