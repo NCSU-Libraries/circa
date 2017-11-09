@@ -2,9 +2,9 @@
 
   <h2>Assigned staff</h2>
 
-  <div ng-include="templateUrl('orders/assignee_list')"></div>
-
   <div ng-if="validationErrors['assignees']" class="validation-error field-validation-error">{{ validationErrors['assignees'] }}</div>
+
+  <div ng-include="templateUrl('orders/assignee_list')"></div>
 
   <div ng-include="templateUrl('orders/assignee_selector')"></div>
 

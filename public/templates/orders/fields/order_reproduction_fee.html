@@ -29,18 +29,16 @@
       <div ng-class="validationErrors['order_fee_description'] ?
           'has-error' : ''">
 
+        <div class="heading">Fee description</div>
+
+        <input
+            type="text"
+            style="display: inline;"
+            ng-model="order['order_fee']['per_order_fee_description']" />
+
         <div ng-if="validationErrors['order_fee_description']"
             class="validation-error field-validation-error">
           {{ validationErrors['order_fee_description'] }}
-        </div>
-
-        <div class="heading">Fee description</div>
-
-        <div>
-          <input
-              type="text"
-              style="display: inline;"
-              ng-model="order['order_fee']['per_order_fee_description']" />
         </div>
 
       </div>
