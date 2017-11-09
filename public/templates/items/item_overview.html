@@ -77,7 +77,19 @@
       </span>
       <div
           ng-show="itemLocationChangeEnabled == item['id']"
-          ng-include="templateUrl('items/location_selector')"/>
+          ng-include="templateUrl('items/location_selector')">
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div ng-show="!item['digital_object']">
+
+    <div class="inline overview-element">
+      <span class="label">Permanent location:</span>
+      <span class="value">{{ item['permanent_location']['title'] }}</span>
     </div>
 
   </div>

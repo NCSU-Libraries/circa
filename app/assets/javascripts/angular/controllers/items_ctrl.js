@@ -167,18 +167,18 @@ ItemsCtrl.prototype.obsolete = function(scope, itemId) {
   });
 }
 
-
-ItemsCtrl.prototype.updateItemFromSource = function(scope, itemId) {
-  scope.loading = true;
-  var path = '/items/' + itemId + '/update_from_source';
-  var _this = this;
-  this.apiRequests.get(path).then(function(response) {
-    scope.loading = false;
-    if (response.status == 200) {
-      scope.item = response.data['item'];
-    }
-    else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
-    }
-  });
-}
+// Moved to circa_item.js
+// ItemsCtrl.prototype.updateItemFromSource = function(scope, itemId) {
+//   scope.loading = true;
+//   var path = '/items/' + itemId + '/update_from_source';
+//   var _this = this;
+//   this.apiRequests.get(path).then(function(response) {
+//     scope.loading = false;
+//     if (response.status == 200) {
+//       scope.item = response.data['item'];
+//     }
+//     else if (response.data['error'] && response.data['error']['detail']) {
+//       scope.flash = response.data['error']['detail'];
+//     }
+//   });
+// }

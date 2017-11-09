@@ -133,13 +133,20 @@ CircaCtrl.prototype.availableStateEvents = function(scope, item) {
 
 CircaCtrl.prototype.bulkTriggerItemEvent = function(scope, event) {
   var _this = this;
+
+  function eventPermitted(item) {
+    var specialEvents = ['update_from_source'];
+    var permittedEvents = item['permitted_events'].concat(specialEvents);
+    return permittedEvents.indexOf(event) >= 0
+  }
+
   if (scope.order && scope.order['item_orders']) {
     scope.order['item_orders'].forEach(function(itemOrder) {
 
       if (scope.order['bulkEventsList'].indexOf(itemOrder.id) >= 0) {
         var item = itemOrder['item'];
 
-        if (item['permitted_events'].indexOf(event) >= 0) {
+        if (eventPermitted(item)) {
           if (event == 'receive_at_temporary_location') {
             _this.receiveItemAtTemporaryLocation(scope, item)
           }
@@ -188,6 +195,7 @@ CircaCtrl.prototype.updateBulkItemEvents = function(scope) {
       }
     });
 
+    bulkEvents['update_from_source'] = scope.order['item_orders'].length;
     scope.order['bulkItemEvents'] = bulkEvents;
   }
 }
@@ -396,4 +404,20 @@ CircaCtrl.prototype.collectItemIds = function(scope, order) {
       addItemIdsToScope(item_order['item']);
     });
   }
+}
+
+
+CircaCtrl.prototype.updateItemFromSource = function(scope, itemId) {
+  scope.loading = true;
+  var path = '/items/' + itemId + '/update_from_source';
+  var _this = this;
+  this.apiRequests.put(path).then(function(response) {
+    scope.loading = false;
+    if (response.status == 200) {
+      scope.item = response.data['item'];
+    }
+    else if (response.data['error'] && response.data['error']['detail']) {
+      scope.flash = response.data['error']['detail'];
+    }
+  });
 }

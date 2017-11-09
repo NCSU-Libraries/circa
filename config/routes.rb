@@ -65,7 +65,6 @@ Rails.application.routes.draw do
   get 'items/returns_list' => 'items#returns_list'
   get 'items/items_in_transit_for_use' => 'items#items_in_transit_for_use'
   get 'items/items_in_transit_for_use_list' => 'items#items_in_transit_for_use_list'
-  get 'items/:id/update_from_source' => 'items#update_from_source'
   get 'items/:id/movement_history' => 'items#movement_history'
   get 'items/:id/modification_history' => 'items#modification_history'
 
@@ -77,6 +76,7 @@ Rails.application.routes.draw do
   put 'items/:id/check_in' => 'items#check_in'
   put 'items/:id/check_out' => 'items#check_out'
   put 'items/:id/receive_at_temporary_location' => 'items#receive_at_temporary_location'
+  put 'items/:id/update_from_source' => 'items#update_from_source'
   put 'items/:id/:event' => 'items#update_state'
 
   get 'orders/course_reserves' => 'orders#course_reserves'
