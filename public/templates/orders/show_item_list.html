@@ -108,6 +108,15 @@
           </div>
 
 
+          <div class="action">
+            <span
+                poptip="Refresh item data from source"
+                poptip-position="right"
+                class="link secondary"
+                ng-click="triggerItemEvent(item['id'], 'update_from_source')">Refresh item data from source</span>
+          </div>
+
+
           <div ng-if="!item['digital_object'] && !item['obsolete'] && order.open">
             <div
                 class="action"

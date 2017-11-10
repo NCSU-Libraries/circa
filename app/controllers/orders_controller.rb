@@ -349,6 +349,11 @@ class OrdersController < ApplicationController
       note: order_fee_data['note'],
       unit_fee_type: order_fee_data['unit_fee_type']
     }
+
+    [:per_unit_fee, :per_order_fee].each do |key|
+      atts[key] = atts[key] <= 0 ? nil : atts[key]
+    end
+
     existing_order_fee = OrderFee.find_by(record_id: record_id, record_type: record_type)
     if existing_order_fee
       existing_order_fee.update_attributes(atts)

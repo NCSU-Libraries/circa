@@ -69,13 +69,11 @@
 
       <div class="heading">Additional/other fee</div>
 
-      <div>
-        <input
-            type="text"
-            format-as-currency
-            style="display: inline;"
-            ng-model="itemOrder['order_fee']['per_order_fee']" />
-      </div>
+      <input
+          type="text"
+          format-as-currency
+          style="display: inline;"
+          ng-model="itemOrder['order_fee']['per_order_fee']" />
 
     </div>
 
@@ -86,18 +84,16 @@
           ng-class="validationErrors['item_order_fee_other_description'][$index] ?
               'has-error' : ''">
 
+        <div class="heading">Additional/other fee description</div>
+
+        <input
+            type="text"
+            style="display: inline;"
+            ng-model="itemOrder['order_fee']['per_order_fee_description']" />
+
         <div ng-if="validationErrors['item_order_fee_other_description'][$index]"
             class="validation-error field-validation-error">
           {{ validationErrors['item_order_fee_other_description'][$index] }}
-        </div>
-
-        <div class="heading">Additional/other fee description</div>
-
-        <div>
-          <input
-              type="text"
-              style="display: inline;"
-              ng-model="itemOrder['order_fee']['per_order_fee_description']" />
         </div>
 
       </div>

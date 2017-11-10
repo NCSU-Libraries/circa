@@ -19,23 +19,42 @@ OrdersCtrl.prototype.validateOrder = function(scope) {
   scope.hasValidationErrors = false;
 
   this.validateOrderType(scope);
-
   this.validateOrderSubType(scope);
-
   this.validateItems(scope);
-
   this.validateAccessDate(scope);
-
   this.validateReproductionSpec(scope);
-
   this.validateOrderFee(scope);
+  this.validateUsersAndAssignees(scope);
 
-  if (scope.order['users'].length == 0 && scope.order['assignees'].length == 0) {
-    scope.validationErrors['users'] =
-        "Order must be associated with a user, assigned to a staff member, or both.";
-    scope.validationErrors['assignees'] =
-        "Order must be associated with a user, assigned to a staff member, or both.";
+  function blank(value) {
+    return (!value || (typeof value == 'string' && value.length == 0));
   }
+
+  function removeEmptyArrayValues() {
+    var validationErrors = scope.validationErrors;
+    for (key in validationErrors) {
+      var value = validationErrors[key];
+      if (Array.isArray(value)) {
+        if (value.length == 0) {
+          delete scope.validationErrors[key];
+        }
+        else {
+          var allBlank = true;
+          for (var i = 0; i < value.length; i++) {
+            if (!blank(value[i])) {
+              allBlank = false;
+              break;
+            }
+          }
+          if (allBlank) {
+            delete scope.validationErrors[key];
+          }
+        }
+      }
+    }
+  }
+
+  removeEmptyArrayValues();
 
   if (Object.keys(scope.validationErrors).length > 0) {
     valid = false;
@@ -82,6 +101,15 @@ OrdersCtrl.prototype.validateAccessDate = function(scope) {
   }
 }
 
+
+OrdersCtrl.prototype.validateUsersAndAssignees = function(scope) {
+  if (scope.order['users'].length == 0 && scope.order['assignees'].length == 0) {
+    scope.validationErrors['users'] =
+        "Order must be associated with a user, assigned to a staff member, or both.";
+    scope.validationErrors['assignees'] =
+        "Order must be associated with a user, assigned to a staff member, or both.";
+  }
+}
 
 
 OrdersCtrl.prototype.validateReproductionSpec = function(scope) {
@@ -133,6 +161,7 @@ OrdersCtrl.prototype.validateReproductionSpec = function(scope) {
           }
         }
       }
+
     });
   }
 }
