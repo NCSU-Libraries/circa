@@ -351,7 +351,7 @@ class OrdersController < ApplicationController
     }
 
     [:per_unit_fee, :per_order_fee].each do |key|
-      atts[key] = atts[key] <= 0 ? nil : atts[key]
+      atts[key] = atts[key].to_f <= 0 ? nil : atts[key]
     end
 
     existing_order_fee = OrderFee.find_by(record_id: record_id, record_type: record_type)

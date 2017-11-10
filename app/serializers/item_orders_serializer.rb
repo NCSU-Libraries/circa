@@ -112,6 +112,4 @@ class ItemOrdersSerializer < ActiveModel::Serializer
     events
   end
 
-
-
 end

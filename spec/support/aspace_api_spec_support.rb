@@ -13,7 +13,7 @@ module AspaceApiSpecSupport
         resource_identifier: 'MC 00022',
         archival_object_uri: '/repositories/2/archival_objects/3004',
         # item_uri corresponds to values returned from archival_object uri above
-        item_uri: '/repositories/2/resources/23/legalbox/2',
+        item_uri: '/repositories/2/top_containers/758',
         location_uri: '/locations/5960',
         location_title: 'Satellite [Range: 06, Section: E, Shelf: 09]'
       },
@@ -22,7 +22,7 @@ module AspaceApiSpecSupport
         resource_uri: '/repositories/2/resources/23',
         archival_object_uri: '/repositories/2/archival_objects/3002',
         # item_uri corresponds to values returned from archival_object uri above
-        item_uri: '/repositories/2/resources/23/halfbox/1',
+        item_uri: '/repositories/2/top_containers/756',
         location_uri: '/locations/5044',
         location_title: 'Satellite [Range: 06, Section: E, Shelf: 05]'
       },
@@ -31,7 +31,7 @@ module AspaceApiSpecSupport
         resource_uri: '/repositories/2/resources/23',
         archival_object_uri: '/repositories/2/archival_objects/3027',
         # item_uri corresponds to values returned from archival_object uri above
-        item_uri: '/repositories/2/resources/23/halfbox/3',
+        item_uri: '/repositories/2/top_containers/760',
         location_uri: '/locations/5960',
         location_title: 'Satellite [Range: 06, Section: E, Shelf: 09]'
       }
@@ -46,14 +46,14 @@ module AspaceApiSpecSupport
         resource_uri: '/repositories/2/resources/23',
         archival_object_uri: '/repositories/2/archival_objects/3002',
         # item_uri corresponds to values returned from archival_object uri above
-        item_uri: '/repositories/2/resources/23/legalbox/2'
+        item_uri: '/repositories/2/top_containers/756'
       },
       {
         repository_uri: '/repositories/2',
         resource_uri: '/repositories/2/resources/23',
         archival_object_uri: '/repositories/2/archival_objects/3003',
         # item_uri corresponds to values returned from archival_object uri above
-        item_uri: '/repositories/2/resources/23/legalbox/2'
+        item_uri: '/repositories/2/top_containers/756'
       }
     ]
   end

@@ -35,6 +35,7 @@ RSpec.describe OrdersController, type: :controller do
     let(:location) { create(:location) }
     let(:order_type) { OrderType.create(name: 'test', label: 'test') }
     let(:order_sub_type) { OrderSubType.create(name: 'test', label: 'test', order_type_id: order_type.id) }
+    let(:reproduction_fee_order_sub_type) { create(:order_sub_type, name: 'reproduction_fee') }
 
     let(:item_orders) do
       item_records = create_list(:item, 3)
@@ -97,6 +98,7 @@ RSpec.describe OrdersController, type: :controller do
 
     it "crates order with reproduction items, fees and specs" do
       order_data = order_post_data
+      order_data['order_sub_type_id'] = reproduction_fee_order_sub_type.id
       order_data[:item_orders] = reproduction_item_orders
       post :create, order: order_data
       r = JSON.parse(response.body)
