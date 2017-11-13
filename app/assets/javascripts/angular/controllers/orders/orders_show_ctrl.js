@@ -1,12 +1,11 @@
-// OrdersShowCtrl - For show view, inherits from OrderCtrl
+// OrdersShowCtrl - For show view, inherits from OrdersCtrl
 
 var OrdersShowCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
-  OrderCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+  OrdersCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
 
   var _this = this;
 
   var callback = function(scope) {
-    _this.setStatesEvents(scope);
     _this.initializeCheckOut(scope);
     _this.setDefaultPrimaryUserId(scope);
   }
@@ -38,10 +37,12 @@ var OrdersShowCtrl = function($scope, $route, $routeParams, $location, $window, 
     _this.toggleTruncateItems($scope);
   }
 
+  this.applyFunctionsToScope($scope);
+
 }
 
 
-OrdersShowCtrl.prototype = Object.create(OrderCtrl.prototype);
+OrdersShowCtrl.prototype = Object.create(OrdersCtrl.prototype);
 OrdersShowCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('OrdersShowCtrl', OrdersShowCtrl);
 

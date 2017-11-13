@@ -1,27 +1,18 @@
 namespace :users do
 
-  desc "create user with Unity ID"
-  task :unity_create, [:unity_id, :role] => :environment do |t, args|
-    if args[:unity_id]
-      options = { role: args[:role] }
-      User.create_from_ldap(args[:unity_id], options)
-    end
-  end
-
-
-  desc "create generic admin user for initial "
+  desc "create generic admin user"
   task :create_admin => :environment do |t, args|
     admin_role = UserRole.where(name: 'admin').first
     if admin_role
       existing_admin_user = User.where(user_role_id: admin_role.id).first
       if !existing_admin_user
-        user = User.create!(email: 'admin@circa', password: 'circa_admin', user_role_id: admin_role.id)
+        User.create!(email: 'admin@circa', password: 'circa_admin', user_role_id: admin_role.id)
         puts "Admin user created. email: admin@circa, password: circa_admin"
       else
         puts "An admin user already exists with email '#{ existing_admin_user.email }'"
       end
     else
-      puts "Admin role does not yet exist. Run 'rake user_roles:populate'"
+      puts "Admin role does not yet exist. Run 'rake db:seed' to generate this and other required values in the database."
     end
   end
 

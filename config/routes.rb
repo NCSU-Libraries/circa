@@ -36,16 +36,14 @@ Rails.application.routes.draw do
     unlocks: 'users/unlocks'
   }
 
-
-
   get 'current_user' => 'utility#user_data'
 
   get 'archivesspace_redirect(/*archivesspace_path)' => 'utility#archivesspace_redirect'
   get 'archivesspace_resolver(/*archivesspace_uri)' => 'utility#archivesspace_resolver'
 
-  get 'aspace_get' => 'utility#aspace_get'
+  get 'get_archivesspace_record' => 'utility#get_archivesspace_record'
 
-  get 'catalog_get' => 'utility#catalog_get'
+  get 'get_ncsu_catalog_record' => 'utility#get_ncsu_catalog_record'
 
   get 'user_typeahead' => 'utility#user_typeahead'
   get 'user_typeahead/:q' => 'utility#user_typeahead'
@@ -67,40 +65,42 @@ Rails.application.routes.draw do
   get 'items/returns_list' => 'items#returns_list'
   get 'items/items_in_transit_for_use' => 'items#items_in_transit_for_use'
   get 'items/items_in_transit_for_use_list' => 'items#items_in_transit_for_use_list'
+  get 'items/:id/movement_history' => 'items#movement_history'
+  get 'items/:id/modification_history' => 'items#modification_history'
+
+  post 'items/create_from_archivesspace' => 'items#create_from_archivesspace'
+  post 'items/create_from_catalog' => 'items#create_from_catalog'
+
   put 'items/:id/obsolete' => 'items#obsolete'
   put 'items/:id/change_active_order' => 'items#change_active_order'
-  get 'items/:id/update_from_source' => 'items#update_from_source'
-
+  put 'items/:id/check_in' => 'items#check_in'
+  put 'items/:id/check_out' => 'items#check_out'
+  put 'items/:id/receive_at_temporary_location' => 'items#receive_at_temporary_location'
+  put 'items/:id/update_from_source' => 'items#update_from_source'
+  put 'items/:id/:event' => 'items#update_state'
 
   get 'orders/course_reserves' => 'orders#course_reserves'
-
   get 'orders/:id/call_slip' => 'orders#call_slip'
   get 'orders/:id/history' => 'orders#history'
-  put 'orders/:id/update_state' => 'orders#update_state'
-  put 'orders/:id/deactivate_item' => 'orders#deactivate_item'
-  put 'orders/:id/activate_item' => 'orders#activate_item'
-  put 'orders/:id/:event' => 'orders#update_state'
+  get 'orders/:id/invoice' => 'orders#invoice'
 
   post 'orders/:id/items' => 'orders#add_associations'
   post 'orders/:id/users' => 'orders#add_associations'
   post 'orders/:id/assignees' => 'orders#add_associations'
   post 'orders/:id/notes' => 'orders#add_associations'
   post 'orders/:id/associations' => 'orders#add_associations'
+  post 'orders/:id/spawn' => 'orders#spawn'
+
+  put 'orders/:id/update_state' => 'orders#update_state'
+  put 'orders/:id/deactivate_item' => 'orders#deactivate_item'
+  put 'orders/:id/activate_item' => 'orders#activate_item'
+  put 'orders/:id/:event' => 'orders#update_state'
 
   delete 'orders/:id/items' => 'orders#delete_associations'
   delete 'orders/:id/users' => 'orders#delete_associations'
   delete 'orders/:id/assignees' => 'orders#delete_associations'
   delete 'orders/:id/notes' => 'orders#delete_associations'
   delete 'orders/:id/associations' => 'orders#delete_associations'
-
-  put 'items/:id/check_in' => 'items#check_in'
-  get 'items/:id/history' => 'items#history'
-  put 'items/:id/check_out' => 'items#check_out'
-  put 'items/:id/receive_at_temporary_location' => 'items#receive_at_temporary_location'
-  put 'items/:id/:event' => 'items#update_state'
-
-  post 'items/create_from_archivesspace' => 'items#create_from_archivesspace'
-  post 'items/create_from_catalog' => 'items#create_from_catalog'
 
   resources :requests, controller: 'orders'
 
@@ -110,13 +110,14 @@ Rails.application.routes.draw do
   post 'user_roles/update_levels' => 'user_roles#update_levels'
   put 'user_roles/merge' => 'user_roles#merge'
 
-  resources :orders, :locations, :items, :enumeration_values, :user_roles
+  resources :orders, :locations, :items, :enumeration_values, :user_roles, :order_sub_types
 
   get 'circa_locations' => 'utility#circa_locations'
   get 'states_events' => 'utility#states_events'
   get 'local_values' => 'utility#local_values'
   get 'options' => 'utility#options'
   get 'controlled_values' => 'utility#controlled_values'
+  get 'ncsu_iiif_manifest' => 'utility#get_ncsu_iiif_manifest'
 
   get "reports/item_requests_per_resource" => 'reports/item_requests_per_resource'
   get "reports/item_requests_per_location" => 'reports/item_requests_per_location'

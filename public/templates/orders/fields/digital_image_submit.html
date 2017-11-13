@@ -1,0 +1,18 @@
+<button
+    ng-show="digitalImageSelect['mode'] != 'update'"
+    ng-hide="orderIncludesDigitalImageOrder(digitalImageSelect['identifier'])"
+    class="button small"
+    ng-click="applyDigitalImageSelection()">
+  {{ digitalImageSelectSubmitText() }}
+</button>
+
+<button
+    ng-show="digitalImageSelect['mode'] == 'update'"
+    class="button small"
+    ng-click="initializeDigitalImageSelect()">
+  OK
+</button>
+
+<button class="button small" ng-click="initializeDigitalImageSelect()">
+  Cancel
+</button>

@@ -1,0 +1,64 @@
+<div class="form-section">
+
+  <h2>Order fee</h2>
+
+  <div class="text-block">
+    A single fee applied to the entire order.
+    Enter per-page or per-item fees with items.
+  </div>
+
+  <div class="row">
+
+    <div class="small-12 medium-3 columns">
+
+      <div>
+        <div class="heading">Fee</div>
+
+        <input
+          type="text"
+          format-as-currency
+          style="display: inline;"
+          ng-model="order['order_fee']['per_order_fee']" />
+      </div>
+
+    </div>
+
+
+    <div class="small-12 medium-9 columns">
+
+      <div ng-class="validationErrors['order_fee_description'] ?
+          'has-error' : ''">
+
+        <div class="heading">Fee description</div>
+
+        <input
+            type="text"
+            style="display: inline;"
+            ng-model="order['order_fee']['per_order_fee_description']" />
+
+        <div ng-if="validationErrors['order_fee_description']"
+            class="validation-error field-validation-error">
+          {{ validationErrors['order_fee_description'] }}
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="row">
+
+    <div class="small-12 columns">
+      <div class="heading">Fee note</div>
+
+      <div>
+        <textarea ng-model="order['order_fee']['note']"/>
+      </div>
+    </div>
+
+  </div>
+
+</div>

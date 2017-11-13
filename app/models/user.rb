@@ -6,18 +6,19 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   include EnumerationUtilities
+  # app/models/concerns/ref_integrity.rb
   include RefIntegrity
-  include VersionsSupport
-  # include UserRoles
+  # app/models/concerns/solr_doc.rb
   include SolrDoc
-
-  include NCSULdap
-  require 'campus-ldap.rb'
+  include VersionsSupport
 
   belongs_to :user_role
   has_many :order_users
   has_many :item_orders
   has_many :notes, as: :noted
+
+  include NCSULdap
+  require 'campus-ldap.rb'
 
   has_many :orders, through: :order_users do
     def open
@@ -42,6 +43,12 @@ class User < ActiveRecord::Base
   has_paper_trail
 
   before_destroy :deletable?
+
+  before_create do
+    if self.user_role_id.blank?
+      self.user_role_id = UserRole.lowest.id
+    end
+  end
 
   before_save do
     if self.display_name.blank?

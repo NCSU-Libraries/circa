@@ -9,9 +9,19 @@
 
   <div class="record-show-actions" ng-if="!item.obsolete">
 
-    <div class="record-action"><span class="link" ng-click="confirmObsolete(item.id)"><i class="fa fa-times-circle"></i>Obsolete</span></div>
+    <div class="record-action">
+      <span
+          class="link"
+          ng-click="confirmObsolete(item.id)">
+        <i class="fa fa-times-circle"></i>Obsolete</span>
+    </div>
 
-    <div class="record-action"><span class="link" ng-click="updateItemFromSource(item.id)"><i class="fa fa-refresh"></i>Refresh item data from source</span></div>
+    <div class="record-action">
+      <span
+          class="link"
+          ng-click="updateItemFromSource(item.id)">
+        <i class="fa fa-refresh"></i>Refresh item data from source</span>
+      </div>
 
   </div>
 
@@ -58,48 +68,16 @@
 
 
   <div ng-if="!item['digital_object']">
-
-    <section ng-if="!item['event_history']">
-      <span class="link" ng-if="!item['movement_history']" ng-click="getItemHistory(item['id'])">Get movement history</span>
-    </section>
-
-
-    <section ng-if="item['movement_history']">
-
-      <h2>Movement history</h2>
-
-      <table cellspacing="0">
-
-        <thead>
-          <tr>
-            <th>Action</th>
-            <th>Location</th>
-            <th>Date/time</th>
-            <th>Staff responsible</th>
-            <th>Order ID</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr ng-repeat="historyItem in item['movement_history'] | orderBy : historyItem['datetime'] : true">
-            <td>{{ historyItem['action'] }}</td>
-            <td>{{ historyItem['location']['title'] }}</td>
-            <td>{{ historyItem['datetime'] | date: 'yyyy-MM-dd HH:mm:ss a' }}</td>
-            <td><div ng-if="historyItem['user']">{{ historyItem['user']['last_name'] }}, {{ historyItem['user']['first_name'] }} ({{ historyItem['user']['email'] }})</div></td>
-            <td><span class="link" ng-click="showOrder(historyItem['order_id'])" ng-if="historyItem['order_id']">{{ historyItem['order_id'] }} [view]</span></td>
-          </tr>
-        </tbody>
-
-      </table>
-
-    </section>
-
+    <div ng-include="templateUrl('items/movement_history')"/>
   </div>
+
+
+  <div ng-include="templateUrl('items/modification_history')"/>
+
 
 </div>
 
-<!--
+
 <div ng-if="debug" class="data-panel">
 {{ item | json }}
 </div>
- -->

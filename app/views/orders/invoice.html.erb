@@ -1,0 +1,126 @@
+<div class="invoice">
+
+  <h1>Invoice</h1>
+
+
+  <div class="row">
+
+    <section class="invoice-to print-2 columns">
+      <h2>To</h2>
+      <%= @user.display_name %><br>
+      <% if !@user.address1.blank? %>
+        <%= @user.address1 %><br>
+      <% end %>
+      <% if !@user.address2.blank? %>
+        <%= @user.address2 %><br>
+      <% end %>
+      <% if !@user.city.blank? %>
+        <%= @user.city %><%= @user.state ? ',' : '' %>
+      <% end %>
+      <% if !@user.state.blank? %>
+        <%= @user.state %>
+      <% end %>
+      <% if !@user.zip.blank? %>
+        <%= @user.zip %>
+      <% end %>
+      <% if !@user.phone.blank? %>
+        <br><%= @user.phone %>
+      <% end %>
+      <% if !@user.email.blank? %>
+        <br><%= @user.email %>
+      <% end %>
+    </section>
+
+
+    <section class="invoice-from print-2 columns">
+      <h2>From</h2>
+      <%= render partial: "invoice_from_address" %>
+    </section>
+
+  </div>
+
+
+  <section class="invoice-items">
+
+    <table class="invoice">
+
+      <thead>
+
+        <tr>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Unit price</th>
+          <th>Total</th>
+        </tr>
+
+      </thead>
+
+
+      <tbody>
+
+        <% @item_orders.each do |io| %>
+
+          <% if io.order_fee && (io.order_fee.per_unit_fee ||
+              io.order_fee.per_order_fee) %>
+            <%= render partial: "invoice_item_description_row",
+                locals: { record: io, record_type: 'item_order', item: io.item }
+            %>
+          <% end %>
+
+
+          <% if io.order_fee && io.order_fee.per_unit_fee %>
+            <%= render partial: "invoice_per_unit_fee_row",
+                locals: { record: io, record_type: 'item_order' }
+            %>
+          <% end %>
+
+
+          <% if io.order_fee && io.order_fee.per_order_fee %>
+            <%= render partial: "invoice_per_order_fee_row",
+                locals: { record: io, record_type: 'item_order' }
+            %>
+          <% end %>
+
+        <% end %>
+
+
+        <% @digital_image_orders.each do |dio| %>
+
+          <% if dio.order_fee.per_unit_fee || dio.order_fee.per_order_fee %>
+            <%= render partial: "invoice_item_description_row",
+                locals: { record: dio, record_type: 'digital_image_order', item: dio }
+            %>
+          <% end %>
+
+
+          <% if dio.order_fee.per_unit_fee %>
+            <%= render partial: "invoice_per_unit_fee_row",
+                locals: { record: dio, record_type: 'digital_image_order' }
+            %>
+          <% end %>
+
+
+          <% if dio.order_fee.per_order_fee %>
+            <%= render partial: "invoice_per_order_fee_row",
+                locals: { record: dio, record_type: 'digital_image_order' }
+            %>
+          <% end %>
+
+        <% end %>
+
+        <tr>
+          <td colspan="3" class="total-due">Total due</td>
+          <td class="numeric total">
+            <%= number_to_currency(@order_fees_total) %>
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </section>
+
+
+
+</div>

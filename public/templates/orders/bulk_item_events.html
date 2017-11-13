@@ -1,10 +1,35 @@
 <div ng-if="order['num_items'] > 1" class="bulk-item-actions">
 
-  <span class="inline-label">Bulk item actions:</span>
+  <div class="row">
 
-  <span ng-repeat="(event, count) in bulkItemEvents()">
-    <span class="link action" ng-click="bulkTriggerItemEvent(event)">{{ event | removeUnderscores }} ({{ count }})</span>
-    <span ng-if="!$last">|</span>
-  </span>
+    <div class="small-1 columns checkbox-column">
+      <span class="link"
+          ng-show="order['bulkEventsList'].length < order['item_orders'].length"
+          ng-click="addAllItemOrdersToBulkEventsList()"><i class="fa fa-check-square-o" aria-hidden="true"></i>
+      </span>
+
+      <span class="link"
+          ng-show="order['bulkEventsList'].length > 0"
+          ng-click="clearBulkEventsList()"><i class="fa fa-minus-square-o" aria-hidden="true"></i>
+      </span>
+    </div>
+
+
+    <div class="small-11 columns">
+      <div ng-show="order['bulkEventsList'].length > 0">
+        <span class="inline-label">Bulk actions on selected items:</span><br>
+
+        <span ng-repeat="(event, count) in order.bulkItemEvents">
+          <span class="link action" ng-click="bulkTriggerItemEvent(event)">{{ event | removeUnderscores }} ({{ count }})</span>
+          <span ng-if="!$last">|</span>
+        </span>
+      </div>
+
+      <div ng-show="!order['bulkEventsList'] || order['bulkEventsList'].length == 0">
+        <span class="inline-label">Select items to enable bulk actions</span><br>
+      </div>
+    </div>
+
+  </div>
 
 </div>

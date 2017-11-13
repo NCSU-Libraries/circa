@@ -13,8 +13,12 @@ var ItemsCtrl = function($scope, $route, $routeParams, $location, $window, $moda
   // $scope.sort = 'resource_title asc';
   // $scope.sortOrder = 'asc';
 
-  $scope.getItemHistory = function(id) {
-    _this.getItemHistory($scope, id);
+  $scope.getItemMovementHistory = function(id) {
+    _this.getItemMovementHistory($scope, id);
+  }
+
+  $scope.getItemModificationHistory = function(id) {
+    _this.getItemModificationHistory($scope, id);
   }
 
   this.initializeFilterConfig($scope);
@@ -84,16 +88,32 @@ ItemsCtrl.prototype.getItem = function(scope, id, callback) {
 }
 
 
-ItemsCtrl.prototype.getItemHistory = function(scope, id, callback) {
-  var path = '/items/' + id + '/history';
+ItemsCtrl.prototype.getItemMovementHistory = function(scope, id, callback) {
+  var path = '/items/' + id + '/movement_history';
   var _this = this;
   this.apiRequests.get(path).then(function(response) {
     if (response.status == 200) {
       if (scope['item']) {
-        scope['item']['movement_history'] = response.data['item']['movement_history'];
+        scope['item']['movement_history'] =
+            response.data['item']['movement_history'];
       }
-      else {
-        scope.item = response.data['item'];
+      _this.commonUtils.executeCallback(callback, scope);
+    }
+    else {
+      scope.error = response.data['error'];
+    }
+  });
+}
+
+
+ItemsCtrl.prototype.getItemModificationHistory = function(scope, id, callback) {
+  var path = '/items/' + id + '/modification_history';
+  var _this = this;
+  this.apiRequests.get(path).then(function(response) {
+    if (response.status == 200) {
+      if (scope['item']) {
+        scope['item']['modification_history'] =
+            response.data['item']['modification_history'];
       }
       _this.commonUtils.executeCallback(callback, scope);
     }
@@ -147,19 +167,18 @@ ItemsCtrl.prototype.obsolete = function(scope, itemId) {
   });
 }
 
-
-ItemsCtrl.prototype.updateItemFromSource = function(scope, itemId) {
-  scope.loading = true;
-  var path = '/items/' + itemId + '/update_from_source';
-  var _this = this;
-  this.apiRequests.get(path).then(function(response) {
-    scope.loading = false;
-    if (response.status == 200) {
-      scope.item = response.data['item'];
-    }
-    else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
-    }
-  });
-}
-
+// Moved to circa_item.js
+// ItemsCtrl.prototype.updateItemFromSource = function(scope, itemId) {
+//   scope.loading = true;
+//   var path = '/items/' + itemId + '/update_from_source';
+//   var _this = this;
+//   this.apiRequests.get(path).then(function(response) {
+//     scope.loading = false;
+//     if (response.status == 200) {
+//       scope.item = response.data['item'];
+//     }
+//     else if (response.data['error'] && response.data['error']['detail']) {
+//       scope.flash = response.data['error']['detail'];
+//     }
+//   });
+// }

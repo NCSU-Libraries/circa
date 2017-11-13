@@ -1,0 +1,117 @@
+<div class="row">
+
+    <div class="small-12 columns">
+      <div class="heading">Fee per page</div>
+
+      <div class="row">
+        <div class="small-12 columns">
+
+          <div ng-if="itemOrder['order_fee']['unit_fee_options'].length > 0">
+
+            <span
+                ng-repeat="option in itemOrder['order_fee']['unit_fee_options']"
+                class="radio-inline">
+              <input
+                  type="radio"
+                  ng-model="itemOrder['order_fee']['unit_fee_type']"
+                  ng-value="option['name']"
+                  ng-change="setUnitFee(itemOrder, option['value'])"/>
+              <span ng-if="option['name'] == 'default_internal'">NCSU:</span>
+              <span ng-if="option['name'] == 'default_external'">non-NCSU:</span>
+              {{ option['value'] | currency  }}
+            </span>
+
+            <span class="radio-inline">
+              <input
+                  type="radio"
+                  ng-model="itemOrder['order_fee']['unit_fee_type']"
+                  value="custom" />
+              Custom fee amount
+              <span ng-show="itemOrder['order_fee']['unit_fee_type'] == 'custom'">
+                <input
+                    type="text"
+                    format-as-currency
+                    style="display: inline; width: 7em;"
+                    ng-model="itemOrder['order_fee']['per_unit_fee']" />
+              </span>
+            </span>
+
+            <span class="radio-inline">
+              <input
+                  type="radio"
+                  ng-model="itemOrder['order_fee']['unit_fee_type']"
+                  value="none"
+                  ng-change="setUnitFee(itemOrder, 0)"/>
+              None
+            </span>
+
+          </div>
+
+          <div ng-if="itemOrder['order_fee']['unit_fee_options'].length == 0">
+            <input
+                type="text"
+                format-as-currency
+                style="display: inline; width: 7em;"
+                ng-model="itemOrder['order_fee']['per_unit_fee']" />
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="row">
+
+    <div class="small-12 medium-3 columns">
+
+      <div class="heading">Additional/other fee</div>
+
+      <input
+          type="text"
+          format-as-currency
+          style="display: inline;"
+          ng-model="itemOrder['order_fee']['per_order_fee']" />
+
+    </div>
+
+
+    <div class="small-12 medium-9 columns">
+
+      <div
+          ng-class="validationErrors['item_order_fee_other_description'][$index] ?
+              'has-error' : ''">
+
+        <div class="heading">Additional/other fee description</div>
+
+        <input
+            type="text"
+            style="display: inline;"
+            ng-model="itemOrder['order_fee']['per_order_fee_description']" />
+
+        <div ng-if="validationErrors['item_order_fee_other_description'][$index]"
+            class="validation-error field-validation-error">
+          {{ validationErrors['item_order_fee_other_description'][$index] }}
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="row">
+
+    <div class="small-12 columns">
+      <div class="heading">Fee note</div>
+
+      <div>
+        <textarea ng-model="itemOrder['order_fee']['note']"/>
+      </div>
+    </div>
+
+  </div>

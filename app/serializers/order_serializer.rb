@@ -1,19 +1,25 @@
 class OrderSerializer < ActiveModel::Serializer
 
-  attributes :id, :access_date_start, :access_date_end, :order_type_id, :order_sub_type_id, :confirmed, :open, :created_at, :updated_at,
-    :archivesspace_records, :catalog_records, :catalog_items,
-    :current_state, :permitted_events, :available_events, :states_events,
-    :default_location, :num_items, :primary_user_id, :primary_user_id, :num_items_ready, :created_by_user, :deletable, :item_ids_in_use
+  attributes :id, :access_date_start, :access_date_end, :order_type_id,
+      :order_sub_type_id, :confirmed, :open, :location_id, :invoice_date,
+      :invoice_payment_date, :invoice_attn, :created_at, :updated_at,
+      :cloned_order_id, :archivesspace_records, :catalog_records,
+      :catalog_items, :order_fee, :current_state, :permitted_events,
+      :available_events, :states_events, :num_items,
+      :primary_user_id, :primary_user_id, :num_items_ready, :created_by_user,
+      :deletable, :item_ids_in_use, :has_fees, :clone_orders
 
   belongs_to :order_type
   belongs_to :order_sub_type
   belongs_to :temporary_location
-  has_many :items, serializer: OrderItemsSerializer
-  has_many :item_orders, serializer: ItemOrderSerializer
+  # has_many :items, serializer: OrderItemsSerializer
+  has_many :item_orders, serializer: ItemOrdersSerializer
+  has_many :digital_image_orders, serializer: DigitalImageOrdersSerializer
   has_many :users, serializer: OrderUserSerializer
   has_many :assignees, serializer: OrderUserSerializer
   has_many :notes
   has_one :course_reserve
+  has_one :order_fee, as: :record
 
 
   def created_at
@@ -26,13 +32,6 @@ class OrderSerializer < ActiveModel::Serializer
   end
 
 
-  def default_location
-    if object.temporary_location
-      object.temporary_location.default
-    end
-  end
-
-
   def num_items
     object.items.length
   end
@@ -40,7 +39,7 @@ class OrderSerializer < ActiveModel::Serializer
 
   def primary_user_id
     primary_user = object.primary_user
-    primary_user ? primary_user.user.id : nil
+    primary_user ? primary_user.id : nil
   end
 
 

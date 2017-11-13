@@ -10,7 +10,8 @@ var circaApp = angular.module('circaApp', [
   'circaControllers',
   'mm.foundation',
   'angucomplete-alt',
-  'countrySelect'
+  'countrySelect',
+  'bcherny/formatAsCurrency'
 ]);
 
 circaApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
@@ -22,9 +23,9 @@ circaApp.config(['$routeProvider', '$locationProvider', function($routeProvider,
   $routeProvider.when('/orders/new', { templateUrl: templatePath + 'orders/new.html', controller: 'OrdersNewCtrl' });
   $routeProvider.when('/orders/:orderId', { templateUrl: templatePath + 'orders/show.html', controller: 'OrdersShowCtrl' });
   $routeProvider.when('/orders/:orderId/edit', { templateUrl: templatePath + 'orders/edit.html', controller: 'OrdersEditCtrl' });
+  $routeProvider.when('/orders/:orderId/clone', { templateUrl: templatePath + 'orders/new.html', controller: 'OrdersCloneCtrl' });
   $routeProvider.when('/items', { templateUrl: templatePath + 'items/list.html', controller: 'ItemsListCtrl' });
   $routeProvider.when('/items/:itemId', { templateUrl: templatePath + 'items/show.html', controller: 'ItemsShowCtrl' });
-  // $routeProvider.when('/items/:itemId/history', {templateUrl: templatePath + 'items/history.html', controller: 'ItemsHistoryCtrl'});
   $routeProvider.when('/users', { templateUrl: templatePath + 'users/list.html', controller: 'UsersListCtrl' });
   $routeProvider.when('/users/new', { templateUrl: templatePath + 'users/new.html', controller: 'UsersNewCtrl' });
   $routeProvider.when('/users/:userId', { templateUrl: templatePath + 'users/show.html', controller: 'UsersShowCtrl' });
@@ -39,12 +40,19 @@ circaApp.config(['$routeProvider', '$locationProvider', function($routeProvider,
   $routeProvider.when('/reports/requests_per_location', { templateUrl: templatePath + 'reports/requests_per_location.html' });
   $routeProvider.when('/reports/transfers_per_location', { templateUrl: templatePath + 'reports/transfers_per_location.html' });
   $routeProvider.when('/settings', { templateUrl: templatePath + 'application/settings.html', controller: 'SettingsCtrl' });
+
   $routeProvider.when('/settings/enumeration_values/list/:enumerationName', { templateUrl: templatePath + 'enumeration_values/list.html', controller: 'EnumerationValuesListCtrl' });
   $routeProvider.when('/settings/enumeration_values/new/:enumerationName', { templateUrl: templatePath + 'enumeration_values/new.html', controller: 'EnumerationValuesNewCtrl' });
   $routeProvider.when('/settings/enumeration_values/:enumerationName/:enumerationValueId/edit', { templateUrl: templatePath + 'enumeration_values/edit.html', controller: 'EnumerationValuesEditCtrl' });
   $routeProvider.when('/settings/enumeration_values/:enumerationName/:enumerationValueId/merge', { templateUrl: templatePath + 'enumeration_values/merge.html', controller: 'EnumerationValuesMergeCtrl' });
-  $routeProvider.when('/settings/user_roles/list', { templateUrl: templatePath + 'user_roles/list.html', controller: 'UserRolesListCtrl' });
+
+  $routeProvider.when('/settings/user_roles', { templateUrl: templatePath + 'user_roles/list.html', controller: 'UserRolesListCtrl' });
   $routeProvider.when('/settings/user_roles/new', { templateUrl: templatePath + 'user_roles/new.html', controller: 'UserRolesNewCtrl' });
   $routeProvider.when('/settings/user_roles/:userRoleId/edit', { templateUrl: templatePath + 'user_roles/edit.html', controller: 'UserRolesEditCtrl' });
   $routeProvider.when('/settings/user_roles/:userRoleId/merge', { templateUrl: templatePath + 'user_roles/merge.html', controller: 'UserRolesMergeCtrl' });
+
+  $routeProvider.when('/settings/order_sub_types', { templateUrl: templatePath + 'order_sub_types/list.html', controller: 'OrderSubTypesListCtrl' });
+  $routeProvider.when('/settings/order_sub_types/new', { templateUrl: templatePath + 'order_sub_types/new.html', controller: 'OrderSubTypesNewCtrl' });
+  $routeProvider.when('/settings/order_sub_types/:orderSubTypeId/edit', { templateUrl: templatePath + 'order_sub_types/edit.html', controller: 'OrderSubTypesEditCtrl' });
+
 }]);

@@ -1,0 +1,100 @@
+add = lambda do |n|
+x = n + 1
+puts x
+self.(x)
+add(1)
+add.(1)
+`pwd`
+cmd = "pwd
+"
+cmd = "pwd"
+`cmd`
+o = OrderSubType.first
+ost = OrderSubType.first
+ost.orders
+ost.orders.class
+r = ActiveRecord::Associations::CollectionProxy.new
+ot = OrderType.first
+ot
+ot.order_sub_types.flat_map { |ost| ost.orders }
+o1 = ot.order_sub_types.flat_map { |ost| ost.orders }
+o1.length
+ot.orders.length
+Order.count
+require Nokogiri
+include 'nokogiri'
+require 'nokogiri'
+include Nokogiri
+c = "<this>1</this><that>2</that>"
+fragment = Nokogiri::XML::DocumentFragment.parse(c)
+fragment.to_s
+fragment.element_children
+fragment.root
+fragment.name
+fragment.class
+ProcessingSessions.count
+ProcessingSession.count
+s = 1
+case s
+def test(x)
+case x
+when 1
+'boo'
+when 2
+'hoo'
+test(1)
+Dir
+Dir.empty?('/Users/trthorn2/Desktop/scps_test_data/emptytest')
+dir = '/Users/trthorn2/Desktop/scps_test_data/emptytest/content'
+dir = '/Users/trthorn2/Desktop/scps_test_data/emptytest/test'
+Dir.empty?(dir)
+Dir.entries(dir).length
+dir = '/Users/trthorn2/Desktop/scps_test_data/emptytest'
+directories = `find #{dir} -type d`.split("\n")
+puts directories
+directories = `find #{dir} -type d`
+Dir.entries(dir)
+puts File.directory?(e)
+puts e.match(/^\.{1,2}$/)
+Dir.entries(dir).each do |e|
+puts e
+puts e.match(/^\.{1,2}$/).nil?
+end
+dir
+ds = dir + '/.DS_Store'
+puts File.directory?(ds)
+puts File.file?(ds)
+'thing' =~ /hin/
+'thing' =~ /\./
+a1 = [1,2,3]
+ai += [5,6]
+a1 += [5,6]
+o.order_fees
+o.type_of?(Order)
+o.kind_of?(Order)
+o.class == ItemOrder
+o.class == Order
+(1..3).inject { |sum, n| sum + n }  
+(0.3).inject { |sum, n| sum + n }  
+o.states_events
+o.order_type.name != 'reproduction'
+config = o.states_events_config
+config.reject { |x| x[:to_state] == :in_progress }
+o = Order.find 1508
+o.states_events_config
+o = Order.find 1540
+o.order_fees_total
+rake users:ldap_attributes[mrnutt]
+rake users:ldap_record[mrnutt]
+rake users:ldap_record["mrnutt"]
+rake users:unity_create[mrnutt]
+OrderSubType.where(id: 13).pluck(:name)
+OrderSubType.where(id: 13).limit(1).pluck(:name)
+OrderSubType.where(id: 13).pluck(:name)[0]
+OrderSubType.name_from_id(13)
+Rails.env
+YAML.load_file('config/archivesspace.yml')
+ENV.update YAML.load_file('config/archivesspace.yml')[Rails.env] rescue {}
+Item.create_or_update_from_archivesspace('/repositories/2/archival_objects/3003')
+ENV
+ENV.clear

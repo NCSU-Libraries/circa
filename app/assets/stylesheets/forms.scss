@@ -8,6 +8,19 @@
   input {
     margin-bottom: 0;
   }
+
+  .label.inline, label.inline {
+    display: inline !important;
+    padding: 0;
+  }
+
+  .instruction {
+    margin: 0 0 .25rem 0;
+    &.small {
+      font-size: 90%;
+    }
+  }
+
 }
 
 .form-field-note {
@@ -28,6 +41,13 @@
   }
 }
 
+.text-block {
+  margin: 1rem 0;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
 
 input.datepicker-input {
   width: 10em;
@@ -138,6 +158,8 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
   border: 1px solid $grayLighter;
   margin: 2px 0 1rem 0;
 
+
+
   .heading {
     font-size: 110%;
     font-weight: bold;
@@ -158,17 +180,48 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
     margin-bottom: 0 !important;
   }
 
+
   .selection-display {
     border: 1px solid $grayLighter;
     padding: 1rem;
     margin-top: 1rem;
     background: $grayGhost;
+
     .record-detail {
       padding: 0;
       margin-bottom: 1rem;
     }
+
     .heading {
       margin: 1rem 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+
+    .digital-image-select-item {
+
+      .image-label {
+        font-size: 80%;
+        line-height: 1.25em;
+        margin: 0 0 0.5rem 0;
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      img {
+        border: 2px solid $grayLight;
+        opacity: 0.6;
+      }
+
+      &.selected img {
+        border: 2px solid $red;
+        opacity: 1;
+      }
     }
   }
 
@@ -179,6 +232,20 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
     color: $white;
     font-weight: bold;
   }
+
+  ul {
+    margin-left: 0 !important;
+
+    li ul {
+      margin-left: 0 !important;
+    }
+
+    li {
+      background: none !important;
+    }
+  }
+
+
 }
 
 
@@ -205,4 +272,12 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
 .radio-inline {
   white-space: nowrap;
   padding-right: 1rem;
+}
+
+textarea {
+  margin: 0 0 0.5rem 0;
+}
+
+input.integer {
+  width: 5rem;
 }

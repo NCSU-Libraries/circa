@@ -36,12 +36,7 @@ section {
   z-index: -999;
 }
 
-
-
-
-
 .alert-box {
-
   border-width: 0;
 
   &.notice, &.info {
@@ -52,7 +47,6 @@ section {
     background-color: $orange;
   }
 }
-
 
 .record-show-actions, .record-list-actions,
 table .record-list-actions {
@@ -68,10 +62,7 @@ table .record-list-actions {
   .admin-override {
     float: right;
   }
-
 }
-
-
 
 button, .button {
   background: linear-gradient(to bottom, $red 0%, $red2 100%);
@@ -93,15 +84,12 @@ button, .button {
   }
 }
 
-
 td .button, td button,
 .record-actions button, .record-actions .button {
   margin-bottom: 0;
 }
 
-
 .record-overview, .record-detail {
-
   .row {
     margin-left: 0;
   }
@@ -149,9 +137,23 @@ td .button, td button,
     border-width: 0;
     margin: 0;
 
-    .button {
-      padding: 0;
-    }
+    // .button {
+    //   padding: 0;
+    // }
+
+  }
+
+}
+
+
+.version-overview {
+
+  .label.current {
+    font-weight: bold;
+  }
+
+  .version-update-info {
+    margin-bottom: 0.5rem;
   }
 
 }
@@ -167,7 +169,6 @@ td .button, td button,
   }
 }
 
-
 ul.actions-list {
   li {
     white-space: nowrap;
@@ -176,6 +177,12 @@ ul.actions-list {
   }
 }
 
+.sub-records-list-header {
+  padding: .5rem;
+  margin: 0;
+  border: 1px solid $grayLight;
+  border-bottom: 0;
+}
 
 ul.sub-records-list, ul.records-list {
 
@@ -185,12 +192,12 @@ ul.sub-records-list, ul.records-list {
   li {
     padding: .5rem;
     margin: 0;
-    border: 1px solid $grayLight;
+    border: 1px solid $grayLightest;
     border-top: 0;
     background: $bodyBackground;
 
     &:first-child {
-      border-top: 1px solid $grayLight;
+      border-top: 1px solid $grayLightest;
     }
 
     .sub-record-actions, .record-actions {
@@ -199,7 +206,7 @@ ul.sub-records-list, ul.records-list {
       .action {
         text-transform: uppercase;
         font-size: 80%;
-        line-height: 1.1em;
+        line-height: 1.1em !important;
         margin-bottom: 1em;
         div {
           display: inline;
@@ -209,14 +216,52 @@ ul.sub-records-list, ul.records-list {
         }
       }
     }
-  }
 
+    ul {
+      margin: 0.5rem 1rem;
+      list-style: circle;
+      border: none;
+      li {
+        border: none;
+        padding: inherit;
+        &:first-child {
+          border-top: none;
+        }
+      }
+    }
+
+    .subhead {
+      margin: 0.5rem 0 0.25rem 0;
+    }
+
+    .columns, .column {
+      padding-left: 0.5rem !important;
+      padding-right: 1.25rem !important;
+
+      &.checkbox-column {
+        padding-right: 0 !important;
+        input[type="checkbox"] {
+          margin: 0 !important;
+          cursor: pointer;
+        }
+      }
+    }
+    .row, .row .row {
+      margin-left: 0 !important;
+    }
+
+    .row .row {
+      .columns, .column {
+        padding-left: 0 !important;
+        padding-right: 1.875rem !important;
+      }
+    }
+  }
 
   &.notes-list li {
     border: 0;
     padding: 0 0 .5rem 0;
   }
-
 
   &.users-list {
     li {
@@ -226,7 +271,6 @@ ul.sub-records-list, ul.records-list {
     }
   }
 
-
   &.removed {
     li {
       background: $grayGhost;
@@ -234,13 +278,9 @@ ul.sub-records-list, ul.records-list {
   }
 }
 
-
 ul.records-list {
   margin-bottom: 1rem;
 }
-
-
-
 
 .empty-list-label, .empty-content {
   font-style: italic;
@@ -248,21 +288,15 @@ ul.records-list {
   color: $grayLight;
 }
 
-
 .truncated-list-post-note {
   color: $gray;
   font-size: 0.8em;
   text-transform: uppercase;
 }
 
-
-
-
-
 .positive {
   color: $green;
 }
-
 
 .negative {
   color: $red;
@@ -274,8 +308,6 @@ ul.records-list {
   text-transform: uppercase;
 }
 
-
-
 main {
 
   @extend .row;
@@ -285,6 +317,10 @@ main {
 
   font-family: "UniversRoman", Arial, sans-serif;
   font-size: 0.9375rem;
+
+  .row {
+    margin-left: inherit;
+  }
 
   a, .link {
     color: $blue;
@@ -328,14 +364,11 @@ main {
     content: none;
   }
 
-
   .small {
     font-size: 80%;
   }
 
-
-
-  h1, h2, h3, .heading {
+  h1, h2, h3, h4, .heading {
     font-family: "GlyphaRoman", serif;
     font-weight: bold;
   }
@@ -370,13 +403,13 @@ main {
   h2 {
     font-size: 1.5rem;
     font-weight: bold;
-    margin: 0 0 0.5rem 0;
+    margin: 0.5rem 0;
   }
 
   h3 {
     font-size: 1.25rem;
     font-weight: bold;
-    margin: 0 0 0.5rem 0;
+    margin: 0.5rem 0 0.2rem 0;
   }
 
   p {
@@ -384,11 +417,10 @@ main {
     padding: 0;
   }
 
-
-
   ul, ol, dl {
     font-size: 0.9375rem;
   }
+
 
   // app header
 
@@ -432,7 +464,6 @@ main {
       }
     }
 
-
     .app-nav {
       text-transform: uppercase;
       // font-size: 80%;
@@ -457,23 +488,13 @@ main {
       right: 0;
       text-transform: none;
     }
-
-
-
   }
-
-
-
 }
-
 
 .admin-override {
   font-size: 80%;
   text-transform: uppercase;
 }
-
-
-
 
 // Big Nav
 
@@ -487,10 +508,6 @@ main {
   }
 }
 
-
-
-
-
 .pagination, ul.pagination {
   margin: 0 0 0.5rem 0;
   width: 100%;
@@ -502,7 +519,6 @@ main {
     padding-right: 0;
   }
 }
-
 
 .list-sort {
   margin: 0 0 1rem 0;
@@ -525,7 +541,6 @@ main {
     font-weight: bold;
   }
 }
-
 
 .search-info {
 
@@ -553,7 +568,6 @@ main {
   }
 }
 
-
 .sortable {
   .sort-choice, .sort-order {
     &:hover {
@@ -569,12 +583,8 @@ main {
       cursor: default;
       color: inherit;
     }
-
   }
-
 }
-
-
 
 .filters {
 
@@ -597,9 +607,7 @@ main {
     .date-range-point {
       padding-right: 1rem;
     }
-
   }
-
 
   .filter-toggle {
     padding: 3px;
@@ -616,12 +624,10 @@ main {
     font-size: 80%;
   }
 
-
   .button {
     margin: 0;
   }
 }
-
 
 .active-filters {
   background: $grayDark;
@@ -656,10 +662,6 @@ main {
   }
 }
 
-
-
-
-
 .data-panel {
   @extend .panel;
   height: 10rem;
@@ -667,9 +669,6 @@ main {
   background: $grayLightest;
   margin: 2rem 0;
 }
-
-
-
 
 table {
 
@@ -731,10 +730,6 @@ table {
 
 }
 
-
-
-
-
 .loading {
   background-image: image-url("loading.gif");
   background-position: center top;
@@ -754,14 +749,9 @@ span.postfix, label.postfix {
   color: $white;
 }
 
-
-
-
 .date-range-delimeter {
   padding: 0 0.5rem;
 }
-
-
 
 .block {
   display: block;
@@ -817,7 +807,6 @@ span.postfix, label.postfix {
   }
 }
 
-
 .flash {
   background: $yellow;
   padding: 0.5rem;
@@ -829,6 +818,53 @@ span.postfix, label.postfix {
   // z-index: 1000;
 }
 
+.tabs {
+
+  position: relative;
+  overflow: visible;
+  width: 100%;
+  padding-bottom: 2px;
+  margin-bottom: 1rem !important;
+
+  .tab {
+    font-size: 90%;
+    float: left;
+    padding: 0 2px 2px 0;
+    text-align: center;
+    border-bottom: 1px solid $grayLightest;
+
+    .link {
+      text-decoration: none;
+      color: $textColor;
+      &:hover {
+        color: $green;
+        text-decoration: underline;
+      }
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    .tab-inner {
+      padding: 1rem 1.5rem;
+      background: $grayGhost;
+      display: block;
+
+      &:hover {
+        background: $grayLightest;
+      }
+    }
+
+    &.active {
+      .tab-inner {
+        background: $white;
+      }
+    }
+  }
+
+}
+
 dl.tabs {
   dd {
     border-right: 2px solid $white;
@@ -837,15 +873,21 @@ dl.tabs {
   }
 }
 
-.tabset .tab-content {
-  padding: 0 1rem;
-}
-
 dl.tabs dd > a {
   font-size: 90%;
+}
+
+
+.tabset .tab-content {
+  padding: 0 1rem;
 }
 
 p.warning, div.warning, span.warning {
   color: $red;
   font-weight: bold;
+}
+
+.inline-action {
+  font-size: 80%;
+  padding-left: 0.5rem;
 }

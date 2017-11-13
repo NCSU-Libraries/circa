@@ -4,17 +4,21 @@ class ItemsController < ApplicationController
 
   before_action :set_item, only: [
     :show, :edit, :update, :destroy, :update_state, :check_out, :check_in,
-    :receive_at_temporary_location, :history, :obsolete, :change_active_order,
-    :update_from_source
+    :receive_at_temporary_location, :obsolete, :change_active_order,
+    :update_from_source, :movement_history, :modification_history
   ]
 
   before_action :set_params
 
-  before_action :verify_order_id, :verify_check_out_permitted, :verify_users, only: [ :check_out ]
+  before_action :verify_order_id, :verify_check_out_permitted, :verify_users,
+      only: [ :check_out ]
 
   before_action :get_active_access_session, only: [ :check_in ]
 
   before_action :verify_event_permitted, only: [ :check_in, :update_state ]
+
+  before_action :set_paper_trail_whodunnit
+
 
   def index
     @params = params
@@ -110,7 +114,8 @@ class ItemsController < ApplicationController
   # end
 
 
-  # Will create one or more items from the ArchivesSpace record corresponding to params[:archivesspace_uri]
+  # Will create one or more items from the ArchivesSpace record
+  # corresponding to params[:archivesspace_uri]
   # If any item already exists it will be updated
   # Returns array of item records (including both new and updated records)
   def create_from_archivesspace
@@ -120,12 +125,15 @@ class ItemsController < ApplicationController
         render json: @items ? @items : {}
         return
       else
-        render json: { error: { detail: 'Bad request: No ArchivesSpace URI provided' } }, status: 400
+        render json: { error: { detail: 'Bad request: No ArchivesSpace URI provided' } },
+            status: 400
         return
       end
     rescue Exception => e
       logger.error e
-      render json: { error: { detail: "Internal server error: #{e.message} - #{e.backtrace.inspect}" } }, status: 500
+      error = { detail: "Internal server error: #{e.message} -
+          #{e.backtrace.inspect}" }
+      render json: { error: error }, status: 500
     end
   end
 
@@ -135,11 +143,14 @@ class ItemsController < ApplicationController
   # Returns single item record
   def create_from_catalog
     if (params[:catalog_record_id].blank? || params[:catalog_item_id].blank?)
-      raise CircaExceptions::BadRequest, "Catalog record id and item id were not provided."
+      raise CircaExceptions::BadRequest,
+          "Catalog record id and item id were not provided."
     else
-      @item = Item.create_or_update_from_catalog(params[:catalog_record_id], params[:catalog_item_id])
+      @item = Item.create_or_update_from_catalog(params[:catalog_record_id],
+          params[:catalog_item_id])
       if !@item
-        raise CircaExceptions::BadRequest, "No catalog record found matching the id provided."
+        raise CircaExceptions::BadRequest,
+            "No catalog record found matching the id provided."
       else
         render json: @item
       end
@@ -190,7 +201,6 @@ class ItemsController < ApplicationController
 
   def obsolete
     @item.mark_as_obsolete
-    puts "IT HAPPENED"
     @item.reload
     # render json: nil, status: 204
     render json: @item
@@ -244,8 +254,23 @@ class ItemsController < ApplicationController
   end
 
 
-  def history
-    render json: @item, serializer: ItemHistorySerializer
+  def movement_history
+    response = {
+      item: {
+        movement_history: @item.movement_history
+      }
+    }
+    render json: response
+  end
+
+
+  def modification_history
+    response = {
+      item: {
+        modification_history: @item.modification_history
+      }
+    }
+    render json: response
   end
 
 
@@ -381,8 +406,13 @@ class ItemsController < ApplicationController
     @items.each do |i|
       i = i.with_indifferent_access
       i[:open_order_ids].each do |oid|
-        @orders[oid] ||= { items: [] }
-        @orders[oid][:items] << i
+        io = ItemOrder.where(order_id: oid, item_id: i[:id]).first
+        if io
+          io = io.attributes.with_indifferent_access
+          io[:item] = i
+          @orders[oid] ||= { item_orders: [] }
+          @orders[oid][:item_orders] << io
+        end
       end
     end
     @total_items = @items.length
@@ -392,38 +422,29 @@ class ItemsController < ApplicationController
 
   def get_pending_transfers
     @items = get_items_in_state(:ordered, 'next_scheduled_use_date asc')
-    @orders = {}
-    @facilities = []
-
-    @items.each do |i|
-      i = i.with_indifferent_access
-      i[:open_order_ids].each do |oid|
-        @orders[oid] ||= { items: [] }
-        @orders[oid][:items] << i
-      end
-
-      if i[:permanent_location]
-        @facilities << i[:permanent_location][:facility]
-      else
-        @facilities << 'unknown'
-      end
-
-    end
-    @total_items = @items.length
-    @facilities.uniq!
-    @orders.with_indifferent_access
+    prepare_common_response_objects
   end
 
 
   def get_returns_in_transit
     @items = get_items_in_state(:returning_to_permanent_location)
+    prepare_common_response_objects
+  end
+
+
+  def prepare_common_response_objects
     @orders = {}
     @facilities = []
     @items.each do |i|
       i = i.with_indifferent_access
       i[:open_order_ids].each do |oid|
-        @orders[oid] ||= { items: [] }
-        @orders[oid][:items] << i
+        @orders[oid] ||= { item_orders: [] }
+        item_order = ItemOrder.where(order_id: oid, item_id: i[:id]).first
+        if item_order
+          io = item_order.attributes
+          io['item'] = i
+          @orders[oid][:item_orders] << io
+        end
       end
       if i[:permanent_location]
         @facilities << i[:permanent_location][:facility]
@@ -449,7 +470,6 @@ class ItemsController < ApplicationController
 
     orders_raw.each do |o|
       oid = o['id']
-
       order = Order.find_by(id: oid)
 
       if order.temporary_location
@@ -462,20 +482,19 @@ class ItemsController < ApplicationController
         @locations << location
       end
 
-      if order && order.items.length > 0
-        @orders[oid] ||= { items: [], location: location }.with_indifferent_access
-        order.items.each do |item|
+      if order && order.item_orders.length > 0
+        @orders[oid] ||= { item_orders: [], location: location }.with_indifferent_access
+        order.item_orders.each do |item_order|
+          item = item_order.item
           if item && item.current_state == :in_transit_to_temporary_location
-            @orders[oid][:items] << item.json_data(:hash).with_indifferent_access
+            io = item_order.attributes
+            io[:item] = item.json_data(:hash).with_indifferent_access
+            @orders[oid][:item_orders] << io
             @total_items += 1
           end
         end
       end
     end
-
-    puts "***"
-    puts @orders.inspect
-
     @locations.uniq!
     @orders.with_indifferent_access
   end
@@ -486,9 +505,6 @@ class ItemsController < ApplicationController
     @params[:per_page] = 1000
     @params[:filters]['state'] = state.to_s
     @params[:sort] = sort
-
-    puts @params[:filters]
-
     get_list_via_solr('item')
   end
 

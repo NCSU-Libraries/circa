@@ -4,12 +4,12 @@ RSpec.describe EnumerationValue, type: :model do
 
   # pending "add some examples to (or delete) #{__FILE__}"
 
-  it "cannot delete an order_type value that is in use" do
-    e = Enumeration.create(name: 'order_type')
-    ev = EnumerationValue.create(enumeration_id: e.id, value: 'research')
-    create(:order, order_type_id: ev.id)
-    expect(ev.deletable?).to be_falsey
-  end
+  # it "cannot delete an order_type value that is in use" do
+  #   e = Enumeration.create(name: 'order_type')
+  #   ev = EnumerationValue.create(enumeration_id: e.id, value: 'research')
+  #   create(:order, order_type_id: ev.id)
+  #   expect(ev.deletable?).to be_falsey
+  # end
 
   it "cannot delete a location_source value that is in use" do
     e = Enumeration.create(name: 'location_source')
@@ -32,12 +32,12 @@ RSpec.describe EnumerationValue, type: :model do
     expect(ev.deletable?).to be_truthy
   end
 
-  it "raises error when trying to destroy a value that is in use" do
-    e = Enumeration.create(name: 'order_type')
-    ev = EnumerationValue.create(enumeration_id: e.id, value: 'research')
-    create(:order, order_type_id: ev.id)
-    expect { ev.destroy! }.to raise_error
-  end
+  # it "raises error when trying to destroy a value that is in use" do
+  #   e = Enumeration.create(name: 'order_type')
+  #   ev = EnumerationValue.create(enumeration_id: e.id, value: 'research')
+  #   create(:order, order_type_id: ev.id)
+  #   expect { ev.destroy! }.to raise_error
+  # end
 
   it "can retrieve the name of its associated enumeration" do
     e = Enumeration.create(name: 'order_type')

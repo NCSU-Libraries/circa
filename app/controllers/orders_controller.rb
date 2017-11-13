@@ -3,8 +3,11 @@ class OrdersController < ApplicationController
   include SolrUtilities
 
   before_action :set_order, only: [
-    :show, :edit, :update, :destroy, :update_state, :add_associations, :call_slip, :deactivate_item, :activate_item, :history
+    :show, :edit, :update, :destroy, :update_state, :add_associations,
+    :call_slip, :deactivate_item, :activate_item, :history, :spawn, :invoice
   ]
+
+  before_action :set_paper_trail_whodunnit
 
   def index
     @params = params
@@ -28,8 +31,17 @@ class OrdersController < ApplicationController
   end
 
 
+  def spawn
+    if params['order'] && params['order']['spawn']
+      @order_sub_type_id = params['order']['spawn']['order_sub_type_id']
+    end
+    @spawned_order = @order.spawn(@order_sub_type_id)
+    render json: @spawned_order
+  end
+
+
   def create
-    params['order']['location_id'] = params['order']['temporary_location'] ? params['order']['temporary_location']['id'] : nil
+    # params['order']['location_id'] = params['order']['temporary_location'] ? params['order']['temporary_location']['id'] : nil
 
     get_association_data_from_params(params)
     @order = Order.create!(order_params)
@@ -47,13 +59,18 @@ class OrdersController < ApplicationController
 
 
   def update
-    if params['order']['temporary_location']
-      params['order']['location_id'] = params['order']['temporary_location']['id']
-    end
     get_association_data_from_params(params)
+    set_cleanup_reproduction_associations()
+
+    post_update_event = params[:event]
+
     @order.update!(order_params)
 
     update_associations
+
+    if post_update_event
+      @order.trigger(post_update_event.to_sym)
+    end
 
     @order.reload
 
@@ -61,7 +78,6 @@ class OrdersController < ApplicationController
 
     render json: @order
   end
-
 
 
   def update_state
@@ -161,38 +177,6 @@ class OrdersController < ApplicationController
   end
 
 
-
-  def delete_associations
-    response = {}
-    status = 200
-    message = nil
-    if params[:items]
-      # TK
-
-    elsif params[:users]
-      # TK
-
-    elsif params[:assignees]
-      # TK
-
-    elsif params[:notes]
-      # TK
-
-    else
-      status = 400
-      message = "No valid associations provided"
-    end
-
-    if status == 400
-      response[:error] = { status: 403, detail: "Bad request: #{message}" }
-    elsif status == 500
-      response[:error] = { status: 500, detail: "Internal server error" }
-    end
-
-    render json: response, status: status
-  end
-
-
   def call_slip
     @current_user = current_user
     if params[:item_id]
@@ -201,6 +185,15 @@ class OrdersController < ApplicationController
     else
       @items = @order.items
     end
+    render layout: 'layouts/print'
+  end
+
+
+  def invoice
+    @user = @order.primary_user
+    @item_orders = @order.item_orders.includes(:order_fee, :item, :reproduction_spec)
+    @digital_image_orders = @order.digital_image_orders.includes(:order_fee)
+    @order_fees_total = @order.order_fees_total
     render layout: 'layouts/print'
   end
 
@@ -222,13 +215,13 @@ class OrdersController < ApplicationController
   end
 
 
-
   private
 
 
-
   def order_params
-    params.require(:order).permit(:access_date_start, :access_date_end, :type, :location_id, :order_type_id, :order_sub_type_id, :user_id)
+    params.require(:order).permit(:access_date_start, :access_date_end, :type,
+        :location_id, :order_sub_type_id, :user_id, :cloned_order_id,
+        :invoice_date, :invoice_payment_date, :invoice_attn)
   end
 
 
@@ -239,20 +232,53 @@ class OrdersController < ApplicationController
 
 
   def get_association_data_from_params(params)
-    @items = params[:order][:items] || []
-    @item_orders = params[:order][:item_orders] || []
-    @users = params[:order][:users] || []
-    if @users && params[:order][:primary_user_id]
+    order = params[:order]
+    @items = order[:items] || []
+    @item_orders = order[:item_orders] || []
+    @digital_image_orders = order[:digital_image_orders] || []
+    @users = order[:users] || []
+    if @users && order[:primary_user_id]
       @users.map! do |user|
-        user[:primary] = params[:order][:primary_user_id] == user[:id] ? true : nil
+        user[:primary] = order[:primary_user_id] == user[:id] ? true : nil
         user
       end
     end
-    @assignees = params[:order][:assignees] || []
-    @notes = params[:order][:notes] || []
-    @course_reserve = params[:order][:course_reserve]
+    @assignees = order[:assignees] || []
+    @notes = order[:notes] || []
+    @course_reserve = order[:course_reserve]
     @new_assignees = []
-    @new_users = []
+    @order_sub_type_name = OrderSubType.name_from_id(order[:order_sub_type_id])
+    @order_fee = (@order_sub_type_name == 'reproduction_fee' && order[:order_fee]) ?
+        order[:order_fee] : nil
+  end
+
+
+  def update_associations
+    if @users
+      update_users
+    end
+
+    if @items
+      update_items
+    end
+
+    if @notes
+      update_notes
+    end
+
+    if @assignees
+      update_assignees
+    end
+
+    if @course_reserve
+      update_course_reserve
+    end
+
+    if @digital_image_orders
+      update_digital_image_orders
+    end
+
+    update_order_fee
   end
 
 
@@ -262,21 +288,115 @@ class OrdersController < ApplicationController
     @existing_items = []
     @order.items.each { |i| @existing_items << i.id }
 
+    # detail and reproduction_pages will come in as attributes of items, but they actually belong to the item_order
+    # so look for those, then add them to the correct record in @item_orders
+
     @item_orders.each do |item_order|
       # add item to order
       if !@existing_items.include?(item_order['item_id'].to_i)
-        @order.item_orders.create!(item_id: item_order['item_id'], archivesspace_uri: item_order['archivesspace_uri'], user_id: current_user.id, active: true)
+        item_order_record = @order.item_orders.create!(item_id: item_order['item_id'], archivesspace_uri: item_order['archivesspace_uri'], user_id: current_user.id, active: true)
       else
-        existing_item_order = @order.item_orders.where(item_id: item_order['item_id']).first
-        existing_item_order.update_attributes(archivesspace_uri: item_order['archivesspace_uri'])
+        item_order_record = @order.item_orders.where(item_id: item_order['item_id']).first
+        item_order_record.update_attributes(archivesspace_uri: item_order['archivesspace_uri'])
         @order.reload
         # delete id from @existing_items array to track associations to be deleted
         @existing_items.delete(item_order['item_id'])
+      end
+
+      if item_order['reproduction_spec']
+        create_or_update_reproduction_spec(item_order_record.id, item_order['reproduction_spec'])
+      end
+
+      # handle fees
+      if @order_sub_type_name == 'reproduction_fee'
+        if item_order['order_fee']
+          create_or_update_order_fee(item_order_record.id, 'ItemOrder', item_order['order_fee'])
+        end
+      else
+        # delete any existing fee for this item_order if it exists
+        OrderFee.where(record_id: item_order_record.id,
+            record_type: 'ItemOrder').each { |f| f.destroy! }
       end
     end
 
     @existing_items.each do |item_id|
       @order.item_orders.where(item_id: item_id).each { |io| io.destroy! }
+    end
+  end
+
+
+  def create_or_update_reproduction_spec(item_order_id, reproduction_spec_data)
+    atts = {
+      detail: reproduction_spec_data['detail'],
+      pages: reproduction_spec_data['pages'],
+      reproduction_format_id: reproduction_spec_data['reproduction_format_id']
+    }
+    existing_reproduction_spec = ReproductionSpec.find_by(item_order_id: item_order_id)
+    if existing_reproduction_spec
+      existing_reproduction_spec.update_attributes(atts)
+    else
+      atts[:item_order_id] = item_order_id
+      ReproductionSpec.create!(atts)
+    end
+  end
+
+
+  def create_or_update_order_fee(record_id, record_type, order_fee_data)
+    atts = {
+      per_unit_fee: order_fee_data['per_unit_fee'],
+      per_order_fee: order_fee_data['per_order_fee'],
+      per_order_fee_description: order_fee_data['per_order_fee_description'],
+      note: order_fee_data['note'],
+      unit_fee_type: order_fee_data['unit_fee_type']
+    }
+
+    [:per_unit_fee, :per_order_fee].each do |key|
+      atts[key] = atts[key].to_f <= 0 ? nil : atts[key]
+    end
+
+    existing_order_fee = OrderFee.find_by(record_id: record_id, record_type: record_type)
+    if existing_order_fee
+      existing_order_fee.update_attributes(atts)
+    else
+      atts.merge!({ record_id: record_id, record_type: record_type })
+      OrderFee.create!(atts)
+    end
+  end
+
+
+  def update_digital_image_orders
+    attributes_from_params = lambda do |digital_image_order|
+      {
+        order_id: @order.id,
+        resource_identifier: digital_image_order['resource_identifier'],
+        detail: digital_image_order['detail'],
+        resource_title: digital_image_order['resource_title'],
+        display_uri: digital_image_order['display_uri'],
+        manifest_uri: digital_image_order['manifest_uri'],
+        requested_images: digital_image_order['requested_images'],
+        requested_images_detail: digital_image_order['requested_images_detail']
+      }
+    end
+
+    @existing_digital_image_orders = []
+    @order.digital_image_orders.each { |dio| @existing_digital_image_orders << dio.resource_identifier }
+    @digital_image_orders.each do |digital_image_order|
+      # add
+      if !@existing_digital_image_orders.include?(digital_image_order['resource_identifier'])
+        digital_image_order_record = @order.digital_image_orders.create!( attributes_from_params.(digital_image_order) )
+      else
+        digital_image_order_record = DigitalImageOrder.find_by(order_id: @order.id, resource_identifier: digital_image_order['resource_identifier'])
+        digital_image_order_record.update_attributes(attributes_from_params.(digital_image_order))
+        @existing_digital_image_orders.delete(digital_image_order['resource_identifier'])
+      end
+
+      if digital_image_order['order_fee']
+        create_or_update_order_fee(digital_image_order_record.id, 'DigitalImageOrder', digital_image_order['order_fee'])
+      end
+
+    end
+    @existing_digital_image_orders.each do |resource_identifier|
+      @order.digital_image_orders.where(resource_identifier: resource_identifier).each { |dio| dio.destroy! }
     end
   end
 
@@ -345,45 +465,39 @@ class OrdersController < ApplicationController
     end
 
     @existing_assignees.each do |user_id|
-      puts "REMOVE ASSIGNEE: " + user_id.to_s
       @order.order_assignments.where(user_id: user_id).each { |oa| oa.destroy! }
     end
   end
 
 
-  def update_associations
-    if @users
-      update_users
-    end
-
-    if @items
-      update_items
-    end
-
-    if @notes
-      update_notes
-    end
-
-    if @assignees
-      update_assignees
-    end
-
-    if @course_reserve
-      update_course_reserve
+  def update_order_fee
+    @existing_order_fee = @order.order_fee
+    if @existing_order_fee && !@order_fee
+      @existing_order_fee.destroy
+    elsif @order_fee
+      create_or_update_order_fee(@order.id, 'Order', @order_fee)
     end
   end
 
 
   def send_notifications
-    puts '@new_assignees'
-    puts @new_assignees.inspect
     order_url = "#{request.host_with_port}#{relative_url_root}/#/orders/#{@order.id}"
 
     if @new_assignees && @new_assignees.length > 0
       @new_assignees.each do |a|
-        puts a.inspect
         OrderMailer.assignee_email(@order, a, order_url).deliver_later
       end
+    end
+  end
+
+
+  # If the order_type has changed from reproduction to something else,
+  #   we need to delete associations specific to reproduction orders
+  def set_cleanup_reproduction_associations
+    @cleanup_reproduction_associations = nil
+    if @order.order_type.name == 'reproduction' &&
+        params[:order][:order_type_id] != @order.order_type_id
+      @cleanup_reproduction_associations = true
     end
   end
 
