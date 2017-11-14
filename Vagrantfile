@@ -21,18 +21,25 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder '.', '/vagrant'
 
+  # Solr for Circa
   config.vm.network "forwarded_port", guest: 8983, host: 8983,
   auto_correct: true
+  # archivesspace_backend_port
   config.vm.network "forwarded_port", guest: 8089, host: 8089,
     auto_correct: true
+  # archivesspace_frontend_port
   config.vm.network "forwarded_port", guest: 8080, host: 8080,
     auto_correct: true
+  # archivesspace public interface
   config.vm.network "forwarded_port", guest: 8081, host: 8081,
     auto_correct: true
+  # archivesspace OAI-PMH server
   config.vm.network "forwarded_port", guest: 8082, host: 8082,
     auto_correct: true
+  # archivesspace_solr_port
   config.vm.network "forwarded_port", guest: 8090, host: 8090,
     auto_correct: true
+  # Circa
   config.vm.network "forwarded_port", guest: 3000, host: 3000,
     auto_correct: true
 
