@@ -21,6 +21,17 @@ ENV.update YAML.load_file('config/email.yml')[Rails.env] rescue {}
 ENV.update YAML.load_file('config/options.yml')[Rails.env] rescue {}
 ENV.update YAML.load_file('config/wolftech.yml')[Rails.env] rescue {}
 
+# Set applicable ENV vars to defaults if not set
+ENV['archivesspace_backend_port'] ||= '8089'
+ENV['archivesspace_frontend_port'] ||= '8080'
+ENV['archivesspace_solr_port'] ||= '8090'
+ENV['archivesspace_solr_core_path'] ||= '/collection1/'
+ENV['archivesspace_username'] ||= 'admin'
+ENV['archivesspace_password'] ||= 'admin'
+ENV['solr_host'] ||= 'localhost'
+ENV['solr_port'] ||= '8983'
+ENV['solr_core_path'] ||= '/solr/circa/'
+
 module Circa
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
