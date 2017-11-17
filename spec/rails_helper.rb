@@ -54,6 +54,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.clean_with(:deletion)
     DatabaseCleaner.strategy = :deletion
+    # Rails.application.load_seed
   end
 
   # config.before(:each) do

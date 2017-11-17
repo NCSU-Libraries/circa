@@ -33,8 +33,8 @@ exhibition_order_type = OrderType.where(name: 'exhibition').first
 order_sub_types = [
   { name: 'independent_research', label: 'independent research', order_type_id: research_order_type.id },
   { name: 'course_reserve', label: 'course reserve', order_type_id: research_order_type.id },
-  { name: 'reproduction_internal', label: 'reproduction request (internal)', order_type_id: reproduction_order_type.id },
-  { name: 'reproduction_external', label: 'reproduction request (external)', order_type_id: reproduction_order_type.id },
+  { name: 'reproduction_no_fee', label: 'reproduction request, no fee', order_type_id: reproduction_order_type.id },
+  { name: 'reproduction_fee', label: 'reproduction request, fee required', order_type_id: reproduction_order_type.id },
   { name: 'preservation', label: 'preservation treatment ', order_type_id: processing_order_type.id },
   { name: 'processing', label: 'processing', order_type_id: processing_order_type.id },
   { name: 'bulk_digitization', label: 'bulk digitization', order_type_id: processing_order_type.id },
@@ -118,5 +118,46 @@ enumerations.each do |enumeration, values|
       puts "EnumerationValue '#{v}' for Enumeration '#{enumeration}' exists - updating"
       value.update_attributes(attributes)
     end
+  end
+end
+
+
+reproduction_formats = [
+  {
+    name: "photocopy/low-res scan (150 dpi)",
+    default_unit_fee_internal: 0.25,
+    default_unit_fee_external: 0.50,
+    description: nil
+  },
+  {
+    name: "digital scan",
+    default_unit_fee_internal: 5.00,
+    default_unit_fee_external: 15.00,
+    description: nil
+  },
+  {
+    name: "digital camera/cell phone image",
+    default_unit_fee_internal: nil,
+    default_unit_fee_external: nil,
+    description: "No charge. In-person only."
+  },
+  {
+    name: "oversize digital scan",
+    default_unit_fee_internal: 10.00,
+    default_unit_fee_external: 20.00,
+    description: "A $35 set-up and processing fee may be added."
+  },
+  {
+    name: "A/V digitization",
+    default_unit_fee_internal: nil,
+    default_unit_fee_external: nil,
+    description: "Fees are determined on a case-by-case basis; an estimate will be given before the order is finalized. A $35 set-up and processing fee may be added."
+  }
+]
+
+# Only run if the table is empty
+if ReproductionFormat.count == 0
+  reproduction_formats.each do |atts|
+    ReproductionFormat.create!(atts)
   end
 end

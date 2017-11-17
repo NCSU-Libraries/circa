@@ -11,9 +11,16 @@ RSpec.describe ItemsController, type: :controller do
   end
 
 
+  let(:user) { create(:user) }
+
+  before(:each) do
+    sign_in(user)
+  end
+
+
+
   describe "GET #index" do
     it "returns http success" do
-      sign_in(@u)
       get :index
       expect(response).to have_http_status(:success)
     end
@@ -22,7 +29,6 @@ RSpec.describe ItemsController, type: :controller do
 
   describe "GET #show" do
     it "returns http success" do
-      sign_in(@u)
       i = create(:item)
       get :show, id: i.id
       expect(response).to have_http_status(:success)
@@ -32,7 +38,6 @@ RSpec.describe ItemsController, type: :controller do
 
   describe "GET #create" do
     it "returns http success" do
-      sign_in(@u)
       get :create
       expect(response).to have_http_status(:success)
     end
@@ -41,7 +46,6 @@ RSpec.describe ItemsController, type: :controller do
 
   describe "PUT #update" do
     it "updates record and returns http success" do
-      sign_in(@u)
       l1 = create(:location)
       l2 = create(:location)
       i = create(:item, current_location_id: l1.id)
@@ -56,7 +60,6 @@ RSpec.describe ItemsController, type: :controller do
 
   describe "GET #destroy" do
     it "returns http success" do
-      sign_in(@u)
       i = create(:item)
       get :destroy, id: i.id
       expect(response).to have_http_status(:success)
@@ -66,7 +69,6 @@ RSpec.describe ItemsController, type: :controller do
 
   describe "state changes" do
     it "changes state and stores applicable metadata" do
-      sign_in(@u)
       o = create(:order_with_items)
       i = o.items.first
       o.trigger(:confirm)
@@ -81,7 +83,6 @@ RSpec.describe ItemsController, type: :controller do
   describe "POST #check_out" do
 
     it "checks out item and creates AccessSession record when proper params are passed" do
-      sign_in(@u)
       o = create(:order_with_items)
       i = o.items.first
       r = UserRole.last
@@ -98,7 +99,6 @@ RSpec.describe ItemsController, type: :controller do
     end
 
     it "returns 400 if item is already in use" do
-      sign_in(@u)
       i = create(:item)
       o = create(:order)
       r = UserRole.last
@@ -118,7 +118,6 @@ RSpec.describe ItemsController, type: :controller do
 
   describe "GET #check_in" do
     it "checks in an in-use item" do
-      sign_in(@u)
       o = create(:order_with_items)
       i = o.items.first
       r = UserRole.last
@@ -139,13 +138,8 @@ RSpec.describe ItemsController, type: :controller do
 
   describe "POST #create_from_archivesspace" do
     it "returns array of items as JSON" do
-      sign_in(@u)
       api_values = archivesspace_api_values.first
       archivesspace_uri = api_values[:archival_object_uri]
-
-      puts '***'
-      puts archivesspace_uri
-
       post :create_from_archivesspace, archivesspace_uri: archivesspace_uri
       expect(response).to have_http_status('200')
       expect{ JSON.parse(response.body) }.not_to raise_error
@@ -154,7 +148,6 @@ RSpec.describe ItemsController, type: :controller do
     end
 
     it "creates items from ArchivesSpace digital objects and serialized digital object attributes" do
-      sign_in(@u)
       api_values = archivesspace_digital_object_api_values
       archivesspace_uri = api_values[:archival_object_uri]
       post :create_from_archivesspace, archivesspace_uri: archivesspace_uri, digital_object: true
@@ -169,7 +162,6 @@ RSpec.describe ItemsController, type: :controller do
 
   describe "POST #create_from_catalog" do
     it "returns item as JSON" do
-      sign_in(@u)
       catalog_item = catalog_request_item
       catalog_record_id = catalog_item[:recordSpec]
       catalog_item_id = catalog_item[:barcode]
@@ -184,7 +176,6 @@ RSpec.describe ItemsController, type: :controller do
 
   describe "POST #receive_at_temporary_location" do
     it "updates the items current location based on order location" do
-      sign_in(@u)
       o = create(:order_with_items)
       l = create(:location)
       i = o.items.first

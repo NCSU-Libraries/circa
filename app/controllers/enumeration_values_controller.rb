@@ -47,9 +47,7 @@ class EnumerationValuesController < ApplicationController
       raise CircaExceptions::BadRequest, "Order was not set due to an error."
     else
       params[:enumeration_values].each_index do |i|
-        puts i
         ev = params[:enumeration_values][i]
-        puts ev.inspect
         enumeration_value = EnumerationValue.find(ev['id'])
         enumeration_value.update_attributes(order: i)
       end

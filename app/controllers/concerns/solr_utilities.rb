@@ -52,8 +52,6 @@ module SolrUtilities
       # @filters only include facet values included in the request. Additional filters will be added to the query.
       @filters = !@params[:filters].blank? ? @params[:filters].clone : {}
 
-      puts @filters.inspect
-
       s = Search.new(@params)
       @solr_response = s.execute
 

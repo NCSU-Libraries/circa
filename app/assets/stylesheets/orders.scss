@@ -117,4 +117,35 @@ ul.records-list.orders-list {
   .inline-label {
     padding-right: 1rem;
   }
+
+  .row  {
+    .columns, .column {
+      padding-left: 0.5rem !important;
+      padding-right: 1.25rem !important;
+
+      &.checkbox-column {
+        font-size: 1rem;
+        padding-right: 0 !important;
+        input[type="checkbox"] {
+          margin: 0 !important;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+}
+
+.reproduction-detail {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+
+  ul li {
+    background: none;
+  }
+
+  .subhead {
+    margin-top: 0 !important;
+  }
+
 }

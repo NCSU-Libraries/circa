@@ -11,20 +11,13 @@ class Location < ActiveRecord::Base
   has_many :permanent_items, class_name: "Item", foreign_key: 'permanent_location_id'
   has_many :current_items, class_name: "Item", foreign_key: 'current_location_id'
   has_many :orders
+  has_many :order_sub_types, foreign_key: 'default_location_id'
 
   after_create do
     if !self.uri
       self.update_attributes(uri: "/circa_locations/#{ self.id }")
     end
   end
-
-
-  # before_save do
-  #   if self.default
-  #     Location.where(default: true).where.not(id: self.id).find_each { |l| l.update_attributes(default: false) }
-  #   end
-  # end
-
 
   def self.create_or_update_from_archivesspace(archivesspace_uri)
     data = aspace_api_get(archivesspace_uri)

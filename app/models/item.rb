@@ -14,6 +14,7 @@ class Item < ActiveRecord::Base
   include NCSUCatalog
   # app/models/concerns/solr_doc.rb
   include SolrDoc
+  include VersionsSupport
 
   belongs_to :permanent_location, class_name: "Location"
   belongs_to :current_location, class_name: "Location"
@@ -33,6 +34,8 @@ class Item < ActiveRecord::Base
   has_one :active_access_session, -> { where active: true },
       class_name: 'AccessSession'
   has_many :access_users, through: :access_sessions
+
+  has_paper_trail ignore: [:current_location_id]
 
   attr_accessor :archivesspace_records
 
@@ -355,6 +358,30 @@ class Item < ActiveRecord::Base
     end
 
     history
+  end
+
+
+  # Returns current and previous versions of the Item based on changes to
+  #   non-transient attributes (basically everything but current_location)
+  def modification_history
+    location_attributes = lambda do |location_id|
+      location = Location.find_by(id: location_id)
+      if location
+        return { title: l.title, uri: l.uri }
+      end
+    end
+
+    user_attributes = lambda do |user_id|
+      user = User.find_by(id: user_id)
+      if user
+
+      end
+    end
+
+    gather_attributes = lambda do |version|
+
+    end
+
   end
 
 

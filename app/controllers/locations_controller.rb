@@ -52,7 +52,7 @@ class LocationsController < ApplicationController
 
 
   def location_params
-    params.require(:location).permit(:title, :source_id, :notes, :default)
+    params.require(:location).permit(:title, :source_id, :notes)
   end
 
 

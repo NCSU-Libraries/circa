@@ -1,0 +1,22 @@
+<div class="form-section" ng-class="validationErrors['items'] ? 'has-error' : ''">
+
+  <h2>Items to digitize</h2>
+
+  <div ng-include="templateUrl('orders/fields/item_list')"></div>
+
+  <div ng-if="validationErrors['items']" class="validation-error field-validation-error">{{ validationErrors['items'] }}</div>
+
+  <div ng-include="templateUrl('orders/fields/archivesspace_record_selector')"></div>
+
+  <!-- <div ng-include="templateUrl('orders/fields/catalog_record_selector')"></div> -->
+
+
+  <!--
+  <h2>Digital images</h2>
+
+  <div ng-include="templateUrl('orders/fields/digital_image_list')"></div>
+
+  <div ng-include="templateUrl('orders/fields/digital_image_selector')"></div>
+  -->
+
+</div>
