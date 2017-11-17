@@ -82,7 +82,23 @@ class UtilityController < ApplicationController
     solr_params = { lucene: true, filters: { 'record_type' => 'user'} }
     if params[:q].length > 0
       q = URI.unescape(params[:q])
-      solr_params[:q] = "first_name:#{q}* last_name:#{q}* first_name_t:#{q}* last_name_t:#{q}* email:#{q}* email_t:#{q}*"
+      if q =~ /\s/
+        name_parts = q.split(' ')
+        first_name = name_parts.delete_at(0)
+        first_name_q = "(first_name:#{first_name}* OR first_name_t:#{first_name}*)"
+        last_name_q = "("
+        name_parts.each do |lname|
+          last_name_q += "last_name:#{lname}* OR last_name_t:#{lname}*"
+          last_name_q += lname != name_parts.last ? ' OR ' : ''
+        end
+        last_name_q += ")"
+        query = "#{first_name_q} AND #{last_name_q}"
+      else
+        query = "first_name:#{q}* last_name:#{q}* first_name_t:#{q}* last_name_t:#{q}* email:#{q}* email_t:#{q}*"
+      end
+
+      solr_params[:q] = query
+
       s = Search.new(solr_params)
       solr_response = s.execute
       @api_response = {
