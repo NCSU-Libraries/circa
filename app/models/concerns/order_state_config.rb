@@ -145,10 +145,10 @@ module OrderStateConfig
           current_state == :reviewing
         end
       when :begin_work
-        current_state == :confirmed
+        current_state == :confirmed && any_items_ready?
       when :fulfill
         if order_type.name == 'reproduction'
-          [:confirmed, :in_progress].include? current_state
+          current_state == :in_progress
         else
           all_items_ready? && (current_state == :confirmed)
         end
@@ -189,6 +189,27 @@ module OrderStateConfig
           end
         end
         break if !ready
+      end
+      ready
+    end
+
+
+    # Returns true if any items associated with this Order are ready for use
+    def any_items_ready?
+      ready = false
+      if items.blank?
+        ready = true
+      else
+        items.each do |i|
+          if !i.obsolete
+            if i.digital_object
+              ready = i.state_reached_for_order(:ready_at_use_location, self.id)
+            else
+              ready = i.state_reached_for_order(:ready_at_temporary_location, self.id)
+            end
+          end
+          break if ready
+        end
       end
       ready
     end
