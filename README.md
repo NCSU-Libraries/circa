@@ -94,12 +94,12 @@ Sets database connection parameters. There are 2 example files included. Select 
 
 Sets variables required to communicate with the ArchivesSpace API and provide links to the ArchviesSpace staff interface. Locate **archivesspace.example.yml**, save as **archivesspace.yml**, and update values as follows:
 
-* **archivesspace\_backend_port**: Port number (as a string) of ArchivesSpace back end (default: '8089')
-* **archivesspace\_frontend_port**: Port number (as a string) of ArchivesSpace front end/ staff interface (default: '8080')
-* **archivesspace\_solr_port**: Port number (as a string) of ArchivesSpace Solr index (default: '8090')*
-* **archivesspace\_solr\_core_path**: path (from URL root) to the ArchivesSpace Solr core (default: '/collection1/')*
-* **archivesspace_username**: User name used to connect to ArchivesSpace. User should have read access to all resources (default: 'admin')
-* **archivesspace_password**: Password associated with ArchivesSpace API user (default: 'admin')
+* **archivesspace\_backend_port**: Port number (as a string) of ArchivesSpace back end
+* **archivesspace\_frontend_port**: Port number (as a string) of ArchivesSpace front end/ staff interface
+* **archivesspace\_solr_port**: Port number (as a string) of ArchivesSpace Solr index*
+* **archivesspace\_solr\_core_path**: path (from URL root) to the ArchivesSpace Solr core*
+* **archivesspace_username**: User name used to connect to ArchivesSpace. User should have read access to all resources
+* **archivesspace_password**: Password associated with ArchivesSpace API user
 
 \* Note that, while there are methods available to communicate with the ArchivesSpace Solr index, this functionality is not currently being used in the application
 
@@ -108,9 +108,9 @@ Sets variables required to communicate with the ArchivesSpace API and provide li
 
 Set variables required to connect to your Solr index. Locate **solr.example.yml**, save as **solr.yml**, and update values as follows:
 
-* **solr_host**: The host name of your active Solr 5 installation (default: 'localhost')
-* **solr_port**: The port on which your Solr instance is running (default: '8983')
-* **solr\_core_path**: The path to the Solr core used by Circa (default: '/solr/circa/')
+* **solr_host**: The host name of your active Solr 5 installation
+* **solr_port**: The port on which your Solr instance is running
+* **solr\_core_path**: The path to the Solr core used by Circa
 
 
 ### config/email.yml
@@ -249,6 +249,3 @@ Alternately, you can specify the location of the custom config directory within 
 ## Background job queuing
 
 Circa uses the Active Job framework (included with Rails) to handle background jobs (primarily for sending email notifications asynchronously). Active Job is configured to use the [Resque](https://github.com/resque/resque) library for its queuing backend. Resque uses Redis, which must be installed and running on the server on which Circa is installed.
-
-
-

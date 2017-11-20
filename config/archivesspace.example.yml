@@ -13,10 +13,5 @@ development:
 test:
   <<: *defaults
 
-staging:
-  <<: *defaults
-  archivesspace_host: staging.archivesspace.yourorg.org
-
 production:
   <<: *defaults
-  archivesspace_host: archivesspace.yourorg.org
