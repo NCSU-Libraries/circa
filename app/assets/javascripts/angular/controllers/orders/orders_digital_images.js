@@ -109,6 +109,10 @@ OrdersCtrl.prototype.applyDigitalImageFunctions = function(scope) {
   scope.digitalImageSelectSubmitText = function() {
     return _this.digitalImageSelectSubmitText(scope);
   }
+
+  scope.digitalImagesTotalSelectedText = function(digitalImageOrder) {
+    return _this.digitalImagesTotalSelectedText(digitalImageOrder);
+  }
 }
 
 
@@ -209,7 +213,8 @@ OrdersCtrl.prototype.applyDigitalImageSelection = function(scope) {
     requested_images_detail: scope.digitalImageSelect['requestedImagesDetail'],
     display_uri: scope.digitalImageSelect['displayUri'],
     manifest_uri: scope.digitalImageSelect['manifestUri'],
-    resource_title: scope.digitalImageSelect['resource_title']
+    resource_title: scope.digitalImageSelect['resource_title'],
+    total_images_in_resource: scope.digitalImageSelect['allImages'].length
   }
   scope.order['digital_image_orders'].push(digitalImageOrder);
   this.initializeDigitalImageSelect(scope);
@@ -299,6 +304,9 @@ OrdersCtrl.prototype.setDigitalImageSelectImages = function(scope, manifest) {
     images.push(imageId);
   });
   scope.digitalImageSelect['allImages'] = images;
+  if (images.length == 1) {
+    scope.digitalImageSelect['requestedImages'] = images;
+  }
   scope.digitalImageSelect['showThumbnails'] = images.length <= 30 ?
       true : false;
   scope.digitalImageSelect['imageSelectMode'] = images.length <= 30 ?
@@ -317,10 +325,24 @@ OrdersCtrl.prototype.digitalImageSelectSubmitText = function(scope) {
   var mode = scope.digitalImageSelect['imageSelectMode'];
   var text;
   if (mode == 'thumbnails') {
-    text = "Add " + this.totalRequestedImages(scope) + " images to order";
+    var total = this.totalRequestedImages(scope);
+    text = (total > 1) ? "Add " + total + " images to order" :
+        "Add image to order";
   }
   else {
     text = "Add specified images to order";
+  }
+  return text;
+}
+
+
+OrdersCtrl.prototype.digitalImagesTotalSelectedText = function(digitalImageOrder) {
+  var total = digitalImageOrder.requested_images.length;
+  if (digitalImageOrder.total_images_in_resource > 1) {
+    text = (total > 1) ? total + " images selected" : "1 image selected"
+  }
+  else {
+    text = "1 image"
   }
   return text;
 }

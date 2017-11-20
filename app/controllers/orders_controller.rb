@@ -374,7 +374,8 @@ class OrdersController < ApplicationController
         display_uri: digital_image_order['display_uri'],
         manifest_uri: digital_image_order['manifest_uri'],
         requested_images: digital_image_order['requested_images'],
-        requested_images_detail: digital_image_order['requested_images_detail']
+        requested_images_detail: digital_image_order['requested_images_detail'],
+        total_images_in_resource: digital_image_order['total_images_in_resource']
       }
     end
 

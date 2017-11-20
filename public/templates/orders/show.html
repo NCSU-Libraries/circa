@@ -54,6 +54,23 @@
     </section>
 
 
+    <section
+        ng-show="(order['order_type']['name'] == 'reproduction') && order['order_fee']">
+      <h2>Additional fee</h2>
+
+      <div class="record-overview">
+        <div class="inline overview-element">
+          <span class="label">Fee:</span>
+          <span class="value">{{ order['order_fee']['per_order_fee'] | currency }}</span>
+        </div>
+
+        <div class="inline overview-element">
+          <span class="label">Fee description:</span>
+          <span class="value">{{ order['order_fee']['per_order_fee_description'] }}</span>
+        </div>
+      </div>
+    </section>
+
 
     <section ng-show="order['order_type']['name'] == 'reproduction'">
       <h2>Digital images</h2>

@@ -9,7 +9,7 @@
 
   <div>
     <div class="inline detail-element">
-      <span class="label">Pages:</span>
+      <span class="label">Pages/files:</span>
       <span class="value">{{ itemOrder['reproduction_spec']['pages'] }}</span>
     </div>
 
@@ -24,7 +24,7 @@
 
     <div>
       <div class="inline detail-element" ng-if="itemOrder['order_fee']['per_unit_fee']">
-        <span class="label">Fee per page:</span>
+        <span class="label">Fee per page/file:</span>
         <span class="value">{{ itemOrder['order_fee']['per_unit_fee'] | currency }}</span>
       </div>
 

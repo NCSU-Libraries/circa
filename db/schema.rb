@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171108210616) do
+ActiveRecord::Schema.define(version: 20171120184558) do
 
   create_table "access_sessions", force: :cascade do |t|
     t.integer  "item_id",        limit: 4,                null: false
@@ -35,16 +35,17 @@ ActiveRecord::Schema.define(version: 20171108210616) do
   end
 
   create_table "digital_image_orders", force: :cascade do |t|
-    t.integer  "order_id",                limit: 4,     null: false
-    t.string   "resource_identifier",     limit: 255,   null: false
-    t.text     "detail",                  limit: 65535
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
-    t.string   "resource_title",          limit: 255
-    t.string   "display_uri",             limit: 255
-    t.string   "manifest_uri",            limit: 255
-    t.text     "requested_images",        limit: 65535
-    t.text     "requested_images_detail", limit: 65535
+    t.integer  "order_id",                 limit: 4,     null: false
+    t.string   "resource_identifier",      limit: 255,   null: false
+    t.text     "detail",                   limit: 65535
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.string   "resource_title",           limit: 255
+    t.string   "display_uri",              limit: 255
+    t.string   "manifest_uri",             limit: 255
+    t.text     "requested_images",         limit: 65535
+    t.text     "requested_images_detail",  limit: 65535
+    t.integer  "total_images_in_resource", limit: 4
   end
 
   add_index "digital_image_orders", ["order_id"], name: "by_order_id", using: :btree
