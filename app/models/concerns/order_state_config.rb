@@ -54,19 +54,14 @@ module OrderStateConfig
           event_description: "Reset order status to 'pending'."
         },
         {
-          event: :review,
-          to_state: :reviewing,
-          event_description: "Review the request prior to confirmation."
-        },
-        {
-          event: :confirm,
-          to_state: :confirmed,
-          event_description: "The request has been reviewed and items are approved for transfer, digitization and/or delivery to the requester."
-        },
-        {
           event: :begin_work,
           to_state: :in_progress,
-          event_description: "Digitization is in progress or files are being prepared for delivery.."
+          event_description: "Digitization/copying is in progress or files are being prepared for delivery."
+        },
+        {
+          event: :complete_work,
+          to_state: :work_complete,
+          event_description: "Digitization/copying is complete or files are ready for delivery."
         },
         {
           event: :fulfill,
@@ -123,6 +118,11 @@ module OrderStateConfig
             i.trigger!(:order, { order_id: id, user_id: user_id })
           end
         end
+      when :complete_work
+        request = metadata[:request]
+        puts '***'
+        puts request.inspect
+
       when :finish
         close
       end
@@ -137,7 +137,7 @@ module OrderStateConfig
     def event_permitted(event)
       case event
       when :review
-        current_state == :pending
+        [:pending, :requested].include? current_state
       when :confirm
         if !has_digital_items?
           [:pending, :reviewing].include? current_state
@@ -145,10 +145,12 @@ module OrderStateConfig
           current_state == :reviewing
         end
       when :begin_work
-        current_state == :confirmed && any_items_ready?
+        any_items_ready?
+      when :complete_work
+        current_state == :in_progress
       when :fulfill
         if order_type.name == 'reproduction'
-          current_state == :in_progress
+          current_state == :work_complete
         else
           all_items_ready? && (current_state == :confirmed)
         end
@@ -252,6 +254,15 @@ module OrderStateConfig
       end
       finished
     end
+
+
+    private
+
+
+    def work_complete_notification
+      WorkCompleteNotification.assignee_email(self, a, order_url).deliver_later
+    end
+
 
   end
 end

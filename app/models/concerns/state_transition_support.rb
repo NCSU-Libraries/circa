@@ -53,9 +53,10 @@ module StateTransitionSupport
     def trigger(event, metadata={})
       if event_permitted(event) || (User.current && User.current.is_admin?)
         to_state = self.event_to_state(event)
+        callback_metadata = metadata.clone
         transition_to(to_state, metadata)
         if respond_to?(:event_callbacks)
-          event_callbacks(event, metadata)
+          event_callbacks(event, callback_metadata)
           reload
         end
         update_index
@@ -114,7 +115,9 @@ module StateTransitionSupport
     # Returns true if the current state is at or after the given state in the workflow
     def state_reached?(state)
       states = states_events.map { |se| se[0] }
-      states.index(current_state) >= states.index(state)
+      if states.index(current_state) && states.index(state)
+        states.index(current_state) >= states.index(state)
+      end
     end
 
 
@@ -124,6 +127,10 @@ module StateTransitionSupport
         last_transition.update_attributes(current: false)
       end
       from_state = last_transition ? last_transition.to_state : nil
+      # remove request if included in metadata
+      if metadata && metadata[:request]
+        metadata.delete(:request)
+      end
       attributes = {
         record_id: id,
         record_type: self.class.to_s,

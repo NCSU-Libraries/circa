@@ -1,0 +1,2 @@
+class WorkCompleteMailer < OrderMailer
+end

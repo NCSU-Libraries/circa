@@ -71,6 +71,7 @@ module ApiUtilities
     # Note: event must be a symbol, not a string (as it is in params[:event])
     def trigger_event(record, event, metadata = {})
       metadata[:user_id] = current_user.id
+      metadata[:request] = request
       if record.permitted_events.include?(event.to_sym) || current_user.is_admin?
         record.trigger!(event, metadata)
         render json: record
