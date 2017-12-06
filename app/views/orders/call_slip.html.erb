@@ -2,6 +2,12 @@
 
   <h1>Order #<%= @order.id %></h1>
 
+  <% if @order.cloned_order_id %>
+  <div class="heading">
+    Cloned from Order #<%= @order.cloned_order_id %>
+  </div>
+  <% end %>
+
   <div class="order-details">
 
     <div class="overview-item">
