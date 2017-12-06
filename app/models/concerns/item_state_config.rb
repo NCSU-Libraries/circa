@@ -266,7 +266,7 @@ module ItemStateConfig
       if item_order && !obsolete
         order = item_order.order
 
-        if order.open && order.confirmed && item_order.active
+        if (order.open || order.reproduction_order?) && order.confirmed && item_order.active
           events = available_events
 
           if events.include?(:already_on_site) && state_reached_for_order(:ready_at_temporary_location, order_id)

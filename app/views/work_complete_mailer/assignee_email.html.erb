@@ -11,7 +11,7 @@
     <% end %>
 
 
-    <p>View this order: <%= @order_url %></p>
+    <p>View this order: <%= link_to(nil, @order_url) %></p>
 
     <h2>Order details:</h2>
 
@@ -22,64 +22,30 @@
 
 
     <p>
-    <strong>Access <%= @order.access_date_end ? 'dates' : 'date' %>:</strong>
-      <%= @order.access_date_start.strftime('%B %e, %Y') %>
-      <% if @order.access_date_end %>
-      - <%= @order.access_date_end.strftime('%B %e, %Y') %>
-      <% end %>
-    </p>
-
-
-    <p>
-    <strong><%= "Patron".pluralize(@order.users.length) %>:</strong>
+    <strong>Requester:</strong>
     <% @order.users.each do |u| %>
       <%= u.last_name %>, <%= u.first_name %> (<%= u.email %>)<%= u != @order.users.last ? '; ' : '' %>
     <% end %>
     </p>
 
 
-    <% if @order.temporary_location %>
-    <p>
-    <strong>Use location:</strong>
-    <%= @order.temporary_location.title %>
-    </p>
-    <% end %>
+    <% if @order.item_orders && @order.item_orders.length > 0 %>
+      <h2>Items requested</h2>
 
-    <p>
-    <strong>Status:</strong>
-    <%= @order.current_state.to_s.gsub(/_/,' ') %>
-    </p>
-
-
-    <% if @order.notes.length > 0 %>
-      <h3>Notes:</h3>
-      <% @order.notes.each do |n| %>
-      <p><%= n.content %></p>
+      <% @order.item_orders.each do |io| %>
+        <p>
+          <strong><%= io.item.resource_title %><%= io.item.container ? ". #{io.item.container}" : '' %></strong><br>
+          <%= io.reproduction_spec.pages %> pages/files<br>
+        </p>
       <% end %>
     <% end %>
 
 
-    <h2>Items requested:</h2>
-
-    <ul class="items-list">
-    <% @order.items.each do |i| %>
-      <li>
-        <strong><%= i.resource_title %> (<%= i.resource_identifier %>)
-        <% if i.container %>
-        - <%= i.container %>
-        <% end %></strong>
-
-        <% if i.barcode %>
-        <br>
-        <strong>Barcode:</strong>
-        <%= i.barcode %>
-        <% end %>
-
-        <br><strong>Permanent location:</strong>
-        <%= i.permanent_location ? i.permanent_location.title : '[unknown]' %>
-
-        <br><strong>Status:</strong>
-        <%= i.current_state.to_s.gsub(/_/,' ') %>
-      </li>
+    <% if @order.digital_image_orders && @order.digital_image_orders.length > 0 %>
+      <% @order.digital_image_orders.each do |dio| %>
+        <p>
+          <strong><%= dio.resource_title %></strong><br>
+          <%= dio.display_uri %>
+        </p>
+      <% end %>
     <% end %>
-    </ul>

@@ -7,7 +7,7 @@ class OrderSerializer < ActiveModel::Serializer
       :catalog_items, :order_fee, :current_state, :permitted_events,
       :available_events, :states_events, :num_items,
       :primary_user_id, :primary_user_id, :num_items_ready, :created_by_user,
-      :deletable, :item_ids_in_use, :has_fees, :clone_orders
+      :deletable, :item_ids_in_use, :has_fees, :clone_orders, :reproduction_order?
 
   belongs_to :order_type
   belongs_to :order_sub_type

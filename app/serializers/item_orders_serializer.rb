@@ -106,8 +106,10 @@ class ItemOrdersSerializer < ActiveModel::Serializer
 
   def available_events_per_order
     events = {}
-    object.item.open_orders.each do |o|
-      events[o.id] = object.item.available_events_for_order(o.id)
+    object.item.orders.each do |o|
+      if o.open || o.reproduction_order?
+        events[o.id] = object.item.available_events_for_order(o.id)
+      end
     end
     events
   end

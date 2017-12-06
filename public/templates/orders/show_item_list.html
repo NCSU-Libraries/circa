@@ -60,7 +60,7 @@
 
             <div ng-switch on="stateEvent['event']">
 
-              <span ng-show="order.confirmed && order.open">
+              <span ng-show="(order.confirmed && order.open) || order['reproduction_order?']">
 
                 <span
                     poptip="{{ stateEvent['eventDescription'] }}"

@@ -23,11 +23,11 @@
             poptip="{{ stateEvent['eventDescription'] }}">
 
           <span ng-if="$first || stateEvent['complete']">
-            {{ stateEvent['state'] }}
+            {{ stateEvent['state'] | removeUnderscores }}
           </span>
 
           <span ng-if="!$first && !stateEvent['complete']">
-            {{ stateEvent['event'] }}
+            {{ stateEvent['event'] | removeUnderscores }}
           </span>
 
         </span>
@@ -36,7 +36,7 @@
 
       <span
           ng-if="(!stateEvent['permitted'] && !adminOverrideEnabled) || stateEvent['current']">
-        {{ ($first || stateEvent['complete']) ? stateEvent['state'] : stateEvent['event'] }}
+        {{ ($first || stateEvent['complete']) ? stateEvent['state'] : stateEvent['event'] | removeUnderscores }}
       </span>
 
     </div>

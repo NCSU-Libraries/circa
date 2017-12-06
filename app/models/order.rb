@@ -47,6 +47,11 @@ class Order < ActiveRecord::Base
   end
 
 
+  def reproduction_order?
+    order_type.name == 'reproduction'
+  end
+
+
   def self.first_datetime
     where('created_at is not null').order('created_at asc').limit(1).pluck('created_at')[0]
   end

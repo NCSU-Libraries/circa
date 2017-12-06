@@ -22,5 +22,5 @@ class OrderMailer < ApplicationMailer
 
     mail(to: to_address.format, cc: cc, subject: "Circa Order #{order.id}")
   end
-  
+
 end
