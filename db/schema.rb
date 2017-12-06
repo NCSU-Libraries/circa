@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171120184558) do
+ActiveRecord::Schema.define(version: 20171206205745) do
 
   create_table "access_sessions", force: :cascade do |t|
     t.integer  "item_id",        limit: 4,                null: false
@@ -213,6 +213,7 @@ ActiveRecord::Schema.define(version: 20171120184558) do
     t.date     "invoice_date"
     t.date     "invoice_payment_date"
     t.string   "invoice_attn",         limit: 255
+    t.string   "invoice_id",           limit: 255
   end
 
   add_index "orders", ["location_id"], name: "fk_rails_5b9551c291", using: :btree

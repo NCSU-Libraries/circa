@@ -194,6 +194,8 @@ class OrdersController < ApplicationController
     @item_orders = @order.item_orders.includes(:order_fee, :item, :reproduction_spec)
     @digital_image_orders = @order.digital_image_orders.includes(:order_fee)
     @order_fees_total = @order.order_fees_total
+    @invoice_date = @order.invoice_date || DateTime.now.to_date
+    @invoice_id = @order.invoice_id || @order.generate_invoice_id
     render layout: 'layouts/print'
   end
 
