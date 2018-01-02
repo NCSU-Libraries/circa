@@ -501,7 +501,7 @@ class Item < ActiveRecord::Base
       end
     when 'catalog'
       if item_catalog_record
-        Item.create_or_update_from_catalog(icr.catalog_record_id, icr.catalog_item_id)
+        Item.create_or_update_from_catalog(item_catalog_record.catalog_record_id, item_catalog_record.catalog_item_id)
       end
     end
   end
