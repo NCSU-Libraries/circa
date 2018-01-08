@@ -45,14 +45,10 @@ OrdersCtrl.prototype.enableFees = function(scope) {
 
 
 OrdersCtrl.prototype.setReproductionFormat = function(record) {
-  var format = record['reproduction_spec']['reproduction_format'];
-
-  if (!format) {
-    var formatId = record['reproduction_spec']['reproduction_format_id'];
-    format = this.controlledValues['reproduction_format'].find(function(element) {
-      return element.id == formatId;
-    });
-  }
+  var formatId = record['reproduction_spec']['reproduction_format_id'];
+  var format = this.controlledValues['reproduction_format'].find(function(element) {
+    return element.id == formatId;
+  });
   if (format) {
     record['reproduction_spec']['reproduction_format'] = format;
     record['order_fee'] = {};
