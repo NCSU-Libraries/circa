@@ -83,6 +83,14 @@ RSpec.describe OrdersController, type: :controller do
       }
     end
 
+
+    let(:course_reserve_data) do
+      {
+        course_number: '1234',
+        course_name: 'course reserve name'
+      }
+    end
+
     it "creates order, and adds items and users, and returns json response with http success" do
       order_data = order_post_data
       order_data[:item_orders] = item_orders
@@ -114,6 +122,31 @@ RSpec.describe OrdersController, type: :controller do
       expect(r['order']['digital_image_orders'].empty?).not_to be true
       expect(r['order']['digital_image_orders'].length).to eq(1)
       expect(r['order']['digital_image_orders'][0]['order_fee']['per_unit_fee']).to eq(1.23)
+    end
+
+
+    it "creates course reserve order" do
+      order_data = order_post_data
+      order_data[:item_orders] = item_orders
+      order_data[:course_reserve] = course_reserve_data
+      post :create, order: order_data
+      r = JSON.parse(response.body)
+      expect(r['order']['course_reserve']['course_number']).to eq('1234')
+      expect(r['order']['course_reserve']['course_name']).to eq('course reserve name')
+    end
+
+
+    it "creates cloned course reserve order" do
+      order_data = order_post_data
+      order_data[:item_orders] = item_orders
+      course_reserve = course_reserve_data
+      course_reserve[:id] = 999999
+      course_reserve[:order_id] = 999999
+      order_data[:course_reserve] = course_reserve
+      post :create, order: order_data
+      r = JSON.parse(response.body)
+      expect(r['order']['course_reserve']['course_number']).to eq('1234')
+      expect(r['order']['course_reserve']['course_name']).to eq('course reserve name')
     end
 
   end

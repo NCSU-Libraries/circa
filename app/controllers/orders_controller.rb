@@ -47,7 +47,7 @@ class OrdersController < ApplicationController
     @order = Order.create!(order_params)
     @params = params
 
-    update_associations
+    update_associations(:create)
 
     # Consider revising - update_index is called twice, once after order is created and again here
     @order.update_index
@@ -255,7 +255,7 @@ class OrdersController < ApplicationController
   end
 
 
-  def update_associations
+  def update_associations(action = :update)
     if @users
       update_users
     end
@@ -265,7 +265,7 @@ class OrdersController < ApplicationController
     end
 
     if @notes
-      update_notes
+      update_notes(action)
     end
 
     if @assignees
@@ -273,7 +273,7 @@ class OrdersController < ApplicationController
     end
 
     if @course_reserve
-      update_course_reserve
+      update_course_reserve(action)
     end
 
     if @digital_image_orders
@@ -425,7 +425,7 @@ class OrdersController < ApplicationController
   end
 
 
-  def update_notes
+  def update_notes(action = :update)
     if (@order.notes.length == 0) && (@notes.length == 0)
       return
     elsif (@order.notes.length == 0) && (@notes.length > 0)
@@ -447,7 +447,10 @@ class OrdersController < ApplicationController
   end
 
 
-  def update_course_reserve
+  def update_course_reserve(action = :update)
+    if action == :create
+      @course_reserve.delete('id')
+    end
     @order.create_or_update_course_reserve(@course_reserve.symbolize_keys)
   end
 
