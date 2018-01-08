@@ -226,7 +226,7 @@ module OrderStateConfig
 
     # Triggers the :fulfill event for this Order if all of its Items are ready for use
     def fulfill_if_items_ready(metadata)
-      if reproduction_order?
+      if !reproduction_order?
         if available_events.include?(:fulfill) && all_items_ready?
           trigger(:fulfill, metadata)
         end
