@@ -26,6 +26,10 @@ OrdersCtrl.prototype.applyReproductionFunctions = function(scope) {
     _this.editInvoiceDate(scope);
   }
 
+  scope.editInvoicePaymentDate = function() {
+    _this.editInvoicePaymentDate(scope);
+  }
+
 }
 
 
@@ -89,4 +93,9 @@ OrdersCtrl.prototype.hideCustomUnitFee = function(record) {
 
 OrdersCtrl.prototype.editInvoiceDate = function(scope) {
   scope.order['editInvoiceDate'] = true;
+}
+
+
+OrdersCtrl.prototype.editInvoicePaymentDate = function(scope) {
+  scope.order['editInvoicePaymentDate'] = true;
 }

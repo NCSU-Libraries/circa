@@ -8,7 +8,7 @@ module AspaceUtilities
   # Query ArchivesSpace Solr index (currently unused but available if needed)
   # Ensure that archivesspace_solr_port and archivesspace_solr_path are defined in application.yml
   def aspace_solr_query(query, params={})
-    solr_url = "http://#{ENV['archivesspace_host']}:#{ENV['archivesspace_solr_port']}#{ENV['archivesspace_solr_core_path']}"
+    solr_url = "http://#{ENV['archivesspace_solr_host']}#{ENV['archivesspace_solr_core_path']}"
     @solr = RSolr.connect :url => solr_url
     @solr_params = {:q => query }
     @solr_params.merge! params

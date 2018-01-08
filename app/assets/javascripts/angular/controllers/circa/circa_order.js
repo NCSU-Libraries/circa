@@ -18,12 +18,12 @@ CircaCtrl.prototype.applyOrderFunctions = function(scope) {
     _this.refreshCurrentOrder(scope, callback);
   }
 
-  scope.updateOrder = function(event) {
-    _this.updateOrder(scope, event);
+  scope.updateOrder = function() {
+    _this.updateOrder(scope);
   }
 
-  scope.updateOrderAndTriggerEvent = function(event) {
-    _this.updateOrderAndTriggerEvent(scope, event);
+  scope.updateAndRefreshOrder = function(event) {
+    _this.updateAndRefreshOrder(scope, event);
   }
 
 }
@@ -70,6 +70,8 @@ CircaCtrl.prototype.refreshOrder = function(scope, order, callback) {
   this.setDateSingleOrRange(scope);
   scope.order['editInvoiceDate'] = !scope.order['invoice_date'] ?
     true : false;
+  scope.order['editInvoicePaymentDate'] = !scope.order['invoice_payment_date'] ?
+    true : false;
   this.commonUtils.executeCallback(callback, scope);
 }
 
@@ -109,14 +111,10 @@ CircaCtrl.prototype.triggerOrderEvent = function(scope, orderId, event, callback
 }
 
 
-CircaCtrl.prototype.updateOrder = function(scope, event, callback) {
+CircaCtrl.prototype.updateOrder = function(scope, callback) {
   var _this = this;
   scope.loading = true;
-
   var data = { 'order': scope.order };
-  if (event) {
-    data['event'] = event;
-  }
 
   this.apiRequests.put("orders/" + scope.order['id'], data).then(function(response) {
     if (response.status == 200) {
@@ -132,8 +130,21 @@ CircaCtrl.prototype.updateOrder = function(scope, event, callback) {
 }
 
 
-CircaCtrl.prototype.updateOrderAndTriggerEvent = function(scope, event, callback) {
-  if (scope.order) {
-    this.updateOrder(scope, event, callback);
+CircaCtrl.prototype.updateAndRefreshOrder = function(scope, event, callback) {
+  var _this = this;
+  scope.loading = true;
+  var data = { 'order': scope.order };
+  if (event) {
+    data['event'] = event;
   }
+
+  this.apiRequests.put("orders/" + scope.order['id'], data).then(function(response) {
+    if (response.status == 200) {
+      _this.refreshOrder(scope, response.data['order'], callback);
+      scope.loading = false;
+    }
+    else if (response.data['error'] && response.data['error']['detail']) {
+      scope.flash = response.data['error']['detail'];
+    }
+  });
 }

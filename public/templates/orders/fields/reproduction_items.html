@@ -2,9 +2,9 @@
 
   <h2>Items to digitize</h2>
 
-  <div ng-include="templateUrl('orders/fields/item_list')"></div>
-
   <div ng-if="validationErrors['items']" class="validation-error field-validation-error">{{ validationErrors['items'] }}</div>
+
+  <div ng-include="templateUrl('orders/fields/item_list')"></div>
 
   <div ng-include="templateUrl('orders/fields/archivesspace_record_selector')"></div>
 

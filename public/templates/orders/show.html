@@ -39,11 +39,6 @@
     </section>
 
 
-    <section ng-show="order.has_fees">
-      <div ng-include="templateUrl('orders/order_invoice_date')"></div>
-    </section>
-
-
 
     <section>
       <h2>Researchers</h2>
@@ -59,7 +54,24 @@
     </section>
 
 
-    <!--
+    <section
+        ng-show="(order['order_type']['name'] == 'reproduction') && order['order_fee']">
+      <h2>Additional fee</h2>
+
+      <div class="record-overview">
+        <div class="inline overview-element">
+          <span class="label">Fee:</span>
+          <span class="value">{{ order['order_fee']['per_order_fee'] | currency }}</span>
+        </div>
+
+        <div class="inline overview-element">
+          <span class="label">Fee description:</span>
+          <span class="value">{{ order['order_fee']['per_order_fee_description'] }}</span>
+        </div>
+      </div>
+    </section>
+
+
     <section ng-show="order['order_type']['name'] == 'reproduction'">
       <h2>Digital images</h2>
       <div ng-include="templateUrl('orders/show_digital_image_list')"></div>
@@ -74,6 +86,27 @@
       <div class="note-content" ng-repeat="note in order['notes']">
         {{ note['content'] }}
       </div>
+
+    </section>
+
+
+    <section ng-show="order.has_fees" class="invoice-section">
+
+      <h2>Invoice</h2>
+
+      <div class="row">
+        <div class="small-12 medium-6 columns">
+          <div ng-include="templateUrl('orders/fields/invoice_date')"></div>
+        </div>
+
+        <div class="small-12 medium-6 columns end">
+          <div ng-include="templateUrl('orders/fields/invoice_payment_date')"></div>
+        </div>
+      </div>
+
+      <section ng-if="order['invoice_attn']">
+        Payment to attention of: {{ order['invoice_attn'] }}
+      </section>
 
     </section>
 

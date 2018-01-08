@@ -97,10 +97,10 @@ describe('ItemsCtrl', function () {
   });
 
 
-  describe('getItemHistory', function() {
+  describe('getItemMovementHistory', function() {
 
     it('uses apiRequests service to get item history', function() {
-      itemsCtrl.getItemHistory($scope);
+      itemsCtrl.getItemMovementHistory($scope);
       expect(apiRequestsStub.get.calledOnce).toBeTruthy();
     });
 

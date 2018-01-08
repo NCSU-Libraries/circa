@@ -30,8 +30,7 @@
             </div>
 
             <div ng-if="commonUtils.objectLength(digitalImageOrder['requested_images']) > 0">
-              {{ commonUtils.objectLength(digitalImageOrder['requested_images']) }}
-                images selected
+              {{ digitalImagesTotalSelectedText(digitalImageOrder) }}
               <ul>
                 <li ng-repeat="image in digitalImageOrder['requested_images']">
                   {{ image }}

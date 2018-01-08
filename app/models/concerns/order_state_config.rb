@@ -6,6 +6,15 @@ module OrderStateConfig
 
   included do
 
+    # require 'work_complete_mailer.rb'
+
+    # reproduction orders don't have a confirm step so confirm on create
+    after_create do
+      if self.order_type.name == 'reproduction'
+        confirm
+      end
+    end
+
 
     # Specify state an Order is in by default upon creation
     def initial_state
@@ -54,19 +63,14 @@ module OrderStateConfig
           event_description: "Reset order status to 'pending'."
         },
         {
-          event: :review,
-          to_state: :reviewing,
-          event_description: "Review the request prior to confirmation."
-        },
-        {
-          event: :confirm,
-          to_state: :confirmed,
-          event_description: "The request has been reviewed and items are approved for transfer, digitization and/or delivery to the requester."
-        },
-        {
           event: :begin_work,
           to_state: :in_progress,
-          event_description: "Digitization is in progress or files are being prepared for delivery.."
+          event_description: "Digitization/copying is in progress or files are being prepared for delivery."
+        },
+        {
+          event: :complete_work,
+          to_state: :work_complete,
+          event_description: "Digitization/copying is complete or files are ready for delivery."
         },
         {
           event: :fulfill,
@@ -91,7 +95,7 @@ module OrderStateConfig
     # Instance method that calls self.states_events class method above
     # Provides common functionality between Items and Orders for shared methods in state_transition_support
     def states_events_config
-      if self.order_type.name == 'reproduction'
+      if reproduction_order?
         config = self.class.states_events_reproduction
       else
         config = self.class.states_events
@@ -123,6 +127,9 @@ module OrderStateConfig
             i.trigger!(:order, { order_id: id, user_id: user_id })
           end
         end
+      when :complete_work
+        request = metadata[:request]
+        work_complete_notification(request)
       when :finish
         close
       end
@@ -137,7 +144,7 @@ module OrderStateConfig
     def event_permitted(event)
       case event
       when :review
-        current_state == :pending
+        [:pending, :requested].include? current_state
       when :confirm
         if !has_digital_items?
           [:pending, :reviewing].include? current_state
@@ -145,17 +152,19 @@ module OrderStateConfig
           current_state == :reviewing
         end
       when :begin_work
-        current_state == :confirmed
+        current_state == :pending && any_items_ready?
+      when :complete_work
+        current_state == :in_progress
       when :fulfill
-        if order_type.name == 'reproduction'
-          [:confirmed, :in_progress].include? current_state
+        if reproduction_order?
+          current_state == :work_complete
         else
           all_items_ready? && (current_state == :confirmed)
         end
       when :activate
         current_state == :fulfilled
       when :finish
-        if order_type.name == 'reproduction'
+        if reproduction_order?
           current_state == :fulfilled
         else
           (current_state == :fulfilled) && finished?
@@ -194,9 +203,30 @@ module OrderStateConfig
     end
 
 
+    # Returns true if any items associated with this Order are ready for use
+    def any_items_ready?
+      ready = false
+      if items.blank?
+        ready = true
+      else
+        items.each do |i|
+          if !i.obsolete
+            if i.digital_object
+              ready = i.state_reached_for_order(:ready_at_use_location, self.id)
+            else
+              ready = i.state_reached_for_order(:ready_at_temporary_location, self.id)
+            end
+          end
+          break if ready
+        end
+      end
+      ready
+    end
+
+
     # Triggers the :fulfill event for this Order if all of its Items are ready for use
     def fulfill_if_items_ready(metadata)
-      if order_type.name != 'reproduction'
+      if !reproduction_order?
         if available_events.include?(:fulfill) && all_items_ready?
           trigger(:fulfill, metadata)
         end
@@ -231,6 +261,18 @@ module OrderStateConfig
       end
       finished
     end
+
+
+    private
+
+
+    def work_complete_notification(request)
+      order_url = "#{request.host_with_port}/#/orders/#{self.id}"
+      self.assignees.each do |a|
+        WorkCompleteMailer.assignee_email(self, a, order_url).deliver_later
+      end
+    end
+
 
   end
 end

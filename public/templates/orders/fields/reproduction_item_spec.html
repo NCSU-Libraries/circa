@@ -2,12 +2,18 @@
 
   <div class="small-12 columns">
 
-    <div ng-class="validationErrors['reproduction_spec_detail'] ? 'has-error' : ''">
-
-      <div ng-if="validationErrors['reproduction_spec_detail']" class="validation-error field-validation-error">{{ validationErrors['reproduction_spec_detail'] }}</div>
+    <div ng-class="validationErrors['reproduction_spec_detail'][$index] ?
+        'has-error' : ''">
 
       <div class="heading">Specific items for reproduction</div>
+
       <textarea ng-model="itemOrder['reproduction_spec']['detail']"></textarea>
+
+      <div
+          ng-if="validationErrors['reproduction_spec_detail'][$index]"
+          class="validation-error field-validation-error">
+        {{ validationErrors['reproduction_spec_detail'][$index] }}
+      </div>
 
     </div>
 
@@ -20,12 +26,18 @@
 
   <div class="small-12 medium-2 columns">
 
-    <div ng-class="validationErrors['reproduction_spec_pages'] ? 'has-error' : ''">
+    <div ng-class="validationErrors['reproduction_spec_pages'][$index] ?
+        'has-error' : ''">
 
-      <div ng-if="validationErrors['reproduction_spec_pages']" class="validation-error field-validation-error">{{ validationErrors['reproduction_spec_pages'] }}</div>
+      <div class="heading">Total pages/files</div>
 
-      <div class="heading">Total pages</div>
       <input type="number" ng-model="itemOrder['reproduction_spec']['pages']" />
+
+      <div
+          ng-if="validationErrors['reproduction_spec_pages'][$index]"
+          class="validation-error field-validation-error">
+        {{ validationErrors['reproduction_spec_pages'][$index] }}
+      </div>
 
     </div>
 
@@ -34,21 +46,28 @@
 
   <div class="small-12 medium-10 columns">
 
-    <div ng-class="validationErrors['reproduction_spec_format'] ? 'has-error' : ''">
-
-      <div ng-if="validationErrors['reproduction_spec_format']" class="validation-error field-validation-error">{{ validationErrors['reproduction_spec_format'] }}</div>
+    <div ng-class="validationErrors['reproduction_spec_format'][$index] ?
+        'has-error' : ''">
 
       <div class="heading">Format</div>
+
       <select
         ng-model="itemOrder['reproduction_spec']['reproduction_format_id']"
         ng-change="setReproductionFormat(itemOrder)">
         <option
           ng-repeat="reproductionFormat in controlledValues['reproduction_format']"
           ng-value="{{ reproductionFormat['id'] }}"
-          ng-selected="reproductionFormat['id'] == itemOrder['reproduction_spec']['reproduction_format_id']">
+          ng-selected="reproductionFormat['id'] ==
+              itemOrder['reproduction_spec']['reproduction_format_id']">
           {{ reproductionFormat.name }}
         </option>
       </select>
+
+      <div
+          ng-if="validationErrors['reproduction_spec_format'][$index]"
+          class="validation-error field-validation-error">
+        {{ validationErrors['reproduction_spec_format'][$index] }}
+      </div>
 
     </div>
 

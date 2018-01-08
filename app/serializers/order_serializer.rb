@@ -2,12 +2,12 @@ class OrderSerializer < ActiveModel::Serializer
 
   attributes :id, :access_date_start, :access_date_end, :order_type_id,
       :order_sub_type_id, :confirmed, :open, :location_id, :invoice_date,
-      :created_at, :updated_at, :cloned_order_id,
-      :archivesspace_records, :catalog_records,
+      :invoice_payment_date, :invoice_attn, :created_at, :updated_at,
+      :cloned_order_id, :archivesspace_records, :catalog_records,
       :catalog_items, :order_fee, :current_state, :permitted_events,
       :available_events, :states_events, :num_items,
       :primary_user_id, :primary_user_id, :num_items_ready, :created_by_user,
-      :deletable, :item_ids_in_use, :has_fees, :clone_orders
+      :deletable, :item_ids_in_use, :has_fees, :clone_orders, :reproduction_order?
 
   belongs_to :order_type
   belongs_to :order_sub_type
@@ -19,6 +19,7 @@ class OrderSerializer < ActiveModel::Serializer
   has_many :assignees, serializer: OrderUserSerializer
   has_many :notes
   has_one :course_reserve
+  has_one :order_fee, as: :record
 
 
   def created_at

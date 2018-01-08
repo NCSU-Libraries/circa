@@ -47,7 +47,7 @@ class OrdersController < ApplicationController
     @order = Order.create!(order_params)
     @params = params
 
-    update_associations
+    update_associations(:create)
 
     # Consider revising - update_index is called twice, once after order is created and again here
     @order.update_index
@@ -194,6 +194,8 @@ class OrdersController < ApplicationController
     @item_orders = @order.item_orders.includes(:order_fee, :item, :reproduction_spec)
     @digital_image_orders = @order.digital_image_orders.includes(:order_fee)
     @order_fees_total = @order.order_fees_total
+    @invoice_date = @order.invoice_date || DateTime.now.to_date
+    @invoice_id = @order.invoice_id || @order.generate_invoice_id
     render layout: 'layouts/print'
   end
 
@@ -221,7 +223,7 @@ class OrdersController < ApplicationController
   def order_params
     params.require(:order).permit(:access_date_start, :access_date_end, :type,
         :location_id, :order_sub_type_id, :user_id, :cloned_order_id,
-        :invoice_date)
+        :invoice_date, :invoice_payment_date, :invoice_attn)
   end
 
 
@@ -253,7 +255,7 @@ class OrdersController < ApplicationController
   end
 
 
-  def update_associations
+  def update_associations(action = :update)
     if @users
       update_users
     end
@@ -263,7 +265,7 @@ class OrdersController < ApplicationController
     end
 
     if @notes
-      update_notes
+      update_notes(action)
     end
 
     if @assignees
@@ -271,7 +273,7 @@ class OrdersController < ApplicationController
     end
 
     if @course_reserve
-      update_course_reserve
+      update_course_reserve(action)
     end
 
     if @digital_image_orders
@@ -349,6 +351,11 @@ class OrdersController < ApplicationController
       note: order_fee_data['note'],
       unit_fee_type: order_fee_data['unit_fee_type']
     }
+
+    [:per_unit_fee, :per_order_fee].each do |key|
+      atts[key] = atts[key].to_f <= 0 ? nil : atts[key]
+    end
+
     existing_order_fee = OrderFee.find_by(record_id: record_id, record_type: record_type)
     if existing_order_fee
       existing_order_fee.update_attributes(atts)
@@ -369,7 +376,8 @@ class OrdersController < ApplicationController
         display_uri: digital_image_order['display_uri'],
         manifest_uri: digital_image_order['manifest_uri'],
         requested_images: digital_image_order['requested_images'],
-        requested_images_detail: digital_image_order['requested_images_detail']
+        requested_images_detail: digital_image_order['requested_images_detail'],
+        total_images_in_resource: digital_image_order['total_images_in_resource']
       }
     end
 
@@ -417,7 +425,7 @@ class OrdersController < ApplicationController
   end
 
 
-  def update_notes
+  def update_notes(action = :update)
     if (@order.notes.length == 0) && (@notes.length == 0)
       return
     elsif (@order.notes.length == 0) && (@notes.length > 0)
@@ -439,7 +447,10 @@ class OrdersController < ApplicationController
   end
 
 
-  def update_course_reserve
+  def update_course_reserve(action = :update)
+    if action == :create
+      @course_reserve.delete('id')
+    end
     @order.create_or_update_course_reserve(@course_reserve.symbolize_keys)
   end
 
@@ -467,14 +478,10 @@ class OrdersController < ApplicationController
 
   def update_order_fee
     @existing_order_fee = @order.order_fee
-    if @existing_order_fee && @order_fee
-      @existing_order_fee.update_attributes(@order_fee)
-    elsif @existing_order_fee && !@order_fee
+    if @existing_order_fee && !@order_fee
       @existing_order_fee.destroy
-    elsif @order_fee && !@existing_order_fee
-      atts = { record_type: 'Order', record_id: @order.id }
-      atts.merge!(@order_fee)
-      OrderFee.create!(@order_fee)
+    elsif @order_fee
+      create_or_update_order_fee(@order.id, 'Order', @order_fee)
     end
   end
 

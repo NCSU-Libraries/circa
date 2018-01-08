@@ -364,24 +364,42 @@ class Item < ActiveRecord::Base
   # Returns current and previous versions of the Item based on changes to
   #   non-transient attributes (basically everything but current_location)
   def modification_history
+    history = []
+
     location_attributes = lambda do |location_id|
       location = Location.find_by(id: location_id)
-      if location
-        return { title: l.title, uri: l.uri }
-      end
+      return location ? { title: location.title, uri: location.uri } : nil
     end
 
     user_attributes = lambda do |user_id|
       user = User.find_by(id: user_id)
-      if user
+      return user ? { email: user.email, display_name: user.display_name } : nil
+    end
 
+    gather_attributes = lambda do |item_version|
+      atts = item_version.attributes
+      atts['source'] = source
+      location_id = item_version.permanent_location_id
+      user_id = item_version.paper_trail.originator.to_i
+      atts['permanent_location'] = location_attributes.(location_id)
+      atts['user'] = user_attributes.(user_id)
+      if item_catalog_record
+        atts['item_catalog_record'] = item_catalog_record.attributes
+      end
+      return atts
+    end
+
+    add_to_history = Proc.new do |item|
+      history << gather_attributes.(item)
+      previous = item.paper_trail.previous_version
+      if previous
+        add_to_history.(previous)
       end
     end
 
-    gather_attributes = lambda do |version|
+    add_to_history.(self)
 
-    end
-
+    history
   end
 
 
@@ -483,7 +501,7 @@ class Item < ActiveRecord::Base
       end
     when 'catalog'
       if item_catalog_record
-        Item.create_or_update_from_catalog(icr.catalog_record_id, icr.catalog_item_id)
+        Item.create_or_update_from_catalog(item_catalog_record.catalog_record_id, item_catalog_record.catalog_item_id)
       end
     end
   end

@@ -26,7 +26,7 @@ var OrdersShowCtrl = function($scope, $route, $routeParams, $location, $window, 
   }
 
   $scope.calculatedItemsLimit = function() {
-    return $scope.truncateItems ? $scope.itemsLimit : $scope.order.items.length
+    return $scope.truncateItems ? $scope.itemsLimit : $scope.order.item_orders.length
   }
 
   $scope.toggleTruncateUsers = function() {

@@ -47,6 +47,11 @@ class Order < ActiveRecord::Base
   end
 
 
+  def reproduction_order?
+    order_type.name == 'reproduction'
+  end
+
+
   def self.first_datetime
     where('created_at is not null').order('created_at asc').limit(1).pluck('created_at')[0]
   end
@@ -387,6 +392,22 @@ class Order < ActiveRecord::Base
         end
       end
     end
+  end
+
+
+  def generate_invoice_id
+    if !invoice_id
+      user = users.first
+      if user && user.last_name
+        prefix = user.last_name.byteslice(0,3).upcase
+      else
+        prefix = 'CIR'
+      end
+      date = invoice_date || DateTime.now.to_date
+      suffix = date.strftime("%m%d%y")
+      update_attributes(invoice_id: "#{prefix}-#{suffix}")
+    end
+    invoice_id
   end
 
 end

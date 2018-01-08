@@ -25,7 +25,10 @@
 
             <div class="detail-element">
 
-              <div class="subhead">{{ commonUtils.objectLength(digitalImageOrder['requested_images']) }} images requested:</div>
+              <div class="subhead">
+                {{ digitalImageOrder['requested_images'].length }}
+                {{ digitalImageOrder['requested_images'].length == 1 ? "image" : "images" }}
+                requested:</div>
 
               <ul>
                 <li ng-repeat="imageId in digitalImageOrder['requested_images']">{{ imageId }}</li>

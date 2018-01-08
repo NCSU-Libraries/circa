@@ -26,7 +26,6 @@ circaApp.config(['$routeProvider', '$locationProvider', function($routeProvider,
   $routeProvider.when('/orders/:orderId/clone', { templateUrl: templatePath + 'orders/new.html', controller: 'OrdersCloneCtrl' });
   $routeProvider.when('/items', { templateUrl: templatePath + 'items/list.html', controller: 'ItemsListCtrl' });
   $routeProvider.when('/items/:itemId', { templateUrl: templatePath + 'items/show.html', controller: 'ItemsShowCtrl' });
-  // $routeProvider.when('/items/:itemId/history', {templateUrl: templatePath + 'items/history.html', controller: 'ItemsHistoryCtrl'});
   $routeProvider.when('/users', { templateUrl: templatePath + 'users/list.html', controller: 'UsersListCtrl' });
   $routeProvider.when('/users/new', { templateUrl: templatePath + 'users/new.html', controller: 'UsersNewCtrl' });
   $routeProvider.when('/users/:userId', { templateUrl: templatePath + 'users/show.html', controller: 'UsersShowCtrl' });

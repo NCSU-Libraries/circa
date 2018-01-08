@@ -1,0 +1,109 @@
+<div class="record-overview item-overview version-overview">
+
+  <div ng-if="$index == 0">
+    <div class="inline overview-element">
+      <span class="label current">Current version</span>
+    </div>
+  </div>
+
+
+  <!-- version update info -->
+  <div ng-if="!$last" class="version-update-info">
+    <div class="inline overview-element">
+      <span class="label">Updated:</span>
+      <span class="value">{{ version['updated_at'] | date: 'yyyy-MM-dd HH:mm:ss a' }}
+    </div>
+
+    <div class="inline overview-element">
+      <span class="label">Updated by:</span>
+      <span class="value">{{ version['user']['display_name'] }}
+    </div>
+  </div>
+
+
+  <div ng-if="$last" class="version-update-info">
+    <div class="inline overview-element">
+      <span class="label">Created:</span>
+      <span class="value">{{ version['created_at'] | date: 'yyyy-MM-dd HH:mm:ss a' }}
+    </div>
+  </div>
+  <!-- END version update info -->
+
+
+  <div ng-if="version['resource_identifier']">
+    <div class="inline overview-element">
+      <span class="label">Resource identifier:</span>
+      <span class="value">{{ version['resource_identifier'] }}</span>
+    </div>
+  </div>
+
+
+  <div>
+    <div class="inline overview-element">
+      <span class="label">Resource title:</span>
+      <span class="value">{{ version['resource_title'] }}</span>
+    </div>
+  </div>
+
+
+  <div ng-show="version['digital_object']">
+
+    <div class="inline overview-element">
+      <span class="label">Digital Object:</span>
+      <span class="value">
+        <span
+            ng-click="openArchivesSpaceRecord(version['uri'])"
+            class="link"
+            poptip="{{ version['uri'] }}">{{ version['digital_object_title'] }}</span>
+        </span>
+    </div>
+
+  </div>
+
+
+
+  <div ng-show="!version['digital_object']">
+
+    <div class="inline overview-element nowrap" ng-if="version['source'] == 'archivesspace'">
+      <span class="label">Container:</span>
+      <span class="value">{{ version['container'] }}</span>
+    </div>
+
+    <div class="inline overview-element nowrap" ng-if="version['barcode']">
+      <span class="label">Barcode:</span>
+      <span class="value">{{ version['barcode'] }}</span>
+    </div>
+
+  </div>
+
+
+
+  <div ng-if="version['source'] == 'catalog'">
+
+    <div class="inline overview-element nowrap">
+      <span class="label">Call number:</span>
+      <span class="value">{{ version['resource_identifier'] }}</span>
+    </div>
+
+    <div class="inline overview-element nowrap">
+      <span class="label">Catalog record ID:</span>
+      <span class="value">{{ version['item_catalog_record']['catalog_record_id'] }}</span>
+    </div>
+
+    <div class="inline overview-element nowrap">
+      <span class="label">Catalog item ID:</span>
+      <span class="value">{{ version['item_catalog_record']['catalog_item_id'] }}</span>
+    </div>
+
+  </div>
+
+
+  <div>
+    <div class="inline overview-element nowrap">
+      <span class="label">Permanent location:</span>
+      <span class="value">{{ version['permanent_location']['title'] }}</span>
+    </div>
+  </div>
+
+
+</div>

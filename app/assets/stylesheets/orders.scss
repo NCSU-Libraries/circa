@@ -149,3 +149,17 @@ ul.records-list.orders-list {
   }
 
 }
+
+
+section.invoice-section {
+  padding: 0.5rem 1rem;
+  background: $grayGhost;
+
+  .column, .columns {
+    padding-left: 0;
+  }
+
+  .form-field, button, .button {
+    margin-bottom: 0;
+  }
+}

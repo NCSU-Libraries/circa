@@ -1,4 +1,6 @@
-<div ng-if="hasValidationErrors == true" class="validation-error form-validation-error">
+<div
+    ng-if="hasValidationErrors == true"
+    class="validation-error form-validation-error">
 Please fix the problems noted below.
 </div>
 
@@ -10,7 +12,11 @@ Please fix the problems noted below.
 <div ng-show="order['order_type']">
 
   <!-- course info - for course reserves only -->
-  <div ng-include="templateUrl('orders/fields/course_info')" ng-show="order['order_sub_type'] && order['order_sub_type']['name'] == 'course_reserve'"></div>
+  <div
+      ng-include="templateUrl('orders/fields/course_info')"
+      ng-show="order['order_sub_type'] && order['order_sub_type']['name'] ==
+          'course_reserve'">
+  </div>
 
 
   <!-- users -->
@@ -18,9 +24,22 @@ Please fix the problems noted below.
 
 
   <!-- items -->
-  <div ng-include="templateUrl('orders/fields/items')" ng-show="order['order_type']['name'] != 'reproduction'"></div>
+  <div
+      ng-include="templateUrl('orders/fields/items')"
+      ng-show="order['order_type']['name'] != 'reproduction'">
+  </div>
 
-  <div ng-include="templateUrl('orders/fields/reproduction_items')" ng-show="order['order_type']['name'] == 'reproduction'"></div>
+  <div
+      ng-include="templateUrl('orders/fields/reproduction_items')"
+      ng-show="order['order_type']['name'] == 'reproduction'">
+  </div>
+
+
+  <!-- order fee -->
+  <div
+      ng-show="order['order_sub_type']['name'] == 'reproduction_fee'"
+      ng-include="templateUrl('orders/fields/order_reproduction_fee')">
+  </div>
 
 
   <!-- dates -->
@@ -37,5 +56,12 @@ Please fix the problems noted below.
 
   <!-- notes -->
   <div ng-include="templateUrl('orders/fields/notes')"></div>
+
+
+  <!-- invoice ATTN: -->
+  <div
+      ng-show="order['order_sub_type']['name'] == 'reproduction_fee'"
+      ng-include="templateUrl('orders/fields/invoice_attn')"></div>
+
 
 </div>
