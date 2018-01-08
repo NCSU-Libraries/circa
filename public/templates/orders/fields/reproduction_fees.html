@@ -16,8 +16,8 @@
                   ng-model="itemOrder['order_fee']['unit_fee_type']"
                   ng-value="option['name']"
                   ng-change="setUnitFee(itemOrder, option['value'])"/>
-              <span ng-if="option['name'] == 'default_internal'">NCSU:</span>
-              <span ng-if="option['name'] == 'default_external'">non-NCSU:</span>
+              <span ng-if="option['name'] == 'default_internal'">affiliated:</span>
+              <span ng-if="option['name'] == 'default_external'">not affiliated:</span>
               {{ option['value'] | currency  }}
             </span>
 
