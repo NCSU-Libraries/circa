@@ -10,7 +10,7 @@ Circa provides close integration with ArchivesSpace, upon which the application 
 * Ruby 2.2.1 or higher
 * MySQL
 * Solr 5
-* Redis (to support notifications)
+* Redis (to support email notifications)
 
 # Quick start
 
@@ -74,48 +74,97 @@ Next you need to add a Solr core for Circa.
 If you navigate (in your browser) to localhost:8983 you should see the Solr admin UI, and 'circa' should be included in the 'Core Selector' dropdown on the left. If so, you are ready to go.
 
 
-## Configuration
+## Database configuration
 
-Several YAML files are used to set environment variables used by the application to facilitate communication with other systems and components. In each case, settings can be made per environment, with the ability to define inheritable default values. Settings defined at the environment level will override the defaults.
+Database connection parameters should be stored in `config/database.yml`.
+This is a standard Rails config file. For more info, see the
+[Rails configuration documentation](http://edgeguides.rubyonrails.org/configuring.html#configuring-a-database)
 
-Example files are included in the **config** directory. You will save copies of these in the same directory, following the instructions below.
+There are 2 example files included. Select the appropriate file and rename or
+save a copy as **database.yml**
 
+**config/database-sqlite3.yml** -
+To use the embedded SQLite database for evaluation or development. Use as is.
 
-### config/database.yml
-
-Sets database connection parameters. There are 2 example files included. Select the appropriate file and rename or save a copy as **database.yml**
-
-**config/database-sqlite3.yml** - To use the embedded SQLite database for evaluation or development. Use as is.
-
-**config/database-mysql.yml** - To use MySQL. Edit this file with the appropriate options for your database. This is a standard Rails config file. For more info, see the [Rails configuration documentation](http://edgeguides.rubyonrails.org/configuring.html#configuring-a-database)
-
-
-### config/archivesspace.yml
-
-Sets variables required to communicate with the ArchivesSpace API and provide links to the ArchviesSpace staff interface. Locate **archivesspace.example.yml**, save as **archivesspace.yml**, and update values as follows:
-
-* **archivesspace\_backend_port**: Port number (as a string) of ArchivesSpace back end
-* **archivesspace\_frontend_port**: Port number (as a string) of ArchivesSpace front end/ staff interface
-* **archivesspace\_solr_port**: Port number (as a string) of ArchivesSpace Solr index*
-* **archivesspace\_solr\_core_path**: path (from URL root) to the ArchivesSpace Solr core*
-* **archivesspace_username**: User name used to connect to ArchivesSpace. User should have read access to all resources
-* **archivesspace_password**: Password associated with ArchivesSpace API user
-
-\* Note that, while there are methods available to communicate with the ArchivesSpace Solr index, this functionality is not currently being used in the application
+**config/database-mysql.yml** -
+To use MySQL. Edit this file with the appropriate options for your database.
 
 
-### config/solr.yml
+## Additional configuration parameters
 
-Set variables required to connect to your Solr index. Locate **solr.example.yml**, save as **solr.yml**, and update values as follows:
+Before using Circa you must provide configuration parameters in
+`config/application.yml`. These are used to set environment variables required
+by the application to facilitate communication with other systems and components.
+
+Settings can be made per environment, with the ability to define inheritable
+default values. Settings defined at the environment level will override the defaults.
+
+The file `config/application_example.yml` can be used as a guide. The easiest
+way to begin is to save a copy of this file as `config/application.yml` and
+make changes as required.
+
+> NOTE: Due to complications in conversion to Rails environment
+> variables, special handling is required for boolean values:
+>
+> * For true, use `'1'`, or any other quoted string
+>
+> * Do not use false as a value, just exclude the parameter and it will not be set,
+> which will have the same effect. Unfortunately, you cannot use `false` to
+> override a default value of `true` - in this case you'd have to specify the value
+> for each environment separately.
+
+### ArchivesSpace connection parameters
+
+These facilitate communication with the ArchivesSpace API and provide links to the
+ArchivesSpace staff interface. Options are available to support a variety of
+ArchivesSpace deployment scenarios.
+
+* **archivesspace_host** (ex. 'archivespace.yourhost.org')<br>
+The host name for the ArchivesSpace instance.
+This option should be used for the 'default' ArchivesSpace deployment scenario,
+with each component sharing a host but served on different ports.
+
+* **archivesspace_backend_host** (ex. 'api.archivespace.yourhost.org')<br>
+The hostname for the ArchivesSpace backend (API).
+Use this option if the backend uses an unique host name. If present, this value
+will override **archivesspace_host**
+
+* **archivesspace_frontend_host** (ex. 'staff.archivespace.yourhost.org')<br>
+The hostname for the ArchivesSpace frontend (staff interface).
+Use this option if the frontend uses an unique host name. If present, this value
+will override **archivesspace_host**
+
+* **archivesspace_backend_port** (ex. 8089)<br>
+The port number used to connect to the ArchivesSpace backend. If your deployment
+does not require a port number (e.g. for SSL) **do not include this option**.
+
+* **archivesspace_backend_port** (ex. 8080)<br>
+The port number used to connect to the ArchivesSpace frontend. If your deployment
+does not require a port number (e.g. for SSL) **do not include this option**.
+
+* **archivesspace_username**: User name used to connect to ArchivesSpace.
+User should have read access to all resources.
+
+* **archivesspace_password**: Password associated with archivesspace_username
+
+* **archivesspace_https**: To force connections via https, set this to '1',
+otherwise leave it out.
+
+
+### Solr connection parameters
+
+These are required to connect to your Solr index.
 
 * **solr_host**: The host name of your active Solr 5 installation
 * **solr_port**: The port on which your Solr instance is running
-* **solr\_core_path**: The path to the Solr core used by Circa
+* **solr_core_path**: The path to the Solr core used by Circa
+* **solr_https**: To force connections via https, set this to '1',
+otherwise leave it out.
 
 
-### config/email.yml
+### Email notification parameters
 
-Sets variables required for email notifications sent by Circa.
+Set variables required for email notifications sent by Circa.
 
 * **order\_notification\_default_email**: Comma-separated list of email addresses to receive notifications when an order is created
 * **order\_notification\_digital\_items_email**: Comma-separated list of email addresses to receive notifications when an order is created that includes digital items
@@ -231,7 +280,7 @@ Each Order is assigned a use location. As Items on an Order are transferred to t
 
 Circa manages state for Orders and Items, and state changes are persisted in the database to provide an audit trail.
 
-For each model, a corresponding state configuration file (<model_name>_state_config.rb) can be found in app/models/concerns/. This file is used to define states, events that trigger transition to a specific state, rules defining conditions under which specific events/state changes are permitted, and callback methods to be executed after state changes have been completed.
+For each model, a corresponding state configuration file (<model_name>\_state_config.rb) can be found in app/models/concerns/. This file is used to define states, events that trigger transition to a specific state, rules defining conditions under which specific events/state changes are permitted, and callback methods to be executed after state changes have been completed.
 
 
 ## JSON API

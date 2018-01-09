@@ -1,6 +1,6 @@
 require 'active_support/concern'
 
-module SolrUtilities
+module SolrList
   extend ActiveSupport::Concern
 
   included do

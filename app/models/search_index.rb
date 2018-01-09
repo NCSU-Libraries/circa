@@ -1,6 +1,7 @@
 class SearchIndex
 
-  @@solr_url = "http://#{ENV['solr_host']}:#{ENV['solr_port']}#{ENV['solr_core_path']}"
+  include SolrConnect
+
   @@batch_size = 50
 
   def self.wipe_index

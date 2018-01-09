@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
 
-  include SolrUtilities
+  include SolrList
 
   before_action :set_item, only: [
     :show, :edit, :update, :destroy, :update_state, :check_out, :check_in,

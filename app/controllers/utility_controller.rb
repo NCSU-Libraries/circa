@@ -76,9 +76,15 @@ class UtilityController < ApplicationController
 
 
   def archivesspace_redirect
-    url_protocol = ENV['archivesspace_https'] ? 'https://' : 'http://'
+    protocol = ENV['archivesspace_https'] ? 'https://' : 'http://'
+    host = ENV['archivesspace_frontend_host'] ? ENV['archivesspace_frontend_host'] :
+        ENV['archivesspace_host']
+    port = ENV['archivesspace_frontend_port'] ? ENV['archivesspace_frontend_port'] :
+        nil
+    redirect_url = "#{protocol}#{host}#{port ? ':' : ''}#{port}"
     redirect_url = url_protocol + ENV['archivesspace_url_host'] + ':' +
         ENV['archivesspace_frontend_port'] + '/'
+
     redirect_url += params[:archivesspace_path] ?
         params[:archivesspace_path] : ''
     redirect_to redirect_url
@@ -86,9 +92,12 @@ class UtilityController < ApplicationController
 
 
   def archivesspace_resolver
-    url_protocol = ENV['archivesspace_https'] ? 'https://' : 'http://'
-    redirect_url = url_protocol + ENV['archivesspace_host'] + ':' +
-        ENV['archivesspace_frontend_port']
+    protocol = ENV['archivesspace_https'] ? 'https://' : 'http://'
+    host = ENV['archivesspace_frontend_host'] ? ENV['archivesspace_frontend_host'] :
+        ENV['archivesspace_host']
+    port = ENV['archivesspace_frontend_port'] ? ENV['archivesspace_frontend_port'] :
+        nil
+    redirect_url = "#{protocol}#{host}#{port ? ':' : ''}#{port}"
     redirect_url += '/resolve/readonly?uri=/'
     redirect_url += params[:archivesspace_uri]
     redirect_to redirect_url
@@ -215,8 +224,10 @@ class UtilityController < ApplicationController
 
 
   def options
-    @options = YAML.load_file('config/options.yml')
-    render json: { options: @options }
+    render json: {
+      send_order_notifications: ENV['send_order_notifications'],
+      use_devise_passwords: ENV['use_devise_passwords']
+    }
   end
 
 end

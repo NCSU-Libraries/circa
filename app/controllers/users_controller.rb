@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   include UsersControllerCustom
-  include SolrUtilities
+  include SolrList
   include NCSULdapUtils
 
   before_action :set_paper_trail_whodunnit

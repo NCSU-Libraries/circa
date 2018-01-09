@@ -15,10 +15,7 @@ require "sprockets/railtie"
 Bundler.require(*Rails.groups)
 
 # Load application ENV vars and merge with existing ENV vars. Loaded here so can use values in initializers.
-ENV.update YAML.load_file('config/archivesspace.yml')[Rails.env] rescue {}
-ENV.update YAML.load_file('config/solr.yml')[Rails.env] rescue {}
-ENV.update YAML.load_file('config/email.yml')[Rails.env] rescue {}
-ENV.update YAML.load_file('config/options.yml')[Rails.env] rescue {}
+ENV.update YAML.load_file('config/application.yml')[Rails.env] rescue {}
 
 module Circa
   class Application < Rails::Application

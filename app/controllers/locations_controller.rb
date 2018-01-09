@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
 
-  include SolrUtilities
+  include SolrList
 
   before_action :set_location, only: [ :show, :update, :destroy ]
 

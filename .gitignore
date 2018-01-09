@@ -5,13 +5,16 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Ignore secrets
+/config/application.yml
 /config/deploy.rb
 /config/database.yml
 /config/secrets.yml
+# legacy config files
 /config/archivesspace.yml
 /config/solr.yml
 /config/email.yml
 /config/wolftech.yml
+
 /README.md.old
 
 # Ignore sqlite db if there is one

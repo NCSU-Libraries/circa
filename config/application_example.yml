@@ -1,0 +1,40 @@
+defaults: &defaults
+
+  ### ArchivesSpace connection ###
+  archivesspace_host: localhost
+  archivesspace_backend_port: 8089
+  archivesspace_frontend_port: 8080
+  archivesspace_username: admin
+  archivesspace_password: n0tadm1n
+  # archivesspace_frontend_host: localhost
+  # archivesspace_solr_host: localhost
+  # archivesspace_backend_host: localhost
+  # archivesspace_https: '1'
+
+  ### email settings
+  order_notification_default_email: 'user@yourdomain.org'
+  # order_notification_digital_items_email: 'user@yourdomain.org'
+  circa_email: 'circa@yourdomain.org'
+  circa_email_display_name: 'Circa notfications'
+
+  ### Solr
+  solr_host: localhost
+  solr_port: '8983'
+  solr_core_name: 'circa'
+  solr_core_path: /solr/circa/
+
+  ### misc options
+  use_devise_passwords: '1'
+  send_order_notifications: '1'
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults

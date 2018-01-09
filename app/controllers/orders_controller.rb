@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
 
-  include SolrUtilities
+  include SolrList
 
   before_action :set_order, only: [
     :show, :edit, :update, :destroy, :update_state, :add_associations,

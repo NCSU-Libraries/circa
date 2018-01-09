@@ -1,7 +1,7 @@
 class Search
 
   include GeneralUtilities
-
+  include SolrConnect
 
   ######################################
   # CONFIG
@@ -61,9 +61,6 @@ class Search
   # 'group.limit'
   @@group_limit_default = 5
   ###
-
-  # Solr URL - constructed here using ENV vars declared on initialization
-  @@solr_url = "http://#{ENV['solr_host']}:#{ENV['solr_port']}#{ENV['solr_core_path']}"
 
   ######################################
   # END CONFIG
