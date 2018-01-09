@@ -12,36 +12,8 @@ Circa provides close integration with ArchivesSpace, upon which the application 
 * Solr 5
 * Redis (to support email notifications)
 
-# Quick start
 
-## Vagrant
-
-Development is done in Vagrant. You will need to have [Vagrant](https://www.vagrantup.com/) installed.
-
-Check out the code:
-
-```sh
-git clone git@github.com:NCSU-Libraries/circa.git
-cd circa
-```
-
-Start vagrant:
-
-```sh
-vagrant plugin install vagrant-vbguest vagrant-triggers
-vagrant up
-```
-
-While this is installing the appropriate box and provisioning it, you can look through the /ansible directory to get some idea of all the dependencies and how the application gets deployed to a production environment.
-
-After finished provisioning the box, ssh to the box, go to `/vagrant` directory and start the server.
-```sh
-vagrant ssh
-cd /vagrant
-rails server -b 0.0.0.0
-```
-
-# Manual Installation
+# Installation
 
 These instructions should help you get a local development version up and running. Better options for providing a development environment (like Vagrant) are in the works.
 
