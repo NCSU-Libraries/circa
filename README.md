@@ -119,26 +119,26 @@ These facilitate communication with the ArchivesSpace API and provide links to t
 ArchivesSpace staff interface. Options are available to support a variety of
 ArchivesSpace deployment scenarios.
 
-* **archivesspace_host** (ex. 'archivespace.yourhost.org')<br>
+* **archivesspace_host** (ex. *archivespace.yourhost.org*)<br>
 The host name for the ArchivesSpace instance.
 This option should be used for the 'default' ArchivesSpace deployment scenario,
 with each component sharing a host but served on different ports.
 
-* **archivesspace_backend_host** (ex. 'api.archivespace.yourhost.org')<br>
+* **archivesspace_backend_host** (ex. *api.archivespace.yourhost.org*)<br>
 The hostname for the ArchivesSpace backend (API).
 Use this option if the backend uses an unique host name. If present, this value
 will override **archivesspace_host**
 
-* **archivesspace_frontend_host** (ex. 'staff.archivespace.yourhost.org')<br>
+* **archivesspace_frontend_host** (ex. *staff.archivespace.yourhost.org*)<br>
 The hostname for the ArchivesSpace frontend (staff interface).
 Use this option if the frontend uses an unique host name. If present, this value
 will override **archivesspace_host**
 
-* **archivesspace_backend_port** (ex. 8089)<br>
+* **archivesspace_backend_port** (ex. *8089*)<br>
 The port number used to connect to the ArchivesSpace backend. If your deployment
 does not require a port number (e.g. for SSL) **do not include this option**.
 
-* **archivesspace_backend_port** (ex. 8080)<br>
+* **archivesspace_backend_port** (ex. *8080*)<br>
 The port number used to connect to the ArchivesSpace frontend. If your deployment
 does not require a port number (e.g. for SSL) **do not include this option**.
 
@@ -155,9 +155,11 @@ otherwise leave it out.
 
 These are required to connect to your Solr index.
 
-* **solr_host**: The host name of your active Solr 5 installation
-* **solr_port**: The port on which your Solr instance is running
-* **solr_core_path**: The path to the Solr core used by Circa
+* **solr_host** (ex. *solr.yourhost.org*): The host name of your active Solr 5 installation
+* **solr_port** (ex. *8983*): The port on which your Solr instance is running
+* **solr_core_name** (ex. *circa*): The name of the Solr core used by Circa
+* **solr_core_path** (ex. *'/solr/circa'*): The path to the Solr core used by Circa
+(relative to Solr root - include leading slash)
 * **solr_https**: To force connections via https, set this to '1',
 otherwise leave it out.
 
