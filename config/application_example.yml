@@ -5,7 +5,7 @@ defaults: &defaults
   archivesspace_backend_port: 8089
   archivesspace_frontend_port: 8080
   archivesspace_username: admin
-  archivesspace_password: n0tadm1n
+  archivesspace_password: admin
   # archivesspace_frontend_host: localhost
   # archivesspace_solr_host: localhost
   # archivesspace_backend_host: localhost
@@ -22,6 +22,7 @@ defaults: &defaults
   solr_port: '8983'
   solr_core_name: 'circa'
   solr_core_path: /solr/circa/
+  # solr_https: '1'
 
   ### misc options
   use_devise_passwords: '1'
