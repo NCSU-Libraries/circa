@@ -2,8 +2,8 @@ defaults: &defaults
 
   ### ArchivesSpace connection ###
   archivesspace_host: localhost
-  archivesspace_backend_port: 8089
-  archivesspace_frontend_port: 8080
+  archivesspace_backend_port: '8089'
+  archivesspace_frontend_port: '8080'
   archivesspace_username: admin
   archivesspace_password: admin
   # archivesspace_frontend_host: localhost
