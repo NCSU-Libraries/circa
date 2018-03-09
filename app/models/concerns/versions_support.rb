@@ -13,7 +13,6 @@ module VersionsSupport
       end
     end
 
-
     def last_updated_by_user
       v = versions.last
       if v
@@ -21,8 +20,6 @@ module VersionsSupport
         User.find_by_id(user_id)
       end
     end
-
-
 
   end
 
