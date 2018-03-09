@@ -5,10 +5,10 @@
 
 <body>
 
-  <% if Rails.env != 'production' %>
+  <% if Rails.env == 'staging' %>
   <div class="environment-label">
     <i class="fa fa-bolt"></i>
-    This is the <%= Rails.env %> version -- not for production use
+    This is the STAGING version -- not for production use
     <i class="fa fa-bolt"></i>
     </div>
   <% end %>

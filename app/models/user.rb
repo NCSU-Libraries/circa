@@ -1,10 +1,10 @@
 class User < ActiveRecord::Base
 
+  include UserCustom
   include EnumerationUtilities
   include RefIntegrity
   include SolrDoc
   include VersionsSupport
-  include UserCustom
 
   belongs_to :user_role
   has_many :order_users
