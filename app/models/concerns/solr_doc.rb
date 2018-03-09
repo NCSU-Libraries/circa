@@ -112,7 +112,6 @@ module SolrDoc
       }
 
       case self
-
       when Order
         [:open, :confirmed, :order_sub_type_id, :location_id].each do |attr|
           doc[attr] = self[attr]
@@ -170,7 +169,6 @@ module SolrDoc
         if notes.length > 0
           doc[:notes] = notes.map { |n| n.content }
         end
-
       when Item
         [:resource_title, :resource_identifier, :resource_uri,
           :container, :uri, :permanent_location_id, :current_location_id, :digital_object, :unprocessed, :digital_object_title, :obsolete].each do |attr|
@@ -206,7 +204,6 @@ module SolrDoc
           doc[:open_order_id] = open_orders.map { |o| o.id }
           doc[:next_scheduled_use_date] = next_scheduled_use_date
         end
-
       when User
         [:email, :affiliation, :first_name, :last_name, :role, :patron_type_id, :user_role_id].each do |attr|
           doc[attr] = self[attr]
@@ -214,38 +211,26 @@ module SolrDoc
         doc[:agreement_confirmed] = !agreement_confirmed_at.nil?
         doc[:patron_type] = patron_type
         doc[:roles] = roles
-
       when Location
         doc[:title] = title
         doc[:source] = source
         doc[:source_id] = source_id
-
-      # when AccessSession
-      #   [:start_datetime, :end_datetime, :item_id, :order_id, :active].each do |attr|
-      #     doc[attr] = self[attr]
-      #   end
-      #   doc[:user_id] = users.map { |u| u.id }
-
       end
 
       # remove nil/empty values
       doc.delete_if { |k,v| nil_or_empty?(v) }
-
       doc
     end
-
 
     def solr_id
       "#{ self.class.to_s.underscore }_#{ id }"
     end
-
 
     # Updates the record in the Solr index
     def update_index
       self.reload
       SearchIndex.update_record(self)
     end
-
 
     # Remove the record from the Solr index
     def delete_from_index

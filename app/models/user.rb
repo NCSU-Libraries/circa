@@ -1,22 +1,15 @@
 class User < ActiveRecord::Base
 
-  include DeviseModules
-
   include EnumerationUtilities
-  # app/models/concerns/ref_integrity.rb
   include RefIntegrity
-  # app/models/concerns/solr_doc.rb
   include SolrDoc
   include VersionsSupport
+  include UserCustom
 
   belongs_to :user_role
   has_many :order_users
   has_many :item_orders
   has_many :notes, as: :noted
-
-  # include NCSULdap
-  # require 'campus-ldap.rb'
-
   has_many :orders, through: :order_users do
     def open
       where(open: true)
@@ -25,15 +18,12 @@ class User < ActiveRecord::Base
       where(open: false)
     end
   end
-
   has_many :order_assignments
   has_many :assigned_orders, through: :order_assignments, source: :order
   has_many :notes, as: :noted
-
   has_many :user_access_sessions
   has_many :access_sessions, through: :user_access_sessions
   has_many :accessed_items, through: :access_sessions
-
   has_many :state_transitions
 
   has_paper_trail
@@ -60,36 +50,29 @@ class User < ActiveRecord::Base
     RequestStore.store[:user]
   end
 
-
   def self.current=(user)
     RequestStore.store[:user] = user
   end
-
 
   def self.staff_patron_type_id
     get_enumeration_value_id('staff', 'patron_type')
   end
 
-
   def open_orders
     orders.open
   end
-
 
   def completed_orders
     orders.completed
   end
 
-
   def patron_type
     get_enumeration_value(patron_type_id)
   end
 
-
   def has_active_access_session
     access_sessions.where(active: true).count > 0
   end
-
 
   # user_role methods
 
@@ -97,16 +80,13 @@ class User < ActiveRecord::Base
     assignable_roles.map { |r| r.name }
   end
 
-
   def role
     user_role.name
   end
 
-
   def assign_role(new_user_role)
     update_attributes(user_role_id: new_user_role.id)
   end
-
 
   def is_admin?
     admin_role = UserRole.find_by_name('admin')
@@ -118,17 +98,10 @@ class User < ActiveRecord::Base
     end
   end
 
-
   # alias for is_admin?, used by serializers
   def is_admin
     is_admin?
   end
-
-
-  # def has_role?(r)
-  #   roles.include?(r.to_sym)
-  # end
-
 
   def assignable_roles
     roles = []
@@ -139,7 +112,6 @@ class User < ActiveRecord::Base
     end
     roles
   end
-
 
   def can_assign_role?(user_role_id)
     assignable_roles.map { |r| r.id }.include?(user_role_id.to_i)
