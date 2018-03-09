@@ -19,7 +19,6 @@ gem 'formtastic'
 # Using 0.10.0.rc3
 gem 'active_model_serializers', git: "https://github.com/rails-api/active_model_serializers.git", branch: "0-10-stable"
 
-
 gem 'sprockets-rails', '~> 3.0.2', :require => 'sprockets/railtie'
 
 # Use SCSS for stylesheets
@@ -34,13 +33,6 @@ gem 'modernizr-rails'
 gem 'font-awesome-sass'
 gem 'will_paginate'
 gem 'foundation-will_paginate'
-
-
-# NCSU only
-# gem 'devise_wolftech_authenticatable', git: "git@github.ncsu.edu:NCSU-Libraries/devise_wolftech_authenticatable.git"
-# gem 'ncsu_catalog_api_client', git: "git@github.ncsu.edu:trthorn2/ncsu_catalog_api_client.git"
-# END - NCSU only
-
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby
@@ -70,22 +62,10 @@ gem 'resque-scheduler'
 
 gem 'whenever', :require => false
 
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 group :development do
-
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
-
 end
-
 
 group :development, :test do
   gem 'rspec-rails', '>= 3.0'

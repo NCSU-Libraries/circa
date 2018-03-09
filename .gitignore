@@ -13,9 +13,6 @@
 /config/archivesspace.yml
 /config/solr.yml
 /config/email.yml
-/config/wolftech.yml
-
-/README.md.old
 
 # Ignore sqlite db if there is one
 /db/*.sqlite3
