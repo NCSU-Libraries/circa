@@ -62,6 +62,9 @@ gem 'resque-scheduler'
 
 gem 'whenever', :require => false
 
+# security vulnerabilities in loofah <2.2.1
+gem 'loofah', '~> 2.2.1'
+
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
