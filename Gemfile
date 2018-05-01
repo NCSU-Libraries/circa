@@ -65,6 +65,9 @@ gem 'whenever', :require => false
 # security vulnerabilities in loofah <2.2.1
 gem 'loofah', '~> 2.2.1'
 
+# security vulnerabilities in rails-html-sanitizer 1.0.3
+gem 'rails-html-sanitizer', '~> 1.0.4'
+
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
