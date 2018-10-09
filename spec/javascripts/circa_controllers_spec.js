@@ -200,7 +200,6 @@ describe('CircaCtrl', function () {
       expect($scope.statesEvents[0]['complete']).toBe(true);
       expect($scope.statesEvents[1]['complete']).toBe(true);
       expect($scope.statesEvents[2]['complete']).toBe(false);
-      console.log($scope.statesEvents);
     });
   });
 

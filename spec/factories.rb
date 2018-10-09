@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
 
 
   factory :search_index do
@@ -33,8 +33,9 @@ FactoryGirl.define do
   end
 
 
-  factory :location do
+  factory :location, aliases: [:temporary_location, :permanent_location, :current_location] do
     sequence( :uri ) { |n| "/repositories/2/resources/1234#{n}" }
+    sequence( :title ) { |n| "Location #{n}" }
     source_id Location.archivesspace_location_source_id
   end
 
@@ -55,10 +56,9 @@ FactoryGirl.define do
   factory :order do
     access_date_start Date.today
     order_sub_type
+    temporary_location
 
     after(:create) do |order|
-      location = create(:location)
-      order.update_attributes(location_id: location.id)
       order.reload
     end
 
@@ -154,6 +154,10 @@ FactoryGirl.define do
 
   factory :item do
     sequence( :uri ) { |n| "/repositories/2/resources/1234/box/#{n}" }
+    sequence( :resource_title ) { |n| "Resource #{n}" }
+    sequence( :container ) { |n| "Box #{n}-1" }
+    current_location
+    permanent_location
   end
 
 
@@ -168,7 +172,7 @@ FactoryGirl.define do
   end
 
 
-  factory :digital_image_order do
+  factory :digital_collections_order do
     sequence( :resource_identifier ) { |n| "image#{n}" }
     requested_images [ 'imagefile0001', 'imagefile0002', 'imagefile0003' ]
     sequence(:resource_title) { |n| "Digital image order #{n}" }

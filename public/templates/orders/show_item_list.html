@@ -1,250 +1,176 @@
-<div ng-if="order['item_orders'].length == 0" class="empty-list-label">
+<div ng-if="ctrl.order['item_orders'].length == 0" class="empty-list-label">
   None selected
 </div>
 
 
-<ul ng-if="order['item_orders'].length > 0" class="sub-records-list items-list">
+<ul ng-if="ctrl.order['item_orders'].length > 0" class="subrecords-list items-list">
 
   <li
-      ng-repeat="itemOrder in order['item_orders']"
+      ng-repeat="itemOrder in ctrl.order['item_orders']"
       ng-init="item = itemOrder['item']"
-      ng-show="$index < calculatedItemsLimit()"
+      ng-show="$index < ctrl.calculatedItemsLimit()"
       data-item-id="{{ item['id'] }}">
 
     <div class="row">
 
-      <div ng-if="order['num_items'] > 1" class="small-1 columns checkbox-column">
+      <div ng-if="ctrl.order['num_items'] > 1" class="small-1 columns checkbox-column">
         <input
             type="checkbox"
-            ng-checked="commonUtils.inArray(order['bulkEventsList'], itemOrder.id)"
+            ng-checked="ctrl.commonUtils.inArray(ctrl.order['bulkEventsList'], itemOrder.id)"
             ng-model="itemOrder['inBulkEventsList']"
-            ng-change="toggleItemOrderIdInBulkEventsList(itemOrder)">
+            ng-change="ctrl.toggleItemOrderIdInBulkEventsList(itemOrder)">
       </div>
 
-      <div ng-class="order['num_items'] > 1 ? 'small-9 columns' : 'small-10 columns'">
 
-        <div ng-include="templateUrl('items/item_overview')"></div>
+      <div ng-class="ctrl.order['num_items'] > 1 ? 'small-8 columns' : 'small-9 columns'">
+
+        <div ng-include="ctrl.templateUrl('items/item_overview')"></div>
+
+        <div ng-include="ctrl.templateUrl('orders/item_order_reproduction_details')"></div>
+
+        <div ng-if="item['open_orders'].length > 1"
+            ng-include="ctrl.templateUrl('orders/item_other_open_orders')"></div>
+
+      </div>
+
+
+      <div class="small-3 columns">
 
         <div
-            poptip="Generate printable 'call slip' for this item only"
-            class="record-action"
-            ng-if="!item['obsolete']">
-          <a ng-href="{{ rootPath() }}/orders/{{ order['id'] }}/call_slip?item_id={{ item['id'] }}"
-              target="_blank">
-          <i class="fa fa-print"></i>Print item call slip</a>
+            class="item-status"
+            ng-if="itemOrder.active">
+          <div ng-if="!item['obsolete']">
+            <span class="value" ng-if="item['current_state'] == 'in_use'">
+              Checked out on
+              {{ item['active_access_session']['start_datetime'] | date: 'yyyy-MM-dd' }}
+              at
+              {{ item['active_access_session']['start_datetime'] | date: 'mediumTime' }}
+              to
+              <span ng-repeat="user in item['active_access_session']['users']">{{ user['email'] }}<br ng-if="!$last"></span>
+            </span>
+
+            <span class="value" ng-if="item['current_state'] != 'in_use'">{{ item['current_state'] | removeUnderscores | capitalize }}</span>
+          </div>
         </div>
 
-
-        <div ng-include="templateUrl('orders/item_order_reproduction_details')"></div>
-
-
-
-      </div>
-
-
-      <div class="small-2 columns">
-
-        <div
-            ng-show="itemEventLoading"
-            ng-include="templateUrl('common/processing')"/>
-
-        <div
-            ng-show="!itemEventLoading"
-            ng-if="order['id']"
-            ng-hide="commonUtils.inArray(checkOutItemIds, item['id'])"
-            class="sub-record-actions item-actions">
-
+        <div class="subrecord-actions-primary">
           <div
-              ng-repeat="stateEvent in availableStateEvents(item)"
-              class="action">
-
-            <div ng-switch on="stateEvent['event']">
-
-              <span ng-show="(order.confirmed && order.open) || order['reproduction_order?']">
-
-                <span
-                    poptip="{{ stateEvent['eventDescription'] }}"
-                    poptip-position="right"
-                    ng-if="order.checkOutAvailable"
-                    ng-switch-when="check_out"
-                    class="link primary"
-                    ng-click="toggleCheckout(item['id'])">Check out</span>
-
-                <span
-                    poptip="{{ stateEvent['eventDescription'] }}"
-                    poptip-position="right"
-                    ng-if="order.checkOutAvailable &&
-                        commonUtils.inArray(order.item_ids_in_use, item.id)"
-                    ng-switch-when="check_in"
-                    class="link primary"
-                    ng-click="checkInItem(item)">Check in</span>
-
-                <span
-                    poptip="{{ stateEvent['eventDescription'] }}"
-                    poptip-position="right"
-                    ng-switch-when="receive_at_temporary_location"
-                    class="link primary"
-                    ng-click="receiveItemAtTemporaryLocation(item)">Receive at temporary location</span>
-
-                <span
-                    poptip="{{ stateEvent['eventDescription'] }}"
-                    poptip-position="right"
-                    ng-switch-default
-                    class="link secondary"
-                    ng-click="triggerItemEvent(item['id'], stateEvent['event'])">{{ stateEvent['event'] | removeUnderscores }}</span>
-
-              </span>
-
-            </div>
-          </div>
-
-
-          <div class="action">
-            <span
-                poptip="View item details"
-                poptip-position="right"
-                class="link secondary"
-                ng-click="showItem(item['id'])">View item details</span>
-          </div>
-
-
-          <div class="action">
-            <span
-                poptip="Refresh item data from source"
-                poptip-position="right"
-                class="link secondary"
-                ng-click="triggerItemEvent(item['id'], 'update_from_source')">Refresh item data from source</span>
-          </div>
-
-
-          <div ng-if="!item['digital_object'] && !item['obsolete'] && order.open">
+              ng-show="ctrl.itemEventLoading"
+              ng-include="ctrl.templateUrl('common/processing')"/>
             <div
-                class="action"
-                ng-if="item['active_order_ids'].length > 1 &&
-                    commonUtils.inArray(item['active_order_ids'], order.id) &&
-                    !commonUtils.inArray(order.item_ids_in_use, item.id)">
-              <span
-                  class="link"
-                  ng-click="deactivateItem(item)">Deactivate item for this order</span>
-            </div>
+                ng-show="!ctrl.itemEventLoading"
+                ng-if="ctrl.order['id']"
+                ng-hide="ctrl.commonUtils.inArray(ctrl.checkOutItemIds, item['id'])">
 
-            <div
-                class="action"
-                ng-if="!commonUtils.inArray(item['active_order_ids'], order.id)">
-              <span
-                  class="link"
-                  ng-click="activateItem(item)">Reactivate item for this order</span>
+              <div
+                  class="item-status item-deactivated"
+                  ng-if="!itemOrder.active">
+                Deactivated for this order
+              </div>
+
+
+              <div
+                  ng-repeat="stateEvent in ctrl.availableStateEvents(item)"
+                  class="action">
+
+                <div ng-switch on="stateEvent['event']">
+
+                  <span ng-show="(ctrl.order.confirmed && ctrl.order.open) || ctrl.order['reproduction_order?']">
+
+                    <span
+                        poptip="{{ stateEvent['eventDescription'] }}"
+                        poptip-position="right"
+                        ng-if="ctrl.order.checkOutAvailable"
+                        ng-switch-when="check_out"
+                        class="link primary"
+                        ng-click="ctrl.toggleCheckout(item['id'])">
+                      Check out
+                    </span>
+
+                    <span
+                        poptip="{{ stateEvent['eventDescription'] }}"
+                        poptip-position="right"
+                        ng-if="ctrl.order.checkOutAvailable &&
+                            ctrl.commonUtils.inArray(ctrl.order.item_ids_in_use, item.id)"
+                        ng-switch-when="check_in"
+                        class="link primary"
+                        ng-click="ctrl.checkInItem(item)">
+                      Check in
+                    </span>
+
+                    <span
+                        poptip="{{ stateEvent['eventDescription'] }}"
+                        poptip-position="right"
+                        ng-switch-when="receive_at_temporary_location"
+                        class="link primary"
+                        ng-click="ctrl.receiveItemAtTemporaryLocation(item)">
+                      Receive at temporary location
+                    </span>
+
+                    <span
+                        poptip="{{ stateEvent['eventDescription'] }}"
+                        poptip-position="right"
+                        ng-switch-default
+                        class="link secondary"
+                        ng-click="ctrl.triggerItemEvent(item['id'], stateEvent['event'])">
+                      {{ stateEvent['event'] | removeUnderscores }}
+                    </span>
+
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-
-
         </div>
-
       </div>
-
     </div>
 
 
+    <div ng-include="ctrl.templateUrl('orders/check_out_controls')"></div>
 
 
-    <div
-        class="checkout-controls"
-        ng-show="commonUtils.inArray(checkOutItemIds, item['id'])">
+    <div class="subrecord-actions-secondary item-actions-secondary">
 
-      <h3>Check out item to:</h3>
-
-      <div class="user-select-list">
-        <div ng-repeat="user in order['users']">
-
-          <div ng-if="!adminOverrideEnabled">
-
-            <span
-                ng-if="user['agreement_confirmed'] && !user['has_active_access_session']"
-                class="link no-underline"
-                ng-click="commonUtils.toggleArrayElement(checkOutUserIds, user['id'])">
-              <i
-                  ng-if="commonUtils.inArray(checkOutUserIds, user['id'])"
-                  class="fa fa-check-square-o"></i>
-              <i
-                  ng-if="!commonUtils.inArray(checkOutUserIds, user['id'])"
-                  class="fa fa-square-o"></i>
-              {{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})
-            </span>
-
-            <span ng-if="!user['agreement_confirmed']" class="disabled">
-              {{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})
-              <span class="callout alert">This user has not signed the policies agreement.</span>
-            </span>
-
-            <span ng-if="user['has_active_access_session']" class="disabled">
-              {{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})
-              <span class="callout alert">This user already has an item checked out.</span>
-            </span>
-
-          </div>
-
-
-          <div ng-if="adminOverrideEnabled">
-
-            <span
-                class="link no-underline"
-                ng-click="commonUtils.toggleArrayElement(checkOutUserIds, user['id'])">
-              <i
-                  ng-if="commonUtils.inArray(checkOutUserIds, user['id'])"
-                  class="fa fa-check-square-o"></i>
-              <i
-                  ng-if="!commonUtils.inArray(checkOutUserIds, user['id'])"
-                  class="fa fa-square-o"></i>
-              {{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})
-              <span
-                  ng-if="!user['agreement_confirmed']"
-                  class="callout alert">This user has not signed the policies agreement.</span>
-              <span
-                  ng-if="user['has_active_access_session']"
-                  class="callout alert">This user already has an item checked out.</span>
-            </span>
-
-          </div>
-
-        </div>
-
-        <div
-            ng-if="currentUserIsAdmin"
-            ng-include="templateUrl('common/admin_override')"
-            class="record-action admin-override">
-        </div>
-
+      <div class="item-action" ng-if="!item['obsolete']">
+        <a
+            ng-href="{{ ctrl.rootPath() }}/orders/{{ ctrl.order['id'] }}/call_slip?item_id={{ item['id'] }}"
+            target="_blank"
+            poptip="Generate printable 'call slip' for this item only">
+        <i class="fa fa-print"></i>Print item call slip</a>
       </div>
 
-      <span
-          ng-if="checkOutUserIds.length > 0"
-          class="button small"
-          ng-click="checkOutItem(item,checkOutUserIds)">Check out</span>
-      <span
-          class="button small"
-          ng-click="toggleCheckout(item['id'])">Cancel</span>
-      <span
-          ng-if="checkOutUserIds.length == 0">No users selected (or none eligible for check-out)</span>
+      <div class="item-action">
+        <span
+            class="link secondary"
+            ng-click="ctrl.showItem(item['id'])"
+            poptip="View item details">
+          <i class="fas fa-eye"></i>View item details</span>
+      </div>
+
+      <div class="item-action">
+        <span
+            class="link secondary"
+            ng-click="ctrl.triggerItemEvent(item['id'], 'update_from_source')"
+            poptip="Refresh item data from source"
+            poptip-position="right">
+          <i class="fas fa-sync"></i>Refresh item data from source</span>
+      </div>
 
     </div>
-
-
-
   </li>
-
 </ul>
 
 
-<div ng-if="order['item_orders'].length > itemsLimit">
+<div ng-if="ctrl.order['item_orders'].length > ctrl.itemsLimit">
   <span
-      ng-if="truncateItems"
-      class="truncated-list-post-note">+ {{ order['item_orders'].length - itemsLimit }} more</span>
+      ng-if="ctrl.truncateItems"
+      class="truncated-list-post-note">+ {{ ctrl.order['item_orders'].length - ctrl.itemsLimit }} more</span>
   <span
-      ng-if="truncateItems"
+      ng-if="ctrl.truncateItems"
       class="link"
-      ng-click="toggleTruncateItems()">Show all</span>
+      ng-click="ctrl.toggleTruncateItems()">Show all</span>
   <span
-      ng-if="!truncateItems"
+      ng-if="!ctrl.truncateItems"
       class="link"
-      ng-click="toggleTruncateItems()">Show less</span>
+      ng-click="ctrl.toggleTruncateItems()">Show fewer</span>
 </div>

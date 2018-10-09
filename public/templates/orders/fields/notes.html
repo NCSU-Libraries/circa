@@ -1,47 +1,56 @@
-<div class="form-section">
+<div>
 
   <h2>Notes</h2>
 
+  <ul
+      class="subrecords-list notes-list"
+      ng-if="ctrl.order['notes'].length > 0">
 
-  <ul class="sub-records-list notes-list" ng-if="order['notes'].length > 0">
-
-    <li ng-repeat="note in order['notes']">
+    <li ng-repeat="note in ctrl.order['notes']">
       <div class="row">
 
         <div class="small-11 columns">
-          <textarea ng-model="order['notes'][$index]['content']"/>
+          <textarea ng-model="ctrl.order['notes'][$index]['content']"/>
         </div>
 
         <div class="small-1 columns">
-          <div class="sub-record-actions item-actions">
-            <span class="link action" ng-click="removeNote($index)">Remove</span>
+          <div class="subrecord-actions-primary">
+            <span
+                class="link action"
+                ng-click="ctrl.removeNote(ctrl.order, $index)">Remove</span>
           </div>
         </div>
 
       </div>
     </li>
-
   </ul>
 
+  <span
+      class="link"
+      ng-click="ctrl.addNote(ctrl.order)">
+    <i class="fas fa-plus-circle"></i>Add note
+  </span>
 
-  <span class="link" ng-click="addNote()">Add note</span>
-
-
-  <div ng-show="removedNotes.length > 0">
+  <div ng-show="ctrl.removedNotes.length > 0">
 
     <div class="heading">Removed notes:</div>
 
-    <ul class="sub-records-list removed-notes-list">
+    <ul class="subrecords-list removed-notes-list">
 
-      <li ng-repeat="note in removedNotes">
+      <li ng-repeat="note in ctrl.removedNotes">
         <div class="row">
           <div class="small-10 columns"><p>{{ note['content'] }}</p></div>
-          <div class="small-2 columns sub-record-actions"><span class="link action" ng-click="restoreNote(note)">Restore</span></div>
+          <div class="small-2 columns">
+            <div class="subrecord-actions-primary">
+              <span
+                  class="link action"
+                  ng-click="ctrl.restoreNote(ctrl.order, note)">Restore</span>
+            </div>
+          </div>
         </div>
       </li>
 
     </ul>
-
   </div>
 
 </div>

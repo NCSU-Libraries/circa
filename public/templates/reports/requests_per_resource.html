@@ -1,55 +1,34 @@
-<div ng-controller="ReportsResourceRequestsCtrl as report">
+<div ng-include="ctrl.templateUrl('reports/date_config')"></div>
 
-  <div ng-show="report.loading" ng-include="report.templateUrl('common/processing')"/>
+<div class="table-options">
 
-  <div ng-show="!report.loading">
-
-    <div ng-init="section='reports'" ng-include="report.templateUrl('common/app_header')"></div>
-
-    <h1>Item requests per resource</h1>
-
-    <div ng-include="report.templateUrl('reports/date_config')"></div>
-
-    <div class="table-options">
-
-      <span ng-show="report.limit < report.requestsPerResource.total_resources">
-        <span class="info">Showing top {{ report.defaultLimit }}</span>
-        <span class="link"  ng-click="report.showAll()">Show all</span>
-      </span>
-      <span class="link" ng-show="report.limit > report.defaultLimit" ng-click="report.showLimit()">Show top {{ report.defaultLimit }} only</span>
-
-    </div>
-
-
-    <table>
-
-      <thead>
-        <tr>
-          <th style="width: 50%;">Resource</th>
-          <th style="width: 40%;">Item requests by order type</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr ng-repeat="resource in report.requestsPerResource.resources | orderBy:'-item_requests' | limitTo: report.limit">
-          <td style="width: 50%;">{{ resource.resource_identifier }} - {{ resource.resource_title }}</td>
-          <td style="width: 40%;">
-            <div ng-repeat="orderType in resource.sorted_order_types">{{ orderType }}: {{ resource.order_types[orderType] }}</div>
-          </td>
-          <td>{{ resource.total_requests }}</td>
-        </tr>
-      </tbody>
-
-    </table>
-
-  </div>
-
-<!--
-  <div ng-if="debug" class="data-panel">
-  {{ report | json }}
-  </div>
- -->
+  <span ng-show="ctrl.limit < ctrl.reportData.total_records">
+    <span class="info">Showing top {{ ctrl.defaultLimit }}</span>
+    <span class="link"  ng-click="ctrl.showAll()">Show all {{ ctrl.reportData.total_records }} resources</span>
+  </span>
+  <span class="link" ng-show="ctrl.limit > ctrl.defaultLimit" ng-click="ctrl.showLimit()">Show top {{ ctrl.defaultLimit }} only</span>
 
 </div>
 
+
+<table>
+
+  <thead>
+    <tr>
+      <th style="width: 50%;">Resource</th>
+      <th style="width: 40%;">Item requests by order type</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr ng-repeat="resource in ctrl.reportData.resources | orderBy:'-item_requests' | limitTo: ctrl.limit">
+      <td style="width: 50%;">{{ resource.resource_identifier }} - {{ resource.resource_title }}</td>
+      <td style="width: 40%;">
+        <div ng-repeat="orderType in resource.sorted_order_types">{{ orderType }}: {{ resource.order_types[orderType] }}</div>
+      </td>
+      <td>{{ resource.total_requests }}</td>
+    </tr>
+  </tbody>
+
+</table>

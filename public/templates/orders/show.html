@@ -1,131 +1,124 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="OrdersShowCtrl as ctrl">
+
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
+
+  <main>
+
+    <div ng-show="ctrl.loading" ng-include="ctrl.templateUrl('common/processing')"/>
+
+    <div ng-if="!ctrl.loading">
+
+      <div ng-if="ctrl.errorCode && !ctrl.order">
+        <span class="link" ng-click="ctrl.goto('/orders/')">Go to Orders list</span>
+      </div>
+
+      <div ng-if="ctrl.order">
+
+        <h1>
+          Order {{ ctrl.order['id'] }}
+          <span class="subhead" ng-if="ctrl.order.cloned_order_id">Cloned from Order
+            <span
+                ng-if="ctrl.order.id"
+                class="link"
+                ng-click="ctrl.showOrder(ctrl.order.cloned_order_id)">{{ctrl.order.cloned_order_id}}</span>
+            <span ng-if="!ctrl.order.id">{{ctrl.order.cloned_order_id}}</span>
+          </span>
+        </h1>
 
 
-<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+        <div
+            ng-if="ctrl.order.open || ctrl.adminOverrideEnabled"
+            ng-include="ctrl.templateUrl('orders/workflow_controls')">
+        </div>
 
 
-<div ng-if="!loading">
-
-  <div ng-if="errorCode && !order">
-    <span class="link" ng-click="goto('/orders/')">Go to Orders list</span>
-  </div>
-
-
-  <div ng-if="order">
-
-    <h1>
-      Order #{{ order['id'] }}
-      <span class="subhead" ng-if="order.cloned_order_id">Cloned from Order
-        <span ng-if="order.id" class="link" ng-click="showOrder(order.cloned_order_id)">{{order.cloned_order_id}}</span>
-        <span ng-if="!order.id">{{order.cloned_order_id}}</span>
-      </span>
-    </h1>
+        <div
+            class="order-closed callout"
+            ng-if="!ctrl.order.open">
+          <strong>This order is closed.</strong>
+        </div>
 
 
-    <div ng-if="order.open || adminOverrideEnabled" ng-include="templateUrl('orders/workflow_controls')"></div>
+        <div class="record-show-actions">
+          <div ng-include="ctrl.templateUrl('orders/order_actions')"></div>
+        </div>
 
 
-    <div class="order-closed callout" ng-if="!order.open"><strong>This order is closed.</strong></div>
+        <section class="record-detail order-detail">
+          <div ng-include="ctrl.templateUrl('orders/order_details')"></div>
+        </section>
 
 
-    <div class="record-show-actions">
-      <div ng-include="templateUrl('orders/order_actions')"></div>
+        <section>
+          <h2>Researchers</h2>
+          <div ng-include="ctrl.templateUrl('orders/order_researchers')"></div>
+        </section>
+
+        <section>
+          <h2>
+            Items {{ ctrl.order['order_type']['name'] == 'reproduction' ? 'to digitize' : '' }}
+            {{ ctrl.order['num_items'] > 0 ? '(' + ctrl.order['num_items'] + ')' : '' }}</h2>
+          <div ng-include="ctrl.templateUrl('orders/bulk_item_events')"></div>
+          <div ng-include="ctrl.templateUrl('orders/show_item_list')"></div>
+        </section>
+
+        <section
+            ng-show="(ctrl.order['order_type']['name'] == 'reproduction') && ctrl.order['order_fee']">
+          <h2>Additional fee</h2>
+
+          <div class="record-overview">
+            <div class="inline overview-element">
+              <span class="label">Fee:</span>
+              <span class="value">{{ ctrl.order['order_fee']['per_order_fee'] | currency }}</span>
+            </div>
+
+            <div class="inline overview-element">
+              <span class="label">Fee description:</span>
+              <span class="value">{{ ctrl.order['order_fee']['per_order_fee_description'] }}</span>
+            </div>
+          </div>
+        </section>
+
+
+        <section
+            ng-if="ctrl.customTemplateExists('showDigitalCollectionsList')"
+            ng-show="ctrl.order['order_type']['name'] == 'reproduction'">
+          <h2>Digital collections</h2>
+          <div ng-include="ctrl.customTemplateUrl('showDigitalCollectionsList')"></div>
+        </section>
+
+
+        <section ng-if="ctrl.order['notes'].length > 0">
+          <h2>Notes</h2>
+
+          <div class="note-content" ng-repeat="note in ctrl.order['notes']">
+            {{ note['content'] }}
+          </div>
+        </section>
+
+
+        <section ng-show="ctrl.order.has_fees" class="invoice-section">
+          <div ng-include="ctrl.templateUrl('orders/invoice_form')"></div>
+        </section>
+
+
+        <section>
+          <div ng-include="ctrl.templateUrl('orders/history')"></div>
+        </section>
+
+      </div>
     </div>
 
+    <div ng-if="ctrl.debug" class="data-panel">
+    {{ ctrl.order | json }}
+    </div>
 
-    <section class="record-detail order-detail">
-      <h2>Order details</h2>
-      <div ng-include="templateUrl('orders/order_details')"></div>
-    </section>
-
-
-
-    <section>
-      <h2>Researchers</h2>
-      <div ng-include="templateUrl('orders/order_researchers')"></div>
-    </section>
+  </main>
 
 
-
-    <section>
-      <h2>Items ({{ order['num_items'] }})</h2>
-      <div ng-include="templateUrl('orders/bulk_item_events')"></div>
-      <div ng-include="templateUrl('orders/show_item_list')"></div>
-    </section>
-
-
-    <section
-        ng-show="(order['order_type']['name'] == 'reproduction') && order['order_fee']">
-      <h2>Additional fee</h2>
-
-      <div class="record-overview">
-        <div class="inline overview-element">
-          <span class="label">Fee:</span>
-          <span class="value">{{ order['order_fee']['per_order_fee'] | currency }}</span>
-        </div>
-
-        <div class="inline overview-element">
-          <span class="label">Fee description:</span>
-          <span class="value">{{ order['order_fee']['per_order_fee_description'] }}</span>
-        </div>
-      </div>
-    </section>
-
-
-    <section ng-show="order['order_type']['name'] == 'reproduction'">
-      <h2>Digital images</h2>
-      <div ng-include="templateUrl('orders/show_digital_image_list')"></div>
-    </section>
-    -->
-
-
-    <section ng-if="order['notes'].length > 0">
-
-      <h2>Notes</h2>
-
-      <div class="note-content" ng-repeat="note in order['notes']">
-        {{ note['content'] }}
-      </div>
-
-    </section>
-
-
-    <section ng-show="order.has_fees" class="invoice-section">
-
-      <h2>Invoice</h2>
-
-      <div class="row">
-        <div class="small-12 medium-6 columns">
-          <div ng-include="templateUrl('orders/fields/invoice_date')"></div>
-        </div>
-
-        <div class="small-12 medium-6 columns end">
-          <div ng-include="templateUrl('orders/fields/invoice_payment_date')"></div>
-        </div>
-      </div>
-
-      <section ng-if="order['invoice_attn']">
-        Payment to attention of: {{ order['invoice_attn'] }}
-      </section>
-
-    </section>
-
-
-
-    <section>
-
-      <div ng-include="templateUrl('orders/history')"></div>
-
-    </section>
-
-
+  <div
+      ng-show="ctrl.showRecordDeleteModal"
+      ng-include="ctrl.templateUrl('common/delete_record')">
   </div>
 
-
-</div>
-
-
-
-<div ng-if="debug" class="data-panel">
-{{ order | json }}
 </div>

@@ -1,0 +1,19 @@
+<div ng-include="ctrl.templateUrl('reports/date_config')"></div>
+
+<table>
+
+  <thead>
+    <tr>
+      <th>{{ ctrl.dateColumnHeading() }}</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr ng-repeat="(date, count) in ctrl.reportData">
+      <td>{{ date }}</td>
+      <td>{{ count }}</td>
+    </tr>
+  </tbody>
+
+</table>

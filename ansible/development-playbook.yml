@@ -2,7 +2,7 @@
 - hosts: circa
   gather_facts: yes
   vars:
-    - ruby_version: ruby-2.4.2
+    - ruby_version: ruby-2.5.0
     - project_name: circa
   roles:
     # - role: mariadb
@@ -35,6 +35,6 @@
       solr_port: "8983"
       solr_cores:
         - circa
-    
+
     - role: archivesspace
     - role: circa

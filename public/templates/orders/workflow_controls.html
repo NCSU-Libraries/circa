@@ -1,11 +1,11 @@
 <div class="workflow-controls">
 
-  <div ng-show="orderEventLoading" ng-include="templateUrl('common/processing')"/>
+  <div ng-show="ctrl.orderEventLoading" ng-include="ctrl.templateUrl('common/processing')"/>
 
   <div
-      ng-show="!orderEventLoading"
-      ng-repeat="stateEvent in statesEvents"
-      class="workflow-event {{ 'of-' + statesEvents.length }}">
+      ng-show="!ctrl.orderEventLoading"
+      ng-repeat="stateEvent in ctrl.statesEvents"
+      class="workflow-event {{ 'of-' + ctrl.statesEvents.length }}">
 
     <div class="workflow-event-inner
       {{ stateEvent['current'] ? 'current' : '' }}
@@ -15,11 +15,11 @@
       {{ stateEvent['complete'] ? 'complete' : 'incomplete' }}">
 
       <span
-          ng-if="(stateEvent['permitted'] || adminOverrideEnabled) && !stateEvent['current']">
+          ng-if="(stateEvent['permitted'] || ctrl.adminOverrideEnabled) && !stateEvent['current']">
 
         <span
             class="link"
-            ng-click="triggerOrderEvent(order['id'], stateEvent['event'])"
+            ng-click="ctrl.triggerOrderEvent(ctrl.order['id'], stateEvent['event'])"
             poptip="{{ stateEvent['eventDescription'] }}">
 
           <span ng-if="$first || stateEvent['complete']">
@@ -35,7 +35,7 @@
       </span>
 
       <span
-          ng-if="(!stateEvent['permitted'] && !adminOverrideEnabled) || stateEvent['current']">
+          ng-if="(!stateEvent['permitted'] && !ctrl.adminOverrideEnabled) || stateEvent['current']">
         {{ ($first || stateEvent['complete']) ? stateEvent['state'] : stateEvent['event'] | removeUnderscores }}
       </span>
 

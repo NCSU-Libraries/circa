@@ -1,11 +1,17 @@
-.form-field {
-  margin: 0 0 1rem 0;
+.form {
+  section {
+    margin: 1.5rem 0;
 
-  label, .label {
-    font-weight: bold;
+    .subsection {
+      margin: .5rem 0;
+    }
   }
 
-  input {
+  label, .label {
+    // font-weight: bold;
+  }
+
+  input, select {
     margin-bottom: 0;
   }
 
@@ -21,6 +27,24 @@
     }
   }
 
+  &.user-form {
+    .row .column, .row .columns {
+      padding-left: 0;
+      padding-right: 1.875rem;
+      padding-bottom: 0.5rem;
+    }
+  }
+}
+
+
+
+
+.checkbox-label, .radio-label {
+  padding-left: 0.5rem;
+}
+
+.form-field {
+  margin: 0 0 1rem 0;
 }
 
 .form-field-note {
@@ -29,15 +53,11 @@
   margin-top: 0.25rem;
 }
 
+.form-submit-section {
+  margin: 1rem 0 0 0;
 
-.form-section {
-  margin: 2rem 0;
-  &.form-submit-section {
-    margin-bottom: 0;
-
-    .button, button {
-      margin: 0;
-    }
+  .button, button {
+    margin: 0;
   }
 }
 
@@ -54,7 +74,6 @@ input.datepicker-input {
   display: inline;
 }
 
-
 .date-range {
   position: relative;
 
@@ -64,21 +83,20 @@ input.datepicker-input {
       display: inline;
       width: 10rem;
     }
-
   }
 }
 
-
 .date-range-fieldset {
+
   .date-range-field {
     display: inline;
     padding-right: 1rem;
   }
+
   label, .datepicker-input {
     display: inline;
   }
 }
-
 
 .ui-datepicker {
   background: $white;
@@ -102,13 +120,11 @@ input.datepicker-input {
     .ui-datepicker-next {
       float: right;
     }
-
   }
 
   .ui-datepicker-unselectable, .ui-state-disabled {
     color: $grayLighter;
   }
-
 }
 
 .ui-datepicker-trigger {
@@ -116,27 +132,34 @@ input.datepicker-input {
 }
 
 ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color: $grayLight;
+  color: $grayLight;
 }
+
 :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   color: $grayLight;
-   opacity:  1;
+  color: $grayLight;
+  opacity:  1;
 }
+
 ::-moz-placeholder { /* Mozilla Firefox 19+ */
    color: $grayLight;
    opacity:  1;
 }
+
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
    color: $grayLight;
 }
+
 :placeholder-shown { /* Standard (https://drafts.csswg.org/selectors-4/#placeholder) */
   color: $grayLight;
 }
-input:focus::-webkit-input-placeholder { color:transparent; }
-input:focus:-moz-placeholder { color:transparent; } /* FF 4-18 */
-input:focus::-moz-placeholder { color:transparent; } /* FF 19+ */
-input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
 
+input:focus::-webkit-input-placeholder { color:transparent; }
+
+input:focus:-moz-placeholder { color:transparent; } /* FF 4-18 */
+
+input:focus::-moz-placeholder { color:transparent; } /* FF 19+ */
+
+input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
 
 .has-error {
   padding: 0.5rem;
@@ -149,16 +172,28 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
   color: $orange;
 }
 
+.fieldset {
+  padding: 0.5em;
+  background: $grayGhost;
+  border: 1px solid $grayLighter;
+  margin: 2px 0 1rem 0;
+  position: relative;
 
+  .text-block {
+    margin: 0 0 1rem 0;
+  }
+
+  .columns {
+    padding-left: 0;
+  }
+}
 
 .selector {
-
   padding: 0.5em;
   background: $grayLightest;
   border: 1px solid $grayLighter;
   margin: 2px 0 1rem 0;
-
-
+  position: relative;
 
   .heading {
     font-size: 110%;
@@ -171,7 +206,6 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
     padding-left: 1rem;
   }
 
-
   .instruction {
     font-size: 90%;
   }
@@ -180,6 +214,14 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
     margin-bottom: 0 !important;
   }
 
+  .close-selector {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 1rem;
+    height: 1rem;
+    z-index: 1;
+  }
 
   .selection-display {
     border: 1px solid $grayLighter;
@@ -189,7 +231,7 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
 
     .record-detail {
       padding: 0;
-      margin-bottom: 1rem;
+      // margin-bottom: 1rem;
     }
 
     .heading {
@@ -200,9 +242,7 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
       }
     }
 
-
     .digital-image-select-item {
-
       .image-label {
         font-size: 80%;
         line-height: 1.25em;
@@ -241,16 +281,22 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
     }
 
     li {
-      background: none !important;
+      // background: none !important;
+      // background: $white;
     }
   }
 
-
+  .selector-modify {
+    padding-left: 0.5rem !important;
+    padding-top: 0.25rem !important;
+    label {
+      top: 1px;
+      margin-left: .25rem;
+    }
+  }
 }
 
-
 .archivesspace-record-selector {
-
   margin: 2px 0 1rem 0;
 
   input {
@@ -260,7 +306,52 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
   .button {
     margin: 0
   }
+}
 
+
+.user-select {
+  position: relative;
+  .user-select-list {
+    position: absolute;
+    max-width: 95%;
+    max-height: 8rem;
+    overflow: auto;
+    background: $white;
+    border: 1px solid $gray;
+    z-index: 100;
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: nonw;
+
+      li {
+        margin: 0;
+        padding: 0.5rem;
+        border-bottom: 1px solid $grayLight;
+        background: $grayGhost;
+        &:hover {
+          background: $blue;
+          color: $white;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+
+.add-user-links, .add-item-links {
+  margin: 0.5rem 0;
+  padding: 0 0.25rem;
+
+  .add-user-link, .add-item-link {
+    padding-right: 2rem;
+  }
+}
+
+
+.sub-section {
+  padding: 0.5rem;
 }
 
 .radio-block {
@@ -280,4 +371,15 @@ textarea {
 
 input.integer {
   width: 5rem;
+}
+
+.course-info {
+  .course-number {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.remove-link {
+  text-transform: uppercase;
+  font-size: 90%;
 }

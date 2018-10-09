@@ -1,45 +1,61 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="OrderSubTypesEditCtrl as ctrl">
 
-<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
 
-<h1>Edit order sub-type</h1>
+  <main>
 
-<div ng-hide="loading">
+    <div
+        ng-show="ctrl.loading"
+        ng-include="ctrl.templateUrl('common/processing')">
+    </div>
 
-  <div  class="form-field">
-    <div class="label">Name (not editable)</div>
-    {{ orderSubType.name }}
-  </div>
+    <h1>Edit order sub-type</h1>
 
+    <div ng-hide="ctrl.loading">
 
-  <div class="form-field">
-    <div class="label">Label</div>
-    <input type="text" ng-model="orderSubType['label']"/>
-  </div>
-
-
-  <div class="form-field">
-    <input type="checkbox" ng-model="orderSubType['default']" value="true"/>
-    <span class="label inline">Default for
-      {{orderSubType['order_type']['name']}} order type?</span>
-  </div>
+      <div  class="form-field">
+        <div class="label">Name (not editable)</div>
+        {{ ctrl.orderSubType.name }}
+      </div>
 
 
-  <div class="form-field">
-    <div class="label">Default location</div>
-    <select ng-model="orderSubType['default_location_id']" convert-to-number>
-      <option ng-repeat="location in circaLocations" value="{{ location['id'] }}">{{location['title']}}</option>
-    </select>
-  </div>
+      <div class="form-field">
+        <div class="label">Label</div>
+        <input type="text" ng-model="ctrl.orderSubType['label']"/>
+      </div>
 
 
-  <button class="button" ng-click="updateOrderSubType()">Save changes</button>
+      <div class="form-field">
+        <input type="checkbox" ng-model="ctrl.orderSubType['default']" value="true"/>
+        <span class="label inline">Default for
+          {{ ctrl.orderSubType['order_type']['name'] }} order type?
+        </span>
+      </div>
 
-  <button class="button" ng-click="goto('/settings/order_sub_types')">Cancel</button>
 
-</div>
+      <div class="form-field">
+        <div class="label">Default location</div>
+        <select ng-model="ctrl.orderSubType['default_location_id']" convert-to-number>
+          <option
+              ng-repeat="location in ctrl.circaLocations"
+              value="{{ location['id'] }}">
+            {{location['title']}}
+          </option>
+        </select>
+      </div>
 
 
-<div ng-if="debug" class="data-panel">
-{{ orderSubType | json }}
+      <button class="button" ng-click="ctrl.updateOrderSubType()">Save changes</button>
+
+      <button class="button" ng-click="ctrl.goto('/settings/order_sub_types')">Cancel</button>
+
+    </div>
+
+
+    <div ng-if="ctrl.debug" class="data-panel">
+    {{ ctrl.orderSubType | json }}
+    </div>
+
+  </main>
+
 </div>

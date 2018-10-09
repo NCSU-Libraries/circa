@@ -1,15 +1,15 @@
 // Enumeration values list
 
-var EnumerationValuesListCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var EnumerationValuesListCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
-  EnumerationValuesCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+  EnumerationValuesCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
 
-  $scope.enumerationName = $routeParams.enumerationName;
+  this.enumerationName = $routeParams.enumerationName;
 
-  this.getEnumerationValuesList($scope, $routeParams.enumerationName);
+  this.getEnumerationValuesList($routeParams.enumerationName);
 
 }
 
 EnumerationValuesListCtrl.prototype = Object.create(EnumerationValuesCtrl.prototype);
-EnumerationValuesListCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+EnumerationValuesListCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('EnumerationValuesListCtrl', EnumerationValuesListCtrl);

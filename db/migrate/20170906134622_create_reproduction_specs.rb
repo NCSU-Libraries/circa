@@ -1,4 +1,4 @@
-class CreateReproductionSpecs < ActiveRecord::Migration
+class CreateReproductionSpecs < ActiveRecord::Migration[5.2]
   def change
     create_table :reproduction_specs do |t|
       t.integer :item_order_id

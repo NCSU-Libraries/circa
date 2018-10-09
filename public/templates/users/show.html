@@ -1,102 +1,177 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="UsersShowCtrl as ctrl">
+
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
+
+  <main>
+
+    <div ng-show="ctrl.loading" ng-include="ctrl.templateUrl('common/processing')"/>
+
+    <div ng-if="!ctrl.loading">
+
+      <h1>User details</h1>
+
+      <section class="record-detail user-detail">
+
+        <div class="record-show-actions">
+          <div class="record-action">
+            <span
+                class="link"
+                ng-if="ctrl.user['agreement_confirmed']"
+                ng-click="ctrl.goto('/users/' + ctrl.user['id'] + '/new_order')">
+              <i class="fas fa-bell"></i>New order for this user</a></span>
+          </div>
+
+          <div class="record-action">
+            <span
+                class="link"
+                ng-click="ctrl.editUser(ctrl.user['id'])">
+              <i class="fas fa-edit"></i>Edit</span>
+          </div>
+
+          <div class="record-action"
+              ng-if="ctrl.options['use_devise_passwords']">
+            <span class="link"
+                ng-click="ctrl.sendPasswordResetLink(user)">
+              <i class="far fa-paper-plane"></i>Send password reset link
+            </span>
+          </div>
+
+          <div class="record-action">
+            <span class="link"
+                ng-click="ctrl.confirmDeleteRecord('user', ctrl.user)">
+              <i class="fas fa-trash-alt"></i>Delete</span>
+          </div>
+        </div>
+
+        <div>
+          <div class='detail-element primary'>
+            {{ ctrl.user['last_name'] }},
+            {{ ctrl.user['first_name'] }}
+          </div>
+
+          <div ng-if="ctrl.user.inactive" class='detail-element'>
+            <span class="callout user-inactive">This user is inactive</span>
+          </div>
 
 
+          <div class='detail-element'>
+            <span class="label">Display name:</span>
+            {{ ctrl.user['display_name'] }}
+          </div>
 
-<h1>User details</h1>
+          <div>
+            <div class='detail-element inline'>
+              <span class="label">Email:</span>
+              {{ ctrl.user['email'] }}
+            </div>
+
+            <div class='detail-element inline'>
+              <span class="label">Phone:</span>
+              {{ ctrl.user['phone'] || '--' }}
+            </div>
+          </div>
+
+          <div>
+            <div class='detail-element inline'>
+              <span class="label">Researcher type:</span>
+              {{ ctrl.user['researcher_type'] }}
+            </div>
+
+            <div class='detail-element inline'>
+              <span class="label">Circa role:</span>
+              {{ ctrl.user['role'] }}
+            </div>
+          </div>
+
+          <div>
+            <div class='detail-element inline'>
+              <span class="label">Affiliation:</span>
+              {{ ctrl.user['affiliation'] }}
+            </div>
+
+            <div class='detail-element inline'>
+              <span class="label">Position:</span>
+              {{ ctrl.user['position'] }}
+            </div>
+          </div>
+
+          <div class='detail-element'>
+            <span class="label">Address 1:</span>
+            {{ ctrl.user['address1'] || '---' }}
+          </div>
+
+          <div class='detail-element'>
+            <span class="label">Address 2:</span>
+            {{ ctrl.user['address2'] || '---' }}
+          </div>
+
+          <div>
+            <div class='detail-element inline'>
+              <span class="label">City:</span>
+              {{ ctrl.user['city'] || '---' }}
+            </div>
+
+            <div class='detail-element inline'>
+              <span class="label">State:</span>
+              {{ ctrl.user['state'] || '---' }}
+            </div>
+
+            <div class='detail-element inline'>
+              <span class="label">ZIP/Postal code:</span>
+              {{ ctrl.user['zip'] || '---' }}
+            </div>
+
+            <div class='detail-element inline'>
+              <span class="label">Country:</span>
+              {{ ctrl.user['country'] || '---' }}
+            </div>
+          </div>
+
+          <div class='detail-element'>
+            <span class="label">Policies agreement signed?</span>
+            {{ ctrl.user['agreement_confirmed'] ? 'Yes' : 'No '}}
+          </div>
+
+          <div class='detail-element'
+              ng-if="ctrl.user.notes.length > 0">
+            <span class="label">Notes</span><br>
+            <div ng-repeat="note in ctrl.user.notes">
+              {{ note['content'] }}
+            </div>
+          </div>
+
+        </div>
+      </section>
 
 
+      <section ng-if="ctrl.user['open_orders'].length > 0">
+        <h2>Open orders</h2>
+
+        <ul class="subrecords-list orders-list">
+          <li ng-repeat="order in ctrl.user['open_orders']">
+            <div ng-include="ctrl.templateUrl('orders/record_list_item')"></div>
+          </li>
+        </ul>
+      </section>
 
 
+      <section ng-if="ctrl.user['completed_orders'].length > 0">
+        <h2>Completed orders</h2>
 
-<section class="record-detail user-detail">
-
-  <div class="record-show-actions">
-    <div class="record-action"><span ng-if="user['agreement_confirmed']" class="link" ng-click="goto('/users/' + user['id'] + '/new_order')"><i class="fa fa-bell"></i>New order for this user</a></span></div>
-    <div class="record-action"><span class="link" ng-click="editUser(user['id'])"><i class="fa fa-pencil"></i>Edit</span></div>
-    <div class="record-action" ng-if="options['use_devise_passwords']"><span class="link" ng-click="sendPasswordResetLink(user)"><i class="fa fa-paper-plane-o"></i>Send password reset link</div>
-    <div class="record-action"><span class="link" ng-click="confirmDeleteRecord('user', user)"><i class="fa fa-times"></i>Delete</span></div>
-  </div>
+        <ul class="subrecords-list orders-list">
+          <li ng-repeat="order in ctrl.user['completed_orders']" class="closed">
+            <div ng-include="ctrl.templateUrl('orders/record_list_item_short')"></div>
+          </li>
+        </ul>
+      </section>
 
 
-  <div>
+      <div ng-if="ctrl.debug" class="data-panel">
+      {{ ctrl.user | json }}
+      </div>
 
-    <div class='detail-element primary'>{{ user['last_name'] }}, {{ user['first_name'] }}</div>
-    <div class='detail-element'><span class="label">Display name:</span> {{ user['display_name'] }}</div>
-
-    <div>
-      <div class='detail-element inline'><span class="label">Email:</span> {{ user['email'] }}</div>
-      <div class='detail-element inline'><span class="label">Phone:</span> {{ user['phone'] || '--' }}</div>
     </div>
 
+  </main>
 
-    <div>
-      <div class='detail-element inline'><span class="label">Patron type:</span> {{ user['patron_type'] }}</div>
-      <div class='detail-element inline'><span class="label">Circa role:</span> {{ user['role'] }}</div>
-    </div>
-
-    <div>
-      <div class='detail-element inline'><span class="label">Affiliation:</span> {{ user['affiliation'] }}</div>
-      <div class='detail-element inline'><span class="label">Position:</span> {{ user['position'] }}</div>
-    </div>
-
-    <div class='detail-element'><span class="label">Address 1:</span> {{ user['address1'] || '---' }}</div>
-    <div class='detail-element'><span class="label">Address 2:</span> {{ user['address2'] || '---' }}</div>
-
-    <div>
-      <div class='detail-element inline'><span class="label">City:</span>{{ user['city'] || '---' }}</div>
-      <div class='detail-element inline'><span class="label">State:</span>{{ user['state'] || '---' }}</div>
-      <div class='detail-element inline'><span class="label">ZIP/Postal code:</span>{{ user['zip'] || '---' }}</div>
-      <div class='detail-element inline'><span class="label">Country:</span>{{ user['country'] || '---' }}</div>
-    </div>
-
-    <div class='detail-element'><span class="label">Policies agreement signed?</span> {{ user['agreement_confirmed'] ? 'Yes' : 'No '}}</div>
-
-    <div class='detail-element' ng-if="user.notes.length > 0"><span class="label">Notes</span><br>
-      <div ng-repeat="note in user.notes">{{ note['content'] }}</div>
-    </div>
-
-  </div>
-
-</section>
-
-
-<section ng-if="user['open_orders'].length > 0">
-
-  <h2>Open orders</h2>
-
-  <ul class="sub-records-list open-orders-list">
-
-    <li ng-repeat="order in user['open_orders']">
-
-      <div ng-include="templateUrl('orders/record_list_item')"></div>
-
-    </li>
-
-  </ul>
-
-</section>
-
-
-
-<section ng-if="user['completed_orders'].length > 0">
-
-  <h2>Completed orders</h2>
-
-  <ul class="sub-records-list open-orders-list">
-
-    <li ng-repeat="order in user['completed_orders']">
-
-      <div ng-include="templateUrl('orders/record_list_item')"></div>
-
-    </li>
-
-  </ul>
-
-</section>
-
-
-<!--
-<div ng-if="debug" class="data-panel">
-{{ user | json }}
 </div>
- -->

@@ -1,21 +1,21 @@
 // Locations
 
-var LocationsCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var LocationsCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
-  $scope.section = 'locations';
+  this.section = 'locations';
 
-  CircaCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+  CircaCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
   if ($routeParams.locationId) {
-    this.getLocation($scope, $routeParams.locationId);
+    this.getLocation($routeParams.locationId);
   }
 }
 
 LocationsCtrl.prototype = Object.create(CircaCtrl.prototype);
-LocationsCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+LocationsCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('LocationsCtrl', LocationsCtrl);
 
 
-LocationsCtrl.prototype.validateLocation = function(scope) {
+LocationsCtrl.prototype.validateLocation = function() {
   // TBD
   return true;
 }

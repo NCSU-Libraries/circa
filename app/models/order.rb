@@ -1,4 +1,4 @@
-class Order < ActiveRecord::Base
+class Order < ApplicationRecord
 
   include OrderStateConfig
   include StateTransitionSupport
@@ -7,10 +7,9 @@ class Order < ActiveRecord::Base
   include VersionsSupport
   include SolrDoc
 
-  # belongs_to :order_type
   belongs_to :order_sub_type
+  has_one :order_type, through: :order_sub_type
   has_one :order_fee, as: :record
-
   has_many :order_users, -> { order 'order_users.created_at desc' }, dependent: :destroy
   has_many :users, through: :order_users, source: :user
   has_many :order_assignments, dependent: :destroy
@@ -19,90 +18,21 @@ class Order < ActiveRecord::Base
   has_many :items, through: :item_orders
   has_many :notes, as: :noted
   has_one :course_reserve
-  has_many :digital_image_orders
+  has_many :digital_collections_orders
   has_one :order_fee, as: :record
-
+  has_one :invoice
   has_many :access_sessions do
     def active
       where(active: true)
     end
   end
+  belongs_to :temporary_location, class_name: 'Location', foreign_key: 'location_id'
 
   has_paper_trail meta: {
     association_data: :association_data
   }
 
-  belongs_to :temporary_location, class_name: 'Location', foreign_key: 'location_id'
-
   attr_reader :archivesspace_records
-
-
-  def order_type
-    order_sub_type.order_type
-  end
-
-
-  def order_type_id
-    order_type.id
-  end
-
-
-  def reproduction_order?
-    order_type.name == 'reproduction'
-  end
-
-
-  def self.first_datetime
-    where('created_at is not null').order('created_at asc').limit(1).pluck('created_at')[0]
-  end
-
-
-  def spawn(sub_type_id = nil)
-    sub_type_id ||= order_sub_type_id
-    spawned_order = Order.create!(order_sub_type_id: sub_type_id)
-    association_atts = { order_id: spawned_order.id }
-
-    item_orders.each do |io|
-      atts = association_atts.merge({
-        item_id: io.item_id,
-        archivesspace_uri: io.archivesspace_uri,
-        user_id: io.user_id
-      })
-      ItemOrder.create!(atts)
-    end
-
-    order_users.each do |ou|
-      atts = association_atts.merge({
-        user_id: ou.user_id,
-        primary: ou.primary
-      })
-      OrderUser.create!(atts)
-    end
-
-    if spawned_order.order_type.name == 'reproduction'
-      digital_image_orders.each do |dio|
-        atts = association_atts.merge({
-          resource_identifier: dio.resource_identifier,
-          detail: dio.detail,
-          label: dio.label,
-          display_uri: dio.display_uri,
-          manifest_uri: dio.manifest_uri,
-          requested_images: dio.requested_images
-        })
-        DigitalImageOrder.create!(atts)
-      end
-    end
-
-    if course_reserve && spawned_order.order_sub_type.name == 'course_reserve'
-      atts = association_atts.merge({
-        course_number: course_reserve.course_number,
-        course_name: course_reserve.course_name
-      })
-      CourseReserve.create!(atts)
-    end
-
-    spawned_order.reload
-  end
 
 
   # As a failsafe, we don't actually destroy orders
@@ -122,6 +52,21 @@ class Order < ActiveRecord::Base
     else
       false
     end
+  end
+
+
+  def order_type_id
+    order_type.id
+  end
+
+
+  def reproduction_order?
+    order_type.name == 'reproduction'
+  end
+
+
+  def self.first_datetime
+    where('created_at is not null').order('created_at asc').limit(1).pluck('created_at')[0]
   end
 
 
@@ -177,28 +122,16 @@ class Order < ActiveRecord::Base
 
   # assigns order to user (in addition to existing assignees, if applicable)
   def assign_to(user_id)
-    paper_trail.touch_with_version
+    paper_trail.save_with_version
     order_assignments.create!(user_id: user_id)
   end
 
 
   # reassigns order to user (replacing existing assignments)
   def reassign_to(user_id)
-    paper_trail.touch_with_version
+    paper_trail.save_with_version
     order_assignments.each { |a| a.destroy }
     order_assignments.create!(user_id: user_id)
-  end
-
-
-  def add_items_from_archivesspace(archivesspace_uri)
-    as_items = Item.create_or_update_from_archivesspace(archivesspace_uri)
-    if as_items
-      as_items.each do |item|
-        add_item(item, archivesspace_uri)
-      end
-    else
-      nil
-    end
   end
 
 
@@ -237,6 +170,10 @@ class Order < ActiveRecord::Base
     if course_reserve
       course_reserve.update_attributes(attributes)
     else
+
+      # permit protected attributes passed from controller via nested object in request data
+      attributes.permit!
+
       create_course_reserve!(attributes)
     end
   end
@@ -244,6 +181,11 @@ class Order < ActiveRecord::Base
 
   def includes_item?(item)
     item_orders.exists?(item_id: item.id)
+  end
+
+
+  def num_items
+    items.length
   end
 
 
@@ -263,6 +205,11 @@ class Order < ActiveRecord::Base
 
   def close
     update_attributes(open: false)
+  end
+
+
+  def closed?
+    !open
   end
 
 
@@ -362,17 +309,16 @@ class Order < ActiveRecord::Base
     fees_for_collection = lambda do |collection|
       collection.map { |x| x.order_fee ? x.order_fee : nil }
     end
-    fees = [item_orders.to_a, digital_image_orders.to_a].flat_map { |x| fees_for_collection.(x) }
+    fees = [item_orders.to_a, digital_collections_orders.to_a].flat_map { |x| fees_for_collection.(x) }
     fees.delete_if { |f| f.nil? }
     if self.order_fee
       fees << self.order_fee
     end
-
     fees
   end
 
 
-  def has_fees
+  def has_fees?
     !order_fees.empty? ? true : false;
   end
 
@@ -385,7 +331,7 @@ class Order < ActiveRecord::Base
   def cleanup_reproduction_associations
     if order_type.name != 'reproduction'
       order_fees.each { |of| of.destroy! }
-      digital_image_orders.each { |dio| dio.destroy! }
+      digital_collections_orders.each { |dio| dio.destroy! }
       item_orders.each do |io|
         if io.reproduction_spec
           io.reproduction_spec.destroy!
@@ -395,19 +341,10 @@ class Order < ActiveRecord::Base
   end
 
 
-  def generate_invoice_id
-    if !invoice_id
-      user = users.first
-      if user && user.last_name
-        prefix = user.last_name.byteslice(0,3).upcase
-      else
-        prefix = 'CIR'
-      end
-      date = invoice_date || DateTime.now.to_date
-      suffix = date.strftime("%m%d%y")
-      update_attributes(invoice_id: "#{prefix}-#{suffix}")
-    end
-    invoice_id
+  # Load custom concern if present - methods in concern override those in model
+  begin
+    include OrderCustom
+  rescue
   end
 
 end

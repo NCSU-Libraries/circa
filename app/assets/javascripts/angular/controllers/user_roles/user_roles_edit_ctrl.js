@@ -1,17 +1,19 @@
 // Settings
 
-var UserRolesEditCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var UserRolesEditCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
   var _this = this;
 
-  $scope.section = 'settings';
+  this.section = 'settings';
 
-  UserRolesCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+  UserRolesCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
 
-  this.getUserRole($scope, $routeParams.userRoleId);
+  this.getUserRole($routeParams.userRoleId);
 
 }
 
 UserRolesEditCtrl.prototype = Object.create(UserRolesCtrl.prototype);
-UserRolesEditCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+
+UserRolesEditCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+
 circaControllers.controller('UserRolesEditCtrl', UserRolesEditCtrl);

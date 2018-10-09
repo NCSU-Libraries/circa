@@ -1,20 +1,3 @@
-CircaCtrl.prototype.applyLocationFunctions = function(scope) {
-
-  var _this = this;
-
-  scope.showLocation = function(locationId) {
-    _this.showLocation(locationId);
-  }
-
-  scope.editLocation = function(locationId) {
-    _this.editLocation(locationId);
-  }
-
-  console.log('locations');
-
-}
-
-
 CircaCtrl.prototype.showLocation = function(locationId) {
   this.goto('locations/' + locationId);
 }
@@ -25,22 +8,22 @@ CircaCtrl.prototype.editLocation = function(locationId) {
 }
 
 
-CircaCtrl.prototype.getLocation = function(scope, id, callback) {
+CircaCtrl.prototype.getLocation = function(id, callback) {
   var path = '/locations/' + id;
   var _this = this;
   this.apiRequests.get(path).then(function(response) {
     if (response.status == 200) {
-      scope.location = response.data['location'];
-      _this.commonUtils.executeCallback(callback, scope);
+      _this.circaLocation = response.data['location'];
+      _this.commonUtils.executeCallback(callback);
     }
     else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
+      _this.flash = response.data['error']['detail'];
     }
   });
 }
 
 
-CircaCtrl.prototype.getLocations = function(scope, page, sort) {
+CircaCtrl.prototype.getLocations = function(page, sort) {
   var path = '/locations';
   var _this = this;
 
@@ -50,12 +33,12 @@ CircaCtrl.prototype.getLocations = function(scope, page, sort) {
   }
   this.apiRequests.getPage(path,page).then(function(response) {
     if (response.status == 200) {
-      scope.locations = response.data['locations'];
+      _this.locations = response.data['locations'];
       var paginationParams = _this.commonUtils.paginationParams(response.data['meta']['pagination']);
-      _this.commonUtils.objectMerge(scope, paginationParams);
+      _this.commonUtils.objectMerge(paginationParams);
     }
     else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
+      _this.flash = response.data['error']['detail'];
     }
   });
 }

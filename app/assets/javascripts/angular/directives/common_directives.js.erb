@@ -4,18 +4,49 @@
 
 var commonDirectives = angular.module('commonDirectives', []);
 
+
+commonDirectives.directive("appNav", function () {
+  return {
+    restrict: "A",
+    link: function (scope, elem, attrs) {
+      var navConfig = [
+        ['orders','Orders'],
+        ['items','Items'],
+        ['users','Users'],
+        ['locations','Locations'],
+        ['reports','Reports'],
+        ['settings','Settings']
+      ]
+
+      var section = attrs['section'];
+      var nav = $('<nav class="app-nav"></nav>');
+
+      for (var i = 0; i < navConfig.length; i++) {
+        var navItem = navConfig[i];
+        var key = navItem[0];
+        var label = navItem[1];
+        var span = $('<span class="nav-link"></span>');
+        var a = $('<a ng-click="/' + key + '"></a>');
+        if (key == section) {
+          a.addClass('current');
+        }
+        a.append(label);
+        span.append(a);
+        nav.append(span);
+      }
+
+      elem.append(nav);
+    }
+  }
+});
+
+
 commonDirectives.directive("datepicker", function () {
   return {
     restrict: "A",
     link: function (scope, elem, attrs) {
-
-      console.log(attrs['allowPastDates']);
-
       var pastPermitted = attrs['allowPastDates'];
       var defaultDate = attrs['defaultDate'];
-
-      console.log(attrs['defaultDate']);
-
       elem.datepicker( {
         dateFormat: 'yy-mm-dd',
         minDate: (pastPermitted) ? null : new Date(),
@@ -84,3 +115,7 @@ commonDirectives.directive("poptip", function () {
     }
   }
 });
+
+
+
+

@@ -1,21 +1,21 @@
 <div class="row collapse">
 
   <div class="small-9 columns">
-    <input type="search" placeholder="Enter search term..." ng-model="searchParams.q">
+    <input type="search" ng-keypress="$event.keyCode === 13 && ctrl.search()" placeholder="Enter search term..." ng-model="ctrl.searchParams.q">
   </div>
 
   <div class="small-3 columns">
-    <a class="button postfix" ng-click="search()">Search</a>
+    <a class="button postfix" ng-click="ctrl.search()">Search</a>
   </div>
 
 </div>
 
 
-<div class="row" ng-show="searchParams.active">
+<div class="row" ng-show="ctrl.searchParams.active">
 
   <div class="small-12 columns search-info">
-    <span class="info">Showing only records matching <span class="term">{{ searchParams.q }}</span></span>
-    <span class="link show-all" ng-click="searchReset()">Show all</span>
+    <span class="info">Showing only records matching <span class="term">{{ ctrl.searchParams.q }}</span></span>
+    <span class="link show-all" ng-click="ctrl.searchReset()">Show all</span>
   </div>
 
 </div>

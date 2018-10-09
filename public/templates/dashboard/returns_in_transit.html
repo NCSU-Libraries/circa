@@ -3,56 +3,46 @@
   <h2>Returns in transit</h2>
 
 
-  <div ng-show="dashboard.dashbaordLoading" ng-include="templateUrl('common/processing')"/>
+  <div ng-show="ctrl.dashbaordLoading" ng-include="templateUrl('common/processing')"/>
 
 
-  <div ng-show="!dashboard.dashbaordLoading">
+  <div ng-show="!ctrl.dashbaordLoading">
 
     <!-- filters -->
-    <div ng-if="!dashboard.filters['permanent_location_facility'] && dashboard.returnsInTransit['facilities'].length > 0" class="facility-filter">
-    Filter by facility: <span ng-repeat="facility in dashboard.returnsInTransit['facilities']" class="facility-filter-option" ng-class="$last ? 'last' : ''"><span ng-click="dashboard.filterReturnsInTransitByFacility(facility)" class="link">{{ facility }}</span></span>
+    <div ng-if="!ctrl.filters['permanent_location_facility'] && ctrl.returnsInTransit['facilities'].length > 0" class="facility-filter">
+    Filter by facility: <span ng-repeat="facility in ctrl.returnsInTransit['facilities']" class="facility-filter-option" ng-class="$last ? 'last' : ''"><span ng-click="ctrl.filterReturnsInTransitByFacility(facility)" class="link">{{ facility }}</span></span>
     </div>
 
-    <div ng-if="dashboard.filters['permanent_location_facility']" class="facility-filter-info text-block">
-    Showing only items from {{ dashboard.filters['permanent_location_facility'] }} <span ng-click="dashboard.getReturnsInTransit()" class="link">Show all</span>
+    <div ng-if="ctrl.filters['permanent_location_facility']" class="facility-filter-info text-block">
+    Showing only items from {{ ctrl.filters['permanent_location_facility'] }} <span ng-click="ctrl.getReturnsInTransit()" class="link">Show all</span>
     </div>
     <!-- END filters -->
 
 
     <!-- no results -->
-    <div ng-show="dashboard.returnsInTransit['total_orders'] == 0" class="text-block">
+    <div ng-show="ctrl.returnsInTransit['total_orders'] == 0" class="text-block">
       <strong>There are no returns in transit, or none matching filters.</strong>
     </div>
     <!-- END no results -->
 
 
     <!-- results -->
-    <div ng-show="dashboard.returnsInTransit['total_orders'] > 0">
+    <div ng-show="ctrl.returnsInTransit['total_orders'] > 0">
 
       <div class="print-list">
-        <span poptip="Generate printable list" class="print-link"><span class="link" ng-click="dashboard.openReturnsList()"><i class="fa fa-print"></i>Print list</span></span>
+        <span poptip="Generate printable list" class="print-link"><span class="link" ng-click="ctrl.openReturnsList()"><i class="fa fa-print"></i>Print list</span></span>
       </div>
 
-      <div ng-repeat="(orderId, order) in dashboard.returnsInTransit['orders']" class="pending-transfers-order">
+      <div ng-repeat="(orderId, order) in ctrl.returnsInTransit['orders']" class="pending-transfers-order">
 
-        <h3><span class="link" ng-click="dashboard.showOrder(orderId)">Order #{{ orderId }}</span></h3>
+        <h3><span class="link" ng-click="ctrl.showOrder(orderId)">Order #{{ orderId }}</span></h3>
 
-        <ul class="records-list items-list">
+        <ul class="subrecords-list items-list">
 
           <li ng-repeat="item_order in order['item_orders']" ng-init="item = item_order['item']" data-item-id="{{ orderId }}">
-            <div class="row">
 
-              <div class="small-10 columns">
-                <div ng-include="dashboard.templateUrl('items/item_location_overview')"></div>
-              </div>
+            <div ng-include="ctrl.templateUrl('dashboard/item_sub_record')"></div>
 
-              <div class="small-2 columns">
-                <div class="record-actions order-actions">
-                  <div class="action"><span class="link" ng-click="dashboard.showItem(item['id'])">View item details</span></div>
-                </div>
-              </div>
-
-            </div>
           </li>
 
         </ul>
@@ -66,7 +56,7 @@
 
 
   <div ng-if="debug" class="data-panel">
-  {{ dashboard.returnsInTransit | json }}
+  {{ ctrl.returnsInTransit | json }}
   </div>
 
 

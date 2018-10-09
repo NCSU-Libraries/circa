@@ -41,8 +41,8 @@
     <% end %>
 
 
-    <% if @order.digital_image_orders && @order.digital_image_orders.length > 0 %>
-      <% @order.digital_image_orders.each do |dio| %>
+    <% if @order.digital_collections_orders && @order.digital_collections_orders.length > 0 %>
+      <% @order.digital_collections_orders.each do |dio| %>
         <p>
           <strong><%= dio.resource_title %></strong><br>
           <%= dio.display_uri %>

@@ -1,27 +1,59 @@
 <div class="date-config">
 
-    <div class="date-range-options">
-      <span class="label">From:</span>
-      <span class="date-option date-start">
-        <input type="text" datepicker allow-past-dates="true" ng-model="report.dateParams.dateStart" class="datepicker-input"/>
+  <div class="date-range-options">
+    <span class="label">From:</span>
+    <span class="date-option date-start">
+      <input
+          type="text"
+          datepicker
+          allow-past-dates="true"
+          ng-model="ctrl.dateParams.dateStart"
+          class="datepicker-input"/>
+    </span>
+
+    <span class="label">To:</span>
+    <span class="date-option date-end">
+      <input
+          type="text"
+          datepicker
+          allow-past-dates="true"
+          ng-model="ctrl.dateParams.dateEnd"
+          class="datepicker-input"/>
+    </span>
+
+    <span
+        class="tiny button"
+        ng-click="ctrl.getReportData()">
+      Update report
+    </span>
+  </div>
+
+
+  <div
+      class="date-unit-options"
+      ng-if="ctrl.showDateUnitOptions">
+
+    <span class="label">View by:</span>
+
+    <span
+        class="date-option date-unit-option"
+        ng-repeat="dateUnit in ctrl.dateUnitOptions">
+
+      <span
+          class="link"
+          ng-show="ctrl.dateParams.dateUnit != dateUnit"
+          ng-click="ctrl.changeDateUnit(dateUnit)">
+        {{ dateUnit | capitalize }}
       </span>
 
-      <span class="label">To:</span>
-      <span class="date-option date-end">
-        <input type="text" datepicker allow-past-dates="true" ng-model="report.dateParams.dateEnd" class="datepicker-input"/>
+      <span
+          class="selected"
+          ng-show="ctrl.dateParams.dateUnit == dateUnit">
+        {{ dateUnit | capitalize }}
       </span>
 
-      <span class="tiny button" ng-click="report.updateReport()">Update report</span>
-    </div>
-
-
-
-    <div ng-if="report.showDateUnitOptions" class="date-unit-options">
-      <span class="label">View by:</span>
-      <span ng-repeat="dateUnit in report.dateUnitOptions" class="date-option date-unit-option">
-        <span class="link" ng-show="report.dateParams.dateUnit != dateUnit" ng-click="report.changeDateUnit(dateUnit)">{{ dateUnit | capitalize }}</span>
-        <span class="selected" ng-show="report.dateParams.dateUnit == dateUnit">{{ dateUnit | capitalize }}</span>
-      </span>
-    </div>
+    </span>
 
   </div>
+
+</div>

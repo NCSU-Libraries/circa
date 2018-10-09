@@ -7,6 +7,18 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 
+# Rename legacy values if they exist
+enumeration = Enumeration.find_by(name: 'patron_type')
+if enumeration
+  enumeration.update_attributes(name: 'researcher_type')
+end
+
+user_role = UserRole.find_by(name: 'patron')
+if user_role
+  user_role.update_attributes(name: 'researcher')
+end
+
+
 # Order types
 
 order_types = [
@@ -60,7 +72,7 @@ roles = [
   { name: 'superadmin', level: 0 },
   { name: 'admin', level: 1 },
   { name: 'staff', level: 10 },
-  { name: 'patron', level: 20 }
+  { name: 'researcher', level: 20 }
 ]
 
 roles.each do |r|
@@ -74,7 +86,7 @@ end
 # Enumeration values
 
 enumerations = {
-  'patron_type' => [
+  'researcher_type' => [
     ['faculty','faculty'],
     ['graduate student','graduate_student'],
     ['undergraduate','undergraduate'],

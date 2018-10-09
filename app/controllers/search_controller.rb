@@ -49,4 +49,12 @@ class SearchController < ApplicationController
 
   end
 
+
+  # Load custom concern if present
+  begin
+    include SearchControllerCustom
+  rescue
+  end
+
+
 end

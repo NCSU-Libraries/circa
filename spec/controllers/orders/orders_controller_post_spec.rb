@@ -7,17 +7,13 @@ RSpec.describe OrdersController, type: :controller do
     @order = create(:order)
     @item = create(:item)
     @item_order = create(:item_order, order_id: @order.id, item_id: @item.id)
-    @digital_image_order = create(:digital_image_order, order_id: @order.id)
+    @digital_collections_order = create(:digital_collections_order, order_id: @order.id)
     @reproduction_format = create(:reproduction_format)
     @reproduction_spec = create(:reproduction_spec, item_order_id: @item_order.id)
     @order_fee1 = create(:order_fee, record_type: 'ItemOrder', record_id: @item_order.id)
-    @order_fee2 = create(:order_fee, record_type: 'DigitalImageOrder', record_id: @digital_image_order.id)
+    @order_fee2 = create(:order_fee, record_type: 'DigitalCollectionsOrder', record_id: @digital_collections_order.id)
     @item_order.reload
-    @digital_image_order.reload
-
-    puts @digital_image_order.inspect
-    puts @item_order.inspect
-
+    @digital_collections_order.reload
     @order.reload
   end
 
@@ -64,7 +60,7 @@ RSpec.describe OrdersController, type: :controller do
     end
 
 
-    let(:digital_image_orders_data) do
+    let(:digital_collections_orders_data) do
       [
         { resource_identifier: "image1", requested_images: [ 'imagefile1-1', 'imagefile1-2' ],
           order_fee: { per_unit_fee: 1.23 }
@@ -91,11 +87,11 @@ RSpec.describe OrdersController, type: :controller do
       }
     end
 
-    it "creates order, and adds items and users, and returns json response with http success" do
+    it "creates order, and adds items and users, and returns json response with http ok" do
       order_data = order_post_data
       order_data[:item_orders] = item_orders
-      post :create, order: order_data
-      expect(response).to have_http_status(:success)
+      post :create, params: { order: order_data }
+      expect(response).to have_http_status(:ok)
       expect { JSON.parse response.body }.not_to raise_error
       r = JSON.parse(response.body)
       expect(r['order']['item_orders'].empty?).not_to be true
@@ -108,7 +104,7 @@ RSpec.describe OrdersController, type: :controller do
       order_data = order_post_data
       order_data['order_sub_type_id'] = reproduction_fee_order_sub_type.id
       order_data[:item_orders] = reproduction_item_orders
-      post :create, order: order_data
+      post :create, params: { order: order_data }
       r = JSON.parse(response.body)
       expect(r['order']['item_orders'][0]['reproduction_spec']['pages']).to eq(3)
       expect(r['order']['item_orders'][0]['order_fee']['per_unit_fee']).to eq(1.23)
@@ -116,12 +112,12 @@ RSpec.describe OrdersController, type: :controller do
 
     it "creates reproduction order with digital images with fees" do
       order_data = order_post_data
-      order_data[:digital_image_orders] = digital_image_orders_data
-      post :create, order: order_data
+      order_data[:digital_collections_orders] = digital_collections_orders_data
+      post :create, params: { order: order_data }
       r = JSON.parse(response.body)
-      expect(r['order']['digital_image_orders'].empty?).not_to be true
-      expect(r['order']['digital_image_orders'].length).to eq(1)
-      expect(r['order']['digital_image_orders'][0]['order_fee']['per_unit_fee']).to eq(1.23)
+      expect(r['order']['digital_collections_orders'].empty?).not_to be true
+      expect(r['order']['digital_collections_orders'].length).to eq(1)
+      expect(r['order']['digital_collections_orders'][0]['order_fee']['per_unit_fee']).to eq(1.23)
     end
 
 
@@ -129,7 +125,7 @@ RSpec.describe OrdersController, type: :controller do
       order_data = order_post_data
       order_data[:item_orders] = item_orders
       order_data[:course_reserve] = course_reserve_data
-      post :create, order: order_data
+      post :create, params: { order: order_data }
       r = JSON.parse(response.body)
       expect(r['order']['course_reserve']['course_number']).to eq('1234')
       expect(r['order']['course_reserve']['course_name']).to eq('course reserve name')
@@ -143,30 +139,10 @@ RSpec.describe OrdersController, type: :controller do
       course_reserve[:id] = 999999
       course_reserve[:order_id] = 999999
       order_data[:course_reserve] = course_reserve
-      post :create, order: order_data
+      post :create, params: { order: order_data }
       r = JSON.parse(response.body)
       expect(r['order']['course_reserve']['course_number']).to eq('1234')
       expect(r['order']['course_reserve']['course_name']).to eq('course reserve name')
-    end
-
-  end
-
-
-  describe "POST #spawn" do
-
-    let(:order) { create(:order_with_items) }
-
-    it "successfully returns JSON" do
-      post :spawn, id: order.id
-      expect(response).to have_http_status(:success)
-      expect { JSON.parse response.body }.not_to raise_error
-    end
-
-    it "spawns a new order and returns it" do
-      post :spawn, id: order.id
-      r = JSON.parse(response.body)
-      expect(r['order']).not_to be_nil
-      expect(r['order']['item_orders'].length).to eq(order.item_orders.length)
     end
 
   end

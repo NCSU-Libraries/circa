@@ -29,18 +29,18 @@ RSpec.describe Enumeration, type: :model do
     expect(l1.source_id).to eq(l2.source_id)
   end
 
-  it "merges patron_type values" do
+  it "merges researcher_type values" do
     role = create(:user_role)
-    e = Enumeration.create(name: 'patron_type')
+    e = Enumeration.create(name: 'researcher_type')
     ev1 = EnumerationValue.create(enumeration_id: e.id, value: 'type1')
     ev2 = EnumerationValue.create(enumeration_id: e.id, value: 'type2')
-    u1 = create(:user, patron_type_id: ev1.id, user_role_id: role.id)
-    u2 = create(:user, patron_type_id: ev2.id, user_role_id: role.id)
-    expect(u1.patron_type_id).not_to eq(u2.patron_type_id)
-    Enumeration.merge_values(ev1.id, ev2.id, 'patron_type')
+    u1 = create(:user, researcher_type_id: ev1.id, user_role_id: role.id)
+    u2 = create(:user, researcher_type_id: ev2.id, user_role_id: role.id)
+    expect(u1.researcher_type_id).not_to eq(u2.researcher_type_id)
+    Enumeration.merge_values(ev1.id, ev2.id, 'researcher_type')
     u1.reload
     u2.reload
-    expect(u1.patron_type_id).to eq(u2.patron_type_id)
+    expect(u1.researcher_type_id).to eq(u2.researcher_type_id)
   end
 
   # values by enumeration name

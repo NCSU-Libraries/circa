@@ -10,7 +10,7 @@
   font-size: 8rem;
   font-weight: bold;
   line-height: 1em;
-  margin: 2rem 0;
+  margin: 2rem 0 1rem 0;
   text-align: center;
 }
 
@@ -22,19 +22,22 @@
 
 .big-nav-item {
   position: relative;
-  height: 10rem;
+  height: 3rem;
   color: $red;
   text-align: center;
 
   &:hover {
     background: $orange;
+
     .big-nav-icon, .big-nav-text {
       color: $white;
       text-decoration: none;
     }
   }
+
   &.disabled {
     color: $grayLighter;
+
     &:hover {
       background: inherit;
       .big-nav-icon, .big-nav-text {
@@ -48,9 +51,11 @@
   font-size: 4rem;
   line-height: 1em;
   padding-top: 1rem;
+
   i {
     // padding-left: 1rem;
   }
+
   .fa-briefcase {
     line-height: 1.15em;
   }
@@ -61,12 +66,12 @@
   line-height: 1em;
   font-family: "GlyphaRoman", helvetica, arial, sans-serif;
   font-weight: bold;
-  padding-top: 1.25rem;
+  padding: 0.75rem 0;
 }
 
 .big-nav-link {
   display: block;
-  height: 11rem;
+  height: 3rem;
   width: 100%;
   z-index: 100;
   position: absolute;
@@ -79,8 +84,8 @@
   .section-nav-item {
     font-size: 1.1rem;
     line-height: 1.5em;
-    font-family: "GlyphaRoman", helvetica, arial, sans-serif;
-    font-weight: bold;
+    // font-family: "GlyphaRoman", helvetica, arial, sans-serif;
+    // font-weight: bold;
     margin-bottom: 0.5rem;
 
     i {

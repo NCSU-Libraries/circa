@@ -1,37 +1,39 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="UsersListCtrl as ctrl">
 
-<h1>Registered users</h1>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
 
-<div class="record-list-actions">
-  <div class="record-action"><span class="link" ng-click="goto('/users/new')"><i class="fa fa-plus"></i>Create new user</span></div>
+  <main>
+
+    <h1>Users</h1>
+
+    <div class="record-list-actions">
+      <div class="record-action">
+        <span class="link" ng-click="ctrl.goto('/users/new')">
+          <i class="fas fa-plus-circle"></i>Create new user
+        </span>
+      </div>
+    </div>
+
+    <div ng-include="ctrl.templateUrl('common/search_form')"></div>
+
+    <div ng-show="loading" ng-include="ctrl.templateUrl('common/processing')"/>
+
+    <div ng-hide="loading">
+      <div ng-include="ctrl.templateUrl('common/pagination')"></div>
+
+      <ul class="records-list user-list">
+        <li ng-repeat="user in ctrl.users">
+          <div ng-include="ctrl.templateUrl('users/record_list_item')"/>
+        </li>
+      </ul>
+
+      <div ng-include="ctrl.templateUrl('common/pagination')"></div>
+    </div>
+
+    <div ng-if="debug" class="data-panel">
+    {{ ctrl.users | json }}
+    </div>
+
+  </main>
+
 </div>
-
-
-<div ng-include="templateUrl('common/search_form')"></div>
-
-
-<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
-
-<div ng-hide="loading">
-
-  <div ng-include="templateUrl('common/pagination')"></div>
-
-  <ul class="records-list user-list">
-
-    <li ng-repeat="user in users">
-
-      <div ng-include="templateUrl('users/record_list_item')"/>
-
-    </li>
-
-  </ul>
-
-  <div ng-include="templateUrl('common/pagination')"></div>
-
-</div>
-
-<!--
-<div ng-if="debug" class="data-panel">
-{{ users | json }}
-</div>
- -->

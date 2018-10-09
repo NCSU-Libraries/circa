@@ -1,0 +1,160 @@
+<div class="invoice">
+
+  <h1>Invoice</h1>
+
+  <div class="row invoice-info">
+    <span class="label">Date:</span> <%= @invoice_date.strftime("%B %e, %Y") %><br>
+    <span class="label">Invoice ID:</span> <%= @invoice_id %>
+  </div>
+
+  <div class="row">
+
+    <section class="invoice-from print-2 columns">
+      <h2>From</h2>
+      <%= render partial: "from_address" %>
+    </section>
+
+    <section class="invoice-to print-2 columns">
+      <h2>To</h2>
+      <% if @custom_to %>
+        <%= @custom_to.html_safe %>
+      <% else %>
+        <%= @user.display_name %><br>
+        <% if !@user.address1.blank? %>
+          <%= @user.address1 %><br>
+        <% end %>
+        <% if !@user.address2.blank? %>
+          <%= @user.address2 %><br>
+        <% end %>
+        <% if !@user.city.blank? %>
+          <%= @user.city %><%= @user.state ? ',' : '' %>
+        <% end %>
+        <% if !@user.state.blank? %>
+          <%= @user.state %>
+        <% end %>
+        <% if !@user.zip.blank? %>
+          <%= @user.zip %>
+        <% end %>
+        <% if !@user.phone.blank? %>
+          <br><%= @user.phone %>
+        <% end %>
+        <% if !@user.email.blank? %>
+          <br><em><%= @user.email %></em>
+        <% end %>
+
+      <% end %>
+    </section>
+
+  </div>
+
+
+  <section class="invoice-items">
+
+    <table class="invoice">
+
+      <thead>
+
+        <tr>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Unit price</th>
+          <th>Total</th>
+        </tr>
+
+      </thead>
+
+
+      <tbody>
+
+        <% @item_orders.each do |io| %>
+
+          <% if io.order_fee %>
+
+            <% if io.order_fee && (io.order_fee.per_unit_fee ||
+                io.order_fee.per_order_fee) %>
+              <%= render partial: "item_description_row",
+                  locals: { record: io, record_type: 'item_order', item: io.item }
+              %>
+            <% end %>
+
+
+            <% if io.order_fee && io.order_fee.per_unit_fee %>
+              <%= render partial: "per_unit_fee_row",
+                  locals: { record: io, record_type: 'item_order' }
+              %>
+            <% end %>
+
+
+            <% if io.order_fee && io.order_fee.per_order_fee %>
+              <%= render partial: "per_order_fee_row",
+                  locals: { record: io, record_type: 'item_order' }
+              %>
+            <% end %>
+
+          <% end %>
+
+        <% end %>
+
+
+        <% @digital_collections_orders.each do |dio| %>
+
+          <% if dio.order_fee %>
+
+            <% if dio.order_fee.per_unit_fee || dio.order_fee.per_order_fee %>
+              <%= render partial: "item_description_row",
+                  locals: { record: dio, record_type: 'digital_collections_order', item: dio }
+              %>
+            <% end %>
+
+
+            <% if dio.order_fee.per_unit_fee %>
+              <%= render partial: "per_unit_fee_row",
+                  locals: { record: dio, record_type: 'digital_collections_order' }
+              %>
+            <% end %>
+
+
+            <% if dio.order_fee.per_order_fee %>
+              <%= render partial: "per_order_fee_row",
+                  locals: { record: dio, record_type: 'digital_collections_order' }
+              %>
+            <% end %>
+
+          <% end %>
+
+        <% end %>
+
+
+        <% if @order.order_fee && @order.order_fee.per_order_fee %>
+        <tr>
+          <td>
+            <%= @order.order_fee.per_order_fee_description %>
+          </td>
+          <td class="numeric">1</td>
+          <td class="numeric"><%= number_to_currency(@order.order_fee.per_order_fee) %></td>
+          <td class="numeric"><%= number_to_currency(@order.order_fee.per_order_fee) %></td>
+        </tr>
+        <% end %>
+
+
+        <tr>
+          <% if @invoice.payment_date %>
+          <td colspan="3" class="total-due">Amount paid</td>
+          <% else %>
+          <td colspan="3" class="total-due">Total due</td>
+          <% end %>
+
+          <td class="numeric total">
+            <%= number_to_currency(@order_fees_total) %>
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </section>
+
+
+
+</div>

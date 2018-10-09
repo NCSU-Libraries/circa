@@ -1,4 +1,4 @@
-class UserRole < ActiveRecord::Base
+class UserRole < ApplicationRecord
 
   # app/models/concerns/ref_integrity.rb
   include RefIntegrity
@@ -15,6 +15,16 @@ class UserRole < ActiveRecord::Base
   # returns lowest role (the one with the highest level value)
   def self.lowest
     UserRole.order('level DESC').first
+  end
+
+
+  # This assumes that the role with the highest level is an external (researcher)
+  # role and the rest are internal or staff roles
+  # If this isn't true in your case, you can override this method in a customization
+  def self.internal_role_ids
+    roles = self.all.order(:level).to_a
+    roles.pop
+    roles.map { |r| r.id }
   end
 
 
@@ -40,5 +50,11 @@ class UserRole < ActiveRecord::Base
     end
   end
 
+
+  # Load custom concern if present - methods in concern take precidence
+  begin
+    include UserRoleCustom
+  rescue
+  end
 
 end

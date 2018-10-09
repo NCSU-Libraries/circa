@@ -13,6 +13,7 @@ RSpec.describe ItemsController, type: :controller do
 
   let(:user) { create(:user) }
 
+
   before(:each) do
     sign_in(user)
   end
@@ -20,38 +21,38 @@ RSpec.describe ItemsController, type: :controller do
 
 
   describe "GET #index" do
-    it "returns http success" do
+    it "returns http ok" do
       get :index
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(:ok)
     end
   end
 
 
   describe "GET #show" do
-    it "returns http success" do
+    it "returns http ok" do
       i = create(:item)
-      get :show, id: i.id
-      expect(response).to have_http_status(:success)
+      get :show, params: { id: i.id }
+      expect(response).to have_http_status(:ok)
     end
   end
 
 
   describe "GET #create" do
-    it "returns http success" do
+    it "returns http ok" do
       get :create
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(:ok)
     end
   end
 
 
   describe "PUT #update" do
-    it "updates record and returns http success" do
+    it "updates record and returns http ok" do
       l1 = create(:location)
       l2 = create(:location)
       i = create(:item, current_location_id: l1.id)
       expect(i.current_location_id).to eq(l1.id)
-      put :update, id: i.id, item: { current_location_id: l2.id }
-      expect(response).to have_http_status(:success)
+      put :update, params: { id: i.id, item: { current_location_id: l2.id } }
+      expect(response).to have_http_status(:ok)
       i.reload
       expect(i.current_location_id).to eq(l2.id)
     end
@@ -59,10 +60,10 @@ RSpec.describe ItemsController, type: :controller do
 
 
   describe "GET #destroy" do
-    it "returns http success" do
+    it "returns http ok" do
       i = create(:item)
-      get :destroy, id: i.id
-      expect(response).to have_http_status(:success)
+      get :destroy, params: { id: i.id }
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -71,9 +72,9 @@ RSpec.describe ItemsController, type: :controller do
     it "changes state and stores applicable metadata" do
       o = create(:order_with_items)
       i = o.items.first
-      o.trigger(:confirm)
+      o.trigger(:confirm, transition_metadata(user))
       event = i.available_events.first
-      expect(put :update_state, id: i.id, event: event, order_id: o.id).to have_http_status(:success)
+      expect(put :update_state, params: { id: i.id, event: event, order_id: o.id }).to have_http_status(:ok)
       i.reload
       expect(i.last_transition.order_id).to eq(o.id)
     end
@@ -87,15 +88,15 @@ RSpec.describe ItemsController, type: :controller do
       i = o.items.first
       r = UserRole.last
       u = create(:user, user_role_id: r.id)
-      o.trigger(:confirm)
+      o.trigger(:confirm, transition_metadata(u))
       # move item through workflow
-      i.trigger(:order)
-      i.trigger(:transfer)
-      i.trigger(:receive_at_temporary_location)
-      i.trigger(:prepare_at_temporary_location)
+      i.trigger(:order, transition_metadata(u,o))
+      i.trigger(:transfer, transition_metadata(u,o))
+      i.trigger(:receive_at_temporary_location, transition_metadata(u,o))
+      i.trigger(:prepare_at_temporary_location, transition_metadata(u,o))
       expect(i.current_state).to eq(:ready_at_temporary_location)
-      post :check_out, id: i.id, users: [ u.attributes ], order_id: o.id
-      expect(response).to have_http_status(:success)
+      post :check_out, params: { id: i.id, users: [ u.attributes ], order_id: o.id }
+      expect(response).to have_http_status(:ok)
     end
 
     it "returns 400 if item is already in use" do
@@ -105,11 +106,11 @@ RSpec.describe ItemsController, type: :controller do
       u = create(:user, user_role_id: r.id)
       a = create(:access_session, item_id: i.id, order_id: o.id, active: true)
       # move item through workflow
-      i.trigger(:order)
-      i.trigger(:transfer)
-      i.trigger(:receive_at_temporary_location)
-      i.trigger(:prepare_at_temporary_location)
-      post :check_out, id: i.id, users: [ u.attributes ], order_id: o.id
+      i.trigger(:order, transition_metadata(u,o))
+      i.trigger(:transfer, transition_metadata(u,o))
+      i.trigger(:receive_at_temporary_location, transition_metadata(u,o))
+      i.trigger(:prepare_at_temporary_location, transition_metadata(u,o))
+      post :check_out, params: { id: i.id, users: [ u.attributes ], order_id: o.id }
       expect(response).to have_http_status('400')
     end
 
@@ -122,15 +123,15 @@ RSpec.describe ItemsController, type: :controller do
       i = o.items.first
       r = UserRole.last
       u = create(:user, user_role_id: r.id)
-      o.trigger(:confirm)
+      o.trigger(:confirm, transition_metadata(u))
       # move item through workflow
-      i.trigger(:order)
-      i.trigger(:transfer)
-      i.trigger(:receive_at_temporary_location)
-      i.trigger(:prepare_at_temporary_location)
-      post :check_out, id: i.id, users: [ u.attributes ], order_id: o.id
+      i.trigger(:order, transition_metadata(u,o))
+      i.trigger(:transfer, transition_metadata(u,o))
+      i.trigger(:receive_at_temporary_location, transition_metadata(u,o))
+      i.trigger(:prepare_at_temporary_location, transition_metadata(u,o))
+      post :check_out, params: { id: i.id, users: [ u.attributes ], order_id: o.id }
       expect(i.in_use?).to be true
-      get :check_in, id: i.id
+      get :check_in, params: { id: i.id }
       expect(i.in_use?).to be false
     end
   end
@@ -140,7 +141,7 @@ RSpec.describe ItemsController, type: :controller do
     it "returns array of items as JSON" do
       api_values = archivesspace_api_values.first
       archivesspace_uri = api_values[:archival_object_uri]
-      post :create_from_archivesspace, archivesspace_uri: archivesspace_uri
+      post :create_from_archivesspace, params: { archivesspace_uri: archivesspace_uri }
       expect(response).to have_http_status('200')
       expect{ JSON.parse(response.body) }.not_to raise_error
       i = JSON.parse(response.body)['items']
@@ -150,7 +151,7 @@ RSpec.describe ItemsController, type: :controller do
     it "creates items from ArchivesSpace digital objects and serialized digital object attributes" do
       api_values = archivesspace_digital_object_api_values
       archivesspace_uri = api_values[:archival_object_uri]
-      post :create_from_archivesspace, archivesspace_uri: archivesspace_uri, digital_object: true
+      post :create_from_archivesspace, params: { archivesspace_uri: archivesspace_uri, digital_object: true }
       expect(response).to have_http_status('200')
       expect{ JSON.parse(response.body) }.not_to raise_error
       i = JSON.parse(response.body)['items']
@@ -165,7 +166,7 @@ RSpec.describe ItemsController, type: :controller do
       catalog_item = catalog_request_item
       catalog_record_id = catalog_item[:recordSpec]
       catalog_item_id = catalog_item[:barcode]
-      post :create_from_catalog, catalog_record_id: catalog_record_id, catalog_item_id: catalog_item_id
+      post :create_from_catalog, params: { catalog_record_id: catalog_record_id, catalog_item_id: catalog_item_id }
       expect(response).to have_http_status('200')
       expect{ JSON.parse(response.body) }.not_to raise_error
       i = JSON.parse(response.body)['item']
@@ -179,11 +180,11 @@ RSpec.describe ItemsController, type: :controller do
       o = create(:order_with_items)
       l = create(:location)
       i = o.items.first
-      o.trigger(:confirm)
+      o.trigger(:confirm, transition_metadata(user))
       # move item through workflow
-      i.trigger(:order)
-      i.trigger(:transfer)
-      post :receive_at_temporary_location, id: i.id, order_id: o.id
+      i.trigger(:order, transition_metadata(user,o))
+      i.trigger(:transfer, transition_metadata(user,o))
+      post :receive_at_temporary_location, params: { id: i.id, order_id: o.id }
       i.reload
       expect(i.current_location_id).to eq(o.location_id)
     end

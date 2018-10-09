@@ -21,7 +21,9 @@
 //= require angular-animate
 //= require angucomplete-alt/angucomplete-alt
 //= require angular-foundation/mm-foundation-tpls.min
+
 //= require angular/app
+
 //= require ng-country-select
 //= require_tree ./angular/services
 //= require_tree ./angular/directives
@@ -31,11 +33,8 @@
 //= require angular/controllers/circa_ctrl
 //= require_tree ./angular/controllers/circa
 
-//= require angular/controllers/circa_modal_instance_ctrl
-
-//= require angular/controllers/home_ctrl
-
 //= require angular/controllers/orders_ctrl
+//= require_tree ./angular/controllers/orders_ctrl_functions
 //= require_tree ./angular/controllers/orders
 
 //= require angular/controllers/items_ctrl
@@ -47,13 +46,13 @@
 //= require angular/controllers/enumeration_values_ctrl
 //= require angular/controllers/user_roles_ctrl
 //= require angular/controllers/order_sub_types_ctrl
+//= require_tree ./angular/controllers/custom
 
+//= require_tree ./angular/controllers/orders
 //= require_tree ./angular/controllers/items
 //= require_tree ./angular/controllers/locations
 //= require_tree ./angular/controllers/users
-//= require_tree ./angular/controllers/reports
 //= require_tree ./angular/controllers/dashboard
-//= require_tree ./angular/controllers/modals
 //= require_tree ./angular/controllers/enumeration_values
 //= require_tree ./angular/controllers/user_roles
 //= require_tree ./angular/controllers/order_sub_types

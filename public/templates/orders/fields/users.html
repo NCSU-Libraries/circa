@@ -1,23 +1,30 @@
-<div class="form-section" ng-class="validationErrors['users'] ? 'has-error' : ''">
+<div ng-class="ctrl.validationErrors['users'] ? 'has-error' : ''">
 
+  <h2 ng-if="ctrl.order['order_type']['name'] == 'research'">Researchers</h2>
+  <h2 ng-if="ctrl.order['order_type']['name'] != 'research'">Requester</h2>
 
-  <h2 ng-if="order['order_type']['name'] == 'research'">Researchers</h2>
-  <h2 ng-if="order['order_type']['name'] != 'research'">Requester</h2>
+  <div ng-if="ctrl.validationErrors['users']" class="validation-error field-validation-error">{{ ctrl.validationErrors['users'] }}</div>
 
+  <div ng-include="ctrl.templateUrl('orders/user_list')"></div>
 
-  <div ng-if="validationErrors['users']" class="validation-error field-validation-error">{{ validationErrors['users'] }}</div>
+  <div ng-include="ctrl.templateUrl('orders/fields/user_selector')"></div>
 
+  <div class="add-user-links" ng-hide="ctrl.userSelect.show">
 
-  <div ng-include="templateUrl('orders/user_list')"></div>
+    <span class="add-user-link">
+      <span class="link" ng-click="ctrl.showUserSelector()">
+        <i class="fas fa-plus-circle"></i>Add existing user to order
+      </span>
+    </span>
 
+    <span class="add-user-link">
+      <span class="link" ng-click="ctrl.openNewUserModal()">
+        <i class="fas fa-plus-circle"></i>Create new user and add to order
+      </span>
+    </span>
 
-  <div ng-hide="order['order_type']['name'] == 'reproduction' && order['users'].length > 0">
-    <div ng-include="templateUrl('orders/fields/user_selector')"></div>
-    <div>
-      <span class="link" ng-click="createAndAddUser()">Create and add new
-      {{ order['order_type']['name'] == 'research' ? 'researcher' : 'user' }}</span>
-    </div>
   </div>
 
+  <div ng-include="ctrl.templateUrl('orders/fields/removed_users_list')"></div>
 
 </div>

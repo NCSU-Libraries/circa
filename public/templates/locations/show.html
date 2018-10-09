@@ -1,25 +1,44 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="LocationsShowCtrl as ctrl">
 
-<h1>Locations details</h1>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
 
-<h2>
-  {{ location['title'] }}
-  <span ng-if="location['default']" class="default-append">(default)</span>
-</h2>
+  <main>
+
+    <h1>Locations details</h1>
+
+    <h2>
+      {{ ctrl.circaLocation['title'] }}
+      <span class="default-append" ng-if="ctrl.circaLocation['default']">(default)</span>
+    </h2>
 
 
-<div class="record-show-actions">
-  <div class="record-action"><span class="link" ng-click="editLocation(location['id'])"><i class="fa fa-pencil"></i>Edit</span></div>
-  <div class="record-action" ng-if="location['deletable']"><span class="link" ng-click="confirmDeleteRecord('location', location)"><i class="fa fa-times"></i> Delete</span></div>
+    <div class="record-show-actions">
+      <div class="record-action"><span class="link" ng-click="ctrl.editLocation(ctrl.circaLocation['id'])"><i class="fa fa-pencil"></i>Edit</span></div>
+      <div class="record-action" ng-if="ctrl.circaLocation['deletable']">
+        <span class="link" ng-click="ctrl.confirmDeleteRecord('location', ctrl.circaLocation)">
+          <i class="fa fa-times"></i> Delete
+        </span>
+      </div>
+    </div>
+
+
+    <div ng-if="ctrl.circaLocation['notes']">
+      <span class="label">Notes:</span>
+      <p>{{ ctrl.circaLocation['notes'] }}</p>
+    </div>
+
+    <!--
+    <div ng-if="debug" class="data-panel">
+    {{ location | json }}
+    </div>
+     -->
+
+  </main>
+
+
+  <div
+      ng-show="ctrl.showRecordDeleteModal"
+      ng-include="ctrl.templateUrl('common/delete_record')">
+  </div>
+
 </div>
-
-
-<div ng-if="location['notes']">
-  <span class="label">Notes:</span> {{ location['notes'] }}
-</div>
-
-<!--
-<div ng-if="debug" class="data-panel">
-{{ location | json }}
-</div>
- -->

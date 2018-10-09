@@ -1,4 +1,11 @@
-<div record-select-trigger class="selector archivesspace-record-selector">
+<div class="selector archivesspace-record-selector">
+
+
+  <div class="close-selector">
+    <span class="link" ng-click="ctrl.closeItemSelector()">
+      <i class="fas fa-times-circle"></i>
+    </span>
+  </div>
 
 
   <div class="heading">Add item from ArchivesSpace</div>
@@ -7,30 +14,30 @@
   <div class="instruction">Enter the URI of the ArchivesSpace archival object record and click 'Add'</div>
 
 
-  <div class="loading" ng-show="archivesSpaceRecordSelect.loading">
+  <div class="loading" ng-show="ctrl.archivesSpaceRecordSelect.loading">
     <div class="message">Fetching data from ArchivesSpace...</div>
   </div>
 
 
-  <div class="row collapse" ng-hide="archivesSpaceRecordSelect.loading">
+  <div class="row collapse" ng-hide="ctrl.archivesSpaceRecordSelect.loading">
     <div class="small-10 columns">
-      <input type="text" ng-model="archivesSpaceRecordSelect.uri" placeholder="Enter ArchivesSpace URI"/>
+      <input type="text" ng-model="ctrl.archivesSpaceRecordSelect.uri" placeholder="Enter ArchivesSpace URI"/>
     </div>
     <div class="small-2 columns">
-      <span class="button postfix" ng-click="addItemsFromArchivesSpace()">Add</span>
+      <span class="button postfix" ng-click="ctrl.addItemsFromArchivesSpace()">Add</span>
     </div>
   </div>
 
 
-  <div class="row collapse" ng-hide="archivesSpaceRecordSelect.loading">
-    <div class="small-12 columns">
-      <input type="checkbox" ng-model="archivesSpaceRecordSelect.digitalObject">
+  <div class="row collapse" ng-hide="ctrl.archivesSpaceRecordSelect.loading">
+    <div class="small-12 columns selector-modify">
+      <input type="checkbox" ng-model="ctrl.archivesSpaceRecordSelect.digitalObject">
       <label>Check if the requested item is a digital object</label>
     </div>
   </div>
 
 
-  <div class="alert" ng-show="archivesSpaceRecordSelect.alert" alert-control>{{ archivesSpaceRecordSelect.alert }}</div>
+  <div class="alert" ng-show="ctrl.archivesSpaceRecordSelect.alert" alert-control>{{ ctrl.archivesSpaceRecordSelect.alert }}</div>
 
 
 </div>

@@ -1,23 +1,35 @@
 <div class="selector item-location-selector">
 
-  <div class="loading" ng-show="itemLocationChange['loading']">
+  <div
+      class="loading"
+      ng-show="ctrl.itemLocationChange['loading']">
     <div class="message">Updating location...</div>
   </div>
 
 
-  <div class="row collapse" ng-hide="itemLocationChange['loading']">
+  <div
+      class="row collapse"
+      ng-hide="ctrl.itemLocationChange['loading']">
+
     <div class="small-10 columns">
-      <select ng-model="itemLocationChange['locationId']" convert-to-number>
-        <option ng-repeat="location in circaLocations" value="{{ location['id'] }}">{{ location['title'] }}</option>
+      <select
+          ng-model="ctrl.itemLocationChange['locationId']"
+          convert-to-number>
+        <option
+            ng-repeat="location in ctrl.circaLocations"
+            value="{{ location['id'] }}">{{ location['title'] }}</option>
       </select>
     </div>
+
     <div class="small-2 columns">
-      <span class="button postfix" ng-click="changeItemLocation()">Change</span>
+      <span
+          class="button postfix"
+          ng-click="ctrl.changeItemLocation()">Change</span>
     </div>
   </div>
 
 
-  <div class="alert" ng-show="itemLocationChange['alert']">{{ itemLocationChange['alert'] }}</div>
+  <div class="alert" ng-show="ctrl.itemLocationChange['alert']">{{ ctrl.itemLocationChange['alert'] }}</div>
 
 
 </div>

@@ -1,16 +1,14 @@
 // ItemsListCtrl - For list view, inherits from ItemsCtrl
 
-var ItemsListCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
-  ItemsCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+var ItemsListCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
-  // $scope.getItems = function(page) {
-  //   this.getItems($scope, page);
-  // }
+  ItemsCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
 
-  this.processListParams($scope);
-  this.getItems($scope, $scope.page);
+  this.processListParams();
+  this.getItems(this.page);
+  this.deletedRecordFlash('item');
 }
 
 ItemsListCtrl.prototype = Object.create(ItemsCtrl.prototype);
-ItemsListCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+ItemsListCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('ItemsListCtrl', ItemsListCtrl);

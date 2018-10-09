@@ -31,7 +31,7 @@
 
 
     <p>
-    <strong><%= "Patron".pluralize(@order.users.length) %>:</strong>
+    <strong><%= "Researcher".pluralize(@order.users.length) %>:</strong>
     <% @order.users.each do |u| %>
       <%= u.last_name %>, <%= u.first_name %> (<%= u.email %>)<%= u != @order.users.last ? '; ' : '' %>
     <% end %>

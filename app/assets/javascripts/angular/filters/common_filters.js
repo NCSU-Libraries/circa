@@ -17,6 +17,7 @@ commonFilters.filter('removeUnderscores', function () {
 commonFilters.filter('cssClassName', function () {
   return function (value) {
     if (value) {
+      value = value == 'finished' ? 'closed' : value;
       return value.replace(/[^A-Za-z0-9]/g, '-');
     }
   }
@@ -45,5 +46,12 @@ commonFilters.filter('booleanString', function () {
         return value;
       }
     }
+  }
+});
+
+
+commonFilters.filter('hideZeros', function () {
+  return function (value) {
+    return !value ? '--' : value;
   }
 });

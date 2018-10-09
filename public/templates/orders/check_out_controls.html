@@ -1,0 +1,81 @@
+ <div
+        class="checkout-controls"
+        ng-show="ctrl.commonUtils.inArray(ctrl.checkOutItemIds, item['id'])">
+
+      <h3>Check out item to:</h3>
+
+      <div class="user-select-list">
+        <div ng-repeat="user in ctrl.order['users']">
+
+          <div ng-if="!ctrl.adminOverrideEnabled">
+
+            <span
+                ng-if="user['agreement_confirmed'] && !user['has_active_access_session']"
+                class="link"
+                ng-click="ctrl.commonUtils.toggleArrayElement(ctrl.checkOutUserIds, user['id'])">
+              <i
+                  ng-if="ctrl.commonUtils.inArray(ctrl.checkOutUserIds, user['id'])"
+                  class="far fa-check-square"></i>
+              <i
+                  ng-if="!ctrl.commonUtils.inArray(ctrl.checkOutUserIds, user['id'])"
+                  class="far fa-square"></i>
+              {{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})
+            </span>
+
+            <span ng-if="!user['agreement_confirmed']" class="disabled">
+              {{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})
+              <span class="callout alert">This user has not signed the policies agreement.</span>
+            </span>
+
+            <span ng-if="user['has_active_access_session']" class="disabled">
+              {{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})
+              <span class="callout alert">This user already has an item checked out.</span>
+            </span>
+
+          </div>
+
+
+          <div ng-if="ctrl.adminOverrideEnabled">
+
+            <span
+                class="link"
+                ng-click="ctrl.commonUtils.toggleArrayElement(ctrl.checkOutUserIds, user['id'])">
+              <i
+                  ng-if="ctrl.commonUtils.inArray(ctrl.checkOutUserIds, user['id'])"
+                  class="far fa-check-square"></i>
+              <i
+                  ng-if="!ctrl.commonUtils.inArray(ctrl.checkOutUserIds, user['id'])"
+                  class="far fa-square"></i>
+              {{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})
+              <span
+                  ng-if="!user['agreement_confirmed']"
+                  class="callout alert">This user has not signed the policies agreement.</span>
+              <span
+                  ng-if="user['has_active_access_session']"
+                  class="callout alert">This user already has an item checked out.</span>
+            </span>
+
+          </div>
+
+
+        </div>
+
+        <div
+            ng-if="ctrl.currentUserIsAdmin"
+            ng-include="ctrl.templateUrl('common/admin_override')"
+            class="record-action admin-override">
+        </div>
+
+      </div>
+
+      <span
+          ng-if="ctrl.checkOutUserIds.length > 0"
+          class="button small"
+          ng-click="ctrl.checkOutItem(item, ctrl.checkOutUserIds)">Check out</span>
+      <span
+          class="button small"
+          ng-click="ctrl.toggleCheckout(item['id'])">Cancel</span>
+      <span
+          ng-if="ctrl.checkOutUserIds.length == 0">No users selected (or none eligible for check-out)</span>
+
+    </div>

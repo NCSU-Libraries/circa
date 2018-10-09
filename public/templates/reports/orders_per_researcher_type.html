@@ -1,0 +1,25 @@
+<div ng-include="ctrl.templateUrl('reports/date_config')"></div>
+
+<table>
+
+  <thead>
+    <tr>
+      <th>Researcher type</th>
+      <th>Research orders</th>
+      <th>Reproduction orders</th>
+      <th>Processing orders</th>
+      <th>Exhibition orders</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr ng-repeat="(type, counts) in ctrl.reportData">
+      <td>{{ type }}</td>
+      <td>{{ counts['research'] | hideZeros }}</td>
+      <td>{{ counts['reproduction'] | hideZeros }}</td>
+      <td>{{ counts['processing'] | hideZeros }}</td>
+      <td>{{ counts['exhibition'] | hideZeros }}</td>
+    </tr>
+  </tbody>
+
+</table>

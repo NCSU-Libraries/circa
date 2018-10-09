@@ -2,26 +2,25 @@ class UserRolesController < ApplicationController
 
   before_action :set_user_role, only: [ :show, :update, :destroy ]
 
-
   def index
     render json: user_roles_response
   end
 
 
   def show
-    render json: @user_role
+    render json: { user_role: @user_role }
   end
 
 
   def create
     @user_role = UserRole.create!(user_role_params)
-    render json: @user_role
+    render json: { user_role: @user_role }
   end
 
 
   def update
     @user_role.update_attributes(user_role_params)
-    render json: @user_role
+    render json: { user_role: @user_role }
   end
 
 
@@ -62,6 +61,13 @@ class UserRolesController < ApplicationController
   end
 
 
+  # Load custom concern if present
+  begin
+    include UserRolesControllerCustom
+  rescue
+  end
+
+
   private
 
 
@@ -78,8 +84,17 @@ class UserRolesController < ApplicationController
 
 
   def user_roles_response
-    UserRole.where('level > 0').order(:level).all
+    roles = UserRole.where('level > 0').order(:level).all
+
+    role_attributes = lambda do |role|
+      return {
+        id: role.id, name: role.name, level: role.level,
+        users_count: role.users.length
+      }
+    end
+    { user_roles: roles.map { |r| role_attributes.call(r) } }
   end
+
 
   def format_name(name)
     name.downcase.gsub(/[^A-Za-z0-1_]/, '_').gsub(/_{2,}/,'_').gsub(/_$/,'')

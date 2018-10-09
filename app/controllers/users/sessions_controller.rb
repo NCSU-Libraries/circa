@@ -9,7 +9,16 @@ class Users::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   # def create
-  #   super
+  #   begin
+  #     user = User.where(email: params[:user][:email]).first
+  #     if user && user.inactive
+  #       redirect_to '/users/sign_in', alert: "User with email #{ user.email } is no longer active."
+  #     else
+  #       super
+  #     end
+  #   rescue Exception => e
+  #     flash[:alert] = e
+  #   end
   # end
 
   # DELETE /resource/sign_out

@@ -1,11 +1,11 @@
 .dashboard {
 
   h3 {
-    margin: 1rem 0 0.5rem 0;
+    margin: 1.25rem 0 0.25rem 0;
   }
 
   h3 .print-call-slip {
-    font-size: 1rem;
+    font-size: 0.9rem;
     padding-left: 1rem;
   }
 
@@ -24,4 +24,17 @@
       border-right: 0;
     }
   }
+
+  ul.records-list {
+    margin-bottom: 1rem;
+
+    li {
+      background: $bodyBackground;
+      &:hover {
+        background: $grayGhost;
+        cursor: inherit;
+      }
+    }
+  }
+
 }

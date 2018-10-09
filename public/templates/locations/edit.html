@@ -1,20 +1,26 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="LocationsEditCtrl as ctrl">
 
-<h1>Edit location</h1>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
 
-<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+  <main>
 
-<div ng-hide="loading">
+    <h1>Edit location</h1>
 
-  <div ng-include="templateUrl('locations/form_fields')"/>
+    <div ng-show="loading" ng-include="ctrl.templateUrl('common/processing')"/>
 
-  <button class="button" ng-click="updateLocation()">Update</button>
-  <button class="button" ng-click="goto('/locations')">Cancel</button>
+    <div ng-hide="loading">
+
+      <div ng-include="ctrl.templateUrl('locations/form_fields')"/>
+
+      <button class="button" ng-click="ctrl.updateLocation()">Update</button>
+      <button class="button" ng-click="ctrl.goto('/locations')">Cancel</button>
+
+    </div>
+
+    <div ng-if="debug" class="data-panel">
+      {{ ctrl.circaLocation | json }}
+    </div>
+
+  </main>
 
 </div>
-
-<!--
-<div ng-if="debug" class="data-panel">
-{{ location | json }}
-</div>
- -->

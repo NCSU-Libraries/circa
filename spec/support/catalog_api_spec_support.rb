@@ -40,7 +40,7 @@ module CatalogApiSpecSupport
       "inReferenceCollection" => false,
       "reserveStatus" => false,
       "itemRequestURL" => "/request/NCSU2499528#S02830408P",
-      "patronInaccessible" => true,
+      "researcherInaccessible" => true,
       "kindleBook" => false,
       "specialCollections" => true
     })

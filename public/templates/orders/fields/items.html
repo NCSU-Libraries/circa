@@ -1,13 +1,49 @@
-<div class="form-section" ng-class="validationErrors['items'] ? 'has-error' : ''">
+<section>
 
-  <h2>Items</h2>
+  <div ng-class="ctrl.validationErrors['items'] ? 'has-error' : ''">
 
-  <div ng-if="validationErrors['items']" class="validation-error field-validation-error">{{ validationErrors['items'] }}</div>
+    <h2>Items</h2>
 
-  <div ng-include="templateUrl('orders/fields/item_list')"></div>
+    <div
+        ng-if="ctrl.validationErrors['items']"
+        class="validation-error field-validation-error">{{ ctrl.validationErrors['items'] }}</div>
 
-  <div ng-include="templateUrl('orders/fields/archivesspace_record_selector')"></div>
+    <div ng-include="ctrl.templateUrl('orders/fields/item_list')"></div>
 
-  <!-- <div ng-include="templateUrl('orders/fields/catalog_record_selector')"></div> -->
 
-</div>
+    <div class="add-item-links" ng-hide="ctrl.showItemSelector">
+
+      <span class="add-item-link">
+        <span class="link" ng-click="ctrl.showArchivesSpaceRecordSelector()">
+          <i class="fas fa-plus-circle"></i>Add item from ArchivesSpace
+        </span>
+      </span>
+
+      <!-- only available for custom catalog service -->
+      <span class="add-item-link" ng-if="ctrl.catalogRecordSelect">
+        <span class="link" ng-click="ctrl.showCatalogRecordSelector()">
+          <i class="fas fa-plus-circle"></i>Add item from catalog
+        </span>
+      </span>
+
+    </div>
+
+
+    <div
+        ng-show="ctrl.showItemSelector == 'archivesspace'"
+        ng-include="ctrl.templateUrl('orders/fields/archivesspace_record_selector')">
+    </div>
+
+
+    <div
+        ng-if="ctrl.customTemplateExists('catalogRecordSelector')"
+        ng-show="ctrl.showItemSelector == 'catalog'"
+        ng-include="ctrl.customTemplateUrl('catalogRecordSelector')">
+    </div>
+
+
+    <div ng-include="ctrl.templateUrl('orders/fields/removed_items_list')"></div>
+
+  </div>
+
+</section>

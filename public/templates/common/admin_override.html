@@ -1,2 +1,4 @@
-<span ng-if="adminOverrideEnabled"><strong>Admin override enabled</strong> - </span>
-<span poptip="As an admin, you can change current status arbitraily as required. Use with caution." class="link" ng-click="toggleAdminOverride()">{{ adminOverrideEnabled ? 'Disable' : 'Enable admin override' }}</span>
+<span ng-if="ctrl.adminOverrideEnabled"><strong>Admin override enabled</strong> - </span>
+<span poptip="As an admin, you can change current status arbitraily as required. Use with caution."
+    class="link"
+    ng-click="ctrl.toggleAdminOverride()">{{ ctrl.adminOverrideEnabled ? 'Disable' : 'Enable admin override' }}</span>

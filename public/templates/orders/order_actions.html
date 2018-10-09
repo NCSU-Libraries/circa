@@ -1,44 +1,46 @@
 <div
-    ng-if="order.open || adminOverrideEnabled"
+    ng-if="ctrl.order.open || ctrl.adminOverrideEnabled"
     class="record-action">
   <span
       class="link"
-      ng-click="editOrder(order.id)"><i class="fa fa-pencil"></i>Edit</span>
+      ng-click="ctrl.goto('orders/' + ctrl.order.id + '/edit')"><i class="fas fa-edit"></i>Edit</span>
 </div>
 
 <div
-    ng-if="order['deletable']"
+    ng-if="ctrl.order['deletable']"
     class="record-action">
   <span
       class="link"
-      ng-click="confirmDeleteRecord('order', order)"><i class="fa fa-trash"></i>Delete</span>
+      ng-click="ctrl.confirmDeleteRecord('order', ctrl.order)">
+    <i class="fas fa-trash-alt"></i>Delete
+  </span>
 </div>
 
 <div
     class="record-action">
   <span
       class="link"
-      ng-click="goto('orders/' + order.id + '/clone')"><i class="fa fa-copy"></i>Clone</span>
+      ng-click="ctrl.goto('orders/' + ctrl.order.id + '/clone')"><i class="fa fa-copy"></i>Clone</span>
 </div>
 
 <div
     poptip="Generate printable 'call slip'"
     class="record-action">
   <a
-      ng-href="{{ rootPath() }}/orders/{{ order['id'] }}/call_slip"
+      ng-href="{{ ctrl.rootPath() }}/orders/{{ ctrl.order['id'] }}/call_slip"
       target="_blank"><i class="fa fa-print"></i>Print</a>
 </div>
 
 <div
     poptip="Generate printable 'call slip'"
     class="record-action"
-    ng-if="order.has_fees">
+    ng-if="ctrl.order.has_fees">
   <a
-      ng-href="{{ rootPath() }}/orders/{{ order['id'] }}/invoice"
-      target="_blank"><i class="fa fa-money"></i>Invoice</a>
+      ng-href="{{ ctrl.rootPath() }}/orders/{{ ctrl.order['id'] }}/invoice"
+      target="_blank"><i class="fas fa-dollar-sign"></i>Invoice</a>
 </div>
 
 <div
-    ng-if="currentUserIsAdmin"
-    ng-include="templateUrl('common/admin_override')"
+    ng-if="ctrl.currentUserIsAdmin"
+    ng-include="ctrl.templateUrl('common/admin_override')"
     class="record-action admin-override" />

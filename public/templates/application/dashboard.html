@@ -1,0 +1,31 @@
+<div class="dashboard" ng-controller="DashboardCtrl as ctrl">
+
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
+
+  <main>
+
+    <h1>Dashboard</h1>
+
+    <div>
+      <select
+          ng-model="ctrl.activeDashboard"
+          ng-change="ctrl.setActiveDashboard(ctrl.activeDashboard)">
+        <option value="pendingTransfers">Pending transfers</option>
+        <option value="returnsInTransit">Returns in transit</option>
+        <option value="itemsInTransitForUse">Items in transit for use</option>
+        <option value="courseReserves">Course reserves</option>
+        <option value="digitalObjectRequests">Digital object requests</option>
+      </select>
+    </div>
+
+    <div class="row dashboard-display">
+      <div ng-show="ctrl.activeDashboard == 'pendingTransfers'" ng-include="ctrl.templateUrl('dashboard/pending_transfers')"></div>
+      <div ng-show="ctrl.activeDashboard == 'returnsInTransit'" ng-include="ctrl.templateUrl('dashboard/returns_in_transit')"></div>
+      <div ng-show="ctrl.activeDashboard == 'itemsInTransitForUse'" ng-include="ctrl.templateUrl('dashboard/items_in_transit_for_use')"></div>
+      <div ng-show="ctrl.activeDashboard == 'courseReserves'" ng-include="ctrl.templateUrl('dashboard/course_reserves')"></div>
+      <div ng-show="ctrl.activeDashboard == 'digitalObjectRequests'" ng-include="ctrl.templateUrl('dashboard/digital_object_requests')"></div>
+    </div>
+
+  </main>
+
+</div>

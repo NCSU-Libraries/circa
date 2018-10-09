@@ -18,41 +18,43 @@ circaApp.config(['$routeProvider', '$locationProvider', function($routeProvider,
   var rootPath = '<%= Rails.application.config.action_controller.relative_url_root %>';
   var templatePath = rootPath + '/templates/';
   $locationProvider.hashPrefix('');
-  $routeProvider.when('/', { templateUrl: templatePath + 'application/home.html', controller: 'HomeCtrl' });
-  $routeProvider.when('/orders', { templateUrl: templatePath + 'orders/list.html', controller: 'OrdersListCtrl', reloadOnSearch: true });
-  $routeProvider.when('/orders/new', { templateUrl: templatePath + 'orders/new.html', controller: 'OrdersNewCtrl' });
-  $routeProvider.when('/orders/:orderId', { templateUrl: templatePath + 'orders/show.html', controller: 'OrdersShowCtrl' });
-  $routeProvider.when('/orders/:orderId/edit', { templateUrl: templatePath + 'orders/edit.html', controller: 'OrdersEditCtrl' });
-  $routeProvider.when('/orders/:orderId/clone', { templateUrl: templatePath + 'orders/new.html', controller: 'OrdersCloneCtrl' });
-  $routeProvider.when('/items', { templateUrl: templatePath + 'items/list.html', controller: 'ItemsListCtrl' });
-  $routeProvider.when('/items/:itemId', { templateUrl: templatePath + 'items/show.html', controller: 'ItemsShowCtrl' });
-  $routeProvider.when('/users', { templateUrl: templatePath + 'users/list.html', controller: 'UsersListCtrl' });
-  $routeProvider.when('/users/new', { templateUrl: templatePath + 'users/new.html', controller: 'UsersNewCtrl' });
-  $routeProvider.when('/users/:userId', { templateUrl: templatePath + 'users/show.html', controller: 'UsersShowCtrl' });
-  $routeProvider.when('/users/:userId/new_order', { templateUrl: templatePath + 'orders/new.html', controller: 'OrdersNewCtrl' });
-  $routeProvider.when('/users/:userId/edit', { templateUrl: templatePath + 'users/edit.html', controller: 'UsersEditCtrl' });
-  $routeProvider.when('/locations', { templateUrl: templatePath + 'locations/list.html', controller: 'LocationsListCtrl' });
-  $routeProvider.when('/locations/new', { templateUrl: templatePath + 'locations/new.html', controller: 'LocationsNewCtrl' });
-  $routeProvider.when('/locations/:locationId', { templateUrl: templatePath + 'locations/show.html', controller: 'LocationsShowCtrl'});
-  $routeProvider.when('/locations/:locationId/edit', { templateUrl: templatePath + 'locations/edit.html', controller: 'LocationsEditCtrl' });
-  $routeProvider.when('/reports', { templateUrl: templatePath + 'reports/list.html', controller: 'ReportsCtrl' });
-  $routeProvider.when('/reports/requests_per_resource', { templateUrl: templatePath + 'reports/requests_per_resource.html' });
-  $routeProvider.when('/reports/requests_per_location', { templateUrl: templatePath + 'reports/requests_per_location.html' });
-  $routeProvider.when('/reports/transfers_per_location', { templateUrl: templatePath + 'reports/transfers_per_location.html' });
-  $routeProvider.when('/settings', { templateUrl: templatePath + 'application/settings.html', controller: 'SettingsCtrl' });
+  $routeProvider.when('/', { templateUrl: templatePath + 'application/dashboard.html' });
 
-  $routeProvider.when('/settings/enumeration_values/list/:enumerationName', { templateUrl: templatePath + 'enumeration_values/list.html', controller: 'EnumerationValuesListCtrl' });
-  $routeProvider.when('/settings/enumeration_values/new/:enumerationName', { templateUrl: templatePath + 'enumeration_values/new.html', controller: 'EnumerationValuesNewCtrl' });
-  $routeProvider.when('/settings/enumeration_values/:enumerationName/:enumerationValueId/edit', { templateUrl: templatePath + 'enumeration_values/edit.html', controller: 'EnumerationValuesEditCtrl' });
-  $routeProvider.when('/settings/enumeration_values/:enumerationName/:enumerationValueId/merge', { templateUrl: templatePath + 'enumeration_values/merge.html', controller: 'EnumerationValuesMergeCtrl' });
+  $routeProvider.when('/orders', { templateUrl: templatePath + 'orders/list.html', reloadOnSearch: true });
+  $routeProvider.when('/orders/new', { templateUrl: templatePath + 'orders/new.html' });
+  $routeProvider.when('/orders/:orderId', { templateUrl: templatePath + 'orders/show.html' });
+  $routeProvider.when('/orders/:orderId/edit', { templateUrl: templatePath + 'orders/edit.html' });
+  $routeProvider.when('/orders/:orderId/clone', { templateUrl: templatePath + 'orders/clone.html' });
 
-  $routeProvider.when('/settings/user_roles', { templateUrl: templatePath + 'user_roles/list.html', controller: 'UserRolesListCtrl' });
-  $routeProvider.when('/settings/user_roles/new', { templateUrl: templatePath + 'user_roles/new.html', controller: 'UserRolesNewCtrl' });
-  $routeProvider.when('/settings/user_roles/:userRoleId/edit', { templateUrl: templatePath + 'user_roles/edit.html', controller: 'UserRolesEditCtrl' });
-  $routeProvider.when('/settings/user_roles/:userRoleId/merge', { templateUrl: templatePath + 'user_roles/merge.html', controller: 'UserRolesMergeCtrl' });
+  $routeProvider.when('/items', { templateUrl: templatePath + 'items/list.html' });
+  $routeProvider.when('/items/:itemId', { templateUrl: templatePath + 'items/show.html' });
 
-  $routeProvider.when('/settings/order_sub_types', { templateUrl: templatePath + 'order_sub_types/list.html', controller: 'OrderSubTypesListCtrl' });
-  $routeProvider.when('/settings/order_sub_types/new', { templateUrl: templatePath + 'order_sub_types/new.html', controller: 'OrderSubTypesNewCtrl' });
-  $routeProvider.when('/settings/order_sub_types/:orderSubTypeId/edit', { templateUrl: templatePath + 'order_sub_types/edit.html', controller: 'OrderSubTypesEditCtrl' });
+  $routeProvider.when('/users', { templateUrl: templatePath + 'users/list.html' });
+  $routeProvider.when('/users/new', { templateUrl: templatePath + 'users/new.html' });
+  $routeProvider.when('/users/:userId', { templateUrl: templatePath + 'users/show.html' });
+  $routeProvider.when('/users/:userId/new_order', { templateUrl: templatePath + 'orders/new.html' });
+  $routeProvider.when('/users/:userId/edit', { templateUrl: templatePath + 'users/edit.html' });
+
+  $routeProvider.when('/locations', { templateUrl: templatePath + 'locations/list.html' });
+  $routeProvider.when('/locations/new', { templateUrl: templatePath + 'locations/new.html' });
+  $routeProvider.when('/locations/:locationId', { templateUrl: templatePath + 'locations/show.html' });
+  $routeProvider.when('/locations/:locationId/edit', { templateUrl: templatePath + 'locations/edit.html' });
+
+  $routeProvider.when('/settings', { templateUrl: templatePath + 'application/settings.html' });
+  $routeProvider.when('/settings/enumeration_values/list/:enumerationName', { templateUrl: templatePath + 'enumeration_values/list.html' });
+  $routeProvider.when('/settings/enumeration_values/new/:enumerationName', { templateUrl: templatePath + 'enumeration_values/new.html' });
+  $routeProvider.when('/settings/enumeration_values/:enumerationName/:enumerationValueId/edit', { templateUrl: templatePath + 'enumeration_values/edit.html' });
+  $routeProvider.when('/settings/enumeration_values/:enumerationName/:enumerationValueId/merge', { templateUrl: templatePath + 'enumeration_values/merge.html' });
+
+  $routeProvider.when('/settings/user_roles', { templateUrl: templatePath + 'user_roles/list.html' });
+  $routeProvider.when('/settings/user_roles/new', { templateUrl: templatePath + 'user_roles/new.html' });
+  $routeProvider.when('/settings/user_roles/:userRoleId/edit', { templateUrl: templatePath + 'user_roles/edit.html' });
+  $routeProvider.when('/settings/user_roles/:userRoleId/merge', { templateUrl: templatePath + 'user_roles/merge.html' });
+  $routeProvider.when('/settings/order_sub_types', { templateUrl: templatePath + 'order_sub_types/list.html' });
+  $routeProvider.when('/settings/order_sub_types/new', { templateUrl: templatePath + 'order_sub_types/new.html' });
+  $routeProvider.when('/settings/order_sub_types/:orderSubTypeId/edit', { templateUrl: templatePath + 'order_sub_types/edit.html' });
+
+  $routeProvider.when('/reports', { templateUrl: templatePath + 'reports.html' });
+  $routeProvider.when('/reports/:reportName', { templateUrl: templatePath + 'reports.html' });
 
 }]);

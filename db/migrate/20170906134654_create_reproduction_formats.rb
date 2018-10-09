@@ -1,4 +1,4 @@
-class CreateReproductionFormats < ActiveRecord::Migration
+class CreateReproductionFormats < ActiveRecord::Migration[5.2]
   def change
     create_table :reproduction_formats do |t|
       t.string :name

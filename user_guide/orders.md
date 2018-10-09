@@ -16,7 +16,7 @@ In addition to the Order workflow, each Item associated with the Order has its o
 2. **reviewing** - The Order is in the process of being reviewed (this step can be skipped, moving directly to the 'confirmed' state)
 3. **confirmed** - The Order has been confirmed and the requested Items can be transferred from their storage location for use
 4. **fulfilled** - All of the Items associated with this Order have been transferred to their use location (this state is reached automatically once all Items have been marked as received for use; the user cannot move to this state manually without administrative override)
-5. **finished** - All of the Items associated with this Order have been returned to their permanent locations (this state is reached automatically once all Items have been marked as returned; the user cannot move to this state manually without administrative override)
+5. **closed** - All of the Items associated with this Order have been returned to their permanent locations (this state is reached automatically once all Items have been marked as returned; the user cannot move to this state manually without administrative override)
 
 ## Orders list
 

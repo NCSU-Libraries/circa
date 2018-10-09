@@ -1,71 +1,58 @@
 // OrdersShowCtrl - For show view, inherits from OrdersCtrl
 
-var OrdersShowCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
-  OrdersCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+var OrdersShowCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
+  OrdersCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
 
   var _this = this;
 
-  var callback = function(scope) {
-    _this.initializeCheckOut(scope);
-    _this.setDefaultPrimaryUserId(scope);
+  var callback = function() {
+    _this.initializeCheckOut();
+    _this.setDefaultPrimaryUserId();
   }
 
-  this.getOrder($scope, $routeParams.orderId, callback);
+  this.getOrder($routeParams.orderId, callback);
 
-  $scope.getOrderHistory = function() {
-    _this.getOrderHistory($scope);
-  }
-
-  $scope.usersLimit = 5;
-  $scope.itemsLimit = 10;
-  $scope.truncateUsers = true;
-  $scope.truncateItems = true;
-
-  $scope.calculatedUsersLimit = function() {
-    return $scope.truncateUsers ? $scope.usersLimit : $scope.order.users.length
-  }
-
-  $scope.calculatedItemsLimit = function() {
-    return $scope.truncateItems ? $scope.itemsLimit : $scope.order.item_orders.length
-  }
-
-  $scope.toggleTruncateUsers = function() {
-    _this.toggleTruncateUsers($scope);
-  }
-
-  $scope.toggleTruncateItems = function() {
-    _this.toggleTruncateItems($scope);
-  }
-
-  this.applyFunctionsToScope($scope);
-
+  this.usersLimit = 5;
+  this.itemsLimit = 10;
+  this.truncateUsers = true;
+  this.truncateItems = true;
 }
 
 
 OrdersShowCtrl.prototype = Object.create(OrdersCtrl.prototype);
-OrdersShowCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+OrdersShowCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('OrdersShowCtrl', OrdersShowCtrl);
 
 
-OrdersShowCtrl.prototype.getOrderHistory = function(scope) {
-  var path = '/orders/' + scope['order']['id'] + '/history';
+OrdersShowCtrl.prototype.calculatedUsersLimit = function() {
+  return this.truncateUsers ? this.usersLimit : this.order.users.length
+}
+
+
+OrdersShowCtrl.prototype.calculatedItemsLimit = function() {
+  return this.truncateItems ? this.itemsLimit : this.order.item_orders.length
+}
+
+
+OrdersShowCtrl.prototype.getOrderHistory = function() {
+  var path = '/orders/' + this['order']['id'] + '/history';
   var _this = this;
   this.apiRequests.get(path).then(function(response) {
     if (response.status == 200) {
-      scope['order']['history'] = response.data['order']['history'];
+      _this['order']['history'] = response.data['order']['history'];
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }
 
 
-OrdersShowCtrl.prototype.toggleTruncateUsers = function(scope) {
-  scope.truncateUsers = (scope.truncateUsers == false) ? true : false;
+OrdersShowCtrl.prototype.toggleTruncateUsers = function() {
+  this.truncateUsers = (this.truncateUsers == false) ? true : false;
 }
 
 
-OrdersShowCtrl.prototype.toggleTruncateItems = function(scope) {
-  scope.truncateItems = (scope.truncateItems == false) ? true : false;
+OrdersShowCtrl.prototype.toggleTruncateItems = function() {
+  this.truncateItems = (this.truncateItems == false) ? true : false;
 }

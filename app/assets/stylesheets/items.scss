@@ -2,8 +2,31 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.item-details {
-  margin: 2rem 0;
+.item-detail {
+
+  .heading {
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 1.2em;
+    margin: 0 0 0.5rem 0;
+
+    .subheading {
+      font-weight: normal;
+    }
+  }
+
+  .superheading {
+    font-size: 1rem;
+    margin: 0 0 0.25rem 0;
+  }
+
+  .label {
+    display: inline;
+    text-transform: uppercase;
+    font-size: 90%;
+    color: $grayLight;
+    padding-right: 0.25rem;
+  }
 }
 
 .checkout-controls {
@@ -35,6 +58,30 @@
   font-weight: bold;
   color: $red;
   text-transform: uppercase;
+}
+
+ul.versions-list {
+  padding: 0;
+  margin: 0;
+
+  li {
+    border: none;
+    padding: 0 0 1rem 0;
+    border-bottom: 1px solid $grayLighter;
+    margin: 1rem 0;
+
+    &.last {
+      border-bottom: none;
+    }
+  }
+}
+
+
+
+.current-version-heading {
+  text-transform: uppercase;
+  color: $grayLight;
+  margin: 0 0 0.25rem 0;
 }
 
 // table.item-list {

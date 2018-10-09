@@ -15,6 +15,7 @@ class LocationsController < ApplicationController
 
     @params = params
     @list = get_list_via_solr('location')
+
     @api_response = {
       locations: @list,
       meta: { pagination: pagination_params }
@@ -25,26 +26,33 @@ class LocationsController < ApplicationController
 
 
   def show
-    render json: @location
+    render json: SerializeLocation.call(@location)
   end
 
 
   def create
     params[:location][:source_id] = Location.circa_location_source_id
     @location = Location.create!(location_params)
-    render json: @location
+    render json: SerializeLocation.call(@location)
   end
 
 
   def update
     @location.update!(location_params)
-    render json: @location
+    render json: SerializeLocation.call(@location)
   end
 
 
   def destroy
     @location.destroy!
     render json: {}
+  end
+
+
+  # Load custom concern if present
+  begin
+    include LocationsControllerCustom
+  rescue
   end
 
 

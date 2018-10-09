@@ -37,6 +37,11 @@ module ItemStateConfig
           event_description: "Item is in transit to use location."
         },
         {
+          event: :cancel_order,
+          to_state: :at_permanent_location,
+          event_description: "Move item from 'ordered' back to 'at permanent location'."
+        },
+        {
           event: :receive_at_temporary_location,
           to_state: :arrived_at_temporary_location,
           event_description: "Item has been received at its temporary (use) location."
@@ -44,12 +49,7 @@ module ItemStateConfig
         {
           event: :prepare_at_temporary_location,
           to_state: :ready_at_temporary_location,
-          event_description: "The item has been reviewed and is ready for use."
-        },
-        {
-          event: :already_on_site,
-          to_state: :ready_at_temporary_location,
-          event_description: "Item is already available at its use location."
+          event_description: "Item has been reviewed and is ready for use."
         },
         {
           event: :check_out,
@@ -70,6 +70,16 @@ module ItemStateConfig
           event: :return,
           to_state: :returning_to_permanent_location,
           event_description: "Mark item as in transit to its permanent location."
+        },
+        {
+          event: :cancel_return,
+          to_state: :ready_at_temporary_location,
+          event_description: "Move item from 'to return' back to 'ready at temporary location'."
+        },
+        {
+          event: :already_on_site,
+          to_state: :ready_at_temporary_location,
+          event_description: "Item is already available at its use location."
         },
         {
           event: :report_not_found,
@@ -135,6 +145,11 @@ module ItemStateConfig
           event_description: "Reset or refresh laptop as required"
         },
         {
+          event: :cancel_return,
+          to_state: :ready_at_use_location,
+          event_description: "Move item from 'preparing for return' back to 'ready at use location'"
+        },
+        {
           event: :return,
           to_state: :use_complete,
           event_description: "Use of laptop is complete and it will be returned"
@@ -160,7 +175,7 @@ module ItemStateConfig
 
     # Helper method to retried applicable state/event definitions for Item instance
     def states_events_config
-      self.digital_object ? self.class.states_events_digital : self.class.states_events_physical
+      digital_object ? self.class.states_events_digital : self.class.states_events_physical
     end
 
 
@@ -183,6 +198,17 @@ module ItemStateConfig
     end
 
 
+    def workflow_complete_for_order(order_id)
+      state_reached_for_order(final_state, order_id)
+    end
+
+
+    # Override for Items and/or Orders as needed
+    def required_metadata_present?(event, metadata)
+      metadata[:order_id] && metadata[:user_id]
+    end
+
+
     # FOR PHYSICAL ITEMS
     # Specifies conditions under which a given event is permitted
     # Returns boolean
@@ -194,6 +220,8 @@ module ItemStateConfig
         has_confirmed_order? && (current_state == :at_permanent_location)
       when :transfer
         current_state == :ordered
+      when :cancel_order
+        current_state == :ordered
       when :receive_at_temporary_location
         current_state == :in_transit_to_temporary_location
       when :prepare_at_temporary_location
@@ -203,8 +231,11 @@ module ItemStateConfig
       when :check_in
         current_state == :in_use
       when :mark_for_return
-        current_state == :ready_at_temporary_location
+        current_state == :ready_at_temporary_location &&
+          active_order_ids.length <= 1
       when :return
+        current_state == :to_return
+      when :cancel_return
         current_state == :to_return
       when :report_not_found
         ![:not_found, :missing, :found].include?(current_state)
@@ -239,6 +270,8 @@ module ItemStateConfig
         current_state == :ready_at_use_location
       when :return
         current_state == :preparing_for_return
+      when :cancel_return
+        current_state == :preparing_for_return
       when :receive
         current_state == :returning
       end
@@ -269,10 +302,12 @@ module ItemStateConfig
         if (order.open || order.reproduction_order?) && order.confirmed && item_order.active
           events = available_events
 
-          if events.include?(:already_on_site) && state_reached_for_order(:ready_at_temporary_location, order_id)
+          # remove :already_on_site if the item is already at the temporary location
+          if events.include?(:already_on_site) && at_temporary_location_for_order?(order_id)
             events.delete(:already_on_site)
           end
 
+          # items cannot be returned if they are active on multiple orders
           if events.include?(:mark_for_return) && active_order_ids.length > 1
             events.delete(:mark_for_return)
           end
@@ -290,12 +325,18 @@ module ItemStateConfig
         self.current_location_id = nil
         save!
         if self.digital_object
-          finish_applicable_orders(metadata)
+          close_applicable_orders(metadata)
         end
       when :receive_at_permanent_location, :receive
         self.current_location_id = permanent_location_id
         save!
-        finish_applicable_orders(metadata)
+
+        # deactivate other ItemOrders when Item is returned
+        if metadata[:order_id]
+          deactivate_for_other_orders(metadata[:order_id], metadata[:user_id])
+          reload
+        end
+        close_applicable_orders(metadata)
       when :prepare_at_temporary_location, :receive_at_use_location
         open_orders.each do |o|
           o.fulfill_if_items_ready(metadata)
@@ -331,13 +372,12 @@ module ItemStateConfig
     end
 
 
-    # Moves any open orders associated with the Item to the :finished state
+    # Moves any open orders associated with the Item to the :closed state if applicable
     # This is a helper method used in even_callbacks above
-    def finish_applicable_orders(metadata={})
-      puts "***"; puts "finish_applicable_orders"; puts "***"
+    def close_applicable_orders(metadata={})
       open_orders.each do |o|
         if o.finished? && o.order_type.name != 'reproduction'
-          o.trigger(:finish, metadata)
+          o.trigger(:close, metadata)
         end
       end
     end
@@ -352,5 +392,4 @@ module ItemStateConfig
     end
 
   end
-
 end

@@ -3,9 +3,6 @@
 DashboardCtrl.prototype.filterReturnsInTransitByFacility = function(facility) {
   var _this = this;
   var filters = { permanent_location_facility: facility };
-
-  console.log(facility);
-
   _this.getReturnsInTransit(filters);
 }
 
@@ -30,9 +27,6 @@ DashboardCtrl.prototype.getReturnsInTransit = function(filters) {
     _this.dashbaordLoading = false;
     if (response.status == 200) {
       _this.returnsInTransit = response.data;
-
-      console.log(_this.returnsInTransit );
-
     }
     else if (response.data['error'] && response.data['error']['detail']) {
       _this.flash = response.data['error']['detail'];

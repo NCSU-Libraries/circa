@@ -1,55 +1,19 @@
-<div ng-controller="ReportsTransfersPerLocationCtrl as report">
+<div ng-include="ctrl.templateUrl('reports/date_config')"></div>
 
-<div ng-init="section='reports'" ng-include="report.templateUrl('common/app_header')"></div>
+<table>
 
+  <thead>
+    <tr>
+      <th>{{ ctrl.dateColumnHeading() }}</th>
+      <th ng-repeat="location in ctrl.reportData.location_values">{{ location }}</th>
+    </tr>
+  </thead>
 
-  <h1>Transfers per storage location</h1>
+  <tbody>
+    <tr ng-repeat="date in ctrl.reportData.date_values">
+      <td>{{ date }}</td>
+      <td ng-repeat="location in ctrl.reportData.location_values">{{ ctrl.reportData.locations[location][date] }}</td>
+    </tr>
+  </tbody>
 
-  <div ng-include="report.templateUrl('reports/date_config')"></div>
-
-
-  <table>
-
-    <thead>
-      <tr>
-        <th>{{ report.dateColumnHeading() }}</th>
-        <th ng-repeat="location in report.transfersPerLocation.location_values">{{ location }}</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr ng-repeat="date in report.transfersPerLocation.date_values">
-        <td>{{ date }}</td>
-        <td ng-repeat="location in report.transfersPerLocation.location_values">{{ report.transfersPerLocation.locations[location][date] }}</td>
-      </tr>
-    </tbody>
-
-  </table>
-
-
-  <!--
-  <div class="table-options">
-
-    <span ng-show="reports.limit < reports.requestsPerResource.total_resources">
-      <span class="info">Showing top {{ reports.defaultLimit }}</span>
-      <span class="link"  ng-click="reports.showAll()">Show all</span>
-    </span>
-    <span class="link" ng-show="reports.limit > reports.defaultLimit" ng-click="reports.showLimit()">Show top {{ reports.defaultLimit }} only</span>
-
-  </div>
-
-
-
-  -->
-
-
-
-<!--
-<div ng-if="debug" class="data-panel">
-{{ report.dateParams | json }}
-{{ report.transfersPerLocation | json }}
-</div>
- -->
-
-</div>
-
+</table>

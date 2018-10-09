@@ -2,9 +2,10 @@ class OrdersController < ApplicationController
 
   include SolrList
 
+
   before_action :set_order, only: [
     :show, :edit, :update, :destroy, :update_state, :add_associations,
-    :call_slip, :deactivate_item, :activate_item, :history, :spawn, :invoice
+    :call_slip, :deactivate_item, :activate_item, :history, :invoice
   ]
 
   before_action :set_paper_trail_whodunnit
@@ -26,46 +27,29 @@ class OrdersController < ApplicationController
     if @order.deleted
       raise CircaExceptions::BadRequest, "Order ##{@order.id} has been deleted."
     else
-      render json: @order
+      render json: SerializeOrder.call(@order)
     end
-  end
-
-
-  def spawn
-    if params['order'] && params['order']['spawn']
-      @order_sub_type_id = params['order']['spawn']['order_sub_type_id']
-    end
-    @spawned_order = @order.spawn(@order_sub_type_id)
-    render json: @spawned_order
   end
 
 
   def create
     # params['order']['location_id'] = params['order']['temporary_location'] ? params['order']['temporary_location']['id'] : nil
-
     get_association_data_from_params(params)
     @order = Order.create!(order_params)
     @params = params
-
     update_associations(:create)
-
     # Consider revising - update_index is called twice, once after order is created and again here
     @order.update_index
-
     send_notifications
-
-    render json: @order
+    render json: SerializeOrder.call(@order)
   end
 
 
   def update
     get_association_data_from_params(params)
     set_cleanup_reproduction_associations()
-
     post_update_event = params[:event]
-
     @order.update!(order_params)
-
     update_associations
 
     if post_update_event
@@ -73,10 +57,8 @@ class OrdersController < ApplicationController
     end
 
     @order.reload
-
     send_notifications
-
-    render json: @order
+    render json: SerializeOrder.call(@order)
   end
 
 
@@ -96,9 +78,9 @@ class OrdersController < ApplicationController
     else
       if @order && @order.item_ids.include?(params[:item_id].to_i)
         item_order = @order.item_orders.where(item_id: params[:item_id]).first
-        item_order.deactivate
+        item_order.deactivate(current_user.id)
         @order.reload
-        render json: @order
+        render json: SerializeOrder.call(@order)
       else
         raise CircaExceptions::BadRequest, "Item #{ params[:item_id] } is not associated with this order"
       end
@@ -114,66 +96,11 @@ class OrdersController < ApplicationController
         item_order = @order.item_orders.where(item_id: params[:item_id]).first
         item_order.activate
         @order.reload
-        render json: @order
+        render json: SerializeOrder.call(@order)
       else
         raise CircaExceptions::BadRequest, "Item #{ params[:item_id] } is not associated with this order"
       end
     end
-  end
-
-
-  def add_associations
-    response = {}
-    status = 200
-    message = nil
-
-    if params[:items]
-      # Request should fail if any of the URIs provided are invalid
-      if check_values(:archivesspace_archival_object_uri, params[:items])
-        params[:items].each do |archivesspace_uri|
-          if !@order.add_items_from_archivesspace(archivesspace_uri)
-            status = 500
-          end
-        end
-      else
-        status = 400
-        message = "One or more ArchivesSpace URIs included in the request was invalid."
-      end
-
-    elsif params[:users]
-      params[:users].each do |user_id|
-        if !OrderUser.create!(order_id: @order.id, user_id: user_id)
-          status = 500
-        end
-      end
-
-    elsif params[:assignees]
-      params[:assignees].each do |user_id|
-        if !OrderAssignment.create!(order_id: @order.id, user_id: user_id)
-          status = 500
-        end
-      end
-
-    elsif params[:notes]
-      # TK
-
-    else
-      status = 400
-      message = "No valid associations provided"
-    end
-
-    if status == 200
-      render json: @order
-      return
-    else
-      if status == 400
-        response[:error] = { status: 403, detail: "Bad request: #{message}"}
-      elsif status == 500
-        response[:error] = { status: 500, detail: "Internal server error"}
-      end
-      render json: response, status: status
-    end
-
   end
 
 
@@ -189,19 +116,19 @@ class OrdersController < ApplicationController
   end
 
 
-  def invoice
-    @user = @order.primary_user
-    @item_orders = @order.item_orders.includes(:order_fee, :item, :reproduction_spec)
-    @digital_image_orders = @order.digital_image_orders.includes(:order_fee)
-    @order_fees_total = @order.order_fees_total
-    @invoice_date = @order.invoice_date || DateTime.now.to_date
-    @invoice_id = @order.invoice_id || @order.generate_invoice_id
-    render layout: 'layouts/print'
-  end
+  # def invoice
+  #   @user = @order.primary_user
+  #   @item_orders = @order.item_orders.includes(:order_fee, :item, :reproduction_spec)
+  #   @digital_collections_orders = @order.digital_collections_orders.includes(:order_fee)
+  #   @order_fees_total = @order.order_fees_total
+  #   @invoice_date = @order.invoice_date || DateTime.now.to_date
+  #   @invoice_id = @order.invoice_id || @order.generate_invoice_id
+  #   render layout: 'layouts/print'
+  # end
 
 
   def history
-    render json: @order, serializer: OrderHistorySerializer
+    render json: SerializeOrderHistory.call(@order)
   end
 
 
@@ -214,6 +141,13 @@ class OrdersController < ApplicationController
       meta: { pagination: pagination_params }
     }
     render json: @api_response
+  end
+
+
+  # Load custom concern if present
+  begin
+    include OrdersControllerCustom
+  rescue
   end
 
 
@@ -237,7 +171,7 @@ class OrdersController < ApplicationController
     order = params[:order]
     @items = order[:items] || []
     @item_orders = order[:item_orders] || []
-    @digital_image_orders = order[:digital_image_orders] || []
+    @digital_collections_orders = order[:digital_collections_orders] || []
     @users = order[:users] || []
     if @users && order[:primary_user_id]
       @users.map! do |user|
@@ -252,6 +186,7 @@ class OrdersController < ApplicationController
     @order_sub_type_name = OrderSubType.name_from_id(order[:order_sub_type_id])
     @order_fee = (@order_sub_type_name == 'reproduction_fee' && order[:order_fee]) ?
         order[:order_fee] : nil
+    @invoice = order[:invoice] || nil
   end
 
 
@@ -276,8 +211,8 @@ class OrdersController < ApplicationController
       update_course_reserve(action)
     end
 
-    if @digital_image_orders
-      update_digital_image_orders
+    if @digital_collections_orders
+      update_digital_collections_orders
     end
 
     update_order_fee
@@ -366,40 +301,40 @@ class OrdersController < ApplicationController
   end
 
 
-  def update_digital_image_orders
-    attributes_from_params = lambda do |digital_image_order|
+  def update_digital_collections_orders
+    attributes_from_params = lambda do |digital_collections_order|
       {
         order_id: @order.id,
-        resource_identifier: digital_image_order['resource_identifier'],
-        detail: digital_image_order['detail'],
-        resource_title: digital_image_order['resource_title'],
-        display_uri: digital_image_order['display_uri'],
-        manifest_uri: digital_image_order['manifest_uri'],
-        requested_images: digital_image_order['requested_images'],
-        requested_images_detail: digital_image_order['requested_images_detail'],
-        total_images_in_resource: digital_image_order['total_images_in_resource']
+        resource_identifier: digital_collections_order['resource_identifier'],
+        detail: digital_collections_order['detail'],
+        resource_title: digital_collections_order['resource_title'],
+        display_uri: digital_collections_order['display_uri'],
+        manifest_uri: digital_collections_order['manifest_uri'],
+        requested_images: digital_collections_order['requested_images'],
+        requested_images_detail: digital_collections_order['requested_images_detail'],
+        total_images_in_resource: digital_collections_order['total_images_in_resource']
       }
     end
 
-    @existing_digital_image_orders = []
-    @order.digital_image_orders.each { |dio| @existing_digital_image_orders << dio.resource_identifier }
-    @digital_image_orders.each do |digital_image_order|
+    @existing_digital_collections_orders = []
+    @order.digital_collections_orders.each { |dio| @existing_digital_collections_orders << dio.resource_identifier }
+    @digital_collections_orders.each do |digital_collections_order|
       # add
-      if !@existing_digital_image_orders.include?(digital_image_order['resource_identifier'])
-        digital_image_order_record = @order.digital_image_orders.create!( attributes_from_params.(digital_image_order) )
+      if !@existing_digital_collections_orders.include?(digital_collections_order['resource_identifier'])
+        digital_collections_order_record = @order.digital_collections_orders.create!( attributes_from_params.(digital_collections_order) )
       else
-        digital_image_order_record = DigitalImageOrder.find_by(order_id: @order.id, resource_identifier: digital_image_order['resource_identifier'])
-        digital_image_order_record.update_attributes(attributes_from_params.(digital_image_order))
-        @existing_digital_image_orders.delete(digital_image_order['resource_identifier'])
+        digital_collections_order_record = DigitalCollectionsOrder.find_by(order_id: @order.id, resource_identifier: digital_collections_order['resource_identifier'])
+        digital_collections_order_record.update_attributes(attributes_from_params.(digital_collections_order))
+        @existing_digital_collections_orders.delete(digital_collections_order['resource_identifier'])
       end
 
-      if digital_image_order['order_fee']
-        create_or_update_order_fee(digital_image_order_record.id, 'DigitalImageOrder', digital_image_order['order_fee'])
+      if digital_collections_order['order_fee']
+        create_or_update_order_fee(digital_collections_order_record.id, 'DigitalCollectionsOrder', digital_collections_order['order_fee'])
       end
-
     end
-    @existing_digital_image_orders.each do |resource_identifier|
-      @order.digital_image_orders.where(resource_identifier: resource_identifier).each { |dio| dio.destroy! }
+
+    @existing_digital_collections_orders.each do |resource_identifier|
+      @order.digital_collections_orders.where(resource_identifier: resource_identifier).each { |dio| dio.destroy! }
     end
   end
 
@@ -410,12 +345,12 @@ class OrdersController < ApplicationController
 
     @users.each do |user|
       if !@existing_users.include?(user['id'])
-        @order.order_users.create!(user_id: user['id'], primary: user['primary'])
+        @order.order_users.create!(user_id: user['id'], primary: user['primary'], remote: user['remote'])
       else
         # delete id from @existing_users array to track associations to be deleted
         # and update order_user to set primary
         @existing_users.delete(user['id'])
-        @order.order_users.where(user_id: user['id']).first.update_attributes(primary: user['primary'])
+        @order.order_users.where(user_id: user['id']).first.update_attributes(primary: user['primary'], remote: user['remote'])
       end
     end
 
@@ -451,7 +386,7 @@ class OrdersController < ApplicationController
     if action == :create
       @course_reserve.delete('id')
     end
-    @order.create_or_update_course_reserve(@course_reserve.symbolize_keys)
+    @order.create_or_update_course_reserve(@course_reserve)
   end
 
 

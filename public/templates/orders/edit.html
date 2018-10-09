@@ -1,29 +1,43 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="OrdersEditCtrl as ctrl">
 
-<h1>Edit Order
-<span class="subhead">ID: {{ order['id'] }}</span>
-</h1>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
+
+  <main>
+
+    <h1>Edit Order {{ ctrl.order['id'] }}</h1>
+
+    <div
+        ng-if="ctrl.loading"
+        ng-include="ctrl.templateUrl('common/processing')"/>
+
+    <div class="form" ng-if="!ctrl.loading">
+
+      <div ng-include="ctrl.templateUrl('orders/form_fields')"/>
+
+      <div ng-show="ctrl.order['order_type'] && ctrl.order['order_sub_type']">
+        <button
+            class="button"
+            ng-click="ctrl.validateAndUpdateOrder()">Save changes</button>
+        <button
+            class="button"
+            ng-click="ctrl.goto('/orders/' + ctrl.order['id'])">Cancel</button>
+      </div>
+
+    </div>
+
+    <div ng-if="debug" class="data-panel">
+    <p>order:</p>
+    <p>{{ ctrl.order | json }}</p>
+    <p>validationErrors</p>
+    <p>{{ ctrl.validationErrors | json }}</p>
+    </div>
+
+  </main>
 
 
-<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
-
-
-<div ng-hide="loading">
-
-  <div ng-include="templateUrl('orders/form_fields')"/>
-
-  <div ng-show="order['order_type'] && order['order_sub_type']">
-    <button class="button" ng-click="validateAndUpdateOrder()">Save changes</button>
-    <button class="button" ng-click="goto('/orders/' + order['id'])">Cancel</button>
+  <div
+      ng-show="ctrl.showNewUserModal"
+      ng-include="ctrl.templateUrl('orders/new_user_modal')">
   </div>
 
-</div>
-
-
-
-<div ng-if="debug" class="data-panel">
-<p>order:</p>
-<p>{{ order | json }}</p>
-<p>validationErrors</p>
-<p>{{ validationErrors | json }}</p>
 </div>

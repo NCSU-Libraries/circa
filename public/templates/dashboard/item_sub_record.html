@@ -1,0 +1,27 @@
+<div class="row">
+
+  <div class="small-12 columns">
+    <div ng-include="ctrl.templateUrl('items/item_location_overview')"></div>
+  </div>
+
+</div>
+
+<div class="subrecord-actions-secondary">
+
+  <div class="item-action">
+    <span
+        class="link secondary"
+        ng-click="ctrl.showItem(item['id'])"
+        poptip="View item details">
+      <i class="fas fa-eye"></i>View item details</span>
+  </div>
+
+  <div class="item-action" ng-if="!item['obsolete']">
+    <a
+        ng-href="{{ ctrl.rootPath() }}/orders/{{ orderId }}/call_slip?item_id={{ item['id'] }}"
+        target="_blank"
+        poptip="Generate printable 'call slip' for this item only">
+    <i class="fa fa-print"></i>Print item call slip</a>
+  </div>
+
+</div>

@@ -1,0 +1,23 @@
+<div ng-show="ctrl.removedUsers.length > 0" class="sub-section">
+
+  <div class="heading">Removed/to be deleted:</div>
+
+  <ul class="subrecords-list users-list removed">
+    <li ng-repeat="user in ctrl.removedUsers">
+
+      <div class="row">
+        <div class="small-9 columns">
+          {{ user.display_name }} ({{ user.email }})
+        </div>
+
+        <div class="small-3 columns">
+          <div class="sub-record-actions item-actions">
+            <span class="link table-action" ng-click="ctrl.restoreUser(user)">Restore</span>
+          </div>
+        </div>
+      </div>
+
+    </li>
+  </ul>
+
+</div>

@@ -1,18 +1,3 @@
-CircaCtrl.prototype.applyUserFunctions = function(scope) {
-
-  var _this = this;
-
-  scope.showUser = function(userId) {
-    _this.showUser(userId);
-  }
-
-  scope.editUser = function(userId) {
-    _this.editUser(userId);
-  }
-
-}
-
-
 CircaCtrl.prototype.showUser = function(userId) {
   this.goto('users/' + userId);
 }
@@ -23,8 +8,8 @@ CircaCtrl.prototype.editUser = function(userId) {
 }
 
 
-CircaCtrl.prototype.getUser = function(scope, userId, callback) {
-  scope.loading = true;
+CircaCtrl.prototype.getUser = function(userId, callback) {
+  this.loading = true;
   var path = '/users/' + userId;
   var _this = this;
   // var params = { user_type: 'user' };
@@ -32,42 +17,98 @@ CircaCtrl.prototype.getUser = function(scope, userId, callback) {
 
   this.apiRequests.get(path, { 'params': params } ).then(function(response) {
     if (response.status == 200) {
-      scope.loading = false;
-      _this.refreshUser(scope, response.data['user'], callback)
+      _this.loading = false;
+      _this.refreshUser(response.data['user'], callback)
     }
     else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
+      this.flash = response.data['error']['detail'];
     }
   });
 }
 
 
-CircaCtrl.prototype.refreshUser = function(scope, user, callback) {
-  scope.user = user;
-  scope.user['open_orders'] = scope.user['orders'].filter(function(o) { return o['open']; });
-  scope.user['completed_orders'] = scope.user['orders'].filter(function(o) { return !o['open']; });
-  this.commonUtils.executeCallback(callback, scope);
+CircaCtrl.prototype.createUser = function() {
+  var _this = this;
+
+  if (this.validateUser()) {
+    this.apiRequests.post("/users", { 'user': this.user }).then(function(response) {
+      if (response.status == 200) {
+        _this.user = response.data['user'];
+        _this.goto('/users/' + _this.user['id']);
+      }
+      else if (response.data['error'] && response.data['error']['detail']) {
+        _this.flash = response.data['error']['detail'];
+      }
+    });
+  }
+  else {
+    _this.window.scroll(0,0);
+  }
+}
+
+
+CircaCtrl.prototype.validateUser = function() {
+  var valid = true;
+  this.user.validationErrors = {};
+  this.user.hasValidationErrors = false;
+  var _this = this;
+
+  $.each(this.requiredUserFields(), function(index, value) {
+    if (!_this.user[value]) {
+      _this.user.validationErrors[value] = 'Required';
+    }
+  });
+
+  // Validate email
+  var emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  if (!this.user['email'].match(emailRegex)) {
+    this.user.validationErrors['email'] = 'Email address is not valid';
+  }
+
+  if (Object.keys(this.user.validationErrors).length > 0) {
+    valid = false;
+    this.user.hasValidationErrors = true;
+  }
+
+  return valid;
+}
+
+
+CircaCtrl.prototype.requiredUserFields = function() {
+  // return ['email', 'first_name', 'last_name', 'researcher_type_id', 'address1', 'city', 'state', 'zip', 'country', 'phone'];
+  return [ 'email', 'first_name', 'last_name', 'researcher_type_id', 'state', 'country' ];
+}
+
+
+
+CircaCtrl.prototype.refreshUser = function(user, callback) {
+  this.user = user;
+  this.user['open_orders'] = this.user['orders'].filter(function(o) { return o['open']; });
+  this.user['completed_orders'] = this.user['orders'].filter(function(o) { return !o['open']; });
+  this.commonUtils.executeCallback(callback);
 }
 
 
 // Collect associated user emails to avoid duplication
-CircaCtrl.prototype.collectUserEmails = function(scope, order) {
-  scope.userEmails = (typeof scope.userEmails === 'undefined') ? [] : scope.userEmails;
-  function addEmailToScope(element, index, array) {
-    scope.userEmails.push(element['email'])
-  }
+CircaCtrl.prototype.collectUserEmails = function(order) {
+  var _this = this;
+  this.userEmails = this.userEmails || [];
+
   if (Array.isArray(order['users'])) {
-    order['users'].forEach(addEmailToScope);
+    order['users'].forEach(function(user) {
+      _this.userEmails.push(user['email'])
+    });
   }
 }
 
 
 // Collect associated assignee emails to avoid duplication
-CircaCtrl.prototype.collectAssigneeEmails = function(scope, order) {
-  scope.assigneeEmails = (typeof scope.assigneeEmails === 'undefined') ? [] : scope.assigneeEmails;
+CircaCtrl.prototype.collectAssigneeEmails = function(order) {
+  var _this = this;
+  this.assigneeEmails = (typeof this.assigneeEmails === 'undefined') ? [] : this.assigneeEmails;
   if (Array.isArray(order['assignees'])) {
     $.each(order['assignees'], function(index, user) {
-      scope.assigneeEmails.push(user['email']);
+      _this.assigneeEmails.push(user['email']);
     });
   }
 }
@@ -80,8 +121,7 @@ CircaCtrl.prototype.initializeUser = function() {
     position: '', affiliation: '',
     display_name: '',
     address1: '', address2: '', city: '', state: 'NC', zip: '', country: 'US', phone: '', agreement_confirmed_at: '',
-    role: 'patron',
+    role: 'researcher',
     notes: []
   }
 }
-

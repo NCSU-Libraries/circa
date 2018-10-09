@@ -7,16 +7,11 @@ class ItemsController < ApplicationController
     :receive_at_temporary_location, :obsolete, :change_active_order,
     :update_from_source, :movement_history, :modification_history
   ]
-
   before_action :set_params
-
   before_action :verify_order_id, :verify_check_out_permitted, :verify_users,
       only: [ :check_out ]
-
   before_action :get_active_access_session, only: [ :check_in ]
-
   before_action :verify_event_permitted, only: [ :check_in, :update_state ]
-
   before_action :set_paper_trail_whodunnit
 
 
@@ -105,13 +100,8 @@ class ItemsController < ApplicationController
 
 
   def show
-    render json: @item
+    render json: SerializeItem.call(@item)
   end
-
-
-  # def create
-
-  # end
 
 
   # Will create one or more items from the ArchivesSpace record
@@ -121,8 +111,9 @@ class ItemsController < ApplicationController
   def create_from_archivesspace
     begin
       if params[:archivesspace_uri] && !params[:archivesspace_uri].blank?
-        @items = Item.create_or_update_from_archivesspace(params[:archivesspace_uri], params)
-        render json: @items ? @items : {}
+        service_response = CreateOrUpdateItemsFromArchivesspace.call(params[:archivesspace_uri], params)
+        @items = service_response.items
+        render json: @items ? { items: @items.map { |i| SerializeItem.call(i)[:item] } } : {}
         return
       else
         render json: { error: { detail: 'Bad request: No ArchivesSpace URI provided' } },
@@ -131,6 +122,7 @@ class ItemsController < ApplicationController
       end
     rescue Exception => e
       logger.error e
+      puts e.inspect
       error = { detail: "Internal server error: #{e.message} -
           #{e.backtrace.inspect}" }
       render json: { error: error }, status: 500
@@ -138,53 +130,16 @@ class ItemsController < ApplicationController
   end
 
 
-  # Will create one item from the NCSU catalog ID and item id provided
-  # If item already exists it will be updated
-  # Returns single item record
-  def create_from_catalog
-    if (params[:catalog_record_id].blank? || params[:catalog_item_id].blank?)
-      raise CircaExceptions::BadRequest,
-          "Catalog record id and item id were not provided."
-    else
-      @item = Item.create_or_update_from_catalog(params[:catalog_record_id],
-          params[:catalog_item_id])
-      if !@item
-        raise CircaExceptions::BadRequest,
-            "No catalog record found matching the id provided."
-      else
-        render json: @item
-      end
-    end
-  end
-
-
   def update
     @item.update!(item_params)
-    render json: @item
+    render json: SerializeItem.call(@item)
   end
 
 
   def update_from_source
-    # case @item.source
-    # when 'archivesspace'
-    #   archivesspace_uris = []
-    #   @item.item_archivesspace_records.each { |iar| archivesspace_uris << iar.archivesspace_uri }
-    #   archivesspace_uris.each do |uri|
-    #     options = { digital_object: @item.digital_object }
-    #     options[:force_update] = @item.digital_object ? true : nil
-    #     Item.create_or_update_from_archivesspace(uri, options)
-    #   end
-    #   @item.reload
-    # when 'catalog'
-    #   icr = @item.item_catalog_record
-    #   if icr
-    #     Item.create_or_update_from_catalog(icr.catalog_record_id, icr.catalog_item_id)
-    #     @item.reload
-    #   end
-    # end
     @item.update_from_source
     @item.reload
-    render json: @item
+    render json: SerializeItem.call(@item)
   end
 
 
@@ -195,15 +150,11 @@ class ItemsController < ApplicationController
   end
 
 
-  def destroy
-  end
-
-
   def obsolete
     @item.mark_as_obsolete
     @item.reload
     # render json: nil, status: 204
-    render json: @item
+    render json: SerializeItem.call(@item)
   end
 
 
@@ -215,7 +166,7 @@ class ItemsController < ApplicationController
         metadata[:location_id] = @item.current_location_id
       end
       @item.trigger!(event, metadata)
-      render json: @item
+      render json: SerializeItem.call(@item)
     end
   end
 
@@ -228,7 +179,7 @@ class ItemsController < ApplicationController
       @item.trigger!(:check_out, transition_metadata)
       @order = Order.find params[:order_id]
       @item.reload
-      render json: @item
+      render json: SerializeItem.call(@item)
     end
   end
 
@@ -240,7 +191,7 @@ class ItemsController < ApplicationController
     @item.trigger!(:receive_at_temporary_location, metadata)
     @item.update_attributes(current_location_id: @order.location_id)
     @item.reload
-    render json: @item
+    render json: SerializeItem.call(@item)
   end
 
 
@@ -250,15 +201,13 @@ class ItemsController < ApplicationController
     metadata = transition_metadata
     metadata[:location_id] = @order.location_id
     @item.trigger!(:check_in, metadata)
-    render json: @item
+    render json: SerializeItem.call(@item)
   end
 
 
   def movement_history
     response = {
-      item: {
-        movement_history: @item.movement_history
-      }
+      item: { movement_history: @item.movement_history }
     }
     render json: response
   end
@@ -266,9 +215,7 @@ class ItemsController < ApplicationController
 
   def modification_history
     response = {
-      item: {
-        modification_history: @item.modification_history
-      }
+      item: { modification_history: @item.modification_history }
     }
     render json: response
   end
@@ -288,7 +235,7 @@ class ItemsController < ApplicationController
     if params[:order_id]
       @item.deactivate_for_order(order_id)
       @item.reload
-      render json: @item
+      render json: SerializeItem.call(@item)
     else
       raise CircaExceptions::BadRequest, 'No new order id was provided'
     end
@@ -306,11 +253,20 @@ class ItemsController < ApplicationController
   end
 
 
+  # Load custom concern if present
+  begin
+    include ItemsControllerCustom
+  rescue
+  end
+
+
   private
 
 
   def item_params
-    params.require(:item).permit(:resource_title, :resource_identifier, :resource_uri, :container, :uri, :permanent_location_id, :current_location_id)
+    params.require(:item).permit(:resource_title, :resource_identifier,
+        :resource_uri, :container, :uri, :permanent_location_id,
+        :current_location_id)
   end
 
 
@@ -332,7 +288,8 @@ class ItemsController < ApplicationController
 
   def verify_order_id
     if !params[:order_id]
-      raise CircaExceptions::BadRequest, "Order ID must be provided with check out request"
+      raise CircaExceptions::BadRequest,
+          "Order ID must be provided with check out request"
     end
   end
 
@@ -358,13 +315,6 @@ class ItemsController < ApplicationController
   end
 
 
-  def verify_event_permitted
-    if params[:event] && !@item.permitted_events.include?(params[:event].to_sym)
-      raise CircaExceptions::BadRequest, "Item cannot be checked out at this time"
-    end
-  end
-
-
   def verify_users
     if !params[:users]
       raise CircaExceptions::BadRequest, "One or more User IDs required"
@@ -375,7 +325,9 @@ class ItemsController < ApplicationController
   def get_active_access_session
     @access_session = @item.active_access_session
     if !@access_session
-      raise CircaExceptions::BadRequest, "There is no active AccessSession associated with this item (it is not checked out)"
+      raise CircaExceptions::BadRequest,
+          "There is no active AccessSession associated with this item
+          (it is not checked out)"
     end
   end
 
@@ -390,7 +342,8 @@ class ItemsController < ApplicationController
     end
 
     if !event || !@item.permitted_events.include?(event)
-      raise CircaExceptions::BadRequest, event ? "#{event} is not currently permitted" : "No event was specified"
+      raise CircaExceptions::BadRequest,
+          event ? "#{event} is not currently permitted" : "No event was specified"
     end
   end
 

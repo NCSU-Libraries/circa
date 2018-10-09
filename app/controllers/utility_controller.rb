@@ -1,8 +1,8 @@
 class UtilityController < ApplicationController
 
+
   include AspaceUtilities
-  include NcsuCatalogUtilities
-  include NcsuDigitalImagesUtilities
+
 
   def uuid
     render text: SecureRandom.uuid
@@ -23,37 +23,6 @@ class UtilityController < ApplicationController
   end
 
 
-  def get_ncsu_catalog_record
-    if params[:catalog_record_id]
-      # catalog_id_from_url() will handle either full url or just the id
-      id = catalog_id_from_url(params[:catalog_record_id])
-      catalog_connection = NcsuCatalogApiClient::Connection.new
-      data = catalog_connection.get_record_by_id(id)
-      record = { data: data }
-
-      if !data
-        raise CircaExceptions::BadRequest(
-          "No catalog record found matching the id or url provided."
-        )
-      else
-        render json: record
-      end
-    end
-  end
-
-
-  def get_ncsu_iiif_manifest
-    manifest = {}
-    if params[:resource_identifier]
-      if (resource_identifier =
-          resource_identifier_from_url(params[:resource_identifier]))
-        manifest = get_iiif_manifest(resource_identifier) || {}
-      end
-    end
-    render json: manifest
-  end
-
-
   def archivesspace_data
     case params[:request]
     when 'resources_per_accession'
@@ -70,24 +39,8 @@ class UtilityController < ApplicationController
     else
       @user = current_user
       # @user = current_user.clone
-      render json:  @user
+      render json:  SerializeUser.call(@user)
     end
-  end
-
-
-  def archivesspace_redirect
-    protocol = ENV['archivesspace_https'] ? 'https://' : 'http://'
-    host = ENV['archivesspace_frontend_host'] ? ENV['archivesspace_frontend_host'] :
-        ENV['archivesspace_host']
-    port = ENV['archivesspace_frontend_port'] ? ENV['archivesspace_frontend_port'] :
-        nil
-    redirect_url = "#{protocol}#{host}#{port ? ':' : ''}#{port}"
-    redirect_url = url_protocol + ENV['archivesspace_url_host'] + ':' +
-        ENV['archivesspace_frontend_port'] + '/'
-
-    redirect_url += params[:archivesspace_path] ?
-        params[:archivesspace_path] : ''
-    redirect_to redirect_url
   end
 
 
@@ -97,7 +50,8 @@ class UtilityController < ApplicationController
         ENV['archivesspace_host']
     port = ENV['archivesspace_frontend_port'] ? ENV['archivesspace_frontend_port'] :
         nil
-    redirect_url = "#{protocol}#{host}#{port ? ':' : ''}#{port}"
+    redirect_url = "#{protocol}#{host}"
+    redirect_url += port ? ":#{port}" : ''
     redirect_url += '/resolve/readonly?uri=/'
     redirect_url += params[:archivesspace_uri]
     redirect_to redirect_url
@@ -121,10 +75,18 @@ class UtilityController < ApplicationController
         last_name_q += ")"
         query = "#{first_name_q} AND #{last_name_q}"
       else
-        query = "first_name:#{q}* last_name:#{q}* first_name_t:#{q}* last_name_t:#{q}* email:#{q}* email_t:#{q}*"
+        query = "(first_name:#{q}* OR last_name:#{q}* OR first_name_t:#{q}* OR last_name_t:#{q}* OR email:#{q}* OR email_t:#{q}* OR display_name_t:#{q}*)"
+      end
+
+      if params[:internal]
+        query += " AND user_role_id:( #{ UserRole.internal_role_ids.join(' OR ') })"
       end
 
       solr_params[:q] = query
+
+      puts '***'
+      puts solr_params.inspect
+      puts '***'
 
       s = Search.new(solr_params)
       solr_response = s.execute
@@ -166,9 +128,9 @@ class UtilityController < ApplicationController
   # Provides the following values to the front end:
   #  * order_types
   #  * order_sub_types
-  #  * patron_type (from enumeration_values)
+  #  * researcher_type (from enumeration_values)
   def controlled_values
-    @values = { order_type: [], order_sub_type: [], patron_type: [],
+    @values = { order_type: [], order_sub_type: [], researcher_type: [],
         reproduction_format: [] }
 
     #order_type
@@ -186,10 +148,10 @@ class UtilityController < ApplicationController
           default_location: ost.default_location }
     end
 
-    #patron_type
-    patron_type_enumeration = Enumeration.where(name: 'patron_type').first
-    EnumerationValue.where(enumeration_id: patron_type_enumeration.id).find_each do |ev|
-      @values[:patron_type] << { id: ev.id, value: ev.value, value_short: ev.value_short }
+    #researcher_type
+    researcher_type_enumeration = Enumeration.where(name: 'researcher_type').first
+    EnumerationValue.where(enumeration_id: researcher_type_enumeration.id).find_each do |ev|
+      @values[:researcher_type] << { id: ev.id, value: ev.value, value_short: ev.value_short }
     end
 
     # reproduction_format
@@ -210,7 +172,7 @@ class UtilityController < ApplicationController
 
   def circa_locations
     @locations = Location.where(source_id: Location.circa_location_source_id)
-    render json: @locations
+    render json: { locations: @locations }
   end
 
 
@@ -224,10 +186,19 @@ class UtilityController < ApplicationController
 
 
   def options
-    render json: {
-      send_order_notifications: ENV['send_order_notifications'],
-      use_devise_passwords: ENV['use_devise_passwords']
-    }
+    option_keys = [
+      'send_order_notifications', 'use_devise_passwords'
+    ]
+    option_values = {}
+    option_keys.each { |k| option_values[k] = ENV[k] }
+    render json: option_values
+  end
+
+
+  # Load custom concern if present
+  begin
+    include UtilityControllerCustom
+  rescue
   end
 
 end

@@ -1,4 +1,4 @@
-class CreateOrderFees < ActiveRecord::Migration
+class CreateOrderFees < ActiveRecord::Migration[5.2]
   def change
     create_table :order_fees do |t|
       t.integer :record_id

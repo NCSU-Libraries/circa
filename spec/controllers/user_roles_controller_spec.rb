@@ -8,10 +8,10 @@ RSpec.describe UserRolesController, type: :controller do
 
 
   describe "GET #index" do
-    it "returns http success" do
+    it "returns http ok" do
       sign_in(@u)
       get :index
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(:ok)
     end
 
     it "returns JSON" do
@@ -31,43 +31,43 @@ RSpec.describe UserRolesController, type: :controller do
 
 
   describe "POST #create" do
-    it "returns http success" do
+    it "returns http ok" do
       sign_in(@u)
-      post :create, user_role: { name: 'test_for_spec' }, format: 'json'
-      expect(response).to have_http_status(:success)
+      post :create, params: { user_role: { name: 'test_for_spec' }, format: 'json' }
+      expect(response).to have_http_status(:ok)
     end
 
     it "returns JSON" do
       sign_in(@u)
-      post :create, user_role: { name: 'test_for_spec' }, format: 'json'
+      post :create, params: { user_role: { name: 'test_for_spec' }, format: 'json' }
       expect { JSON.parse(response.body) }.not_to raise_error
     end
   end
 
 
   describe "PUT #update" do
-    it "returns http success" do
+    it "returns http ok" do
       sign_in(@u)
       ur = create(:user_role)
-      put :update, id: ur.id, user_role: { user_role: ur.id, name: "#{ur.name}_updated" }, format: 'json'
-      expect(response).to have_http_status(:success)
+      put :update, params: { id: ur.id, user_role: { user_role: ur.id, name: "#{ur.name}_updated" }, format: 'json' }
+      expect(response).to have_http_status(:ok)
     end
 
     it "returns JSON" do
       sign_in(@u)
       ur = create(:user_role)
-      put :update, id: ur.id, user_role: { user_role: ur.id, name: "#{ur.name}_updated" }, format: 'json'
+      put :update, params: { id: ur.id, user_role: { user_role: ur.id, name: "#{ur.name}_updated" }, format: 'json' }
       expect { JSON.parse(response.body) }.not_to raise_error
     end
   end
 
 
   describe "DELETE" do
-    it "returns http success" do
+    it "returns http ok" do
       sign_in(@u)
       ur = create(:user_role)
-      delete :destroy, id: ur.id
-      expect(response).to have_http_status(:success)
+      delete :destroy, params: { id: ur.id }
+      expect(response).to have_http_status(:ok)
     end
   end
 

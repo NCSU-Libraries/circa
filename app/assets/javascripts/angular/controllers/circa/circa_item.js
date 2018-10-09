@@ -1,70 +1,3 @@
-CircaCtrl.prototype.applyItemFunctions = function(scope) {
-
-  var _this = this;
-
-  scope.showItem = function(itemId) {
-    _this.showItem(itemId);
-  }
-
-  scope.showItemHistory = function(itemId) {
-    _this.showItemHistory(itemId);
-  }
-
-  scope.triggerItemEvent = function(itemId, event, callback) {
-    _this.triggerItemEvent(scope, itemId, event, callback);
-  }
-
-  scope.initializeCheckOut = function(itemId, orderId) {
-    _this.initializeCheckOut(scope, itemId, orderId);
-  }
-
-  scope.checkOutItem = function(item, users, callback) {
-    _this.checkOutItem(scope, item, users, callback);
-  }
-
-  scope.receiveItemAtTemporaryLocation = function(item, callback) {
-    _this.receiveItemAtTemporaryLocation(scope, item, callback)
-  }
-
-  scope.checkInItem = function(item, callback) {
-    _this.checkInItem(scope, item, callback);
-  }
-
-  scope.enableItemLocationChange = function(item) {
-    _this.enableItemLocationChange(scope, item);
-  }
-
-  scope.changeItemLocation = function() {
-    _this.changeItemLocation(scope);
-  }
-
-  scope.bulkItemEvents = function() {
-    return _this.bulkItemEvents(scope);
-  }
-
-  scope.bulkTriggerItemEvent = function(event) {
-    _this.bulkTriggerItemEvent(scope, event);
-  }
-
-  scope.addAllItemOrdersToBulkEventsList = function() {
-    _this.addAllItemOrdersToBulkEventsList(scope);
-  }
-
-  scope.clearBulkEventsList = function() {
-    _this.clearBulkEventsList(scope);
-  }
-
-  scope.toggleItemOrderIdInBulkEventsList = function(itemOrder) {
-    _this.toggleItemOrderIdInBulkEventsList(scope, itemOrder);
-  }
-
-  scope.availableStateEvents = function(item) {
-    return _this.availableStateEvents(scope, item);
-  }
-
-}
-
-
 CircaCtrl.prototype.showItem = function(itemId) {
   this.goto('items/' + itemId);
 }
@@ -75,51 +8,52 @@ CircaCtrl.prototype.showItemHistory = function(itemId) {
 }
 
 
-CircaCtrl.prototype.setCheckOutAvailable = function(scope) {
-  if (scope.order) {
-    if (scope.order['order_type']['name'] == 'research') {
-      scope.order['checkOutAvailable'] = true;
+CircaCtrl.prototype.setCheckOutAvailable = function() {
+  if (this.order) {
+    if (this.order['order_type']['name'] == 'research') {
+      this.order['checkOutAvailable'] = true;
     }
     else {
-      scope.order['checkOutAvailable'] = false;
+      this.order['checkOutAvailable'] = false;
     }
   }
 }
 
 
 // Trigger event for item
-CircaCtrl.prototype.triggerItemEvent = function(scope, itemId, event, callback) {
+CircaCtrl.prototype.triggerItemEvent = function(itemId, event, callback) {
   var path = '/items/' + itemId + '/' + event;
   var _this = this;
-  var data = { 'order_id': scope.order['id'] };
-  scope.itemEventLoading = true;
-  _this.apiRequests.put(path, data).then(function(response) {
+  var data = { 'order_id': this.order['id'] };
+  this.itemEventLoading = true;
+  this.apiRequests.put(path, data).then(function(response) {
 
-    scope.itemEventLoading = false;
+    _this.itemEventLoading = false;
 
     if (response.status == 200) {
 
-      if (scope.order && response.data['order']) {
-        scope.order = response.data['order'];
+      if (_this.order && response.data['order']) {
+        _this.order = response.data['order'];
       }
-      else if (scope.order && !response.data['order']) {
-        _this.refreshCurrentOrder(scope, callback);
+      else if (_this.order && !response.data['order']) {
+        _this.refreshCurrentOrder(callback);
       }
 
       _this.commonUtils.executeCallback(callback, response.data);
     }
     else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
+      _this.flash = response.data['error']['detail'];
     }
   });
 }
 
 
-CircaCtrl.prototype.availableStateEvents = function(scope, item) {
+CircaCtrl.prototype.availableStateEvents = function(item) {
   var available = [];
+  var _this = this;
 
   function verifyStateEvent(stateEvent, index) {
-    var availableEvents = item.available_events_per_order[scope.order.id];
+    var availableEvents = item.available_events_per_order[_this.order.id];
     if (availableEvents && availableEvents.indexOf(stateEvent['event']) >= 0) {
       available.push(stateEvent);
     }
@@ -131,7 +65,7 @@ CircaCtrl.prototype.availableStateEvents = function(scope, item) {
 }
 
 
-CircaCtrl.prototype.bulkTriggerItemEvent = function(scope, event) {
+CircaCtrl.prototype.bulkTriggerItemEvent = function(event) {
   var _this = this;
 
   function eventPermitted(item) {
@@ -140,18 +74,18 @@ CircaCtrl.prototype.bulkTriggerItemEvent = function(scope, event) {
     return permittedEvents.indexOf(event) >= 0
   }
 
-  if (scope.order && scope.order['item_orders']) {
-    scope.order['item_orders'].forEach(function(itemOrder) {
+  if (this.order && this.order['item_orders']) {
+    this.order['item_orders'].forEach(function(itemOrder) {
 
-      if (scope.order['bulkEventsList'].indexOf(itemOrder.id) >= 0) {
+      if (_this.order['bulkEventsList'].indexOf(itemOrder.id) >= 0) {
         var item = itemOrder['item'];
 
         if (eventPermitted(item)) {
           if (event == 'receive_at_temporary_location') {
-            _this.receiveItemAtTemporaryLocation(scope, item)
+            _this.receiveItemAtTemporaryLocation(item)
           }
           else {
-            _this.triggerItemEvent(scope, item['id'], event);
+            _this.triggerItemEvent(item['id'], event);
           }
         }
 
@@ -161,22 +95,22 @@ CircaCtrl.prototype.bulkTriggerItemEvent = function(scope, event) {
 }
 
 
-CircaCtrl.prototype.updateBulkItemEvents = function(scope) {
+CircaCtrl.prototype.updateBulkItemEvents = function() {
   var _this = this;
 
   var skipEvents = [ 'report_not_found', 'check_out' ];
 
-  if (scope.order && scope.order['item_orders']) {
+  if (this.order && this.order['item_orders']) {
     var bulkEvents = {};
 
-    scope.order['item_orders'].forEach(function(itemOrder) {
+    this.order['item_orders'].forEach(function(itemOrder) {
 
-      if (scope.order['bulkEventsList'].indexOf(itemOrder.id) >= 0) {
+      if (_this.order['bulkEventsList'].indexOf(itemOrder.id) >= 0) {
 
         var item = itemOrder['item'];
         if (!item['obsolete']) {
 
-          var availableEvents = _this.availableStateEvents(scope, item).map(function(stateEvent) {
+          var availableEvents = _this.availableStateEvents(item).map(function(stateEvent) {
             return stateEvent['event'];
           });
 
@@ -195,115 +129,115 @@ CircaCtrl.prototype.updateBulkItemEvents = function(scope) {
       }
     });
 
-    bulkEvents['update_from_source'] = scope.order['item_orders'].length;
-    scope.order['bulkItemEvents'] = bulkEvents;
+    bulkEvents['update_from_source'] = this.order['item_orders'].length;
+    this.order['bulkItemEvents'] = bulkEvents;
   }
 }
 
 
-CircaCtrl.prototype.addItemOrderIdToBulkEventsList = function(scope, itemOrder) {
-  if (scope.order) {
-    if (!scope.order['bulkEventsList']) {
-      scope.order['bulkEventsList'] = [];
+CircaCtrl.prototype.addItemOrderIdToBulkEventsList = function(itemOrder) {
+  if (this.order) {
+    if (!this.order['bulkEventsList']) {
+      this.order['bulkEventsList'] = [];
     }
-    scope.order['bulkEventsList'].push(itemOrder.id);
+    this.order['bulkEventsList'].push(itemOrder.id);
     itemOrder['inBulkEventsList'] = true;
   }
-  this.updateBulkItemEvents(scope);
+  this.updateBulkItemEvents();
 }
 
 
-CircaCtrl.prototype.removeItemOrderIdFromBulkEventsList = function(scope, itemOrder) {
-  if (scope.order && scope.order['bulkEventsList']) {
-    this.commonUtils.removeFromArray(scope.order['bulkEventsList'], itemOrder.id);
+CircaCtrl.prototype.removeItemOrderIdFromBulkEventsList = function(itemOrder) {
+  if (this.order && this.order['bulkEventsList']) {
+    this.commonUtils.removeFromArray(this.order['bulkEventsList'], itemOrder.id);
     itemOrder['inBulkEventsList'] = false;
   }
-  this.updateBulkItemEvents(scope);
+  this.updateBulkItemEvents();
 }
 
 
-CircaCtrl.prototype.addAllItemOrdersToBulkEventsList = function(scope) {
+CircaCtrl.prototype.addAllItemOrdersToBulkEventsList = function() {
   var _this = this;
-  if (scope.order && scope.order['item_orders']) {
-    scope.order['item_orders'].forEach(function(itemOrder) {
-      _this.addItemOrderIdToBulkEventsList(scope, itemOrder);
+  if (this.order && this.order['item_orders']) {
+    this.order['item_orders'].forEach(function(itemOrder) {
+      _this.addItemOrderIdToBulkEventsList(itemOrder);
     });
   }
-  this.updateBulkItemEvents(scope);
+  this.updateBulkItemEvents();
 }
 
 
-CircaCtrl.prototype.clearBulkEventsList = function(scope) {
-  scope.order['bulkEventsList'] = [];
-  this.updateBulkItemEvents(scope);
+CircaCtrl.prototype.clearBulkEventsList = function() {
+  this.order['bulkEventsList'] = [];
+  this.updateBulkItemEvents();
 }
 
 
-CircaCtrl.prototype.toggleItemOrderIdInBulkEventsList =function(scope, itemOrder) {
-  if (scope.order['bulkEventsList'].indexOf(itemOrder.id) < 0) {
-    this.addItemOrderIdToBulkEventsList(scope, itemOrder);
+CircaCtrl.prototype.toggleItemOrderIdInBulkEventsList = function(itemOrder) {
+  if (this.order['bulkEventsList'].indexOf(itemOrder.id) < 0) {
+    this.addItemOrderIdToBulkEventsList(itemOrder);
   }
   else {
-    this.removeItemOrderIdFromBulkEventsList(scope, itemOrder);
+    this.removeItemOrderIdFromBulkEventsList(itemOrder);
   }
 }
 
 
-CircaCtrl.prototype.initializeCheckOut = function(scope) {
+CircaCtrl.prototype.initializeCheckOut = function() {
   var _this = this;
-  scope.checkOutItemIds = [];
-  scope.checkOutUserIds = [];
-  scope.availableUsers = {};
-  scope.toggleCheckout = function(itemId) {
-    _this.commonUtils.toggleArrayElement(scope.checkOutItemIds, itemId);
+  this.checkOutItemIds = [];
+  this.checkOutUserIds = [];
+  this.availableUsers = {};
+  this.toggleCheckout = function(itemId) {
+    _this.commonUtils.toggleArrayElement(this.checkOutItemIds, itemId);
   }
 
-  if (scope.order && scope.order['users']) {
-    $.each(scope.order['users'], function(index, user) {
-      scope.availableUsers[user['id']] = user;
+  if (this.order && this.order['users']) {
+    $.each(this.order['users'], function(index, user) {
+      _this.availableUsers[user['id']] = user;
     });
 
-    if (scope.order['users'].length == 1 && scope.order['users'][0]['agreement_confirmed']) {
-      scope.checkOutUserIds.push(parseInt(scope.order['users'][0]['id']));
+    if (this.order['users'].length == 1 && this.order['users'][0]['agreement_confirmed']) {
+      this.checkOutUserIds.push(parseInt(this.order['users'][0]['id']));
     }
   }
 }
 
 
-CircaCtrl.prototype.enableItemLocationChange = function(scope, item) {
-  scope.itemLocationChangeEnabled = item['id'];
-  scope.itemLocationChange = { 'item': item, 'locationId': item['current_location']['id'].toString() };
+CircaCtrl.prototype.enableItemLocationChange = function(item) {
+  this.itemLocationChangeEnabled = item['id'];
+  this.itemLocationChange = { 'item': item, 'locationId': item['current_location']['id'].toString() };
 }
 
 
-CircaCtrl.prototype.changeItemLocation = function(scope) {
+CircaCtrl.prototype.changeItemLocation = function() {
   var _this = this;
-  if (scope.itemLocationChange) {
-    var item = scope.itemLocationChange['item'];
+  if (this.itemLocationChange) {
+    var item = this.itemLocationChange['item'];
     var itemId = item['id'];
-    var locationId = scope.itemLocationChange['locationId'];
+    var locationId = this.itemLocationChange['locationId'];
     if (itemId && locationId) {
       item['current_location_id'] = locationId;
       var path = '/items/' + item['id'];
       var postData = { 'item': item };
-      scope.itemLocationChange['loading'] = true;
+      this.itemLocationChange['loading'] = true;
       this.apiRequests.put(path, postData).then(function(response) {
         if (response.status == 200) {
-          if (scope.order) {
-            _this.getOrder(scope, scope.order['id']);
+          if (_this.order) {
+            _this.getOrder(_this.order['id']);
           }
-          else if (scope.item) {
-            _this.getItem(scope, scope.item['id']);
+          else if (_this.item) {
+            _this.getItem(_this.item['id']);
           }
-          scope.itemLocationChangeEnabled = null;
-          scope.itemLocationChange = { 'item': null, 'locationId': null };
+          _this.itemLocationChangeEnabled = null;
+          _this.itemLocationChange = { 'item': null, 'locationId': null };
         }
         else {
           if (response.data['error'] && response.data['error']['detail']) {
-            scope.itemLocationChange['alert'] = response.data['error']['detail'];
+            _this.itemLocationChange['alert'] = response.data['error']['detail'];
           }
           else {
-            scope.itemLocationChange['alert'] = "Unknown error"
+            _this.itemLocationChange['alert'] = "Unknown error"
           }
         }
       });
@@ -313,50 +247,50 @@ CircaCtrl.prototype.changeItemLocation = function(scope) {
 
 
 // Check out item
-CircaCtrl.prototype.checkOutItem = function(scope, item, userIds, callback) {
+CircaCtrl.prototype.checkOutItem = function(item, userIds, callback) {
   var _this = this;
   var path = '/items/' + item['id'] + '/check_out';
-  var users = scope.order['users'].filter(function(user) {
+  var users = this.order['users'].filter(function(user) {
     return userIds.indexOf(user['id']) >= 0;
   });
 
-  var data = { 'users': users, 'order_id': scope.order['id'] };
+  var data = { 'users': users, 'order_id': this.order['id'] };
 
   this.apiRequests.put(path, data).then(function(response) {
     if (response.status == 200) {
 
-      if (scope.order) {
-        _this.getOrder(scope, scope.order['id']);
+      if (_this.order) {
+        _this.getOrder(_this.order['id']);
       }
-      else if (scope.item) {
-        _this.getItem(scope, scope.item['id']);
+      else if (_this.item) {
+        _this.getItem(_this.item['id']);
       }
-      _this.initializeCheckOut(scope);
+      _this.initializeCheckOut();
       _this.commonUtils.executeCallback(callback, response.data);
     }
     else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
+      _this.flash = response.data['error']['detail'];
     }
   });
 }
 
 
 // Check in item
-CircaCtrl.prototype.checkInItem = function(scope, item, callback) {
-  scope.itemEventLoading = true;
+CircaCtrl.prototype.checkInItem = function(item, callback) {
+  this.itemEventLoading = true;
   var _this = this;
   var path = '/items/' + item['id'] + '/check_in';
-  var data = { 'order_id': scope.order['id'] };
+  var data = { 'order_id': this.order['id'] };
   this.apiRequests.put(path, data).then(function(response) {
-    scope.itemEventLoading = false;
+    _this.itemEventLoading = false;
     if (response.status == 200) {
-      if (scope.order) {
-        _this.getOrder(scope, scope.order['id']);
+      if (_this.order) {
+        _this.getOrder(_this.order['id']);
       }
-      else if (scope.item) {
-        _this.getItem(scope, scope.item['id']);
+      else if (_this.item) {
+        _this.getItem(_this.item['id']);
       }
-      _this.initializeCheckOut(scope);
+      _this.initializeCheckOut();
       _this.commonUtils.executeCallback(callback, response.data);
     }
   });
@@ -364,60 +298,64 @@ CircaCtrl.prototype.checkInItem = function(scope, item, callback) {
 
 
 // Check out item
-CircaCtrl.prototype.receiveItemAtTemporaryLocation = function(scope, item, callback) {
-  scope.itemEventLoading = true;
+CircaCtrl.prototype.receiveItemAtTemporaryLocation = function(item, callback) {
+  this.itemEventLoading = true;
   var _this = this;
   var path = '/items/' + item['id'] + '/receive_at_temporary_location';
-  var data = { 'order_id': scope.order['id'] };
+  var data = { 'order_id': this.order['id'] };
 
   this.apiRequests.put(path, data).then(function(response) {
-    scope.itemEventLoading = false;
+    _this.itemEventLoading = false;
     if (response.status == 200) {
 
-      if (scope.order) {
-        _this.getOrder(scope, scope.order['id']);
+      if (_this.order) {
+        _this.getOrder(_this.order['id']);
       }
-      else if (scope.item) {
-        _this.getItem(scope, scope.item['id']);
+      else if (_this.item) {
+        _this.getItem(_this.item['id']);
       }
       _this.commonUtils.executeCallback(callback, response.data);
     }
     else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
+      _this.flash = response.data['error']['detail'];
     }
   });
 }
 
 
 // Collect associated item IDs to avoid duplication
-CircaCtrl.prototype.collectItemIds = function(scope, order) {
-  scope.itemIds = (typeof scope.itemIds === 'undefined') ? [] : scope.itemIds;
+CircaCtrl.prototype.collectItemIds = function(order) {
+  this.itemIds = (typeof this.itemIds === 'undefined') ? [] : this.itemIds;
+  var _this = this;
 
-  function addItemIdsToScope(item) {
-    if (scope.itemIds.indexOf(item['id'] < 0)) {
-      scope.itemIds.push(item['id']);
-    }
-  }
+  // function addItemIdsToScope(item) {
+  //   if (scope.itemIds.indexOf(item['id'] < 0)) {
+  //     scope.itemIds.push(item['id']);
+  //   }
+  // }
 
   if (Array.isArray(order['item_orders'])) {
     order['item_orders'].forEach( function(item_order, i, array) {
-      addItemIdsToScope(item_order['item']);
+      var item = item_order['item'];
+      if (_this.itemIds.indexOf(item['id'] < 0)) {
+        _this.itemIds.push(item['id']);
+      }
     });
   }
 }
 
 
-CircaCtrl.prototype.updateItemFromSource = function(scope, itemId) {
-  scope.loading = true;
+CircaCtrl.prototype.updateItemFromSource = function(itemId) {
+  this.loading = true;
   var path = '/items/' + itemId + '/update_from_source';
   var _this = this;
   this.apiRequests.put(path).then(function(response) {
-    scope.loading = false;
+    _this.loading = false;
     if (response.status == 200) {
-      scope.item = response.data['item'];
+      _this.item = response.data['item'];
     }
     else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
+      _this.flash = response.data['error']['detail'];
     }
   });
 }

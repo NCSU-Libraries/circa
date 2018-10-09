@@ -17,7 +17,7 @@
 
   <tbody>
 
-    <tr ng-repeat="order in item['orders'] | orderBy: 'access_date_start'" class="order-list-row" ng-click="viewOrder(order['id'])">
+    <tr ng-repeat="order in ctrl.item['orders'] | orderBy: 'access_date_start'" class="order-list-row" ng-click="ctrl.viewOrder(order['id'])">
       <td class="order-id">
         {{ order['id'] }}
       </td>

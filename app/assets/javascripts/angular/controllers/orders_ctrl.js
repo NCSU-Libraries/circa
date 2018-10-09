@@ -1,151 +1,137 @@
-var OrdersCtrl = function($scope, $route, $routeParams, $location, $window,
-    $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var OrdersCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
-  $scope.section = 'orders';
+  this.section = 'orders';
 
-  CircaCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal,
+  CircaCtrl.call(this, $route, $routeParams, $location, $window,
       apiRequests, sessionCache, commonUtils, formUtils);
 
-  this.initializeFilterConfig($scope);
+  this.initializeFilterConfig();
 
   // this.applyFunctionsToScope($scope);
 }
 
-OrdersCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window',
-    '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+OrdersCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 
 OrdersCtrl.prototype = Object.create(CircaCtrl.prototype);
 
-OrdersCtrl.prototype.applyFunctionsToScope = function(scope) {
+circaControllers.controller('OrdersCtrl', OrdersCtrl);
 
+
+// registering this here but it should be redefined in angular/controllers/custom if needed
+OrdersCtrl.prototype.initializeCustomFormComponents = function() {
+}
+
+
+OrdersCtrl.prototype.initializeOrderFormComponents = function() {
+  this.initializeArchivesSpaceRecordSelect();
+  this.showItemSelector = false;
+  this.userSelect = this.initializeUserSelect();
+  this.assigneeSelect = this.initializeUserSelect();
+  this.removedUsers = [];
+  this.removedAssignees = [];
+  this.removedItems = [];
+  this.removedItemOrders = [];
+  this.removedDigitalCollectionsOrders = [];
+  this.validationErrors = {};
+  this.hasValidationErrors = false;
+  this.itemIds = [];
+  this.userEmails = [];
+  this.assigneeEmails = [];
+  this.initializeCustomFormComponents();
+}
+
+
+OrdersCtrl.prototype.getPage = function(page) {
+  this.getOrders(page);
+}
+
+
+OrdersCtrl.prototype.getOrders = function(page) {
   var _this = this;
 
-  // scope.checkOutAvailable = function() {
-  //   _this.checkOutAvailable(scope);
-  // }
-
-  scope.setDateFilter = function() {
-    _this.setDateFilter(scope);
-  }
-
-  // DEPRECATED - use triggerOrderEvent
-  scope.triggerEvent = function(event) {
-    _this.triggerEvent(scope, event);
-    _this.setStatesEvents(scope);
-  }
-
-  scope.getOrder = function(page, sort) {
-    _this.getOrder(scope, page, sort);
-  }
-
-  scope.addNote = function() {
-    _this.addNote(scope.order);
-  }
-
-  scope.removeNote = function(index) {
-    _this.removeNote(scope, scope.order, index);
-  }
-
-  scope.restoreNote = function(note) {
-    _this.restoreNote($scope, scope.order, note);
-  }
-
-  scope.createOrder = function() {
-    _this.createOrder(scope);
-  }
-
-  this.applyArchivesSpaceFunctions(scope);
-
-  this.applyCatalogFunctions(scope);
-
-  this.applyOrderUserFunctions(scope);
-
-  this.applyOrderItemFunctions(scope);
-
-  this.applyDigitalImageFunctions(scope);
-
-  this.applyOrderValidationFunctions(scope);
-
-  this.applyOrderFormUtilityFunctions(scope);
-
-  this.initializeOrderFormComponents(scope);
-
-  this.applyReproductionFunctions(scope);
-
-}
-
-
-OrdersCtrl.prototype.initializeOrderFormComponents = function(scope) {
-  this.initializeArchivesSpaceRecordSelect(scope);
-  this.initializeCatalogRecordSelect(scope);
-  this.initializeDigitalImageSelect(scope);
-  scope.userSelect = this.initializeUserSelect();
-  scope.assigneeSelect = this.initializeUserSelect();
-  scope.removedUsers = [];
-  scope.removedAssignees = [];
-  scope.removedItems = [];
-  scope.removedItemOrders = [];
-  scope.removedDigitalImageOrders = [];
-  scope.validationErrors = {};
-  scope.hasValidationErrors = false;
-}
-
-
-OrdersCtrl.prototype.getPage = function(scope, page) {
-  this.getOrders(scope, page);
-}
-
-
-OrdersCtrl.prototype.getOrders = function(scope, page) {
-  var _this = this;
-
-  scope.loading = true;
+  this.loading = true;
   var path = '/orders';
   page = page ? page : 1;
-  scope.page = page;
+  this.page = page;
 
-  var config = this.listRequestConfig(scope);
+  var config = this.listRequestConfig();
   this.updateLocationQueryParams(config['params']);
 
   this.apiRequests.getPage(path,page,config).then(function(response) {
-    scope.loading = false;
+    _this.loading = false;
     if (response.status == 200) {
 
       // _this.paramsToQueryString(config['params']);
       // _this.location.search('page', page);
 
-      scope.orders = response.data['orders'];
+      _this.orders = response.data['orders'];
       var paginationParams = _this.commonUtils.paginationParams(response.data['meta']['pagination']);
-      _this.commonUtils.objectMerge(scope, paginationParams);
-      _this.setAppliedFilters(scope);
+      _this.commonUtils.objectMerge(_this, paginationParams);
+      _this.setAppliedFilters();
     }
     else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
+      _this.flash = response.data['error']['detail'];
     }
   });
 }
 
 
-OrdersCtrl.prototype.createOrder = function(scope) {
+OrdersCtrl.prototype.createOrder = function() {
   var _this = this;
 
-  if (_this.validateOrder(scope)) {
-    scope.loading = true;
-    _this.apiRequests.post("orders", { 'order': scope.order }).then(function(response) {
+  if (this.validateOrder()) {
+    this.loading = true;
+    this.apiRequests.post("orders", { 'order': _this.order }).then(function(response) {
       if (response.status == 200) {
-        scope.order = response.data['order'];
-        _this.goto('/orders/' + scope.order['id']);
-        scope.loading = false;
+        _this.order = response.data['order'];
+        _this.goto('/orders/' + _this.order['id']);
+        _this.loading = false;
       }
       else if (response.data['error'] && response.data['error']['detail']) {
-        scope.flash = response.data['error']['detail'];
+        _this.flash = response.data['error']['detail'];
       }
     });
   }
   else {
-    _this.window.scroll(0,0);
+    this.window.scroll(0,0);
   }
+}
 
+
+OrdersCtrl.prototype.cloneOrder = function(id, callback) {
+  var path = '/orders/' + id;
+  var _this = this;
+  var preserveKeys = Object.keys(this.initializeOrder());
+
+  this.loading = true;
+
+  this.apiRequests.get(path).then(function(response) {
+    if (response.status == 200) {
+      var order = response.data['order'];
+
+      var deleteKeys = ['id', 'access_date_start', 'access_date_end',
+          'confirmed', 'open', 'created_at', 'updated_at', 'current_state',
+          'permitted_events', 'available_events', 'states_events',
+          'created_by_user', 'assignees'];
+
+      order['users'] = order['users'].filter(function(user) {
+        return user['id'] == order['primary_user_id'];
+      });
+
+      order['cloned_order_id'] = id;
+
+      for (var i = 0; i < deleteKeys.length; i++) {
+        delete order[deleteKeys[i]];
+      }
+
+      _this.loading = false;
+      _this.refreshOrder(order, callback);
+    }
+    else if (response.data['error'] && response.data['error']['detail']) {
+      _this.errorCode = response.status;
+      _this.flash = response.data['error']['detail'];
+    }
+  });
 }
 
 
@@ -160,15 +146,20 @@ OrdersCtrl.prototype.initializeOrder = function() {
     catalog_records: [],
     catalog_items: [],
     item_orders: [],
-    digital_image_orders: []
+    digital_collections_orders: []
   };
 }
 
 
-OrdersCtrl.prototype.newOrder = function(scope) {
-  scope.order = this.initializeOrder();
-  // scope.order['order_type_id'] = this.orderTypeId('research');
-  scope.itemIds = [];
-  scope.userEmails = [];
-  scope.assigneeEmails = [];
+OrdersCtrl.prototype.newOrder = function() {
+  this.order = this.initializeOrder();
+}
+
+
+OrdersCtrl.prototype.customTemplate = function(templateName) {
+  var template;
+  if (typeof this.customTemplates !== 'undefined') {
+    template = this.customTemplates(templateName);
+  }
+  return (typeof template !== 'undefined') ? template : null;
 }

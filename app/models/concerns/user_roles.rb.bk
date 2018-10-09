@@ -7,7 +7,7 @@ module UserRoles
   included do
 
 
-    @@roles = [ :admin, :staff, :assistant, :patron ]
+    @@roles = [ :admin, :staff, :assistant, :researcher ]
 
 
     def self.roles

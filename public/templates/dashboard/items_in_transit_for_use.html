@@ -2,55 +2,45 @@
 
   <h2>Items in transit for use</h2>
 
-  <div ng-show="dashboard.dashbaordLoading" ng-include="dashboard.templateUrl('common/processing')"/>
+  <div ng-show="ctrl.dashbaordLoading" ng-include="ctrl.templateUrl('common/processing')"/>
 
-  <div ng-show="!dashboard.dashbaordLoading">
+  <div ng-show="!ctrl.dashbaordLoading">
 
     <!-- filters -->
-    <div ng-if="!dashboard.filters['location'] && dashboard.itemsInTransitForUse['locations'].length > 0" class="location-filter">
-    Filter by use location: <span ng-repeat="location in dashboard.itemsInTransitForUse['locations']" class="location-filter-option" ng-class="$last ? 'last' : ''"><span ng-click="dashboard.filterItemsInTransitForUseByLocation(location)" class="link nowrap">{{ location }}</span></span>
+    <div ng-if="!ctrl.filters['location'] && ctrl.itemsInTransitForUse['locations'].length > 0" class="location-filter">
+    Filter by use location: <span ng-repeat="location in ctrl.itemsInTransitForUse['locations']" class="location-filter-option" ng-class="$last ? 'last' : ''"><span ng-click="ctrl.filterItemsInTransitForUseByLocation(location)" class="link nowrap">{{ location }}</span></span>
     </div>
 
-    <div ng-if="dashboard.filters['location']" class="location-filter-info text-block">
-    Showing only items for {{ dashboard.filters['location'] }} <span ng-click="dashboard.getItemsInTransitForUse()" class="link">Show all</span>
+    <div ng-if="ctrl.filters['location']" class="location-filter-info text-block">
+    Showing only items for {{ ctrl.filters['location'] }} <span ng-click="ctrl.getItemsInTransitForUse()" class="link">Show all</span>
     </div>
     <!-- END filters -->
 
 
     <!-- no results -->
-    <div ng-show="dashboard.itemsInTransitForUse['total_orders'] == 0" class="text-block">
+    <div ng-show="ctrl.itemsInTransitForUse['total_orders'] == 0" class="text-block">
       <strong>There are no items in transit for use, or none matching filters.</strong>
     </div>
     <!-- END no results -->
 
 
     <!-- results -->
-    <div ng-show="dashboard.itemsInTransitForUse['total_orders'] > 0">
+    <div ng-show="ctrl.itemsInTransitForUse['total_orders'] > 0">
 
       <div class="print-list">
-        <span poptip="Generate printable list" class="print-link"><span class="link" ng-click="dashboard.openList()"><i class="fa fa-print"></i>Print list</span></span>
+        <span poptip="Generate printable list" class="print-link"><span class="link" ng-click="ctrl.openList()"><i class="fa fa-print"></i>Print list</span></span>
       </div>
 
-      <div ng-repeat="(orderId, order) in dashboard.itemsInTransitForUse['orders']" class="pending-transfers-order">
+      <div ng-repeat="(orderId, order) in ctrl.itemsInTransitForUse['orders']" class="pending-transfers-order">
 
-        <h3><span class="link" ng-click="dashboard.showOrder(orderId)">Order #{{ orderId }}</span></h3>
+        <h3><span class="link" ng-click="ctrl.showOrder(orderId)">Order #{{ orderId }}</span></h3>
 
-        <ul class="records-list items-list">
+        <ul class="subrecords-list items-list">
 
           <li ng-repeat="item_order in order['item_orders']" ng-init="item = item_order['item']" data-item-id="{{ orderId }}">
-            <div class="row">
 
-              <div class="small-10 columns">
-                <div ng-include="dashboard.templateUrl('items/item_location_overview')"></div>
-              </div>
+            <div ng-include="ctrl.templateUrl('dashboard/item_sub_record')"></div>
 
-              <div class="small-2 columns">
-                <div class="record-actions order-actions">
-                  <div class="action"><span class="link" ng-click="dashboard.showItem(item['id'])">View item details</span></div>
-                </div>
-              </div>
-
-            </div>
           </li>
 
         </ul>
@@ -64,7 +54,7 @@
 
 
   <div ng-if="debug" class="data-panel">
-  {{ dashboard.itemsInTransitForUse | json }}
+  {{ ctrl.itemsInTransitForUse | json }}
   </div>
 
 

@@ -1,0 +1,187 @@
+.pagination, ul.pagination {
+  margin: 1rem 0;
+  width: 100%;
+  overflow: hidden;
+
+  > *:before {
+    content: none;
+    margin-left: 0;
+    padding-right: 0;
+  }
+
+  li.current a, li.current button {
+    background: $blueGray1 !important;
+    color: #fff;
+    cursor: default;
+    font-weight: bold;
+
+    &:hover, &:active {
+      background: $blueGray1;
+    }
+  }
+}
+
+.list-sort {
+  margin: 0 0 1rem 0;
+
+  font-size: 90%;
+
+  .sort-option {
+    display: inline;
+    padding-right: 1rem;
+  }
+
+  .label {
+    display: inline;
+    font-size: 80%;
+    text-transform: uppercase;
+    padding-right: 0.5rem;
+  }
+
+  .selected {
+    font-weight: bold;
+  }
+}
+
+.search-info {
+  margin: 0 0 1rem 0;
+
+  .info {
+    padding-right: 0.5rem;
+    .term {
+      font-weight: bold;
+    }
+  }
+
+  .show-all {
+    text-transform: uppercase;
+    font-size: 80%;
+    font-weight: bold;
+  }
+}
+
+.sort-order-toggle {
+  cursor: pointer;
+
+  &:hover {
+    color: $blue;
+  }
+}
+
+.sortable {
+  .sort-choice, .sort-order {
+    &:hover {
+      color: $blue;
+    }
+  }
+
+  .sort-choice {
+    text-decoration: underline;
+    cursor: pointer;
+    &.sorted {
+      text-decoration: none;
+      cursor: default;
+      color: inherit;
+    }
+  }
+}
+
+.filters {
+  margin: 0 0 0.25rem 0;
+
+  .filter-select {
+    padding: 1.5rem 1rem 1rem 1rem;
+    border: 1px solid $grayLighter;
+    border-bottom-color: $white;
+    margin: 0;
+    background: $grayLight;
+    color: $white;
+    position: relative;
+
+    label {
+      display: inline;
+      color: $white;
+    }
+
+    .date-range-point {
+      padding-right: 1rem;
+    }
+
+    .selected-value {
+      margin-bottom: 1rem;
+    }
+
+    .link {
+      color: $white;
+    }
+  }
+
+  .filter-toggle {
+    padding: 3px;
+    margin: 0;
+    border: 1px solid $grayLight;
+    border-bottom-width: 0;
+    width: 10rem;
+    text-align: center;
+    background: $grayLight;
+
+    .link {
+      color: $white;
+    }
+
+    text-transform: uppercase;
+    font-size: 80%;
+  }
+
+  .button {
+    margin: 0;
+  }
+
+  .user-select .user-select-list {
+    margin-top: -0.5rem;
+
+    ul li {
+      color: $grayDark;
+    }
+  }
+
+}
+
+.active-filters {
+  background: $grayDark;
+  color: $white;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.9em;
+  margin-bottom: 0.25rem;
+
+  .link {
+    color: $white;
+  }
+
+  i.link {
+    text-decoration: none;
+  }
+
+  .action {
+    font-size: 80%;
+    text-transform: uppercase;
+  }
+
+  .filter {
+    padding-right: 0.5rem;
+    // span {
+    //   &:after { content: ';'; }
+    // }
+  }
+
+  .filter, label {
+    display: inline;
+  }
+
+  label {
+    padding-right: 0.5rem;
+    font-size: 80%;
+    text-transform: uppercase;
+    color: $grayLightest;
+  }
+}

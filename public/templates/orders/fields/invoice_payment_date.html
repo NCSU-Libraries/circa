@@ -1,14 +1,26 @@
 <div class="heading">Invoice payment received</div>
 
-<div ng-show="!order.editInvoicePaymentDate">
-  {{ order['invoice_payment_date'] }}
-  <span class="link inline-action" ng-click="editInvoicePaymentDate()">Change</span>
+<div ng-show="!ctrl.order.editInvoicePaymentDate">
+
+  {{ ctrl.order['invoice_payment_date'] }}
+
+  <span
+      class="link inline-action"
+      ng-click="ctrl.editInvoicePaymentDate()">Change</span>
 </div>
 
-<div ng-show="order.editInvoicePaymentDate"
+<div
+    ng-show="ctrl.order.editInvoicePaymentDate"
     class="form-field">
 
-  <input type="text" datepicker ng-model="order['invoice_payment_date']" class="datepicker-input"/>
-  <button class="button tiny" ng-click="updateAndRefreshOrder()">Save</button>
+  <input
+      type="text"
+      datepicker
+      ng-model="ctrl.order['invoice_payment_date']"
+      class="datepicker-input"/>
+
+  <button
+      class="button tiny"
+      ng-click="ctrl.updateAndRefreshOrder()">Save</button>
 
 </div>

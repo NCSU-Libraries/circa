@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe ItemOrder, type: :model do
 
+  let(:user) { create(:user) }
+
   let(:order) { create(:order) }
 
   it "validates uniqueness of association" do
@@ -21,19 +23,16 @@ RSpec.describe ItemOrder, type: :model do
   end
 
 
-  it "activates and deactivates" do
+  it "activates and deactivates and records attributes" do
     o = create(:order_with_items)
-    o2 = create(:order)
     i = o.items.first
-    o2.add_item(i)
-    io1 = ItemOrder.where(order_id: o.id, item_id: i.id).first
-    io2 = ItemOrder.where(order_id: o2.id, item_id: i.id).first
-    expect(io1.active).to be_truthy
-    expect(io2.active).to be_truthy
-    i.deactivate_for_order(o.id)
-    io1.reload
-    expect(io1.active).to be_falsey
-    expect(io2.active).to be_truthy
+    io = ItemOrder.where(order_id: o.id, item_id: i.id).last
+    expect(io.active).to be_truthy
+    io.deactivate(user.id)
+    expect(io.active).to be_falsey
+    expect(io.deactivated_by_user_id).to eq(user.id)
+    io.activate
+    expect(io.active).to be_truthy
   end
 
 end

@@ -10,9 +10,6 @@ RSpec.describe User, type: :model do
 
   it "should have orders" do
     u = create(:user_with_orders, user_role_id: @role.id)
-
-    puts u.inspect
-
     u.reload
     expect(u.orders.first).to be_a(Order)
   end

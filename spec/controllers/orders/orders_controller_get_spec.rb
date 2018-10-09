@@ -7,17 +7,13 @@ RSpec.describe OrdersController, type: :controller do
     @order = create(:order)
     @item = create(:item)
     @item_order = create(:item_order, order_id: @order.id, item_id: @item.id)
-    @digital_image_order = create(:digital_image_order, order_id: @order.id)
+    @digital_collections_order = create(:digital_collections_order, order_id: @order.id)
     @reproduction_format = create(:reproduction_format)
     @reproduction_spec = create(:reproduction_spec, item_order_id: @item_order.id)
     @order_fee1 = create(:order_fee, record_type: 'ItemOrder', record_id: @item_order.id)
-    @order_fee2 = create(:order_fee, record_type: 'DigitalImageOrder', record_id: @digital_image_order.id)
+    @order_fee2 = create(:order_fee, record_type: 'DigitalCollectionsOrder', record_id: @digital_collections_order.id)
     @item_order.reload
-    @digital_image_order.reload
-
-    puts @digital_image_order.inspect
-    puts @item_order.inspect
-
+    @digital_collections_order.reload
     @order.reload
   end
 
@@ -28,14 +24,11 @@ RSpec.describe OrdersController, type: :controller do
   end
 
 
-
-
-
   describe "GET #index" do
 
-    it "returns http success" do
+    it "returns http ok" do
       get :index
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(:ok)
     end
 
     it "redirects to sign_in if user is not logged in" do
@@ -46,7 +39,7 @@ RSpec.describe OrdersController, type: :controller do
 
     it "returns response in expected JSON format" do
       create_list(:order, 20)
-      get :index, per_page: 5
+      get :index, params: { per_page: 5 }
       expect { JSON.parse response.body }.not_to raise_error
       r = JSON.parse(response.body)
       expect(r['orders'].length).to eq(5)
@@ -61,13 +54,13 @@ RSpec.describe OrdersController, type: :controller do
   describe "GET #show" do
 
     before(:each) do
-      get :show, id: @order.id
+      get :show, params: { id: @order.id }
       @r = JSON.parse(response.body)
     end
 
 
-    it "returns JSON with http success" do
-      expect(response).to have_http_status(:success)
+    it "returns JSON with http ok" do
+      expect(response).to have_http_status(:ok)
       expect { JSON.parse response.body }.not_to raise_error
     end
 
@@ -78,7 +71,7 @@ RSpec.describe OrdersController, type: :controller do
 
 
     it "returns response with 404 when record not found" do
-      get :show, id: 'x'
+      get :show, params: { id: 'x' }
       expect(response).to have_http_status(404)
       r = JSON.parse(response.body)
       expect(r['error']['status']).to eq(404)
@@ -91,9 +84,9 @@ RSpec.describe OrdersController, type: :controller do
     end
 
 
-    it "includes digital_image_orders in response" do
-      expect(@r['order']['digital_image_orders'].length).to eq(1)
-      expect(@r['order']['digital_image_orders'][0]['resource_identifier']).to eq(@digital_image_order.resource_identifier)
+    it "includes digital_collections_orders in response" do
+      expect(@r['order']['digital_collections_orders'].length).to eq(1)
+      expect(@r['order']['digital_collections_orders'][0]['resource_identifier']).to eq(@digital_collections_order.resource_identifier)
     end
 
 
@@ -104,7 +97,7 @@ RSpec.describe OrdersController, type: :controller do
 
     it "includes order_fees in response" do
       expect(@r['order']['item_orders'][0]['order_fee']['id']).to eq(@order_fee1.id)
-      expect(@r['order']['digital_image_orders'][0]['order_fee']['id']).to eq(@order_fee2.id)
+      expect(@r['order']['digital_collections_orders'][0]['order_fee']['id']).to eq(@order_fee2.id)
     end
 
   end

@@ -91,27 +91,27 @@
         <% end %>
 
 
-        <% @digital_image_orders.each do |dio| %>
+        <% @digital_collections_orders.each do |dio| %>
 
           <% if dio.order_fee %>
 
             <% if dio.order_fee.per_unit_fee || dio.order_fee.per_order_fee %>
               <%= render partial: "invoice_item_description_row",
-                  locals: { record: dio, record_type: 'digital_image_order', item: dio }
+                  locals: { record: dio, record_type: 'digital_collections_order', item: dio }
               %>
             <% end %>
 
 
             <% if dio.order_fee.per_unit_fee %>
               <%= render partial: "invoice_per_unit_fee_row",
-                  locals: { record: dio, record_type: 'digital_image_order' }
+                  locals: { record: dio, record_type: 'digital_collections_order' }
               %>
             <% end %>
 
 
             <% if dio.order_fee.per_order_fee %>
               <%= render partial: "invoice_per_order_fee_row",
-                  locals: { record: dio, record_type: 'digital_image_order' }
+                  locals: { record: dio, record_type: 'digital_collections_order' }
               %>
             <% end %>
 

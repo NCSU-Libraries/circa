@@ -1,17 +1,11 @@
-<div ng-controller="ReportsCtrl as ctrl">
+<ul class="records-list locations-list">
 
-<div ng-init="section='reports'" ng-include="templateUrl('common/app_header')"></div>
+  <li ng-repeat="report in ctrl.reportsList">
 
-  <h1>Reports</h1>
+    <span class="list-item-link" ng-click="ctrl.goto(report.path)"></span>
 
-  <div class="section-nav">
+    {{ report.title }}
 
-    <div ng-repeat="report in ctrl.reportsList" class="section-nav-item">
-      <i class="fa fa-table"></i>
-      <span class="link" ng-click="goto(report.path)">{{ report.title }}</span>
-    </div>
+  </li>
 
-  </div>
-
-</div>
-
+</ul>

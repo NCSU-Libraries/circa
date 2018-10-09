@@ -1,8 +1,6 @@
 class UsersController < ApplicationController
 
-  include UsersControllerCustom
   include SolrList
-  include NCSULdapUtils
 
   before_action :set_paper_trail_whodunnit
 
@@ -15,7 +13,6 @@ class UsersController < ApplicationController
       users: @list,
       meta: { pagination: pagination_params }
     }
-
     render json: @api_response
   end
 
@@ -34,7 +31,7 @@ class UsersController < ApplicationController
     if !@user
       raise ActiveRecord::RecordNotFound
     else
-      render json: @user
+      render json: SerializeUser.call(@user)
     end
   end
 
@@ -58,11 +55,10 @@ class UsersController < ApplicationController
         end
         @user = User.create!(user_params)
         update_notes
-        render json: @user
+        render json: SerializeUser.call(@user)
         return
       end
     end
-
   end
 
 
@@ -81,7 +77,7 @@ class UsersController < ApplicationController
       end
       @user.update!(user_params)
       update_notes
-      render json: @user
+      render json: SerializeUser.call(@user)
       return
     end
   end
@@ -97,12 +93,19 @@ class UsersController < ApplicationController
   end
 
 
+  # Load custom concern if present
+  begin
+    include UsersControllerCustom
+  rescue
+  end
+
+
   private
 
 
   def user_params
-    params.require(:user).permit(:email, :unity_id, :password, :patron_type_id, :position, :affiliation, :first_name, :last_name, :display_name,
-      :address1, :address2, :city, :state, :zip, :country, :phone, :agreement_confirmed_at, :user_role_id)
+    params.require(:user).permit(:email, :unity_id, :password, :researcher_type_id, :position, :affiliation, :first_name, :last_name, :display_name,
+      :address1, :address2, :city, :state, :zip, :country, :phone, :agreement_confirmed_at, :user_role_id, :inactive)
   end
 
 
@@ -127,6 +130,5 @@ class UsersController < ApplicationController
       end
     end
   end
-
 
 end

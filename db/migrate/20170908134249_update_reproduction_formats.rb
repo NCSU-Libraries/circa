@@ -1,4 +1,4 @@
-class UpdateReproductionFormats < ActiveRecord::Migration
+class UpdateReproductionFormats < ActiveRecord::Migration[5.2]
   def change
     add_column :reproduction_formats, :description, :text
     rename_column :reproduction_formats, :default_unit_fee, :default_unit_fee_internal

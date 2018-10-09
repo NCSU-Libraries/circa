@@ -7,17 +7,13 @@ RSpec.describe OrdersController, type: :controller do
     @order = create(:order)
     @item = create(:item)
     @item_order = create(:item_order, order_id: @order.id, item_id: @item.id)
-    @digital_image_order = create(:digital_image_order, order_id: @order.id)
+    @digital_collections_order = create(:digital_collections_order, order_id: @order.id)
     @reproduction_format = create(:reproduction_format)
     @reproduction_spec = create(:reproduction_spec, item_order_id: @item_order.id)
     @order_fee1 = create(:order_fee, record_type: 'ItemOrder', record_id: @item_order.id)
-    @order_fee2 = create(:order_fee, record_type: 'DigitalImageOrder', record_id: @digital_image_order.id)
+    @order_fee2 = create(:order_fee, record_type: 'DigitalCollectionsOrder', record_id: @digital_collections_order.id)
     @item_order.reload
-    @digital_image_order.reload
-
-    puts @digital_image_order.inspect
-    puts @item_order.inspect
-
+    @digital_collections_order.reload
     @order.reload
   end
 
@@ -29,12 +25,12 @@ RSpec.describe OrdersController, type: :controller do
 
 
   describe "DELETE #destroy" do
-    it "returns http success" do
+    it "returns http ok" do
       o = create(:order)
       id = o.id
-      delete :destroy, id: o.id
-      expect(response).to have_http_status(:success)
-      get :show, id: id
+      delete :destroy, params: { id: o.id }
+      expect(response).to have_http_status(:ok)
+      get :show, params: { id: id }
       expect(response).to have_http_status(400)
     end
   end

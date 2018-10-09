@@ -1,20 +1,35 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="EnumerationValuesNewCtrl as ctrl">
 
-<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
 
-<h1>Create {{ enumerationName | removeUnderscores }}</h1>
+  <main>
 
-<div ng-hide="loading">
+    <div ng-show="ctrl.loading" ng-include="ctrl.templateUrl('common/processing')"/>
 
-  <div ng-include="templateUrl('enumeration_values/form_fields')"/>
-    <button class="button" ng-click="createEnumerationValue()">Create</button>
-    <button class="button" ng-click="goto('/settings/enumeration_values/list/' + enumerationName)">Cancel</button>
-  </div>
+    <h1>Create {{ ctrl.enumerationName | removeUnderscores }}</h1>
 
-<!--
-  <div ng-if="debug" class="data-panel">
-  {{ enumerationValue | json }}
-  </div>
- -->
+    <div ng-hide="ctrl.loading">
+
+      <div ng-include="ctrl.templateUrl('enumeration_values/form_fields')"/>
+        <button
+            class="button"
+            ng-click="ctrl.createEnumerationValue()">
+          Create
+        </button>
+
+        <button
+            class="button"
+            ng-click="ctrl.goto('/settings/enumeration_values/list/' + ctrl.enumerationName)">
+          Cancel
+        </button>
+      </div>
+
+      <div ng-if="ctrl.debug" class="data-panel">
+        {{ ctrl.enumerationValue | json }}
+      </div>
+
+    </div>
+
+  </main>
 
 </div>

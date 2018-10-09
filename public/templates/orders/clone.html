@@ -1,0 +1,38 @@
+<div ng-controller="OrdersCloneCtrl as ctrl">
+
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
+
+  <main>
+
+    <h1>New order
+      <span class="subhead" ng-if="ctrl.order.cloned_order_id">Cloned from Order
+        <span
+            ng-if="ctrl.order.id"
+            class="link"
+            ng-click="ctrl.showOrder(ctrl.order.cloned_order_id)">{{ctrl.order.cloned_order_id}}</span>
+        <span ng-if="!ctrl.order.id">{{ctrl.order.cloned_order_id}}</span>
+      </span>
+    </h1>
+
+    <div ng-if="ctrl.loading" ng-include="ctrl.templateUrl('common/processing')"/>
+
+    <div class="form" ng-if="!ctrl.loading">
+
+      <div ng-include="ctrl.templateUrl('orders/form_fields')"/>
+
+      <div ng-show="ctrl.order['order_type'] && ctrl.order['order_sub_type']">
+        <button class="button" ng-click="ctrl.createOrder()">Create order</button>
+        <button class="button" ng-click="ctrl.goto('/orders')">Cancel</button>
+      </div>
+
+    </div>
+
+
+    <div ng-if="ctrl.debug" class="data-panel">
+      <p>ctrl.order</p>
+      {{ ctrl.order | json }}
+    </div>
+
+  </main>
+
+</div>

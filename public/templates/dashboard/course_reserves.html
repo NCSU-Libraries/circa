@@ -2,41 +2,41 @@
 
   <h2>Open course reserves</h2>
 
-  <div ng-show="dashboard.dashbaordLoading" ng-include="dashboard.templateUrl('common/processing')"/>
+  <div ng-show="ctrl.dashbaordLoading" ng-include="ctrl.templateUrl('common/processing')"/>
 
-  <div ng-show="!dashboard.dashbaordLoading">
+  <div ng-show="!ctrl.dashbaordLoading">
 
 
     <!-- no results -->
-    <div ng-show="dashboard.course_reserves.length == 0" class="text-block">
+    <div ng-show="ctrl.course_reserves.length == 0" class="text-block">
       <strong>There are no active course reserves.</strong>
     </div>
     <!-- END no results -->
 
 
     <!-- results -->
-    <div ng-if="dashboard.course_reserves.length > 0">
+    <div ng-if="ctrl.course_reserves.length > 0">
       <table>
 
         <thead>
           <tr>
             <th>ID</th>
-            <th>Course number</th>
-            <th>Course name</th>
-            <th>Total researchers</th>
-            <th>Total items</th>
-            <th>Start/end dates</th>
+            <th>Course</th>
+            <th>Start</th>
+            <th>End</th>
+            <th># researchers</th>
+            <th># items</th>
           </tr>
         </thead>
 
         <tbody>
-          <tr ng-repeat="order in dashboard.course_reserves">
-            <td><span class="link" ng-click="showOrder(order.id)">{{ order.id }}</span></td>
-            <td>{{ order.course_number }}</td>
-            <td>{{ order.course_name }}</td>
+          <tr ng-repeat="order in ctrl.course_reserves" ng-click="ctrl.showOrder(order.id)">
+            <td>{{ order.id }}</td>
+            <td>{{ order.course_number }} - {{ order.course_name }}</td>
+            <td>{{ order.access_date_start }}</td>
+            <td>{{ order.access_date_end }}</td>
             <td>{{ order.users.length }}</td>
             <td>{{ order.num_items }}</td>
-            <td>{{ order.access_date_start }}/{{ order.access_date_end }}</td>
           </tr>
         </tbody>
 

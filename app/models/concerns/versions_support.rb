@@ -22,5 +22,4 @@ module VersionsSupport
     end
 
   end
-
 end

@@ -2,98 +2,72 @@ var circaControllers = angular.module('circaControllers', []);
 
 // Base prototype with methods/properties shared by all controllers
 
-var CircaCtrl = function($scope, $route, $routeParams, $location, $window,
-    $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var CircaCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
   var _this = this;
 
   this.location = $location;
   this.window = $window;
-  this.modal = $modal;
   this.route = $route;
   this.routeParams = $routeParams;
   this.commonUtils = commonUtils;
   this.formUtils = formUtils;
+  this.stateRegionValues = formUtils.stateRegionValues();
   this.urlHelpers = commonUtils.urlHelpers;
   this.rootPath = this.urlHelpers.rootPath;
   this.apiRequests = apiRequests;
   this.sessionCache = sessionCache;
 
-  // set debug to true for development only!
-  // if (this.commonUtils.railsEnv() == 'development') {
-  //   $scope.debug = true;
-  // }
-
-  // for angucomplete-alt
-  $scope.angucompleteRequestFormatter = function(str) {
-    return { q: encodeURIComponent(str) }
-  }
+  this.setDefaults();
 
   var processCache = function(cache) {
-    _this.processCache(cache, $scope);
+    _this.processCache(cache);
   }
 
   var cache = sessionCache.init(processCache);
-
-  this.assignUtilitiesToScope($scope);
-
-  this.applyItemFunctions($scope);
-
-  this.applyLocationFunctions($scope);
-
-  this.applyOrderFunctions($scope);
-
-  this.applySharedUtilityFunctions($scope);
-
-  this.applyUserFunctions($scope);
-
 };
 
 
-CircaCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window',
-  '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+CircaCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 
 circaControllers.controller('CircaCtrl', CircaCtrl);
 
 
-CircaCtrl.prototype.processCache = function(cache, scope) {
-  scope.currentUser = cache.get('currentUser');
-  scope.assignableRoles = cache.get('currentUser')['assignable_roles'];
-  scope.currentUserIsAdmin = scope.currentUser['is_admin'] ? true : false;
+CircaCtrl.prototype.processCache = function(cache) {
+  this.currentUser = cache.get('currentUser');
+  this.assignableRoles = cache.get('currentUser')['assignable_roles'];
+  this.currentUserIsAdmin = this.currentUser['is_admin'] ? true : false;
   this.controlledValues = cache.get('controlledValues');
-  scope.controlledValues = cache.get('controlledValues');
-  scope.circaLocations = cache.get('circaLocations');
-  scope.orderStatesEvents = cache.get('orderStatesEvents');
-  scope.itemStatesEvents = cache.get('itemStatesEvents');
-  scope.options = cache.get('options');
+  this.controlledValues = cache.get('controlledValues');
+  this.circaLocations = cache.get('circaLocations');
+  this.orderStatesEvents = cache.get('orderStatesEvents');
+  this.itemStatesEvents = cache.get('itemStatesEvents');
+  this.options = cache.get('options');
 }
 
 
-CircaCtrl.prototype.assignUtilitiesToScope = function(scope) {
-  var _this = this;
-  scope.commonUtils = this.commonUtils;
-  scope.formUtils = this.formUtils;
-  scope.stateRegionValues = this.formUtils.stateRegionValues();
-  scope.urlHelpers = this.urlHelpers;
-  scope.rootPath = this.rootPath;
-  // Assign templateUrl function $scope for convenience
-  this.templateUrl = function(template) {
-    return _this.urlHelpers.templateUrl(template);
-  }
-  scope.templateUrl = this.templateUrl;
-  scope.searchParams = { 'active': null };
-  scope.adminOverrideEnabled = false;
+CircaCtrl.prototype.setDefaults = function() {
+  this.searchParams = { 'active': null };
+  this.adminOverrideEnabled = false;
+
+  // set debug to true for development only!
+  // if (this.commonUtils.railsEnv() == 'development') {
+  //   this.debug = true;
+  // }
+}
+
+
+CircaCtrl.prototype.templateUrl = function(template) {
+  return this.urlHelpers.templateUrl(template);
 }
 
 
 // Set current options for states and events for current order and its items
-CircaCtrl.prototype.setStatesEvents = function(scope) {
+CircaCtrl.prototype.setStatesEvents = function() {
+  var _this = this;
   var processStatesEvents = function(record) {
     var processedStatesEvents = [];
     var statesEvents = record['states_events'];
-
-    // console.log(statesEvents);
-
     var currentStateIndex = statesEvents.length - 1;
     var currentStateIndex;
     var currentState = record['current_state'];
@@ -121,14 +95,49 @@ CircaCtrl.prototype.setStatesEvents = function(scope) {
     return processedStatesEvents;
   }
 
-  if (scope.order && scope.order['states_events']) {
-    scope.statesEvents = processStatesEvents(scope.order);
-    if (scope.order['item_orders']) {
-      scope.order['item_orders'].forEach( function(item_order, i) {
+  if (this.order && this.order['states_events']) {
+    this.statesEvents = processStatesEvents(this.order);
+    if (this.order['item_orders']) {
+      this.order['item_orders'].forEach( function(item_order, i) {
         var item = item_order['item'];
-        scope.order['item_orders'][i]['item']['states_events'] = processStatesEvents(item);
+        _this.order['item_orders'][i]['item']['states_events'] = processStatesEvents(item);
       });
     }
   }
+}
 
+ // for angucomplete-alt
+CircaCtrl.prototype.angucompleteRequestFormatter = function(str) {
+  return { q: encodeURIComponent(str) }
+}
+
+
+// Declared here but overridden by inherited controllers
+CircaCtrl.prototype.customTemplates = function(templateName) {
+  console.log('this.customTemplates');
+  return null
+}
+
+
+CircaCtrl.prototype.deletedRecordFlash = function(recordType) {
+  if (this.location.search().deleted_record_id) {
+    var deletedId = this.location.search().deleted_record_id;
+    this.flash = this.capitalize(recordType) + ' ' +  deletedId + " has been deleted."
+  }
+}
+
+
+CircaCtrl.prototype.customTemplateExists = function(templateName) {
+  var template;
+  template = this.customTemplates(templateName) || null;
+  return template ? true : false;
+}
+
+CircaCtrl.prototype.customTemplateUrl = function(templateName) {
+  var customTemplate = this.customTemplates(templateName) || 'common/blank';
+  return this.templateUrl(customTemplate);
+}
+
+CircaCtrl.prototype.test = function(string) {
+  console.log("test output: " + string)
 }

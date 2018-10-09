@@ -1,9 +1,9 @@
-<div ng-if="!order['history']">
-<span class="link" ng-click="getOrderHistory()">Show order history</span>
+<div ng-if="!ctrl.order['history']">
+<span class="link" ng-click="ctrl.getOrderHistory()">Show order history</span>
 </div>
 
 
-<div ng-if="order['history']">
+<div ng-if="ctrl.order['history']">
 
   <h2>History</h2>
 
@@ -19,7 +19,7 @@
     </thead>
 
     <tbody>
-      <tr ng-repeat="historyItem in order.history">
+      <tr ng-repeat="historyItem in ctrl.order.history">
         <td class="nowrap">
           {{ historyItem['created_at'] | date: 'yyyy-MM-dd' }}<br>
           {{ historyItem['created_at'] | date: 'HH:mm:ss' }}

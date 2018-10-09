@@ -1,4 +1,6 @@
-class ItemOrder < ActiveRecord::Base
+class ItemOrder < ApplicationRecord
+
+  serialize(:archivesspace_uri, Array)
 
   belongs_to :item
   belongs_to :order
@@ -8,13 +10,10 @@ class ItemOrder < ActiveRecord::Base
 
   validates :item_id, uniqueness: {scope: :order_id}
 
-  serialize(:archivesspace_uri, Array)
-
   after_commit :update_index
-
   before_destroy :reset_item
-
   before_create :set_active
+
 
   def add_archivesspace_uri(uri)
     if !archivesspace_uri.include?(uri)
@@ -25,14 +24,12 @@ class ItemOrder < ActiveRecord::Base
   end
 
 
-  # Update items from
-  # Returns:
-  #
   def update_archivesspace_item
     return_items = []
     if archivesspace_uri && !archivesspace_uri.empty?
       archivesspace_uri.each do |uri|
-        new_items = Item.create_or_update_from_archivesspace(uri)
+
+        new_items = CreateOrUpdateItemsFromArchivesspace.call(uri).items
 
         if new_items && !new_items.empty?
           new_items.each_index do |i|
@@ -47,7 +44,6 @@ class ItemOrder < ActiveRecord::Base
                 ItemOrder.create(params)
               end
             end
-
           end
         end
       end
@@ -57,17 +53,24 @@ class ItemOrder < ActiveRecord::Base
 
 
   def activate
-    update_attributes(active: true)
+    update_attributes(active: true, deactivated_by_user_id: nil, deactivated_at: nil)
   end
 
 
-  def deactivate
-    update_attributes(active: false)
+  def deactivate(user_id)
+    update_attributes(active: false, deactivated_by_user_id: user_id, deactivated_at: DateTime.now)
   end
 
 
   def unit_total
     reproduction_spec ? reproduction_spec.unit_total : 0
+  end
+
+
+  # Load custom concern if present - methods in concern override those in model
+  begin
+    include ItemOrderCustom
+  rescue
   end
 
 

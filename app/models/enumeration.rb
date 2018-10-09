@@ -1,7 +1,6 @@
-class Enumeration < ActiveRecord::Base
+class Enumeration < ApplicationRecord
 
   has_many :enumeration_values
-
 
   def self.merge_values(from_value_id, to_value_id, enumeration_name)
     enumeration = Enumeration.find_by_name(enumeration_name)
@@ -9,9 +8,9 @@ class Enumeration < ActiveRecord::Base
     to_value = EnumerationValue.find(to_value_id)
     if from_value && to_value && (to_value.enumeration_id == enumeration.id)
       case enumeration_name
-      when 'patron_type'
-        records_to_update = User.where(patron_type_id: from_value_id)
-        attribute_name = :patron_type_id
+      when 'researcher_type'
+        records_to_update = User.where(researcher_type_id: from_value_id)
+        attribute_name = :researcher_type_id
       when 'location_source'
         records_to_update = Location.where(source_id: from_value_id)
         attribute_name = :source_id
@@ -30,6 +29,13 @@ class Enumeration < ActiveRecord::Base
   def self.values_by_enumeration_name(enumeration_name)
     enumeration = Enumeration.find_by_name(enumeration_name)
     enumeration.enumeration_values
+  end
+
+
+  # Load custom concern if present - methods in concern override those in model
+  begin
+    include EnumerationCustom
+  rescue
   end
 
 end

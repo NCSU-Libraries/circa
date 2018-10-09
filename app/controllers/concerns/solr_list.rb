@@ -10,7 +10,6 @@ module SolrList
     private
 
     def get_list_via_solr(record_type)
-
       @q = @params[:q]
 
       ######################################################################
@@ -44,10 +43,8 @@ module SolrList
       convert_false.call(@params)
       convert_false.call(@params[:filters])
 
-
       # Remove filters with nil/empty values
       @params[:filters].delete_if { |k,v| nil_or_empty?(v) }
-
 
       # @filters only include facet values included in the request. Additional filters will be added to the query.
       @filters = !@params[:filters].blank? ? @params[:filters].clone : {}
@@ -60,7 +57,6 @@ module SolrList
 
       @solr_response['response']['docs'].map { |d| JSON.parse(d['data']) }
     end
-
   end
 
 end

@@ -1,67 +1,74 @@
 <div
-    ng-if="hasValidationErrors == true"
+    ng-if="ctrl.hasValidationErrors == true"
     class="validation-error form-validation-error">
 Please fix the problems noted below.
 </div>
 
 
 <!-- order type/sub-type -->
-<div ng-include="templateUrl('orders/fields/order_type_sub_type')"></div>
+<section>
+  <div ng-include="ctrl.templateUrl('orders/fields/order_type_sub_type')"></div>
+</section>
 
 
-<div ng-show="order['order_type']">
+
+<div ng-show="ctrl.order['order_type']">
 
   <!-- course info - for course reserves only -->
-  <div
-      ng-include="templateUrl('orders/fields/course_info')"
-      ng-show="order['order_sub_type'] && order['order_sub_type']['name'] ==
-          'course_reserve'">
-  </div>
+  <section
+      ng-show="ctrl.order['order_sub_type'] && ctrl.order['order_sub_type']['name'] == 'course_reserve'">
+    <div ng-include="ctrl.templateUrl('orders/fields/course_info')"></div>
+  </section>
+
+
+  <!-- dates -->
+  <section>
+    <div ng-include="ctrl.templateUrl('orders/fields/dates')"></div>
+  </section>
+
+
+  <!-- location -->
+  <section>
+    <div ng-include="ctrl.templateUrl('orders/fields/location')"></div>
+  </section>
 
 
   <!-- users -->
-  <div ng-include="templateUrl('orders/fields/users')"></div>
+  <section>
+    <div ng-include="ctrl.templateUrl('orders/fields/users')"></div>
+  </section>
 
 
   <!-- items -->
   <div
-      ng-include="templateUrl('orders/fields/items')"
-      ng-show="order['order_type']['name'] != 'reproduction'">
+    ng-include="ctrl.templateUrl('orders/fields/items')"
+    ng-show="ctrl.order['order_type']['name'] != 'reproduction'">
   </div>
 
   <div
-      ng-include="templateUrl('orders/fields/reproduction_items')"
-      ng-show="order['order_type']['name'] == 'reproduction'">
+    ng-include="ctrl.templateUrl('orders/fields/reproduction_items')"
+    ng-show="ctrl.order['order_type']['name'] == 'reproduction'">
   </div>
 
 
   <!-- order fee -->
-  <div
-      ng-show="order['order_sub_type']['name'] == 'reproduction_fee'"
-      ng-include="templateUrl('orders/fields/order_reproduction_fee')">
-  </div>
-
-
-  <!-- dates -->
-  <div ng-include="templateUrl('orders/fields/dates')"></div>
-
-
-  <!-- location -->
-  <div ng-include="templateUrl('orders/fields/location')"></div>
+  <section ng-show="ctrl.order['order_sub_type']['name'] == 'reproduction_fee'">
+    <div ng-include="ctrl.templateUrl('orders/fields/order_reproduction_fee')">
+    </div>
+  </section>
 
 
   <!-- assignees -->
-  <div ng-include="templateUrl('orders/fields/assignees')"></div>
+  <section>
+    <div ng-include="ctrl.templateUrl('orders/fields/assignees')"></div>
+  </section>
 
 
   <!-- notes -->
-  <div ng-include="templateUrl('orders/fields/notes')"></div>
+  <section>
+    <div ng-include="ctrl.templateUrl('orders/fields/notes')"></div>
+  </section>
 
-
-  <!-- invoice ATTN: -->
-  <div
-      ng-show="order['order_sub_type']['name'] == 'reproduction_fee'"
-      ng-include="templateUrl('orders/fields/invoice_attn')"></div>
 
 
 </div>

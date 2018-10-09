@@ -1,8 +1,10 @@
 <div>
   <div class="inline detail-element">
     <span class="label">Created:</span>
-    <span class="value">{{ order['created_at'] | date: 'yyyy-MM-dd' }}</span>
-    <span class="value" ng-if="order['created_by_user']">by {{ order['created_by_user']['display_name'] }} ({{ order['created_by_user']['email'] }})</span>
+    <span class="value">{{ ctrl.order['created_at'] | date: 'yyyy-MM-dd' }}</span>
+    <span class="value" ng-if="ctrl.order['created_by_user']">by
+      {{ ctrl.order['created_by_user']['display_name'] }}
+      ({{ ctrl.order['created_by_user']['email'] }})</span>
   </div>
 </div>
 
@@ -10,41 +12,41 @@
 <div>
   <div class="inline detail-element">
     <span class="label">Order type:</span>
-    <span class="value">{{ order['order_type']['label'] }}</span>
+    <span class="value">{{ ctrl.order['order_type']['label'] }}</span>
   </div>
 
   <div class="inline detail-element">
     <span class="label">Order sub-type:</span>
-    <span class="value">{{ order['order_sub_type']['label'] }}</span>
+    <span class="value">{{ ctrl.order['order_sub_type']['label'] }}</span>
   </div>
 </div>
 
 
 <div>
   <div class="inline detail-element">
-    <span class="label">{{ (order['order_type']['value_short'] == 'research') ? 'Access date:' : 'Access dates:' }}</span>
-    <span class="value">{{ order['access_date_start'] | date: 'yyyy-MM-dd' }}</span>
+    <span class="label">{{ (ctrl.order['order_type']['value_short'] == 'research') ? 'Access date:' : 'Access dates:' }}</span>
+    <span class="value">{{ ctrl.order['access_date_start'] | date: 'yyyy-MM-dd' }}</span>
     <span ng-if="order['access_date_end']" >
       <span class="date-range-delimeter">to</span>
-      <span class="value">{{ order['access_date_end'] | date: 'yyyy-MM-dd' }}</span>
+      <span class="value">{{ ctrl.order['access_date_end'] | date: 'yyyy-MM-dd' }}</span>
     </span>
   </div>
 
   <div class="inline detail-element">
     <span class="label">Use location:</span>
-    <span class="value">{{ order['temporary_location']['title'] }}</span>
+    <span class="value">{{ ctrl.order['temporary_location']['title'] }}</span>
   </div>
 </div>
 
 
-<div class="detail-element" ng-if="order['course_reserve']">
+<div class="detail-element" ng-if="ctrl.order['course_reserve']">
   <div class="inline detail-element">
     <span class="label">Course number:</span>
-    <span class="value">{{ order['course_reserve']['course_number'] }}</span>
+    <span class="value">{{ ctrl.order['course_reserve']['course_number'] }}</span>
   </div>
   <div class="inline detail-element">
     <span class="label">Course name:</span>
-    <span class="value">{{ order['course_reserve']['course_name'] }}</span>
+    <span class="value">{{ ctrl.order['course_reserve']['course_name'] }}</span>
   </div>
 </div>
 
@@ -52,19 +54,22 @@
 <div>
   <div class="inline detail-element">
     <span class="label">Assigned to:</span>
-    <span class="value" ng-if="order['assignees'].length > 0">
-      <span ng-repeat="assignee in order['assignees']">{{ assignee['last_name'] }}, {{ assignee['first_name'] }} ({{ assignee['email'] }})<span ng-if="!$last">; </span></span>
+    <span class="value" ng-if="ctrl.order['assignees'].length > 0">
+      <span ng-repeat="assignee in ctrl.order['assignees']">{{ assignee['last_name'] }},
+        {{ assignee['first_name'] }}
+        ({{ assignee['email'] }})<span ng-if="!$last">; </span></span>
     </span>
+    <span class="value" ng-if="ctrl.order['assignees'].length == 0">--</span>
   </div>
 </div>
 
 
-<div ng-if="order['clone_orders']">
+<div ng-if="ctrl.order['clone_orders']">
   <div class="inline detail-element">
-    <span class="label">Clone {{ order['clone_order_ids'].length > 1 ? 'orders' : 'order'}}:</span>
-    <span ng-repeat="clone in order['clone_orders']">
-      <span class="link" ng-click="showOrder(clone.id)">{{ clone.id }} ({{ clone.order_sub_type.label }})</span><span
-          ng-if="!$last">; </span>
+    <span class="label">Clone {{ ctrl.order['clone_order_ids'].length > 1 ? 'orders' : 'order'}}:</span>
+    <span ng-repeat="clone in ctrl.order['clone_orders']">
+      <span class="link" ng-click="ctrl.showOrder(clone.id)">{{ clone.id }}
+        ({{ clone.order_sub_type.label }})</span><span ng-if="!$last">; </span>
     </span>
   </div>
 </div>

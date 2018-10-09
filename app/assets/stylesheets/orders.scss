@@ -11,24 +11,38 @@ table.order-list {
       cursor: pointer;
     }
   }
-
 }
 
 
-.order-details {
+.order-detail {
   margin: 2rem 0;
 }
 
 
+.order-users-list {
+
+  li {
+    padding: 0;
+    margin: 0 0 .5rem 1.5rem;
+    border: none;
+    list-style: circle;
+  }
+}
 
 
+.primary-user-label {
+  color: $green;
+  font-size: 80%;
+  text-transform: uppercase;
+  font-weight: normal;
+}
 
 
 .workflow-controls {
-
   position: relative;
   width: 100%;
   overflow: hidden;
+  margin: 2rem 0;
 
   .workflow-event {
     float: left;
@@ -66,52 +80,28 @@ table.order-list {
         background-position: center -400px;
         color: $black;
       }
-
     }
   }
 
   @for $i from 1 through 20 {
     .workflow-event.of-#{$i} { width: percentage((100 / $i) * .01); }
   }
-
-
-}
-
-
-
-ul.records-list.orders-list {
-  li {
-    padding: 0;
-
-    .row {
-      margin: 0;
-      padding: 0.5rem;
-      background: $greenLight;
-
-      // color-coding of orders list items
-
-      &.finished {
-        background: $grayLightest;
-      }
-
-      &.pending, &.reviewing {
-        background: $pink;
-      }
-    }
-  }
 }
 
 
 .bulk-item-actions {
-  background: $grayLightest;
+  background: $gray;
+  color: $white;
   padding: 0.5rem;
-  font-size: 80%;
-  line-height: 1.1em;
+  font-size: 90%;
+  line-height: 1.5rem;
   border: 1px solid $grayLight;
   border-bottom-width: 0;
+  margin-bottom: 0.25rem;
 
   .link {
     text-transform: uppercase;
+    color: $white;
   }
 
   .inline-label {
@@ -120,8 +110,7 @@ ul.records-list.orders-list {
 
   .row  {
     .columns, .column {
-      padding-left: 0.5rem !important;
-      padding-right: 1.25rem !important;
+      padding: 0;
 
       &.checkbox-column {
         font-size: 1rem;
@@ -133,27 +122,13 @@ ul.records-list.orders-list {
       }
     }
   }
-
-}
-
-.reproduction-detail {
-  margin-top: 0.5rem;
-  padding: 0.5rem 0.75rem;
-
-  ul li {
-    background: none;
-  }
-
-  .subhead {
-    margin-top: 0 !important;
-  }
-
 }
 
 
 section.invoice-section {
   padding: 0.5rem 1rem;
   background: $grayGhost;
+  position: relative;
 
   .column, .columns {
     padding-left: 0;
@@ -161,5 +136,33 @@ section.invoice-section {
 
   .form-field, button, .button {
     margin-bottom: 0;
+  }
+
+  .invoice-id {
+    margin: -0.5rem 0 0.5rem 0;
+
+    .label {
+      text-transform: uppercase;
+      font-size: 90%;
+      display: inline;
+      padding-right: 0.25rem;
+      color: $grayLight;
+    }
+  }
+
+  .link.invoice-customize-recipient {
+    font-size: 90%;
+    padding-left: 0.5rem;
+  }
+
+  .invoice-updated {
+    font-style: italic;
+    text-align: center;
+  }
+
+  .generate-invoice {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
   }
 }

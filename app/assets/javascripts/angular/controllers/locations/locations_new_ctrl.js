@@ -1,39 +1,31 @@
 // LocationsNewCtrl - inherits from LocationsCtrl
 
-var LocationsNewCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
-  LocationsCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+var LocationsNewCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
+  LocationsCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
   var _this = this;
 
-  $scope.location = {};
-
-  $scope.createLocation = function() {
-    _this.createLocation($scope, sessionCache);
-  }
-
+  this.circaLocation = {};
 }
 
 LocationsNewCtrl.prototype = Object.create(LocationsCtrl.prototype);
-LocationsNewCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+LocationsNewCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('LocationsNewCtrl', LocationsNewCtrl);
 
 
-
-LocationsNewCtrl.prototype.createLocation = function(scope, sessionCache) {
+LocationsNewCtrl.prototype.createLocation = function() {
   var _this = this;
 
-  if (_this.validateLocation()) {
-    scope.loading = true;
-    _this.apiRequests.post("/locations", { 'location': scope.location }).then(function(response) {
+  if (this.validateLocation()) {
+    this.loading = true;
+    this.apiRequests.post("/locations", { 'location': this.circaLocation }).then(function(response) {
       if (response.status == 200) {
-       // scope.location = response.data['location'];
-       sessionCache.refresh('circaLocations');
+       _this.sessionCache.refresh('circaLocations');
        _this.goto('/locations');
-       scope.loading = false;
+       _this.loading = false;
       }
     });
   }
   else {
     // alert
   }
-
 }

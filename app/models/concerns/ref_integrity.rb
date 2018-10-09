@@ -56,7 +56,6 @@ module RefIntegrity
       end
     end
 
-
     def check_deletable
       if deletable?
 
@@ -80,7 +79,6 @@ module RefIntegrity
             return "This user role cannot be deleted because it has associated users."
           end
         end
-        puts "HI"
         puts error_messages.call(self.class.to_s.underscore.to_sym)
         raise CircaExceptions::ReferentialIntegrityConflict, error_messages.call(self.class.to_s.downcase.to_sym)
         false
@@ -88,5 +86,4 @@ module RefIntegrity
     end
 
   end
-
 end

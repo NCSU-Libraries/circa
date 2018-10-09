@@ -1,0 +1,19 @@
+<div ng-controller="ReportsCtrl as ctrl">
+
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
+
+  <main>
+
+    <h1>{{ ctrl.pageTitle }}</h1>
+
+    <div ng-show="ctrl.loading" ng-include="ctrl.templateUrl('common/processing')"/>
+
+    <div ng-hide="ctrl.loading">
+
+      <div ng-include="ctrl.templateUrl(ctrl.template)"></div>
+
+    </div>
+
+  </main>
+
+</div>

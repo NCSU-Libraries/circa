@@ -1,26 +1,53 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="UsersEditCtrl as ctrl">
 
-<h1>Edit user registration
-<span class="subhead">ID: {{ user['id'] }}</span>
-</h1>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
 
+  <main>
 
-<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+    <div ng-show="ctrl.loading" ng-include="ctrl.templateUrl('common/processing')"/>
 
+    <div ng-if="!ctrl.loading">
 
-<div ng-hide="loading">
+      <h1>Edit user registration
+        <span class="subhead">ID: {{ ctrl.user['id'] }}</span>
+      </h1>
 
-  <div class="user-form" ng-include="templateUrl('users/form_fields')"/>
+      <div
+          ng-show="loading"
+          ng-include="ctrl.templateUrl('common/processing')">
+      </div>
 
-  <div class="form-section form-submit-section">
-    <button class="button" class="submit" ng-click="updateUser()">Submit changes</button>
-    <button class="button" ng-click="goto('/users')">Cancel</button>
-  </div>
+      <div ng-hide="loading">
+
+        <div
+            class="form user-form"
+            ng-include="ctrl.templateUrl('users/form_fields')">
+        </div>
+
+        <div class="form-submit-section">
+          <button
+              class="button submit"
+              ng-click="ctrl.updateUser()">
+            Submit changes
+          </button>
+
+          <button
+              class="button"
+              ng-click="ctrl.goto('/users')">
+            Cancel
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div ng-if="ctrl.debug" class="data-panel">
+      {{ ctrl.user | json }}
+      <br>
+      {{ ctrl.currentUser['assignable_roles'] | json }}
+      </div>
+
+  </main>
 
 </div>
-
-<!--
-<div ng-if="debug" class="data-panel">
-  <div>{{ user | json }}</div>
-</div>
- -->

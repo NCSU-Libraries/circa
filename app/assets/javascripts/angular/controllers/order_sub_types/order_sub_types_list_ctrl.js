@@ -1,13 +1,13 @@
 // Enumeration values list
 
-var OrderSubTypesListCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var OrderSubTypesListCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
-  OrderSubTypesCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+  OrderSubTypesCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
 
-  this.getOrderSubTypes($scope);
+  this.getOrderSubTypes();
 
 }
 
 OrderSubTypesListCtrl.prototype = Object.create(OrderSubTypesCtrl.prototype);
-OrderSubTypesListCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+OrderSubTypesListCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('OrderSubTypesListCtrl', OrderSubTypesListCtrl);

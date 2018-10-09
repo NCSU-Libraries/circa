@@ -1,0 +1,68 @@
+<div class="row list-item-content">
+
+  <span class="list-item-link" ng-click="ctrl.showOrder(order['id'])"></span>
+
+  <div class="small-12 columns">
+
+    <div class="record-overview order-overview">
+
+      <div class="inline overview-element heading">
+        <span class="order-id">{{ order['id'] }}</span> ({{ order['order_type']['label'] }}, {{ order['order_sub_type']['label'] }})
+      </div>
+
+
+      <div ng-if="order['users']">
+        <div class="inline overview-element">
+          <span class="label" ng-if="order['users'].length > 1">Researchers:</span>
+          <span class="label" ng-if="order['users'].length <= 1">Researcher:</span>
+          <span class="value" ng-if="order['users'].length > 0">
+            <span ng-repeat="user in order['users'] | limitTo: ctrl.researchersLimit">
+              <span class="nowrap">
+                {{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})<span ng-if="!$last">;</span>
+              </span>
+            </span>
+            <span class="truncated-list-post-note" ng-if="order['users'].length > ctrl.researchersLimit">+ {{ order['users'].length - ctrl.researchersLimit }} more</span>
+          </span>
+        </div>
+      </div>
+
+
+      <div>
+        <div class="inline overview-element">
+          <span class="label">{{ order['access_date_end'] ? 'Access dates:' : 'Access date:' }}</span>
+          <span class="value">{{ order['access_date_start'] | date: 'yyyy-MM-dd' }}</span>
+          <span ng-show="order['access_date_end']">
+            <span class="date-delimeter">to</span>
+            <span class="value">{{ order['access_date_end'] | date: 'yyyy-MM-dd' }}</span>
+          </span>
+        </div>
+
+        <div class="inline overview-element">
+          <span class="label">Use location:</span>
+          <span class="value">{{ order['temporary_location']['title'] }}</span>
+        </div>
+      </div>
+
+
+      <div>
+        <div class="inline overview-element">
+          <span class="label">Resource {{ order['resource_ids'].length > 1 ? 'IDs' : 'ID' }}:</span>
+          <span class="value">
+            <span class="nowrap" ng-repeat="resourceId in order['resource_ids'] | limitTo: ctrl.resourcesLimit">{{ resourceId }}<span ng-if="!$last">, </span></span>
+            <span class="truncated-list-post-note" ng-if="order['resource_ids'].length > ctrl.resourcesLimit">+ {{ order['resource_ids'].length - ctrl.resourcesLimit }} more</span>
+          </span>
+        </div>
+      </div>
+
+
+      <div>
+        <div class="inline overview-element">
+          <span class="label">Created:</span>
+          <span class="value">{{ order['created_at'] | date: 'yyyy-MM-dd' }}</span>
+          <span class="value" ng-if="order['created_by_user']">by {{ order['created_by_user']['display_name'] }} ({{ order['created_by_user']['email'] }})</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

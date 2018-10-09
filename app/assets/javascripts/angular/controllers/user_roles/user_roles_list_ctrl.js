@@ -1,17 +1,17 @@
 // Settings
 
-var UserRolesListCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var UserRolesListCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
   var _this = this;
 
-  $scope.section = 'settings';
+  this.section = 'settings';
 
-  UserRolesCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+  UserRolesCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
 
-  this.getUserRolesList($scope);
+  this.getUserRolesList();
 
 }
 
 UserRolesListCtrl.prototype = Object.create(UserRolesCtrl.prototype);
-UserRolesListCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+UserRolesListCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('UserRolesListCtrl', UserRolesListCtrl);

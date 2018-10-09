@@ -4,10 +4,8 @@
 
 
 .table-options {
-
   margin: 0;
   padding: 0.4rem 0.5rem;
-  border: 1px solid $grayLighter;
   line-height: 1em;
   font-size: 90%;
 
@@ -19,27 +17,24 @@
   .info {
     padding-right: 0.5rem;
   }
-
 }
 
 .date-config {
-
   margin: 1rem 0;
 
   .date-range-options {
-
     margin: 0 0 0.5rem 0;
 
     .button, input {
       margin: 0;
     }
-
   }
 
   .label {
     display: inline;
     padding-right: 1rem;
   }
+
   .date-option {
     padding-right: 1rem;
 

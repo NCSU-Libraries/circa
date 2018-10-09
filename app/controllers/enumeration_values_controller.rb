@@ -9,7 +9,7 @@ class EnumerationValuesController < ApplicationController
 
 
   def show
-    render json: @enumeration_value
+    render json: SerializeEnumerationValue.call(@enumeration_value)
   end
 
 
@@ -30,14 +30,14 @@ class EnumerationValuesController < ApplicationController
       params[:enumeration_value][:value_short] = value_short
     end
     @enumeration_value = EnumerationValue.create!(enumeration_value_params)
-    render json: @enumeration_value
+    render json: SerializeEnumerationValue.call(@enumeration_value)
   end
 
 
   def update
     @params = params
     @enumeration_value.update_attributes(enumeration_value_params)
-    render json: @enumeration_value
+    render json: SerializeEnumerationValue.call(@enumeration_value)
   end
 
 
@@ -74,6 +74,13 @@ class EnumerationValuesController < ApplicationController
       @enumeration_value.destroy
       render json: {}
     end
+  end
+
+
+  # Load custom concern if present
+  begin
+    include EnumerationValuesControllerCustom
+  rescue
   end
 
 

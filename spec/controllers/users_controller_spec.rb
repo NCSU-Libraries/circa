@@ -10,29 +10,29 @@ RSpec.describe UsersController, type: :controller do
 
 
   describe "GET #index" do
-    it "returns http success" do
+    it "returns http ok" do
       sign_in(@u)
       get :index
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(:ok)
     end
   end
 
 
   describe "GET #show" do
 
-    it "returns http success when user is found" do
+    it "returns http ok when user is found" do
       sign_in(@u)
-      get :show, id: @u.id
-      expect(response).to have_http_status(:success)
-      get :show, email: @u.email
-      expect(response).to have_http_status(:success)
+      get :show, params: { id: @u.id }
+      expect(response).to have_http_status(:ok)
+      get :show, params: { email: @u.email }
+      expect(response).to have_http_status(:ok)
     end
 
     it "returns 404 if user is not found" do
       sign_in(@u)
-      get :show, id: 0
+      get :show, params: { id: 0 }
       expect(response).to have_http_status(404)
-      get :show, email: 'foo'
+      get :show, params: { email: 'foo' }
       expect(response).to have_http_status(404)
     end
 
@@ -50,12 +50,12 @@ RSpec.describe UsersController, type: :controller do
       @u = create(:admin_user)
       sign_in(@u)
       params = {
-        user_type: 'patron',
+        user_type: 'researcher',
         user: {
           email: 'you@them.com', first_name: 'You', last_name: 'OK', agreement_confirmed_at: Time.now
         }
       }
-      post :create, params
+      post :create, params: params
       expect(response).to have_http_status(200)
       expect { JSON.parse response.body }.not_to raise_error
       r = JSON.parse(response.body)
@@ -69,13 +69,13 @@ RSpec.describe UsersController, type: :controller do
       @u = create(:admin_user)
       sign_in(@u)
       params = {
-        user_type: 'patron',
+        user_type: 'researcher',
         user: {
           email: 'you1@them.com', first_name: 'You', last_name: 'OK', agreement_confirmed_at: Time.now,
           password: 'password123', password_confirmation: 'password123'
         }
       }
-      post :create, params
+      post :create, params: params
       expect(response).to have_http_status(200)
       r = JSON.parse(response.body)
       user = User.find(r['user']['id'])
@@ -85,23 +85,23 @@ RSpec.describe UsersController, type: :controller do
 
 
   describe "PUT #update" do
-    it "returns http success" do
+    it "returns http ok" do
       @u = create(:admin_user)
       sign_in(@u)
       u = create(:user)
-      put :update, id: u.id, user: u.attributes
-      expect(response).to have_http_status(:success)
+      put :update, params: { id: u.id, user: u.attributes }
+      expect(response).to have_http_status(:ok)
     end
   end
 
 
   describe "DELETE" do
-    it "returns http success" do
+    it "returns http ok" do
       @u = create(:admin_user)
       sign_in(@u)
       u = create(:user)
-      delete :destroy, id: u.id
-      expect(response).to have_http_status(:success)
+      delete :destroy, params: { id: u.id }
+      expect(response).to have_http_status(:ok)
     end
   end
 

@@ -1,12 +1,13 @@
-<section ng-if="!item['movement_history']">
+<section ng-if="!ctrl.item['movement_history']">
   <span
       class="link"
-      ng-if="!item['movement_history']"
-      ng-click="getItemMovementHistory(item['id'])">Get movement history</span>
+      ng-if="!ctrl.item['movement_history']"
+      ng-click="ctrl.getItemMovementHistory(ctrl.item['id'])">
+      <i class="fas fa-cloud-download-alt"></i>Get movement history</span>
 </section>
 
 
-<section ng-if="item['movement_history']">
+<section ng-if="ctrl.item['movement_history']">
 
   <h2>Movement history</h2>
 
@@ -23,12 +24,33 @@
     </thead>
 
     <tbody>
-      <tr ng-repeat="historyItem in item['movement_history'] | orderBy : historyItem['datetime'] : true">
-        <td>{{ historyItem['action'] }}</td>
-        <td>{{ historyItem['location']['title'] }}</td>
-        <td>{{ historyItem['datetime'] | date: 'yyyy-MM-dd HH:mm:ss a' }}</td>
-        <td><div ng-if="historyItem['user']">{{ historyItem['user']['last_name'] }}, {{ historyItem['user']['first_name'] }} ({{ historyItem['user']['email'] }})</div></td>
-        <td><span class="link" ng-click="showOrder(historyItem['order_id'])" ng-if="historyItem['order_id']">{{ historyItem['order_id'] }} [view]</span></td>
+      <tr ng-repeat="historyItem in ctrl.item['movement_history'] | orderBy : historyItem['datetime'] : true">
+        <td>
+          {{ historyItem['action'] }}
+        </td>
+
+        <td>
+          {{ historyItem['location']['title'] }}
+        </td>
+
+        <td>
+          {{ historyItem['datetime'] | date: 'yyyy-MM-dd HH:mm:ss a' }}
+        </td>
+
+        <td>
+          <div ng-if="historyItem['user']">
+            {{ historyItem['user']['last_name'] }},
+            {{ historyItem['user']['first_name'] }}
+            ({{ historyItem['user']['email'] }})
+          </div>
+        </td>
+
+        <td>
+          <span
+              class="link"
+              ng-click="ctrl.showOrder(historyItem['order_id'])"
+              ng-if="historyItem['order_id']">{{ historyItem['order_id'] }} [view]</span>
+        </td>
       </tr>
     </tbody>
 

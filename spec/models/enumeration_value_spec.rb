@@ -18,16 +18,16 @@ RSpec.describe EnumerationValue, type: :model do
     expect(ev.deletable?).to be_falsey
   end
 
-  it "cannot delete a patron_type value that is in use" do
+  it "cannot delete a researcher_type value that is in use" do
     role = create(:user_role)
-    e = Enumeration.create(name: 'patron_type')
+    e = Enumeration.create(name: 'researcher_type')
     ev = EnumerationValue.create(enumeration_id: e.id, value: 'researcher')
-    create(:user, patron_type_id: ev.id, user_role_id: role.id)
+    create(:user, researcher_type_id: ev.id, user_role_id: role.id)
     expect(ev.deletable?).to be_falsey
   end
 
   it "can delete a value that is not in use" do
-    e = Enumeration.create(name: 'patron_type')
+    e = Enumeration.create(name: 'researcher_type')
     ev = EnumerationValue.create(enumeration_id: e.id, value: 'researcher')
     expect(ev.deletable?).to be_truthy
   end

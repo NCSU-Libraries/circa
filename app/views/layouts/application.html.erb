@@ -5,10 +5,10 @@
 
 <body>
 
-  <% if Rails.env == 'staging' %>
+  <% if Rails.env != 'production' %>
   <div class="environment-label">
     <i class="fa fa-bolt"></i>
-    This is the STAGING version -- not for production use
+    This is the <%= Rails.env %> version -- not for production use
     <i class="fa fa-bolt"></i>
     </div>
   <% end %>
@@ -21,8 +21,6 @@
 
 
       <main>
-
-        <%= render partial: 'layouts/circa_temp_header' %>
 
         <%# render partial: 'layouts/flash' %>
 

@@ -1,38 +1,47 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="OrdersListCtrl as ctrl">
 
-<h1>Orders</h1>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
 
+  <main>
 
-<div class="record-list-actions">
-  <div class="record-action"><span class="link" ng-click="goto('orders/new')"><i class="fa fa-plus"></i>Create new order</span></div>
+    <h1>Orders</h1>
+
+    <div class="record-list-actions">
+      <div class="record-action">
+        <span
+            class="link"
+            ng-click="ctrl.goto('orders/new')"><i class="fas fa-plus-circle"></i>Create new order</span>
+      </div>
+    </div>
+
+    <div ng-include="ctrl.templateUrl('common/search_form')"></div>
+
+    <div ng-include="ctrl.templateUrl('orders/list_sort')"></div>
+
+    <div ng-show="loading" ng-include="ctrl.templateUrl('common/processing')"></div>
+
+    <div ng-hide="loading">
+
+      <div ng-include="ctrl.templateUrl('common/pagination')"></div>
+
+      <div ng-include="ctrl.templateUrl('orders/list_filters')"></div>
+
+      <div ng-if="ctrl.orders.length == 0" class="empty-list-label">No orders found</div>
+
+      <ul ng-if="ctrl.orders.length > 0" class="records-list orders-list">
+        <li ng-repeat="order in ctrl.orders" class="{{ order['current_state'] | cssClassName }}">
+          <div ng-include="ctrl.templateUrl('orders/record_list_item')"/>
+        </li>
+      </ul>
+
+      <div ng-include="ctrl.templateUrl('common/pagination')"></div>
+
+    </div>
+
+    <div ng-if="debug" class="data-panel">
+    {{ ctrl.orders | json }}
+    </div>
+
+  </main>
+
 </div>
-
-
-<div ng-include="templateUrl('common/search_form')"></div>
-
-<div ng-include="templateUrl('orders/list_sort')"></div>
-
-
-<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
-
-<div ng-hide="loading">
-
-  <div ng-include="templateUrl('common/pagination')"></div>
-
-  <div ng-include="templateUrl('orders/list_filters')"></div>
-
-  <div ng-if="orders.length == 0" class="empty-list-label">No orders found</div>
-
-  <ul ng-if="orders.length > 0" class="records-list orders-list">
-    <li ng-repeat="order in orders">
-      <div ng-include="templateUrl('orders/record_list_item')"/>
-    </li>
-  </ul>
-
-</div>
-
-<!--
-<div ng-if="debug" class="data-panel">
-{{ orders | json }}
-</div>
- -->

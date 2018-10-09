@@ -58,8 +58,14 @@ class SearchIndex
   end
 
 
-  private
+  # Load custom methods if they exist
+  begin
+    include SearchIndexCustom
+  rescue
+  end
 
+
+  private
 
   def update_batch(records)
     batch = []
@@ -69,6 +75,5 @@ class SearchIndex
     end
     @solr.commit
   end
-
 
 end

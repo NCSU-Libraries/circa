@@ -1,0 +1,325 @@
+body {
+  background: $white;
+  color: $textColor;
+  font-family: "UniversRoman", Helvetica, Arial, sans-serif;
+  font-size: 0.9375rem;
+}
+
+main, nav, .top-bar {
+  padding: 0 1rem;
+}
+
+main {
+  @extend .row;
+
+  min-height: 600px;
+  padding: 0 1rem 1rem 1rem;
+
+  .row {
+    margin-left: inherit;
+  }
+}
+
+section {
+  margin: 1.5rem 0;
+
+  h2:first-child, h3:first-child {
+    margin-top: 0;
+  }
+}
+
+
+
+a, .link {
+  color: $blue;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:visited {
+    color: $blue;
+  }
+
+  &:hover {
+    color: $blue2;
+    text-decoration: underline;
+  }
+
+  &.action-trigger {
+    text-transform: uppercase;
+    font-size: 80%;
+  }
+
+  i {
+    padding-right: 0.25rem;
+  }
+
+  &.button {
+    text-decoration: none;
+  }
+}
+
+button, .button, .button.postfix {
+  background: linear-gradient(to bottom, $blueGray1 0%, $blueGray2 100%);
+  opacity: 0.9;
+  color: $white;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &.edit {
+    background: linear-gradient(to bottom, $blue 0%, $blue2 100%);
+  }
+
+  &.merge {
+    background: linear-gradient(to bottom, $grayLight 0%, $gray 100%);
+  }
+
+  &.view {
+    background: linear-gradient(to bottom, $green 0%, $green2 100%);
+  }
+}
+
+td .button, td button, .record-actions button, .record-actions .button {
+  margin-bottom: 0;
+}
+
+
+// Foundation override
+h1, h2, h3, table .sub-heading, h4, h5, h6, .heading {
+  font-family: "UniversRoman", Helvetica, Arial, sans-serif;
+  // font-family: "GlyphaRoman", helvetica, arial, sans-serif;
+  color: $grayDark;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  margin: 1rem 0 1.5rem 0;
+  font-size: 2.25rem;
+  line-height: 1.2em;
+  // border-bottom: 1px solid $grayLightest;
+
+  .subhead {
+    display: block;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    font-weight: normal;
+    font-family: inherit;
+  }
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin: 1rem 0 0.5rem 0;
+}
+
+h3 {
+  font-size: 1.125rem;
+  margin: 0.5rem 0 0.2rem 0;
+}
+
+p {
+  margin: 0 0 1rem 0;
+  padding: 0;
+}
+
+ul {
+  line-height: 1.6em;
+  list-style: none outside none;
+  margin-left: 0.9rem;
+
+  &.bulleted {
+    list-style-type: disc;
+    padding-left: 0.9375rem;
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+ul > *:before {
+  content: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  line-height: 1.1em;
+
+  th, td {
+    padding: 0.5rem 0.5rem 0.3rem 0.5rem;
+  }
+
+  tbody tr:hover {
+    background: $grayLightest;
+    cursor: pointer;
+  }
+
+  tr.disabled td {
+    font-style: italic;
+    color: $grayLight;
+  }
+
+  thead tr th {
+    background: $gray;
+    color: white;
+    white-space: nowrap;
+    font-size: 80%;
+    text-transform: uppercase;
+    font-weight: normal;
+  }
+
+  .table-action {
+    display: block;
+    font-size: 80%;
+    text-transform: uppercase;
+
+    i {
+      font-size: 120%;
+    }
+  }
+
+  td.state, th.state {
+    width: 15%;
+  }
+
+  td.actions, th.actions {
+    text-align: right;
+    width: 10%;
+  }
+
+  .sub-heading {
+    @extend h3;
+    padding: 0.5625rem 0.625rem;
+  }
+
+  .removed td {
+    color: $grayLight;
+
+    .table-action {
+      @extend .link;
+    }
+  }
+}
+
+.alert-box, .flash {
+  border-width: 0;
+  background: $yellow;
+  padding: 0.5rem;
+
+  &.notice, &.info {
+    background-color: $blue;
+  }
+
+  &.warning {
+    background-color: $orange;
+    color: $white;
+  }
+}
+
+p.warning, div.warning, span.warning {
+  background-color: $yellow;
+  padding: 0.25rem 0.5rem;
+  font-style: italic;
+}
+
+/* utility classes */
+
+.block {
+  display: block;
+}
+
+.inline {
+  display: inline;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.positive {
+  color: $green;
+}
+
+.negative {
+  color: $red;
+}
+
+.small {
+  font-size: 80%;
+}
+
+.na {
+  font-size: 90%;
+  color: $grayLight;
+}
+
+.disabled {
+  color: $grayLighter;
+
+  &:hover {
+    cursor: inherit;
+    color: $grayLighter;
+    text-decoration: none;
+  }
+}
+
+.empty-list-label, .empty-content {
+  font-style: italic;
+  margin: 1em 0;
+  color: $grayLight;
+}
+
+/* dev utilities */
+
+.environment-label {
+  text-align: center;
+  background: $black;
+  color: $white;
+  padding: 0.25rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.data-panel {
+  @extend .panel;
+  height: 10rem;
+  overflow: auto;
+  background: $black;
+  color: #0f0;
+  font-family: monospace;
+  margin: 2rem 0;
+}
+
+.inline-label-tag {
+  padding: 0.1rem 0.2rem;
+  color: $white;
+  font-size: 70%;
+  text-transform: uppercase;
+  background: $grayLight;
+
+  &.red {
+    background: $red;
+  }
+  &.green {
+    background: $green;
+  }
+  &.blue {
+    background: $blue;
+  }
+  &.orange {
+    background: $orange;
+  }
+  &.black {
+    background: $black;
+  }
+}
+
+.inline-edit-link {
+  padding: 0 0.25rem;
+  text-transform: uppercase;
+  i {
+    font-size: 90%;
+  }
+}

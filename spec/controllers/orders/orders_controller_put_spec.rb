@@ -7,17 +7,13 @@ RSpec.describe OrdersController, type: :controller do
     @order = create(:order)
     @item = create(:item)
     @item_order = create(:item_order, order_id: @order.id, item_id: @item.id)
-    @digital_image_order = create(:digital_image_order, order_id: @order.id)
+    @digital_collections_order = create(:digital_collections_order, order_id: @order.id)
     @reproduction_format = create(:reproduction_format)
     @reproduction_spec = create(:reproduction_spec, item_order_id: @item_order.id)
     @order_fee1 = create(:order_fee, record_type: 'ItemOrder', record_id: @item_order.id)
-    @order_fee2 = create(:order_fee, record_type: 'DigitalImageOrder', record_id: @digital_image_order.id)
+    @order_fee2 = create(:order_fee, record_type: 'DigitalCollectionsOrder', record_id: @digital_collections_order.id)
     @item_order.reload
-    @digital_image_order.reload
-
-    puts @digital_image_order.inspect
-    puts @item_order.inspect
-
+    @digital_collections_order.reload
     @order.reload
   end
 
@@ -30,24 +26,24 @@ RSpec.describe OrdersController, type: :controller do
 
   describe "PUT #update" do
 
-    it "returns http success" do
+    it "returns http ok" do
       o = create(:order)
       new_date = '2020-01-01'
-      put :update, id: o.id, order: { access_date_start: new_date }
-      expect(response).to have_http_status(:success)
+      put :update, params: { id: o.id, order: { access_date_start: new_date } }
+      expect(response).to have_http_status(:ok)
     end
 
     it "updates record with values from params" do
       o = create(:order)
       new_date = '2020-01-01'
-      put :update, id: o.id, order: { access_date_start: new_date }
+      put :update, params: { id: o.id, order: { access_date_start: new_date } }
       o.reload
       expect(o.access_date_start).to eq(Date.parse(new_date))
     end
 
     it "ignores params values not permitted by safe_attributes without raising an error" do
       o = create(:order)
-      expect { put :update, id: o.id, order: { foo: 'boo' } }.not_to raise_error
+      expect { put :update, params: { id: o.id, order: { foo: 'boo' } } }.not_to raise_error
     end
 
 
@@ -56,14 +52,14 @@ RSpec.describe OrdersController, type: :controller do
       let(:order_sub_type) { create(:order_sub_type, order_type_id: order_type.id) }
       let(:other_order_sub_type) { create(:order_sub_type) }
       let(:o) { create(:order, order_sub_type_id: order_sub_type.id) }
-      let!(:dio) { create(:digital_image_order, order_id: o.id) }
+      let!(:dio) { create(:digital_collections_order, order_id: o.id) }
 
       it "removes reproduction associations when order-type is changed" do
         order = o.clone
-        expect(o.digital_image_orders.length).to eq(1)
-        put :update, id: order.id, order: { order_sub_type_id: other_order_sub_type.id }
+        expect(o.digital_collections_orders.length).to eq(1)
+        put :update, params: { id: order.id, order: { order_sub_type_id: other_order_sub_type.id } }
         order.reload
-        expect(o.digital_image_orders.length).to eq(0)
+        expect(o.digital_collections_orders.length).to eq(0)
       end
     end
 
@@ -76,10 +72,10 @@ RSpec.describe OrdersController, type: :controller do
       i = o.items.first
       io = o.item_orders.where(item_id: i.id).first
       expect(io.active).to be_truthy
-      put :deactivate_item, id: o.id, item_id: i.id
+      put :deactivate_item, params: { id: o.id, item_id: i.id }
       io.reload
       expect(io.active).to be_falsey
-      put :activate_item, id: o.id, item_id: i.id
+      put :activate_item, params: { id: o.id, item_id: i.id }
       io.reload
       expect(io.active).to be_truthy
     end
@@ -91,8 +87,8 @@ RSpec.describe OrdersController, type: :controller do
       o = create(:order)
       event = o.available_events.first
       expect(o.current_state.to_s).to eq(o.initial_state.to_s)
-      expect(put :update_state, id: o.id, event: event).to have_http_status(:success)
-      expect(put :update_state, id: o.id, event: :foo).to have_http_status(403)
+      expect(put :update_state, params: { id: o.id, event: event }).to have_http_status(:ok)
+      expect(put :update_state, params: { id: o.id, event: :foo }).to have_http_status(403)
     end
   end
 

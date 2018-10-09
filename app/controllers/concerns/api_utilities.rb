@@ -39,6 +39,7 @@ module ApiUtilities
 
     private
 
+
     def not_found(exception)
       render json: { error: { status: 404, detail: exception.message } }, status: 404
     end
@@ -74,13 +75,20 @@ module ApiUtilities
       metadata[:request] = request
       if record.permitted_events.include?(event.to_sym) || current_user.is_admin?
         record.trigger!(event, metadata)
-        render json: record
+
+        case record
+        when Order
+          response = SerializeOrder.call(record)
+        when Item
+          reponse = SerializeItem.call(record)
+        end
+
+        render json: response
         return
       else
         render json: { error: { status: 403, detail: 'State transition not permitted' } }, status: 403
         return
       end
-
     end
 
 

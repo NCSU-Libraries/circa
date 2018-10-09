@@ -4,7 +4,7 @@ require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
-require 'factory_girl_rails'
+require 'factory_bot_rails'
 require 'spec_helper'
 require 'database_cleaner'
 # require 'paper_trail/frameworks/rspec'
@@ -29,6 +29,7 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 include AspaceApiSpecSupport
 include CatalogApiSpecSupport
 include UserRolesSpecSupport
+include TransitionSupport
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -44,10 +45,10 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
 
-  # FactoryGirl config
-  config.include FactoryGirl::Syntax::Methods
+  # FactoryBot config
+  config.include FactoryBot::Syntax::Methods
 
-  config.include Devise::TestHelpers, :type => :controller
+  config.include Devise::Test::ControllerHelpers, :type => :controller
   config.include ControllerHelpers
 
   # DatabaseCleaner configs

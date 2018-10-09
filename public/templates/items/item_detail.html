@@ -1,112 +1,95 @@
 <section class="record-detail item-detail">
 
 
-  <div>
+  <div class="superheading">
+    <span class="label">ID:</span>
+    <span class="value">{{ ctrl.item['id'] }}</span>
+  </div>
 
-    <div class="inline detail-element">
-      <span class="label">ID:</span>
-      <span class="value">{{ item['id'] }}</span>
+
+  <div class="heading">
+
+    <div ng-if="ctrl.item['source'] == 'archivesspace'">
+      <span ng-if="ctrl.item['resource_identifier']">{{ ctrl.item['resource_identifier'] }} - </span>
+      {{ ctrl.item['resource_title'] }}
+    </div>
+
+    <div ng-if="ctrl.item['source'] == 'catalog'">
+      {{ ctrl.item['resource_title'] }}
+    </div>
+
+    <div ng-if="ctrl.item['container']" class="subheading">
+      {{ ctrl.item['container'] }}
     </div>
 
   </div>
 
 
+  <div ng-if="ctrl.item['digital_object']" class="detail-element">
+    <span class="label">Digital Object:</span>
+    <span class="value">
+      <span
+          ng-click="ctrl.openArchivesSpaceRecord(item['uri'])"
+          class="link"
+          poptip="{{ ctrl.item['uri'] }}">{{ ctrl.item['digital_object_title'] }}</span>
+    </span>
+  </div>
 
-  <div>
 
-    <div class="inline detail-element" ng-if="item['source'] == 'archivesspace'">
-      <span class="label">Collection:</span>
-      <span class="value"><span ng-if="item['resource_identifier']">{{ item['resource_identifier'] }} - </span>{{ item['resource_title'] }}</span>
-    </div>
-
-    <div class="inline detail-element" ng-if="item['source'] == 'catalog'">
-      <span class="label">Title:</span>
-      <span class="value">{{ item['resource_title'] }}</span>
-    </div>
-
+  <div class="detail-element nowrap" ng-if="ctrl.item['barcode']">
+    <span class="label">Barcode:</span>
+    <span class="value">{{ ctrl.item['barcode'] }}</span>
   </div>
 
 
 
-  <div ng-if="item['digital_object']">
 
-    <div class="inline detail-element">
-      <span class="label">Digital Object:</span>
-      <span class="value"><span ng-click="openArchivesSpaceRecord(item['uri'])" class="link" poptip="{{ item['uri'] }}">{{ item['digital_object_title'] }}</span></span>
-    </div>
-
-  </div>
-
-
-
-  <div ng-if="item['container'] || item['barcode']">
-
-    <div class="inline detail-element nowrap" ng-if="item['container']">
-      <span class="label">Container:</span>
-      <span class="value">{{ item['container'] }}</span>
-    </div>
-
-    <div class="inline detail-element nowrap" ng-if="item['barcode']">
-      <span class="label">Barcode:</span>
-      <span class="value">{{ item['barcode'] }}</span>
-    </div>
-
-  </div>
-
-
-
-  <div ng-if="item['source'] == 'catalog'">
-
-    <div class="inline detail-element">
+  <div ng-if="ctrl.item['source'] == 'catalog'">
+    <div class="detail-element">
       <span class="label">Call number:</span>
-      <span class="value">{{ item['resource_identifier'] }}</span>
+      <span class="value">{{ ctrl.item['resource_identifier'] }}</span>
     </div>
 
-    <div class="inline detail-element">
+    <div class="detail-element">
       <span class="label">Catalog record ID:</span>
-      <span class="value">{{ item['item_catalog_record']['catalog_record_id'] }}</span>
+      <span class="value">{{ ctrl.item['item_catalog_record']['catalog_record_id'] }}</span>
     </div>
 
-    <div class="inline detail-element">
+    <div class="detail-element">
       <span class="label">Catalog item ID:</span>
-      <span class="value">{{ item['item_catalog_record']['catalog_item_id'] }}</span>
+      <span class="value">{{ ctrl.item['item_catalog_record']['catalog_item_id'] }}</span>
     </div>
-
   </div>
 
 
-
-  <div ng-if="!item['digital_object'] && item['permanent_location']">
-
-    <div class="inline detail-element">
+  <div ng-if="!ctrl.item['digital_object'] && ctrl.item['permanent_location']">
+    <div class="detail-element">
       <span class="label">Permanent location:</span>
-      <span class="value">{{ item['permanent_location']['title'] }}</span>
+      <span class="value">{{ ctrl.item['permanent_location']['title'] }}</span>
     </div>
-
   </div>
 
 
-
-  <div ng-if="!item['digital_object'] && item['current_location']">
-
-    <div class="inline detail-element">
+  <div ng-if="!ctrl.item['digital_object'] && ctrl.item['current_location']">
+    <div class="detail-element">
       <span class="label">Current location:</span>
-      <span class="value">{{ item['current_location']['title'] }}</span>
-      <span ng-show="(item['current_state'] != 'at_permanent_location') && itemLocationChangeEnabled != item['id']" class="link" ng-click="enableItemLocationChange(item)">Change location</span>
-      <div ng-show="itemLocationChangeEnabled == item['id']" ng-include="templateUrl('items/location_selector')"/>
+      <span class="value">{{ ctrl.item['current_location']['title'] }}</span>
+      <span
+          ng-show="(ctrl.item['current_state'] != 'at_permanent_location') && ctrl.itemLocationChangeEnabled != ctrl.item['id']"
+          class="link"
+          ng-click="ctrl.enableItemLocationChange(ctrl.item)">Change location</span>
+      <div
+          ng-show="ctrl.itemLocationChangeEnabled == ctrl.item['id']"
+          ng-include="ctrl.templateUrl('items/location_selector')"/>
     </div>
-
   </div>
-
 
 
   <div>
-
-    <div class="inline detail-element" ng-if="!item['obsolete']">
+    <div class="detail-element" ng-if="!ctrl.item['obsolete']">
       <span class="label">Status:</span>
-      <span class="value">{{ item['current_state'] | removeUnderscores }}</span>
+      <span class="value">{{ ctrl.item['current_state'] | removeUnderscores }}</span>
     </div>
-
   </div>
 
 

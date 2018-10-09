@@ -1,83 +1,123 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="ItemsShowCtrl as ctrl">
 
-<h1>Item details</h1>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
 
-<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+  <main>
 
-<div ng-if="!loading">
+    <h1>Item detail</h1>
+
+    <div ng-if="ctrl.loading" ng-include="ctrl.templateUrl('common/processing')"/>
 
 
-  <div class="record-show-actions" ng-if="!item.obsolete">
+    <div ng-if="!ctrl.loading">
 
-    <div class="record-action">
-      <span
-          class="link"
-          ng-click="confirmObsolete(item.id)">
-        <i class="fa fa-times-circle"></i>Obsolete</span>
-    </div>
+      <div class="record-show-actions" ng-if="!ctrl.item.obsolete">
 
-    <div class="record-action">
-      <span
-          class="link"
-          ng-click="updateItemFromSource(item.id)">
-        <i class="fa fa-refresh"></i>Refresh item data from source</span>
+        <div class="record-action" ng-if="ctrl.item.source == 'archivesspace'">
+          <span
+              class="link"
+              ng-click="ctrl.openItemObsoleteModal()">
+            <i class="fa fa-times-circle"></i>Obsolete</span>
+        </div>
+
+        <div class="record-action">
+          <span
+              class="link"
+              ng-click="ctrl.updateItemFromSource(ctrl.item.id)">
+            <i class="fas fa-sync"></i>Refresh item data from source</span>
+        </div>
+
+        <div class="record-action">
+          <span
+              class="link"
+              ng-click="ctrl.goto('/orders?q=item_id:' + ctrl.item['id'])">
+            <i class="far fa-bell"></i>View orders for this item
+          </span>
+        </div>
+
       </div>
 
-  </div>
+      <div ng-if="ctrl.item.obsolete" class="obsolete-label">This item is obsolete</div>
+
+      <div ng-include="ctrl.templateUrl('items/item_detail')"/>
+
+      <section>
+
+        <h2>Access history</h2>
+
+        <table cellspacing="0" ng-if="ctrl.item['access_sessions'].length > 0">
+
+          <thead>
+            <tr>
+              <th>User(s)</th>
+              <th>Start date/time</th>
+              <th>End date/time</th>
+              <th>Location</th>
+              <th>Order</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr ng-repeat="session in ctrl.item['access_sessions'] | orderBy : session['start_datetime'] : true">
+              <td>
+                <div ng-repeat="user in session['users']">
+                  {{ user['last_name'] }}, {{ user['first_name'] }}
+                  ({{ user['email'] }})
+                </div>
+              </td>
+
+              <td>
+                {{ session['start_datetime'] | date: 'shortDate' }}
+                {{ session['start_datetime'] | date: 'mediumTime' }}
+              </td>
+
+              <td>
+                {{ session['end_datetime'] | date: 'shortDate' }}
+                {{ session['end_datetime'] | date: 'mediumTime' }}
+              </td>
+
+              <td>
+                {{ session['location']['title'] }}
+              </td>
+
+              <td>
+                <span
+                    class="link"
+                    ng-click="ctrl.showOrder(session['order_id'])"
+                    ng-if="session['order_id']">{{ session['order_id'] }} [view]</span>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+
+        <div ng-if="ctrl.item['access_sessions'].length == 0">
+          There is no record of this item having been accessed.
+        </div>
+
+      </section>
 
 
-  <div ng-if="item.obsolete" class="obsolete-label">This item is obsolete</div>
+      <div ng-if="!ctrl.item['digital_object']">
+        <div ng-include="ctrl.templateUrl('items/movement_history')"/>
+      </div>
 
 
-  <div ng-include="templateUrl('items/item_detail')"/>
+      <div ng-include="ctrl.templateUrl('items/modification_history')"/>
 
 
-  <section>
-
-    <h2>Access history</h2>
-
-    <table cellspacing="0" ng-if="item['access_sessions'].length > 0">
-
-      <thead>
-        <tr>
-          <th>User(s)</th>
-          <th>Start date/time</th>
-          <th>End date/time</th>
-          <th>Location</th>
-          <th>Order</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr ng-repeat="session in item['access_sessions'] | orderBy : session['start_datetime'] : true">
-          <td><div ng-repeat="user in session['users']">{{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})</div></td>
-          <td>{{ session['start_datetime'] | date: 'shortDate' }} {{ session['start_datetime'] | date: 'mediumTime' }}</td>
-          <td>{{ session['end_datetime'] | date: 'shortDate' }} {{ session['end_datetime'] | date: 'mediumTime' }}</td>
-          <td>{{ session['location']['title'] }}</td>
-          <td><span class="link" ng-click="showOrder(session['order_id'])" ng-if="session['order_id']">{{ session['order_id'] }} [view]</span></td>
-        </tr>
-      </tbody>
-
-    </table>
-
-    <div ng-if="item['access_sessions'].length == 0">
-    There is no record of this item having been accessed.
     </div>
 
-  </section>
 
+    <div ng-if="ctrl.debug" class="data-panel">
+    {{ ctrl.item | json }}
+    </div>
 
-  <div ng-if="!item['digital_object']">
-    <div ng-include="templateUrl('items/movement_history')"/>
+  </main>
+
+  <div
+      ng-show="ctrl.showItemObsoleteModal"
+      ng-include="ctrl.templateUrl('items/obsolete')">
   </div>
 
-
-  <div ng-include="templateUrl('items/modification_history')"/>
-
-
-</div>
-
-
-<div ng-if="debug" class="data-panel">
-{{ item | json }}
 </div>

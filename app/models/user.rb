@@ -1,6 +1,5 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
 
-  include UserCustom
   include EnumerationUtilities
   include RefIntegrity
   include SolrDoc
@@ -26,7 +25,8 @@ class User < ActiveRecord::Base
   has_many :accessed_items, through: :access_sessions
   has_many :state_transitions
 
-  has_paper_trail
+  has_paper_trail ignore: [:sign_in_count, :current_sign_in_at,
+    :last_sign_in_at, :current_sign_in_ip, :last_sign_in_ip]
 
   before_destroy :deletable?
 
@@ -44,35 +44,56 @@ class User < ActiveRecord::Base
 
   validates :email, presence: true, uniqueness: true
 
+  devise :database_authenticatable, :registerable, :recoverable,
+      :rememberable, :trackable, :validatable
+
+  # Devise override to confirm that user is not inactive before authenticating
+  def active_for_authentication?
+    super && !inactive
+  end
+
+
   # Setter and getter used to assign/fetch current_user to/from User
   # see: https://amitrmohanty.wordpress.com/2014/01/20/how-to-get-current_user-in-model-and-observer-rails/
   def self.current
     RequestStore.store[:user]
   end
 
+
   def self.current=(user)
     RequestStore.store[:user] = user
   end
 
-  def self.staff_patron_type_id
-    get_enumeration_value_id('staff', 'patron_type')
+
+  def self.current_user_is_admin?
+    self.current && self.current.is_admin?
   end
+
+
+  def self.staff_researcher_type_id
+    get_enumeration_value_id('staff', 'researcher_type')
+  end
+
 
   def open_orders
     orders.open
   end
 
+
   def completed_orders
     orders.completed
   end
 
-  def patron_type
-    get_enumeration_value(patron_type_id)
+
+  def researcher_type
+    get_enumeration_value(researcher_type_id)
   end
 
-  def has_active_access_session
+
+  def has_active_access_session?
     access_sessions.where(active: true).count > 0
   end
+
 
   # user_role methods
 
@@ -80,13 +101,22 @@ class User < ActiveRecord::Base
     assignable_roles.map { |r| r.name }
   end
 
+
   def role
     user_role.name
   end
 
+
   def assign_role(new_user_role)
     update_attributes(user_role_id: new_user_role.id)
   end
+
+
+  def self.is_admin?(user_id)
+    user = find(user_id)
+    user.is_admin?
+  end
+
 
   def is_admin?
     admin_role = UserRole.find_by_name('admin')
@@ -98,10 +128,12 @@ class User < ActiveRecord::Base
     end
   end
 
+
   # alias for is_admin?, used by serializers
   def is_admin
     is_admin?
   end
+
 
   def assignable_roles
     roles = []
@@ -113,8 +145,16 @@ class User < ActiveRecord::Base
     roles
   end
 
+
   def can_assign_role?(user_role_id)
     assignable_roles.map { |r| r.id }.include?(user_role_id.to_i)
+  end
+
+
+  # Load custom concern if present - methods in concern take precidence
+  begin
+    include UserCustom
+  rescue
   end
 
 end

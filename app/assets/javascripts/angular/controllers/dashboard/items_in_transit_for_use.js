@@ -26,9 +26,6 @@ DashboardCtrl.prototype.getItemsInTransitForUse = function(filters) {
   this.apiRequests.get(path, config).then(function(response) {
     _this.dashbaordLoading = false;
     if (response.status == 200) {
-
-      console.log(response.data);
-
       _this.itemsInTransitForUse = response.data;
     }
     else if (response.data['error'] && response.data['error']['detail']) {

@@ -15,12 +15,10 @@ module OrderStateConfig
       end
     end
 
-
     # Specify state an Order is in by default upon creation
     def initial_state
       :pending
     end
-
 
     # Define states, events to move to state, and description of the event displayed to users
     def self.states_events
@@ -46,13 +44,12 @@ module OrderStateConfig
           event_description: "All items have been received at their use location."
         },
         {
-          event: :finish,
-          to_state: :finished,
+          event: :close,
+          to_state: :closed,
           event_description: "Use of the items is complete or no longer required. This order can be closed."
         }
       ]
     end
-
 
     # Special state/event definitions for reproduction requests
     def self.states_events_reproduction
@@ -78,19 +75,17 @@ module OrderStateConfig
           event_description: "Materials have been sent to the requester as specified."
         },
         {
-          event: :finish,
-          to_state: :finished,
+          event: :close,
+          to_state: :closed,
           event_description: "All physical items have been returned and the requester has been invoiced as required. This order can be closed."
         }
       ]
     end
 
-
     # Define the final/terminal state for order
     def final_state
-      :finished
+      :closed
     end
-
 
     # Instance method that calls self.states_events class method above
     # Provides common functionality between Items and Orders for shared methods in state_transition_support
@@ -102,10 +97,14 @@ module OrderStateConfig
       end
     end
 
-
     # Returns states/events as a flat array for use in the front end
     def states_events
       states_events_config.map { |se| [ se[:to_state], se[:event], se[:event_description] || '' ] }
+    end
+
+
+    def required_metadata_present?(event, metadata)
+     metadata[:user_id]
     end
 
 
@@ -130,14 +129,13 @@ module OrderStateConfig
       when :complete_work
         request = metadata[:request]
         work_complete_notification(request)
-      when :finish
+      when :close
         close
       end
-      if event != :finish && !open
+      if event != :close && !open
         reopen
       end
     end
-
 
     # Specifies conditions under which a given event is permitted
     # Returns boolean
@@ -163,7 +161,7 @@ module OrderStateConfig
         end
       when :activate
         current_state == :fulfilled
-      when :finish
+      when :close
         if reproduction_order?
           current_state == :fulfilled
         else
@@ -171,7 +169,6 @@ module OrderStateConfig
         end
       end
     end
-
 
     # Returns integer representing the number of Items associated with this Order
     #   which are ready for use
@@ -186,16 +183,22 @@ module OrderStateConfig
     end
 
 
+    def item_ready?(item)
+      at_temp_location = item.at_temporary_location_for_order?(self.id)
+      if item.digital_object
+        item.state_reached_for_order(:ready_at_use_location, self.id) || at_temp_location
+      else
+        item.state_reached_for_order(:ready_at_temporary_location, self.id) || at_temp_location
+      end
+    end
+
+
     # Returns true if all items associated with this Order are ready for use
     def all_items_ready?
       ready = false
       items.each do |i|
         if !i.obsolete
-          if i.digital_object
-            ready = i.state_reached_for_order(:ready_at_use_location, self.id)
-          else
-            ready = i.state_reached_for_order(:ready_at_temporary_location, self.id)
-          end
+          ready = item_ready?(i)
         end
         break if !ready
       end
@@ -244,7 +247,6 @@ module OrderStateConfig
         else
           active_item_orders.each do |io|
             i = io.item
-
             if !i.obsolete
               last_transition = i.state_transitions.where(order_id: id).first
 
@@ -255,7 +257,6 @@ module OrderStateConfig
                 break
               end
             end
-
           end
         end
       end
@@ -272,7 +273,6 @@ module OrderStateConfig
         WorkCompleteMailer.assignee_email(self, a, order_url).deliver_later
       end
     end
-
 
   end
 end

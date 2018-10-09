@@ -1,4 +1,4 @@
-class AccessSession < ActiveRecord::Base
+class AccessSession < ApplicationRecord
 
   include CircaExceptions
   include SolrDoc
@@ -8,13 +8,11 @@ class AccessSession < ActiveRecord::Base
   has_many :user_access_sessions
   has_many  :users, through: :user_access_sessions
 
-
   before_create do
     self.start_datetime = DateTime.now
     self.active = true
     self.class.check_in_use(self)
   end
-
 
   before_save do
     self.active = self.end_datetime.nil? ? true : false
@@ -22,37 +20,40 @@ class AccessSession < ActiveRecord::Base
   end
 
 
-  # validates :item_id, uniqueness: { scope: [:active, :order_id] }
-  # NOTES ON UNIQUENESS:
-  # Need to ensure that only one active access session exists for any given item
-  # Can't do this with a uniqueness validation because it will cause updates to fail when active is set to false
-  # Might need to do this at the controller level instead
-
   def self.create_with_users(attributes)
     users = attributes.delete(:users)
     if !users
       raise ActiveRecord::ActiveRecordError, 'create_with_users requires users'
     else
 
-      filter_users = lambda do |usrs|
-        filtered = []
-        usrs.each do |u|
-          user = User.find(u['id'])
-          if user.agreement_confirmed_at
-            filtered << u
-          end
-        end
-        return filtered
-      end
+      ### REMOVED 2018-09-28
+      ### constraint on agreement_confirmed_at now only enforced on front end
+      ### left here temporarily for reference
 
-      users = filter_users.call(users)
-      if users.empty?
-        raise CircaExceptions::BadRequest, 'None of the submitted users is eligible'
-      else
-        session = create!(attributes)
-        users.each { |u| session.user_access_sessions.create!(user_id: u['id']) }
-        session
-      end
+      # filter_users = lambda do |usrs|
+      #   filtered = []
+      #   usrs.each do |u|
+      #     user = User.find(u['id'])
+      #     if user.agreement_confirmed_at
+      #       filtered << u
+      #     end
+      #   end
+      #   return filtered
+      # end
+
+      # users = filter_users.call(users)
+
+      # if users.empty?
+      #   raise CircaExceptions::BadRequest, 'None of the submitted users is eligible'
+      # else
+      #   session = create!(attributes)
+      #   users.each { |u| session.user_access_sessions.create!(user_id: u['id']) }
+      #   session
+      # end
+
+      session = create!(attributes)
+      users.each { |u| session.user_access_sessions.create!(user_id: u['id']) }
+      session
     end
   end
 
@@ -70,9 +71,10 @@ class AccessSession < ActiveRecord::Base
   end
 
 
-
-
-  private
+  # Load custom concern if present - methods in concern override those in model
+  begin
+    include AccessSessionCustom
+  rescue
+  end
 
 end
-

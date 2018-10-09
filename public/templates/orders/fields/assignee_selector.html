@@ -1,0 +1,45 @@
+<div
+    class="selector user-selector assignee-selector"
+    ng-show="ctrl.assigneeSelect.show">
+
+  <div class="close-selector">
+    <span class="link" ng-click="ctrl.closeAssigneeSelector()">
+      <i class="fas fa-times-circle"></i>
+    </span>
+  </div>
+
+
+  <div class="instruction">Begin typing the name or email of en existing user,
+      then select from the list to add the user to this order.</div>
+
+  <div class="row collapse" ng-hide="ctrl.assigneeSelect['loading']">
+
+    <div class="small-12 columns">
+      <div class="user-select">
+
+        <input
+            type="text"
+            ng-model="ctrl.assigneeSelect.q"
+            ng-keyup="ctrl.updateAssigneeSelectList()"
+            placeholder="Enter user name or email"
+        />
+
+        <div class="user-select-list" ng-show="ctrl.assigneeSelect.list.length > 0">
+          <ul>
+            <li
+                ng-repeat="user in ctrl.assigneeSelect.list"
+                ng-class="$last ? 'last' : ''"
+                ng-click="ctrl.selectAssignee(user)">
+              {{ user['display_name'] }} ( {{ user['email'] }} )
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="alert" ng-show="ctrl.assigneeSelect['alert']">{{ ctrl.assigneeSelect['alert'] }}</div>
+
+</div>

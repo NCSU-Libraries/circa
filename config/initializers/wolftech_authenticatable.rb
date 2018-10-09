@@ -1,0 +1,1 @@
+/Users/trthorn2/code/projects/circa_customizations/config/initializers/wolftech_authenticatable.rb

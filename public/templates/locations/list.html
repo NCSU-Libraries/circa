@@ -1,47 +1,61 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="LocationsListCtrl as ctrl">
 
-<h1>Locations</h1>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
 
-<p>Locations listed here are managed by Circa as temporary locations where materials will be used. Permanent storage locations of materials are managed in ArchivesSpace.</p>
+  <main>
 
-<div class="record-list-actions">
-  <div class="record-action"><span class="link" ng-click="goto('locations/new')"><i class="fa fa-plus"></i>Create new location</span></div>
-</div>
+    <h1>Locations</h1>
 
-<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+    <p>Locations listed here are managed by Circa as temporary locations where materials will be used. Permanent storage locations of materials are managed in ArchivesSpace.</p>
 
-
-<div ng-hide="loading">
-
-<div class="empty-list-label" ng-if="circaLocations.length == 0">
-  No locations found
-</div>
-
-<ul class="records-list locations-list">
-
-  <li ng-repeat="location in circaLocations">
-    <div class="row">
-      <div class="small-10 columns">{{ location['title'] }}
-      <span ng-if="location['default']" class="default-append">(default)</span>
-      </div>
-      <div class="small-2 columns text-right record-actions">
-
-        <span class="button tiny view" ng-click="showLocation(location['id'])">View</span>
-
-        <!--
-        <div class="record-actions order-actions">
-          <div class="action"><span class="link" ng-click="showLocation(location['id'])">View</span></div>
-        </div>
-        -->
-
+    <div class="record-list-actions">
+      <div class="record-action">
+        <span class="link" ng-click="ctrl.goto('locations/new')">
+          <i class="fas fa-plus-circle"></i>Create new location
+        </span>
       </div>
     </div>
-  </li>
 
-</ul>
 
-<!--
-<div ng-if="debug" class="data-panel">
-{{ circaLocations | json }}
+    <div
+        ng-show="loading"
+        ng-include="ctrl.templateUrl('common/processing')">
+    </div>
+
+
+    <div ng-hide="loading">
+
+      <div
+          class="empty-list-label"
+          ng-if="ctrl.circaLocations.length == 0">
+        No locations found
+      </div>
+
+      <ul class="records-list locations-list">
+
+        <li ng-repeat="location in ctrl.circaLocations">
+
+          <span class="list-item-link" ng-click="ctrl.showLocation(location['id'])"></span>
+
+          {{ location['title'] }}
+
+          <span
+              ng-if="location['default']"
+              class="default-append">
+            (default)
+          </span>
+
+        </li>
+
+      </ul>
+
+    </div>
+
+
+    <div ng-if="ctrl.debug" class="data-panel">
+    {{ ctrl.circaLocations | json }}
+    </div>
+
+  </main>
+
 </div>
- -->

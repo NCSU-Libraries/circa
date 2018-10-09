@@ -1,51 +1,40 @@
 <div class="record-overview item-overview">
 
+  <div class="heading">
 
-  <div>
-
-    <div class="inline overview-element">
-      <span ng-if="item['resource_identifier']">{{ item['resource_identifier'] }} – </span>
+    <span ng-if="item['resource_identifier']">{{ item['resource_identifier'] }} – </span>
       {{ item['resource_title'] }}
+
+
+    <div ng-if="item['container']" class="subheading">
+      {{ item['container'] }}
     </div>
 
   </div>
 
 
-
   <div ng-show="item['digital_object']">
-
     <div class="inline overview-element">
       <span class="label">Digital Object:</span>
       <span class="value">
         <span
-            ng-click="openArchivesSpaceRecord(item['uri'])"
+            ng-click="ctrl.openArchivesSpaceRecord(item['uri'])"
             class="link"
             poptip="{{ item['uri'] }}">{{ item['digital_object_title'] }}</span>
         </span>
     </div>
-
   </div>
 
 
-
   <div ng-show="!item['digital_object']">
-
-    <div class="inline overview-element nowrap" ng-if="item['source'] == 'archivesspace'">
-      <span class="label">Container:</span>
-      <span class="value">{{ item['container'] }}</span>
-    </div>
-
     <div class="inline overview-element nowrap" ng-if="item['barcode']">
       <span class="label">Barcode:</span>
       <span class="value">{{ item['barcode'] }}</span>
     </div>
-
   </div>
 
 
-
   <div ng-if="item['source'] == 'catalog'">
-
     <div class="inline overview-element nowrap">
       <span class="label">Call number:</span>
       <span class="value">{{ item['resource_identifier'] }}</span>
@@ -60,75 +49,40 @@
       <span class="label">Catalog item ID:</span>
       <span class="value">{{ item['item_catalog_record']['catalog_item_id'] }}</span>
     </div>
-
   </div>
 
 
   <div ng-show="!item['digital_object'] && item['current_location']">
-
     <div class="inline overview-element">
       <span class="label">Current location:</span>
-      <span class="value" ng-show="itemLocationChangeEnabled != item['id']">
+      <span class="value" ng-show="ctrl.itemLocationChangeEnabled != item['id']">
         <span ng-if="item['current_location']">{{ item['current_location']['title'] }}</span>
         <span ng-if="!item['current_location']">[ in transit ]</span>
-        <span ng-if="(section == 'orders') && (item['current_state'] != 'at_permanent_location') && (itemLocationChangeEnabled != item['id'])"
+        <span
+            ng-if="(ctrl.section == 'orders') && (item['current_state'] != 'at_permanent_location') && (ctrl.itemLocationChangeEnabled != item['id'])"
             class="link nowrap inline-action"
-            ng-click="enableItemLocationChange(item)">Change location</span>
+            ng-click="ctrl.enableItemLocationChange(item)">Change location</span>
       </span>
       <div
-          ng-show="itemLocationChangeEnabled == item['id']"
-          ng-include="templateUrl('items/location_selector')">
+          ng-show="ctrl.itemLocationChangeEnabled == item['id']"
+          ng-include="ctrl.templateUrl('items/location_selector')">
       </div>
     </div>
-
   </div>
 
 
-
   <div ng-show="!item['digital_object']">
-
     <div class="inline overview-element">
       <span class="label">Permanent location:</span>
       <span class="value">{{ item['permanent_location']['title'] }}</span>
     </div>
-
   </div>
 
 
-  <div>
-
-    <div class="inline overview-element nowrap" ng-if="!item['obsolete']">
-      <span class="label">Status:</span>
-      <span class="value" ng-if="item['current_state'] == 'in_use'">
-        Checked out on
-        {{ item['active_access_session']['start_datetime'] | date: 'yyyy-MM-dd' }}
-        at
-        {{ item['active_access_session']['start_datetime'] | date: 'mediumTime' }}
-        to
-        <span ng-repeat="user in item['active_access_session']['users']">{{ user['email'] }}<br ng-if="!$last"></span>
-      </span>
-      <span class="value" ng-if="item['current_state'] != 'in_use'">{{ item['current_state'] | removeUnderscores }}</span>
-    </div>
-
-    <div class="inline overview-element nowrap" ng-if="!item['digital_object']">
-      <span class="label">Last accessed:</span>
-      <span ng-if="item['last_accessed']">{{ item['last_accessed'] | date: 'yyyy-MM-dd' }}</span>
-      <span ng-if="!item['last_accessed']" class="na">N/A</span>
-    </div>
-
-  </div>
 
 
-  <div ng-if="order && item['open_orders'].length > 1">
 
-    <div class="inline overview-element">
-      <span class="label">Included on other open orders:</span>
-      <span class="value" ng-repeat="o in item['open_orders']">
-        <span ng-if="o.id != order.id" class="link" ng-click="goto('/orders/' + o.id)">#{{ o.id }}<span ng-if="o.id == item.active_order_id"> (ACTIVE)</span></span>
-      </span>
-    </div>
 
-  </div>
 
 
   <div ng-if="item['obsolete']">

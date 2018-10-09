@@ -1,0 +1,17 @@
+<table>
+
+  <thead>
+    <tr>
+      <th>Researcher type</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr ng-repeat="(type, count) in ctrl.reportData">
+      <td>{{ type }}</td>
+      <td>{{ count }}</td>
+    </tr>
+  </tbody>
+
+</table>

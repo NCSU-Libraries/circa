@@ -1,0 +1,52 @@
+<div class="other-open-orders">
+
+  <div>
+    This item is included on multiple open orders.
+
+    <!-- Item is inlcuded on multple open orders but only active on this one -->
+    <span ng-if="itemOrder.active && item['active_orders'].length == 1">It is only active on this order.</span>
+
+    <span ng-if="ctrl.otherActiveOrderIds(item).length > 0">
+      <span ng-if="itemOrder.active && item['active_orders'].length > 1">It is active on this order and on</span>
+      <span ng-if="!itemOrder.active && item['active_orders'].length > 0">It has been deactivated on this order but is active on</span>
+      {{ ctrl.otherActiveOrderIds(item).length > 1 ? 'orders' : 'order'}}
+      <span ng-repeat="oid in ctrl.otherActiveOrderIds(item)">
+        {{ !$first && !$last && ctrl.otherActiveOrderIds(item).length > 1 ? ', ' : ''}}
+        {{ $last && ctrl.otherActiveOrderIds(item).length > 1 ? ' and ' : ''}}
+        <span class="link" ng-click="ctrl.goto('/orders/' + oid)">#{{ oid }}</span>{{ $last ? '.' : ''}}
+      </span>
+    </span>
+
+    <!-- deactivated on these orders -->
+    <span ng-if="ctrl.otherDeactivatedOrderIds(item).length > 0">
+      <span ng-if="itemOrder.active">It has been deactivated on</span>
+      <span ng-if="!itemOrder.active">It has also been deactivated on</span>
+      {{ ctrl.otherDeactivatedOrderIds(item).length > 1 ? 'orders' : 'order'}}
+      <span ng-repeat="oid in ctrl.otherDeactivatedOrderIds(item)">
+        {{ !$first && !$last && ctrl.otherDeactivatedOrderIds(item).length > 1 ? ', ' : ''}}
+        {{ $last && ctrl.otherDeactivatedOrderIds(item).length > 1 ? ' and ' : ''}}
+        <span class="link" ng-click="ctrl.goto('/orders/' + oid)">#{{ oid }}</span>{{ $last ? '.' : ''}}
+      </span>
+    </span>
+
+  </div>
+
+
+  <div ng-if="item['active_orders'].length > 1" class="callout">
+    <span ng-if="itemOrder.active">Items cannot be returned while active on multiple orders.</span>
+  </div>
+
+
+  <div>
+    <span ng-if="itemOrder.active && item['active_orders'].length > 1"
+        class="activation-link link"
+        ng-click="ctrl.deactivateItem(item)">
+      Deactivate item for current order (#{{ ctrl.order.id }})</span>
+
+    <span ng-if="!itemOrder.active"
+        class="activation-link link"
+        ng-click="ctrl.activateItem(item)">
+      Reactivate item for current order (#{{ ctrl.order.id }})</span>
+  </div>
+
+</div>

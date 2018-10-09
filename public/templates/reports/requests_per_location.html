@@ -1,36 +1,21 @@
-<div ng-controller="ReportsRequestsPerLocationCtrl as report">
+<div ng-include="ctrl.templateUrl('reports/date_config')"></div>
 
-  <div ng-init="section='reports'" ng-include="report.templateUrl('common/app_header')"></div>
+<table>
 
-  <h1>Item requests per storage location</h1>
+  <thead>
+    <tr>
+      <th>{{ ctrl.dateColumnHeading() }}</th>
+      <th ng-repeat="location in ctrl.reportData.location_values">{{ location }}</th>
+    </tr>
+  </thead>
 
-  <div ng-include="report.templateUrl('reports/date_config')"></div>
+  <tbody>
+    <tr ng-repeat="date in ctrl.reportData.date_values">
+      <td>{{ date }}</td>
+      <td ng-repeat="location in ctrl.reportData.location_values">
+        {{ ctrl.reportData.locations[location][date] | hideZeros }}
+      </td>
+    </tr>
+  </tbody>
 
-  <table>
-
-    <thead>
-      <tr>
-        <th>{{ report.dateColumnHeading() }}</th>
-        <th ng-repeat="location in report.requestsPerLocation.location_values">{{ location }}</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr ng-repeat="date in report.requestsPerLocation.date_values">
-        <td>{{ date }}</td>
-        <td ng-repeat="location in report.requestsPerLocation.location_values">{{ report.requestsPerLocation.locations[location][date] }}</td>
-      </tr>
-    </tbody>
-
-  </table>
-
-
-<!--
-  <div ng-if="debug" class="data-panel">
-  Date params:<br>
-  {{ report.dateParams | json }}
-  </div>
- -->
-
-</div>
-
+</table>

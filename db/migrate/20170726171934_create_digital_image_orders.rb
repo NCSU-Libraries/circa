@@ -1,4 +1,4 @@
-class CreateDigitalImageOrders < ActiveRecord::Migration
+class CreateDigitalImageOrders < ActiveRecord::Migration[5.2]
   def change
     create_table :digital_image_orders do |t|
       t.integer :order_id, null: false

@@ -1,11 +1,11 @@
 <div class="filters">
 
   <div class="filter-toggle">
-    <span ng-hide="filterConfig.show" ng-click="toggleShowFilters()" class="link show-filters">Show filters</span>
-    <span ng-show="filterConfig.show" ng-click="toggleShowFilters()" class="link hide-filters">Hide filters</span>
+    <span ng-hide="ctrl.filterConfig.show" ng-click="ctrl.toggleShowFilters()" class="link show-filters">Show filters</span>
+    <span ng-show="ctrl.filterConfig.show" ng-click="ctrl.toggleShowFilters()" class="link hide-filters">Hide filters</span>
   </div>
 
-  <div ng-show="filterConfig.show" class="filter-select">
+  <div ng-show="ctrl.filterConfig.show" class="filter-select">
 
 
     <div class="row filter-field">
@@ -13,7 +13,7 @@
         <label>Limit to open/closed</label>
       </div>
       <div class="small-9 medium-10 columns">
-        <select ng-model="filterConfig.filters['open']">
+        <select ng-model="ctrl.filterConfig.filters['open']">
           <option value="1">open</option>
           <option value="0">closed</option>
         </select>
@@ -26,20 +26,20 @@
         <label>Order type</label>
       </div>
       <div class="small-9 medium-10 columns">
-        <select ng-model="filterConfig.filters['order_type_id']" ng-change="resetOrderSubTypeFilter()">
-          <option ng-repeat="orderType in controlledValues['order_type']" value="{{ orderType.id }}">{{ orderType.label }}</option>
+        <select ng-model="ctrl.filterConfig.filters['order_type_id']" ng-change="ctrl.resetOrderSubTypeFilter()">
+          <option ng-repeat="orderType in ctrl.controlledValues['order_type']" value="{{ orderType.id }}">{{ orderType.label }}</option>
         </select>
       </div>
     </div>
 
 
-    <div class="row filter-field" ng-if="filterConfig.filters['order_type_id']">
+    <div class="row filter-field" ng-if="ctrl.filterConfig.filters['order_type_id']">
       <div class="small-3 medium-2 columns">
         <label>Order sub-type</label>
       </div>
       <div class="small-9 medium-10 columns">
-        <span ng-repeat="orderSubType in controlledValues['order_sub_type'] | filter:{ order_type_id: filterConfig.filters['order_type_id'] }" class="radio-inline">
-          <input type="radio" ng-model="filterConfig.filters['order_sub_type_id']"
+        <span ng-repeat="orderSubType in ctrl.controlledValues['order_sub_type'] | filter:{ order_type_id: ctrl.filterConfig.filters['order_type_id'] }" class="radio-inline">
+          <input type="radio" ng-model="ctrl.filterConfig.filters['order_sub_type_id']"
             value="orderSubType.id" ng-value="orderSubType.id"/>
           {{ orderSubType.label }}
         </span>
@@ -52,8 +52,8 @@
         <label>Status</label>
       </div>
       <div class="small-9 medium-10 columns">
-        <select ng-model="filterConfig.filters['state']">
-          <option ng-repeat="stateEvent in orderStatesEvents" value="{{ stateEvent['to_state'] }}">{{ stateEvent['to_state'] | removeUnderscores }}</option>
+        <select ng-model="ctrl.filterConfig.filters['state']">
+          <option ng-repeat="stateEvent in ctrl.orderStatesEvents" value="{{ stateEvent['to_state'] }}">{{ stateEvent['to_state'] | removeUnderscores }}</option>
         </select>
       </div>
     </div>
@@ -65,34 +65,95 @@
         <label>Item status</label>
       </div>
       <div class="small-9 medium-10 columns">
-        <select ng-model="filterConfig.filters['item_state']">
-          <option ng-repeat="stateEvent in itemStatesEvents['physical']" value="{{ stateEvent['to_state'] }}">{{ stateEvent['to_state'] | removeUnderscores }}</option>
+        <select ng-model="ctrl.filterConfig.filters['item_state']">
+          <option ng-repeat="stateEvent in ctrl.itemStatesEvents['physical']" value="{{ stateEvent['to_state'] }}">{{ stateEvent['to_state'] | removeUnderscores }}</option>
         </select>
       </div>
     </div>
 
 
-<!--
 
     <div class="row filter-field">
       <div class="small-3 medium-2 columns">
-        <label>User email</label>
+        <label>Researcher email</label>
       </div>
+
       <div class="small-9 medium-10 columns">
-        <input type="text" ng-model="filterConfig.filters['user_email']"/>
+
+        <div class="row collapse" ng-hide="ctrl.userSelect['loading']">
+
+          <div ng-show="ctrl.filterConfig.filters['user_email']" class="selected-value">
+            {{ ctrl.filterConfig.filters['user_email'] }}
+            <i class="fas fa-times-circle link" ng-click="ctrl.resetFilter('user_email')"></i>
+          </div>
+
+
+          <div ng-hide="ctrl.filterConfig.filters['user_email']" class="user-select">
+            <input
+                type="text"
+                ng-model="ctrl.userSelect.q"
+                ng-keyup="ctrl.updateUserSelectList()"
+                placeholder="Enter user name or email"
+            />
+
+            <div class="user-select-list" ng-show="ctrl.userSelect.list.length > 0">
+              <ul>
+                <li
+                    ng-repeat="user in ctrl.userSelect.list"
+                    ng-class="$last ? 'last' : ''"
+                    ng-click="ctrl.addUserFilter(user)">
+                  {{ user['display_name'] }} ( {{ user['email'] }} )
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
+
+
 
     <div class="row filter-field">
       <div class="small-3 medium-2 columns">
         <label>Assignee email</label>
       </div>
+
       <div class="small-9 medium-10 columns">
-        <input type="text" ng-model="filterConfig.filters['assignee_email']"/>
+
+        <div class="row collapse" ng-hide="ctrl.assigneeSelect['loading']">
+
+          <div ng-show="ctrl.filterConfig.filters['assignee_email']" class="selected-value">
+            {{ ctrl.filterConfig.filters['assignee_email'] }}
+            <i class="fas fa-times-circle link" ng-click="ctrl.resetFilter('assignee_email')"></i>
+          </div>
+
+
+          <div ng-hide="ctrl.filterConfig.filters['assignee_email']" class="user-select">
+            <input
+                type="text"
+                ng-model="ctrl.assigneeSelect.q"
+                ng-keyup="ctrl.updateAssigneeSelectList()"
+                placeholder="Enter user name or email"
+            />
+
+            <div class="user-select-list" ng-show="ctrl.assigneeSelect.list.length > 0">
+              <ul>
+                <li
+                    ng-repeat="user in ctrl.assigneeSelect.list"
+                    ng-class="$last ? 'last' : ''"
+                    ng-click="ctrl.addAssigneeFilter(user)">
+                  {{ user['display_name'] }} ( {{ user['email'] }} )
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
 
--->
+
 
     <div class="row filter-field date-range">
       <div class="small-3 medium-2 columns">
@@ -101,34 +162,36 @@
       <div class="small-9 medium-10 columns">
         <span class="date-range-point date-range-from">
           <label>after</label>
-          <input type="text" datepicker allow-past-dates="1" ng-model="filterConfig.options['access_date_from']" ng-change="setDateFilter()" class="datepicker-input"/>
+          <input type="text" datepicker allow-past-dates="1" ng-model="ctrl.filterConfig.options['access_date_from']" ng-change="ctrl.setDateFilter()" class="datepicker-input"/>
         </span>
         <span class="date-range-point date-range-to">
           <label>before</label>
-          <input type="text" datepicker allow-past-dates="1" ng-model="filterConfig.options['access_date_to']" ng-change="setDateFilter()" class="datepicker-input"/>
+          <input type="text" datepicker allow-past-dates="1" ng-model="ctrl.filterConfig.options['access_date_to']" ng-change="ctrl.setDateFilter()" class="datepicker-input"/>
         </span>
       </div>
     </div>
 
-    <span class="button small" ng-click="applyFilters()">Apply filters</span>
+
+    <span class="button small" ng-click="ctrl.applyFilters()">Apply filters</span>
 
   </div>
 
 
 </div>
 
-<div class="active-filters" ng-show="filterConfig.filtersApplied">
+<div class="active-filters" ng-show="ctrl.filterConfig.filtersApplied">
     <label>Filters:</label>
-    <span ng-repeat="(filter, value) in filterConfig.appliedFilters" class="filter">
+    <span ng-repeat="(filter, value) in ctrl.filterConfig.appliedFilters" class="filter">
       <span ng-if="filter=='open' && value">Open: {{ value | booleanString }}</span>
-      <span ng-if="filter=='order_type_id'">Order type: {{ getControlledValueLabel(controlledValues['order_type'], value) }}</span>
-      <span ng-if="filter=='order_sub_type_id'">Order sub-type: {{ getControlledValueLabel(controlledValues['order_sub_type'], value) }}</span>
-      <span ng-if="filter=='user_email'">User email: {{ value }}</span>
-      <span ng-if="filter=='assignee_email'">Assignee email: {{ value }}</span>
+      <span ng-if="filter=='order_type_id'">Order type: {{ ctrl.getControlledValueLabel(ctrl.controlledValues['order_type'], value) }}</span>
+      <span ng-if="filter=='order_sub_type_id'">Order sub-type: {{ ctrl.getControlledValueLabel(ctrl.controlledValues['order_sub_type'], value) }}</span>
+      <span ng-if="filter=='user_email'">Researcher: {{ value }}</span>
+      <span ng-if="filter=='assignee_email'">Assignee: {{ value }}</span>
       <span ng-if="filter=='access_dates'">Access dates: {{ value }}</span>
       <span ng-if="filter=='state'">Status: {{ value | removeUnderscores }}</span>
       <span ng-if="filter=='item_state'">Item status: {{ value | removeUnderscores }}</span>
+      <span ng-include="ctrl.templateUrl('common/remove_list_filter')"/>
     </span>
-    <span class="link action" ng-click="resetFilters();">Clear filters</span>
+    <span class="link action" ng-click="ctrl.resetFilters();">Clear all filters</span>
 
 </div>

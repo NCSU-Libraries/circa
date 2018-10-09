@@ -3,15 +3,14 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .ldap-user-form {
-  padding: 0.5rem 0.5rem 0.75rem 0.5rem;
-  background: $grayLightest;
+  padding: 0.5rem 0.75rem 0.75rem 0.75rem;
+  background: $grayGhost;
   margin-bottom: 1rem;
+  border: 1px solid $grayLighter;
 
   input, .button {
     margin-bottom: 0;
   }
-
-
 }
 
 .login-notice {

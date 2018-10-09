@@ -1,76 +1,63 @@
 // Enumeration values
 
-var OrderSubTypesCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var OrderSubTypesCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
   var _this = this;
 
-  SettingsCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
-
-  $scope.updateOrderSubType = function() {
-    _this.updateOrderSubType($scope);
-  }
-
-  $scope.createOrderSubType = function() {
-    _this.createOrderSubType($scope);
-  }
-
-  // $scope.mergeOrderSubTypes = function() {
-  //   _this.mergeorderSubTypes($scope);
-  // }
-
+  SettingsCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
 }
 
 OrderSubTypesCtrl.prototype = Object.create(SettingsCtrl.prototype);
-OrderSubTypesCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+OrderSubTypesCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('OrderSubTypesCtrl', OrderSubTypesCtrl);
 
 
-OrderSubTypesCtrl.prototype.getOrderSubTypes = function(scope, callback) {
-  scope.loading = true;
+OrderSubTypesCtrl.prototype.getOrderSubTypes = function(callback) {
+  this.loading = true;
   var _this = this;
   var path = '/order_sub_types';
   this.apiRequests.get(path).then(function(response) {
-    scope.loading = false;
+    _this.loading = false;
     if (response.status == 200) {
-      // NOTE: scope.enumerationValues is set on every page when the cache is set - don't use that one
-      scope.orderSubTypes = response.data['order_sub_types'];
-      _this.commonUtils.executeCallback(callback, scope);
+      // NOTE: this.enumerationValues is set on every page when the cache is set - don't use that one
+      _this.orderSubTypes = response.data['order_sub_types'];
+      _this.commonUtils.executeCallback(callback);
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }
 
-OrderSubTypesCtrl.prototype.getOrderSubType = function(scope, id, callback) {
-  scope.loading = true;
+OrderSubTypesCtrl.prototype.getOrderSubType = function(id, callback) {
+  this.loading = true;
   var _this = this;
   var path = '/order_sub_types/' + id;
   this.apiRequests.get(path).then(function(response) {
-    scope.loading = false;
+    _this.loading = false;
     if (response.status == 200) {
-      scope.orderSubType = response.data['order_sub_type'];
-      scope.orderType = response.data['order_sub_type']['order_type'];
-      _this.commonUtils.executeCallback(callback, scope);
+      _this.orderSubType = response.data['order_sub_type'];
+      _this.orderType = response.data['order_sub_type']['order_type'];
+      _this.commonUtils.executeCallback(callback);
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }
 
 
-OrderSubTypesCtrl.prototype.updateOrderSubType = function(scope, callback) {
-  scope.loading = true;
+OrderSubTypesCtrl.prototype.updateOrderSubType = function(callback) {
+  this.loading = true;
   var _this = this;
-  var path = '/order_sub_types/' + scope.orderSubType.id;
-  this.apiRequests.put(path, { order_sub_type: scope.orderSubType }).then(function(response) {
-    scope.loading = false;
+  var path = '/order_sub_types/' + this.orderSubType.id;
+  this.apiRequests.put(path, { order_sub_type: this.orderSubType }).then(function(response) {
+    _this.loading = false;
     if (response.status == 200) {
       _this.goto('/settings/order_sub_types');
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }

@@ -15,5 +15,4 @@ module SolrConnect
     @@solr_url = self.solr_url
 
   end
-
 end

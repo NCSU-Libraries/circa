@@ -66,7 +66,6 @@ class Search
   # END CONFIG
   ######################################
 
-
   def initialize(options = {})
     @options = options.clone
     @q = options[:q]
@@ -173,18 +172,7 @@ class Search
   end
 
 
-  # def custom_query_fields
-  #   # Added here so that it can be overridden in SearchCustom
-  # end
-
-
-  # def custom_solr_params
-  #   # Added here so that it can be overridden in SearchCustom
-  # end
-
-
   def execute
-
     Rails.logger.info "SOLR URL: #{@@solr_url}"
     Rails.logger.debug ENV.keys.inspect
 
@@ -192,7 +180,6 @@ class Search
     set_solr_params()
 
     @response = @solr.paginate self.page, self.per_page, "select", :params => @solr_params
-
   end
 
 

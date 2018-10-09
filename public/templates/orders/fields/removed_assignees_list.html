@@ -1,0 +1,27 @@
+<div ng-if="ctrl.removedAssignees.length > 0" class="subsection">
+
+  <div class="heading">Removed assignees</div>
+
+  <ul class="subrecords-list users-list removed">
+
+    <li ng-repeat="user in ctrl.removedAssignees">
+
+      <div class="row">
+        <div class="small-9 columns">
+          <div class="record-overview user-overview">
+            <div class="overview-element primary">
+              {{ user.display_name }} ({{ user['email'] }})
+            </div>
+          </div>
+        </div>
+
+        <div class="small-3 columns">
+          <div class="subrecord-actions-primary item-actions">
+            <span class="link action" ng-click="ctrl.restoreAssignee(user)">Restore</span>
+          </div>
+        </div>
+      </div>
+
+    </li>
+  </ul>
+</div>

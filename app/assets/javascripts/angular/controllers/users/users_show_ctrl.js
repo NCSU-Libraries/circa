@@ -1,10 +1,10 @@
 // UsersShowCtrl - inherits from UsersCtrl
 
-var UsersShowCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
-  UsersCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
-  this.getUser($scope, $routeParams.userId);
+var UsersShowCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
+  UsersCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
+  this.getUser($routeParams.userId);
 }
 
-UsersShowCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+UsersShowCtrl.$inject = [ '$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils' ];
 UsersShowCtrl.prototype = Object.create(UsersCtrl.prototype);
 circaControllers.controller('UsersShowCtrl', UsersShowCtrl);

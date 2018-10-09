@@ -1,22 +1,28 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="LocationsNewCtrl as ctrl">
 
-<h1>Add location</h1>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
 
-<p>NOTE: Permanent locations of materials are maintained in ArchivesSpace. This is for temporary locations only.</p>
+  <main>
 
-<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+    <h1>Add location</h1>
 
-<div ng-hide="loading">
+    <p>NOTE: Permanent locations of materials are maintained in ArchivesSpace. This is for temporary locations only.</p>
 
-  <div ng-include="templateUrl('locations/form_fields')"/>
+    <div ng-show="loading" ng-include="ctrl.templateUrl('common/processing')"/>
 
-  <button class="button" ng-click="createLocation()">Create location</button>
-  <button class="button" ng-click="goto('/locations')">Cancel</button>
+    <div ng-hide="loading">
+
+      <div ng-include="ctrl.templateUrl('locations/form_fields')"/>
+
+      <button class="button" ng-click="ctrl.createLocation()">Create location</button>
+      <button class="button" ng-click="ctrl.goto('/locations')">Cancel</button>
+
+    </div>
+
+    <div ng-if="ctrl.debug" class="data-panel">
+    {{ ctrl.circaLocation | json }}
+    </div>
+
+  </main>
 
 </div>
-
-<!--
-<div ng-if="debug" class="data-panel">
-{{ location | json }}
-</div>
- -->

@@ -1,0 +1,84 @@
+<h2>Invoice</h2>
+
+<div class="invoice-id">
+<span class="label">Invoice ID:</span>
+<span ng-if="ctrl.order.invoice.invoice_id">{{ctrl.order.invoice.invoice_id}}</span>
+<span ng-if="!ctrl.order.invoice.invoice_id">(assigned when invoice date is set)</span>
+</div>
+
+
+<div class="row">
+
+  <div class="small-12 medium-6 columns">
+    <div class="heading">Invoice date</div>
+    <input
+      type="text"
+      datepicker
+      ng-model="ctrl.order.invoice.invoice_date"
+      class="datepicker-input"
+      ng-change="ctrl.updateInvoice()"/>
+  </div>
+
+  <div class="small-12 medium-6 columns end">
+    <div class="heading">Invoice payment received</div>
+
+    <input
+      type="text"
+      datepicker
+      ng-model="ctrl.order.invoice.payment_date"
+      class="datepicker-input"
+      ng-change="ctrl.updateInvoice()"/>
+  </div>
+
+</div>
+
+
+<div class="row">
+
+  <div class="small-12 medium-6 columns">
+    <div class="heading">Payment to attention of</div>
+    <input
+      type="text"
+      ng-model="ctrl.order.invoice.attn"
+      ng-change="ctrl.updateInvoice()"/>
+  </div>
+
+  <div class="small-12 medium-6 columns">
+    <div class="heading">
+      Recipient
+      <span
+          ng-hide="ctrl.order.invoice.custom_to"
+          class="link invoice-customize-recipient"
+          ng-click="ctrl.customizeRecipient()">Customize</span>
+      <span
+          ng-show="ctrl.order.invoice.custom_to"
+          class="link invoice-customize-recipient"
+          ng-click="ctrl.revertRecipientToDefault()">Revert to default for order user</span>
+
+    </div>
+
+    <textarea
+      ng-show="ctrl.order.invoice.custom_to"
+      ng-model="ctrl.order.invoice.custom_to"
+      ng-change="ctrl.updateInvoice()"
+      rows="7"/>
+
+    <textarea
+      ng-hide="ctrl.order.invoice.custom_to"
+      disabled="true"
+      rows="7">{{ ctrl.defaultRecipientText() }}</textarea>
+
+  </div>
+
+</div>
+
+<div class="generate-invoice">
+  <a
+      ng-href="{{ ctrl.rootPath() }}/orders/{{ ctrl.order['id'] }}/invoice"
+      class="link"
+      target="_blank">Generate invoice</a>
+</div>
+
+<div class="invoice-updated" ng-show="ctrl.invoiceUpdated">
+  Invoice info updated
+</div>

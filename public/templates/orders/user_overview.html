@@ -7,19 +7,25 @@
 
       <div class="overview-element primary">
         {{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})
+        <span ng-if="ctrl.order['primary_user_id'] == user['id']" class="primary-user-label"><i class="fa fa-check"></i> Primary</span>
       </div>
 
 
       <div>
-        <div class='overview-element inline'><span class="label">Researcher type:</span> {{ user['patron_type'] }}</div>
+        <div class='overview-element inline'><span class="label">Researcher type:</span> {{ user['researcher_type'] }}</div>
       </div>
 
+      <div>
+        <div class='overview-element inline' ng-class="user['agreement_confirmed'] ? 'positive' : 'negative' "><span class="label">Policies agreement signed?</span> {{ user['agreement_confirmed'] ? 'Yes' : 'No '}}</div>
 
-      <div class='overview-element' ng-class="user['agreement_confirmed'] ? 'positive' : 'negative' "><span class="label">Policies agreement signed?</span> {{ user['agreement_confirmed'] ? 'Yes' : 'No '}}</div>
+        <div class='overview-element inline'>
+          <input type="checkbox" ng-model="user.remote">
+          <span class="label">Remote user?</span>
+        </div>
+      </div>
 
     </div>
 
   </div>
-
 
 </div>

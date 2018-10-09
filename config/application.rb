@@ -34,11 +34,18 @@ module Circa
     # config.i18n.default_locale = :de
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
+    # config.active_record.raise_in_transactional_callbacks = true
 
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
+
+    config.autoload_paths += %W(#{config.root}/app)
+    config.autoload_paths += Dir["#{config.root}/app/**/"]
+
+    config.autoload_paths += %W(#{config.root}/app/custom)
+    config.autoload_paths += Dir["#{config.root}/app/custom/**/"]
+
     if Rails.env == 'test'
       config.autoload_paths += %W(#{config.root}/spec)
       config.autoload_paths += Dir["#{config.root}/spec/**/"]

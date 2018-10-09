@@ -18,13 +18,4 @@ RSpec.describe Location, type: :model do
     expect(l.current_items.first).to eq(i)
   end
 
-  it "creates item from catalog data" do
-    data = catalog_request_item
-    location = Location.create_or_update_from_catalog_item(data)
-    expect(location).to be_a(Location)
-    expect(location.catalog_item_id).to eq(data[:barcode])
-    location2 = Location.create_or_update_from_catalog_item(data)
-    expect(location2.id).to eq(location.id)
-  end
-
 end

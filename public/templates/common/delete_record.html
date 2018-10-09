@@ -1,5 +1,40 @@
-<h1>Are you sure you want to delete this record?</h1>
+<div class='modal' ng-show='ctrl.showRecordDeleteModal'>
 
-<button ng-click="ok()">Yes, delete it</button>
+  <div class='modal-overlay' ng-click='ctrl.closeDeleteRecordModal()'></div>
 
-<button ng-click="dismiss()">Cancel</button>
+  <div class='modal-dialog' ng-style='dialogStyle'>
+
+    <div class="modal-dialog-content">
+
+      <div ng-if="ctrl.flash" class="flash">{{ ctrl.flash }}</div>
+
+      <h2 >Are you sure you want to delete
+        <span ng-switch="ctrl.recordToDeleteType">
+
+          <span ng-switch-default>
+          {{ ctrl.recordToDeleteType | capitalize }} {{ ctrl.recordToDelete.id }}?
+          </span>
+
+        </span>
+      </h2>
+
+      <button ng-click="ctrl.deleteRecord()">
+        Yes, delete it
+      </button>
+
+      <button ng-click="ctrl.closeDeleteRecordModal()">
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+

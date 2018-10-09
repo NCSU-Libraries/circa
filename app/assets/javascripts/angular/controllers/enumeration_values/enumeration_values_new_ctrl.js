@@ -1,21 +1,21 @@
 // Enumeration values new
 
-var EnumerationValuesNewCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var EnumerationValuesNewCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
-  EnumerationValuesCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+  EnumerationValuesCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
 
-  $scope.enumerationValue = {
+  this.enumerationValue = {
     value: '',
     value_short: '',
     enumeration_name: $routeParams.enumerationName
   };
 
-  $scope.enumerationName = $routeParams.enumerationName;
+  this.enumerationName = $routeParams.enumerationName;
 
-  $scope.mode = 'new';
+  this.mode = 'new';
 
 }
 
 EnumerationValuesNewCtrl.prototype = Object.create(EnumerationValuesCtrl.prototype);
-EnumerationValuesNewCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+EnumerationValuesNewCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('EnumerationValuesNewCtrl', EnumerationValuesNewCtrl);

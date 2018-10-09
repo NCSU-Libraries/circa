@@ -45,7 +45,7 @@ RSpec.describe Order, type: :model do
   it "can recall version of user data from time of request" do
     o = create(:order_with_user_and_assignee)
     p = o.users.first
-    o.paper_trail.touch_with_version
+    o.paper_trail.save_with_version
     sleep 1
     p.update_attributes(first_name: 'Donna')
     o.reload
@@ -58,7 +58,7 @@ RSpec.describe Order, type: :model do
   it "can recall items associated with previous version" do
     o = order_with_items.clone
     first_item_id = o.items.first.id
-    o.paper_trail.touch_with_version
+    o.paper_trail.save_with_version
     o.item_orders.first.destroy
     o.reload
     current_item_ids = o.item_ids
@@ -100,18 +100,6 @@ RSpec.describe Order, type: :model do
   end
 
 
-  it "adds items created from ArchivesSpace URIs" do
-    o = create(:order)
-    as_values = archivesspace_api_values.first
-    as_uri = as_values[:archival_object_uri]
-    o.add_items_from_archivesspace(as_uri)
-    o.reload
-    item = Item.where(uri: as_values[:item_uri]).first
-    expect(o.item_ids.include?(item.id)).to be true
-    expect(o.archivesspace_records.include?(as_uri)).to be true
-  end
-
-
   it "returns user that created the order" do
     o = create(:order_with_user_and_assignee)
     o.versions.each { |v| v.update_attributes(whodunnit: @u.id) }
@@ -129,12 +117,12 @@ RSpec.describe Order, type: :model do
     let(:other_order_sub_type) { create(:order_sub_type) }
     let(:o) { create(:order, order_sub_type_id: order_sub_type.id) }
     let(:io) { create(:item_order, order_id: o.id) }
-    let(:dio) { create(:digital_image_order, order_id: o.id) }
+    let(:dio) { create(:digital_collections_order, order_id: o.id) }
     let!(:reproduction_spec) { create(:reproduction_spec, item_order_id: io.id, pages: 3) }
     # $1 x 3 pages + $1 per order = $4
     let!(:fee1) { create(:order_fee, record_type: 'ItemOrder', record_id: io.id, ) }
     # $1 x 3 files + $1 per order = $4
-    let!(:fee2) { create(:order_fee, record_type: 'DigitalImageOrder', record_id: dio.id) }
+    let!(:fee2) { create(:order_fee, record_type: 'DigitalCollectionsOrder', record_id: dio.id) }
     # $1 per order = $1
     let!(:fee3) { create(:order_fee, record_type: 'Order', record_id: o.id) }
 
@@ -163,7 +151,7 @@ RSpec.describe Order, type: :model do
       it "will not remove associations for reproduction orders" do
         o.cleanup_reproduction_associations
         expect(o.order_fees.length).to eq(3)
-        expect(o.digital_image_orders.length).to eq(1)
+        expect(o.digital_collections_orders.length).to eq(1)
       end
 
       it "will remove associations for non-reproduction orders" do
@@ -172,7 +160,7 @@ RSpec.describe Order, type: :model do
         order.cleanup_reproduction_associations
         order.reload
         expect(order.order_fees.length).to eq(0)
-        expect(order.digital_image_orders.length).to eq(0)
+        expect(order.digital_collections_orders.length).to eq(0)
       end
 
     end

@@ -6,18 +6,26 @@ class OrderSubTypesController < ApplicationController
 
   def index
     @order_sub_types = OrderSubType.all.includes(:order_type, :default_location)
-    render json: @order_sub_types
+    response = { order_sub_types: @order_sub_types.map { |ost| SerializeOrderSubType.call(ost)[:order_sub_type] } }
+    render json: response
   end
 
 
   def show
-    render json: @order_sub_type
+    render json: SerializeOrderSubType.call(@order_sub_type)
   end
 
 
   def update
     @order_sub_type.update_attributes(order_sub_type_params)
-    render json: @order_sub_type
+    render json: SerializeOrderSubType.call(@order_sub_type)
+  end
+
+
+  # Load custom concern if present
+  begin
+    include OrderSubTypesControllerCustom
+  rescue
   end
 
 

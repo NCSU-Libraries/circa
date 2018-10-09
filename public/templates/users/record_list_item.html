@@ -1,35 +1,35 @@
-<div class="row">
+<span class="list-item-link" ng-click="ctrl.showUser(user['id'])"></span>
 
-  <div class="small-9 columns">
+<div class="record-overview user-overview">
 
-    <div class="record-overview user-overview">
-
-
-      <div class="overview-element primary">{{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})</div>
-
-
-      <div>
-
-        <div class="overview-element inline">
-          <span class="label">ID:</span>
-          <span class="value">{{ user['id'] }}</span>
-        </div>
-        <div class='overview-element inline'><span class="label">Circa role:</span> {{ user['roles'][0] }}</div>
-        <div class='overview-element inline'><span class="label">Patron type:</span> {{ user['patron_type'] }}</div>
-      </div>
-
-      <div class='overview-element' ng-class="user['agreement_confirmed_at'] ? 'positive' : 'negative' "><span class="label">Policies agreement signed?</span> {{ user['agreement_confirmed_at'] ? 'Yes' : 'No '}}</div>
-
-    </div>
-
-
+  <div class="overview-element primary">
+    {{ user['last_name'] }},
+    {{ user['first_name'] }}
+    ({{ user['email'] }})
   </div>
 
-
-  <div class="small-3 columns">
-    <div class="sub-record-actions item-actions">
-      <span class="link action" ng-click="showUser(user['id'])">View</span>
+  <div>
+    <div class="overview-element inline">
+      <span class="label">ID:</span>
+      <span class="value">{{ user['id'] }}</span>
     </div>
+
+    <div class='overview-element inline'>
+      <span class="label">Circa role:</span>
+      {{ user['roles'][0] }}
+    </div>
+
+    <div class='overview-element inline'>
+      <span class="label">Researcher type:</span>
+      {{ user['researcher_type'] }}
+    </div>
+  </div>
+
+  <div
+      class='overview-element'
+      ng-class="user['agreement_confirmed_at'] ? 'positive' : 'negative' ">
+    <span class="label">Policies agreement signed?</span>
+    {{ user['agreement_confirmed_at'] ? 'Yes' : 'No '}}
   </div>
 
 </div>

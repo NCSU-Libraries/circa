@@ -44,8 +44,8 @@
 
 
     <div class="overview-item">
-      <span class="label"><%= "Patron".pluralize(@order.users.length) %>:</span>
-      <% @order.users.each_index do |i| %>
+      <span class="label"><%= "Researcher".pluralize(@order.users.length) %>:</span>
+      <% @order.users.to_a.each_index do |i| %>
         <% if i < 5 %>
           <% u = @order.users[i] %>
           <%= u.last_name %>, <%= u.first_name %> (<%= u.email %>)<%= u != @order.users.last ? '; ' : '' %>
@@ -54,7 +54,7 @@
         end %>
       <% end %>
       <% if @order.users.length > 5 %>
-      <span class="truncated-list-post-note">+ <%= @order.users.length - 5 %> more</span>
+        <span class="truncated-list-post-note">+ <%= @order.users.length - 5 %> more</span>
       <% end %>
 
 

@@ -1,65 +1,4 @@
-CircaCtrl.prototype.applySharedUtilityFunctions = function(scope) {
-
-  var _this = this;
-
-  scope.getPage = function(page, config, callback) {
-    _this.getPage(scope, page, config, callback);
-  }
-
-  scope.search = function() {
-    _this.search(scope);
-  }
-
-  scope.searchReset = function() {
-    _this.searchReset(scope);
-  }
-
-  scope.sortList = function(sort, sortOrder) {
-    _this.sortList(scope, sort, sortOrder);
-  }
-
-  scope.reverseSortOrder = function() {
-    _this.reverseSortOrder(scope);
-  }
-
-  scope.toggleShowFilters = function() {
-    _this.toggleShowFilters(scope);
-  }
-
-  scope.applyFilters = function() {
-    _this.applyFilters(scope);
-  }
-
-  scope.resetFilters = function() {
-    _this.resetFilters(scope);
-  }
-
-  scope.resetFilter = function(filter) {
-    _this.resetFilter(scope, filter);
-  }
-
-  scope.toggleAdminOverride = function() {
-    _this.toggleAdminOverride(scope);
-  }
-
-  scope.confirmDeleteRecord = function(recordType, record, redirectPath) {
-    _this.confirmDeleteRecord(scope, recordType, record, redirectPath);
-  }
-
-  scope.goto = function(path, reload) {
-    _this.goto(path, reload);
-  }
-
-  scope.openArchivesSpaceRecord = function(uri) {
-    _this.openArchivesSpaceRecord(scope, uri);
-  }
-
-}
-
-
-// This method must be overridden by any class that inherit from CircaCtrl,
-// The inherited method will in turn call a more specific method to retrieve a single page of records of a specified type
-CircaCtrl.prototype.getPage = function(scope, page, config, callback) {
+CircaCtrl.prototype.getPage = function(page, config, callback) {
 }
 
 
@@ -85,70 +24,102 @@ CircaCtrl.prototype.updateLocationQueryParams = function(params) {
 }
 
 
-CircaCtrl.prototype.search = function(scope) {
-  scope.searchParams['active'] = true;
-  this.getPage(scope);
+CircaCtrl.prototype.search = function() {
+  this.searchParams['active'] = true;
+  this.getPage();
 }
 
 
-CircaCtrl.prototype.searchReset = function(scope) {
-  scope.searchParams['q'] = null;
-  scope.searchParams['active'] = null;
-  this.getPage(scope);
+CircaCtrl.prototype.searchKeyEvents = function(keyEvent) {
+  if (keyEvent.which === 13) {
+    alert('I am an alert');
+  }
 }
 
 
-CircaCtrl.prototype.sortList = function(scope, sort, sortOrder) {
+CircaCtrl.prototype.searchReset = function() {
+  this.searchParams['q'] = null;
+  this.searchParams['active'] = null;
+  this.getPage();
+}
+
+
+CircaCtrl.prototype.sortList = function(sort, sortOrder) {
   if (['asc', 'desc'].indexOf(sortOrder) < 0) {
     sortOrder = 'asc';
   }
-  scope.sort = sort + ' ' + sortOrder;
-  this.getPage(scope);
+  this.sort = sort + ' ' + sortOrder;
+  this.getPage();
 }
 
 
-CircaCtrl.prototype.reverseSortOrder = function(scope) {
-  var currentSortOrder = scope.sort.split(' ')[1];
-  var sort = scope.sort.split(' ')[0];
+CircaCtrl.prototype.reverseSortOrder = function() {
+  var currentSortOrder = this.sort.split(' ')[1];
+  var sort = this.sort.split(' ')[0];
   var sortOrder = (currentSortOrder == 'asc') ? 'desc' : 'asc';
-  this.sortList(scope, sort, sortOrder);
+  this.sortList(sort, sortOrder);
 }
 
 
-CircaCtrl.prototype.initializeFilterConfig = function(scope) {
+CircaCtrl.prototype.initializeFilterConfig = function() {
   var _this = this;
-  scope.filterConfig = { show: false, filters: {}, options: {}, appliedFilters: null, filtersApplied: false};
+  this.filterConfig = { show: false, filters: {}, options: {}, appliedFilters: null, filtersApplied: false};
 }
 
 
 // Override this method on inheritor classes if any filters require special treatment
-CircaCtrl.prototype.setAppliedFilters = function(scope) {
-  scope.filterConfig.appliedFilters = {};
-  var filters = scope.filterConfig.filters;
+CircaCtrl.prototype.setAppliedFilters = function() {
+  this.filterConfig.appliedFilters = {};
+  var filters = this.filterConfig.filters;
   for (var f in filters) {
-    scope.filterConfig.appliedFilters[f] = filters[f];
+    this.filterConfig.appliedFilters[f] = filters[f];
   }
-  scope.filterConfig.filtersApplied = Object.keys(scope.filterConfig.appliedFilters).length > 0 ? true : false;
+  this.filterConfig.filtersApplied = Object.keys(this.filterConfig.appliedFilters).length > 0 ? true : false;
 }
 
 
-CircaCtrl.prototype.toggleShowFilters = function(scope) {
-  scope.filterConfig['show'] = (scope.filterConfig['show']) ? false : true;
+CircaCtrl.prototype.toggleShowFilters = function() {
+  this.filterConfig['show'] = (this.filterConfig['show']) ? false : true;
 }
 
 
-CircaCtrl.prototype.applyFilters = function(scope) {
-  scope.page = null;
-  this.getPage(scope);
+CircaCtrl.prototype.addUserFilter = function(user) {
+  this.filterConfig.filters['user_email'] = user.email;
 }
 
 
-CircaCtrl.prototype.resetFilter = function(scope, filter) {
-  delete scope.filterConfig['filters'][filter];
+CircaCtrl.prototype.addAssigneeFilter = function(user) {
+  this.filterConfig.filters['assignee_email'] = user.email;
 }
 
 
-CircaCtrl.prototype.resetFilters = function(scope) {
+CircaCtrl.prototype.applyFilters = function() {
+  this.page = null;
+  this.getPage();
+}
+
+
+CircaCtrl.prototype.removeFilter = function(filter) {
+  delete this.filterConfig.filters[filter];
+  this.page = null;
+  this.getPage();
+}
+
+
+CircaCtrl.prototype.resetFilter = function(filter) {
+  delete this.filterConfig['filters'][filter];
+
+  if (filter == 'assignee_email') {
+    this.assigneeSelect = this.initializeUserSelect();
+  }
+
+  if (filter == 'user_email') {
+    this.userSelect = this.initializeUserSelect();
+  }
+}
+
+
+CircaCtrl.prototype.resetFilters = function() {
   var _this = this;
   Object.keys(_this.routeParams).forEach(function(key) {
     if (key.match(/^filters\[/)) {
@@ -156,12 +127,12 @@ CircaCtrl.prototype.resetFilters = function(scope) {
       _this.location.search(key, null);
     }
   });
-  _this.initializeFilterConfig(scope);
-  this.getPage(scope);
+  _this.initializeFilterConfig();
+  this.getPage();
 }
 
 
-CircaCtrl.prototype.deleteLocationSearch = function(scope) {
+CircaCtrl.prototype.deleteLocationSearch = function() {
   var _this = this;
   Object.keys(_this.location.search()).forEach(function(key) {
     _this.location.search(key, null);
@@ -170,7 +141,6 @@ CircaCtrl.prototype.deleteLocationSearch = function(scope) {
 
 
 CircaCtrl.prototype.goto = function(path, reload, message) {
-
   var searchParams = {}
   if (path.match(/\?/)) {
     var pathSplit = path.split('?');
@@ -180,7 +150,6 @@ CircaCtrl.prototype.goto = function(path, reload, message) {
       var subStringSplit = subString.split('=');
       searchParams[subStringSplit[0]] = subStringSplit[1];
     });
-    console.log(q_string);
   }
 
   var referrerPath = this.location.path;
@@ -192,17 +161,18 @@ CircaCtrl.prototype.goto = function(path, reload, message) {
   this.window.scroll(0,0);
   this.deleteLocationSearch();
   this.location.path(path).search(searchParams);
+
   if (reload) {
     this.route.reload();
   }
   if (message) {
-    alert(message);
+    this.flash = message;
   }
 }
 
 
-CircaCtrl.prototype.toggleAdminOverride = function(scope) {
-  scope.adminOverrideEnabled = scope.adminOverrideEnabled ? false : true;
+CircaCtrl.prototype.toggleAdminOverride = function() {
+  this.adminOverrideEnabled = this.adminOverrideEnabled ? false : true;
 }
 
 
@@ -220,19 +190,22 @@ CircaCtrl.prototype.getControlledValue = function(controlledValues, controlledVa
 }
 
 
-// Add list config options passed in routerParams to scope
-CircaCtrl.prototype.processListParams = function(scope) {
+// Add list config options passed in routerParams to this
+CircaCtrl.prototype.processListParams = function() {
 
   var _this = this;
-  if (!scope.sort && this.routeParams['sort']) {
-    scope.sort = this.routeParams['sort'];
+
+  if (!this.sort && this.routeParams['sort']) {
+    this.sort = this.routeParams['sort'];
   }
-  if (!scope.page && this.routeParams['page']) {
-    scope.page = this.routeParams['page'];
+
+  if (!this.page && this.routeParams['page']) {
+    this.page = this.routeParams['page'];
   }
-  if (!scope.searchParams['q'] && this.routeParams['q']) {
-    scope.searchParams['q'] = this.routeParams['q'];
-    scope.searchParams.active = true;
+
+  if (!this.searchParams['q'] && this.routeParams['q']) {
+    this.searchParams['q'] = this.routeParams['q'];
+    this.searchParams.active = true;
   }
 
   var filters = {};
@@ -245,27 +218,27 @@ CircaCtrl.prototype.processListParams = function(scope) {
     }
   });
   if (hasFilters) {
-    scope.filterConfig['filters'] = filters;
-    this.setAppliedFilters(scope);
+    this.filterConfig['filters'] = filters;
+    this.setAppliedFilters();
   }
 }
 
 
-CircaCtrl.prototype.listRequestConfig = function(scope) {
+CircaCtrl.prototype.listRequestConfig = function() {
 
   var config = { params: {} };
 
-  if (scope.searchParams['q']) {
-    config['params']['q'] = scope.searchParams['q'];
+  if (this.searchParams['q']) {
+    config['params']['q'] = this.searchParams['q'];
   }
-  if (scope.sort) {
-    config['params']['sort'] = scope.sort;
+  if (this.sort) {
+    config['params']['sort'] = this.sort;
   }
-  if (scope.page) {
-    config['params']['page'] = scope.page;
+  if (this.page) {
+    config['params']['page'] = this.page;
   }
 
-  var filters = scope.filterConfig['filters'];
+  var filters = this.filterConfig['filters'];
   for (var f in filters) {
     config['params']['filters[' + f + ']'] = filters[f];
   }
@@ -280,22 +253,22 @@ CircaCtrl.prototype.addNote = function(record, callback) {
 }
 
 
-CircaCtrl.prototype.removeNote = function(scope, record, index) {
-  scope.removedNotes = scope.removedNotes || [];
+CircaCtrl.prototype.removeNote = function(record, index) {
+  this.removedNotes = this.removedNotes || [];
   if (record['notes'][index]) {
     var removed = record['notes'].splice(index,1);
     removed = removed[0];
-    scope.removedNotes.push(removed);
+    this.removedNotes.push(removed);
   }
 }
 
 
-CircaCtrl.prototype.restoreNote = function(scope, record, note) {
-  if (scope.removedNotes) {
+CircaCtrl.prototype.restoreNote = function(record, note) {
+  if (this.removedNotes) {
     var _this = this;
-    var restoreNoteIndex = scope.removedNotes.indexOf(note);
+    var restoreNoteIndex = this.removedNotes.indexOf(note);
     if (restoreNoteIndex >= 0) {
-      scope.removedNotes.splice(restoreNoteIndex, 1);
+      this.removedNotes.splice(restoreNoteIndex, 1);
       record['notes'].push(note);
     }
     return true;
@@ -303,61 +276,67 @@ CircaCtrl.prototype.restoreNote = function(scope, record, note) {
 }
 
 
-CircaCtrl.prototype.confirmDeleteRecord = function(scope, recordType, record, redirectPath) {
-  var _this = this;
+CircaCtrl.prototype.confirmDeleteRecord = function(recordType, record, redirectPath) {
+  this.showRecordDeleteModal = true;
+  this.recordToDeleteType = recordType;
+  this.recordToDelete = record;
+  this.deleteRedirectPath = redirectPath;
+}
 
-  var modalInstance = _this.modal.open({
-    templateUrl: _this.templateUrl('common/delete_record'),
-    controller: 'CircaModalInstanceCtrl',
-    resolve: {
-      resolved: function() {
-        return {
-          recordType: recordType,
-          record: record
+
+CircaCtrl.prototype.closeDeleteRecordModal = function() {
+  this.showRecordDeleteModal = false;
+  this.recordToDeleteType = null;
+  this.recordToDelete = null;
+  this.deleteRedirectPath = null;
+}
+
+
+CircaCtrl.prototype.deleteRecord = function() {
+  if (this.recordToDelete) {
+    var _this = this;
+    var recordType = this.recordToDeleteType;
+    var recordId = this.recordToDelete.id;
+
+    var pathRoot = {
+      order: 'orders',
+      item: 'items',
+      user: 'users',
+      location: 'locations',
+      enumerationValue: 'enumeration_values',
+      userRole: 'user_roles'
+    }
+
+    var defaultRedirectPath = '/' + pathRoot[recordType]
+    var redirectPath = this.deleteRedirectPath || defaultRedirectPath;
+
+    var redirectQ = "deleted_record_id=" + recordId;
+    var redirectQOperator = redirectPath.match(/\?/) ? '&' : '?';
+    redirectPath = redirectPath + redirectQOperator + redirectQ;
+
+    var apiPath = '/' + pathRoot[recordType] + '/' + recordId;
+
+    this.apiRequests.delete(apiPath).then(function(response) {
+      if (response.status == 200) {
+        _this.closeDeleteRecordModal();
+        if (recordType == 'location') {
+          _this.sessionCache.refresh('circaLocations');
         }
+        _this.flash = _this.capitalize(recordType) + ' ' + recordId + ' has been deleted';
+        _this.goto(redirectPath, true, _this.flash);
       }
-    }
-  });
-
-  modalInstance.result.then(function (result) {
-    _this.deleteRecord(scope, recordType, record, redirectPath);
-  }, function () {
-    console.log('Modal dismissed at: ' + new Date());
-  });
-}
-
-
-CircaCtrl.prototype.deleteRecord = function(scope, recordType, record, redirectPath) {
-  var _this = this;
-
-  var pathRoot = {
-    order: 'orders',
-    item: 'items',
-    user: 'users',
-    location: 'locations',
-    enumerationValue: 'enumeration_values',
-    userRole: 'user_roles'
+      else if (response.data['error'] && response.data['error']['detail']) {
+        _this.flash = response.data['error']['detail'];
+      }
+    });
   }
-
-  var redirectPath = redirectPath ? redirectPath : '/' + pathRoot[recordType];
-
-  var apiPath = '/' + pathRoot[recordType] + '/' + record['id'];
-
-  this.apiRequests.delete(apiPath).then(function(response) {
-    if (response.status == 200) {
-      if (recordType == 'location') {
-        _this.sessionCache.refresh('circaLocations');
-      }
-      _this.goto(redirectPath, true);
-    }
-    else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
-    }
-  });
+  else {
+    this.flash = "Application error: recordToDelete not set"
+  }
 }
 
 
-CircaCtrl.prototype.openArchivesSpaceRecord = function(scope, uri) {
+CircaCtrl.prototype.openArchivesSpaceRecord = function(uri) {
   var url = this.rootPath() + '/archivesspace_resolver' + uri;
   this.window.open(url);
 }
@@ -367,3 +346,10 @@ CircaCtrl.prototype.paramsToQueryString = function(params) {
   this.location.search(params);
 }
 
+
+
+CircaCtrl.prototype.capitalize = function (string) {
+  if (string && typeof string === 'string') {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+}

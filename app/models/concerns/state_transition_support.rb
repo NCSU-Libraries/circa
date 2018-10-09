@@ -8,7 +8,6 @@ module StateTransitionSupport
 
     # self.states_events, self.initial_state, self.event_callbacks, states_events_config and event_permitted must be specified for model in app/models/concerns/[model_name]_state_config.rb
 
-
     # Returns hash of state/event pairs with event as key and state as value
     def self.to_states_by_event
       to_states = {}
@@ -16,19 +15,16 @@ module StateTransitionSupport
       to_states
     end
 
-
     # returns "to" state associated with event
     def self.event_to_state(event)
       self.to_states_by_event[event]
     end
-
 
     # Returns array of permitted events
     def permitted_events
       events = self.states_events_config.map { |se| se[:event] }
       events.delete_if { |e| !event_permitted(e) }
     end
-
 
     # Returns array of available events
     def available_events
@@ -38,7 +34,6 @@ module StateTransitionSupport
       end
       events
     end
-
 
     # Returns state to which given event will transition the record
     def event_to_state(event)
@@ -51,7 +46,8 @@ module StateTransitionSupport
     # Triggers an event, moving record to associated state, if permitted
     # Returns false if event not permitted
     def trigger(event, metadata={})
-      if event_permitted(event) || (User.current && User.current.is_admin?)
+      if (event_permitted(event) || User.is_admin?(metadata[:user_id])) &&
+          required_metadata_present?(event, metadata)
         to_state = self.event_to_state(event)
         callback_metadata = metadata.clone
         transition_to(to_state, metadata)
@@ -66,7 +62,6 @@ module StateTransitionSupport
       end
     end
 
-
     # Triggers an event, moving record to associated state, if permitted
     # Raises exception if event is not permitted
     def trigger!(event, metadata={})
@@ -75,31 +70,26 @@ module StateTransitionSupport
       end
     end
 
-
     # Return all prior state transitions for the record
     def state_transitions
       StateTransition.where(record_id: id, record_type: self.class.to_s).order(id: :desc)
     end
-
 
     # Returns the last (most recent) state transition for the record
     def last_transition
       StateTransition.where(record_id: id, record_type: self.class.to_s).order(id: :desc).limit(1).first
     end
 
-
     # Returns the last (most recent) state transition that moved the record to the given state
     def last_transition_to(to_state)
       StateTransition.where(record_id: id, record_type: self.class.to_s, to_state: to_state.to_s).order(id: :desc).limit(1).first
     end
-
 
     # Returns the last state transition prior to the record moving to the given state
     def last_transition_before(*to_state)
       not_in_fragment = "'#{to_state.map { |x| x.to_s }.join("','")}'"
       StateTransition.where(record_id: id, record_type: self.class.to_s).where("to_state NOT IN (#{ not_in_fragment })").order(id: :desc).limit(1).first
     end
-
 
     # Returns the record's current state
     def current_state
@@ -111,7 +101,6 @@ module StateTransitionSupport
       end
     end
 
-
     # Returns true if the current state is at or after the given state in the workflow
     def state_reached?(state)
       states = states_events.map { |se| se[0] }
@@ -119,7 +108,6 @@ module StateTransitionSupport
         states.index(current_state) >= states.index(state)
       end
     end
-
 
     # Transition record to given state, creating a new StateTransition record
     def transition_to(to_state, metadata={})
@@ -146,7 +134,6 @@ module StateTransitionSupport
     end
 
   end
-
 end
 
 

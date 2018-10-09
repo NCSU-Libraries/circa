@@ -1,18 +1,18 @@
-<ul class="pagination" ng-if="pages > 1">
+<ul class="pagination" ng-if="ctrl.pages > 1">
 
-  <li ng-if="pageListStart == 1" class=\"arrow unavailable\">&laquo;</li>
-  <li ng-if="pageListStart > 1" class="arrow">
-  <a href="" ng-click="getPage(1)">&laquo;</a>
+  <li ng-if="ctrl.pageListStart == 1" class="arrow unavailable">&laquo;</li>
+  <li ng-if="ctrl.pageListStart > 1" class="arrow">
+  <a href="" ng-click="ctrl.getPage(1)">&laquo;</a>
   </li>
 
-  <li ng-repeat="pageListNumber in pageList" ng-class="(pageListNumber == page) ? 'current' : ''">
-    <a ng-show="pageListNumber != page" href="" ng-click="getPage(pageListNumber, sort)">{{ pageListNumber }}</a>
-    <a ng-show="pageListNumber == page" href="">{{ pageListNumber }}</a>
+  <li ng-repeat="pageListNumber in ctrl.pageList" ng-class="(pageListNumber == ctrl.page) ? 'current' : ''">
+    <a ng-show="pageListNumber != ctrl.page" href="" ng-click="ctrl.getPage(pageListNumber, ctrl.sort)">{{ pageListNumber }}</a>
+    <a ng-show="pageListNumber == ctrl.page" href="">{{ pageListNumber }}</a>
   </li>
 
-  <li ng-if="pageListEnd == pages" class="arrow unavailable">&raquo;</li>
-  <li ng-if="pageListEnd < pages" class="arrow">
-    <a href="" ng-click="getPage(pages)">&raquo;</a>
+  <li ng-if="ctrl.pageListEnd == ctrl.pages" class="arrow unavailable">&raquo;</li>
+  <li ng-if="ctrl.pageListEnd < ctrl.pages" class="arrow">
+    <a href="" ng-click="ctrl.getPage(pages)">&raquo;</a>
   </li>
 
 </ul>

@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
 
   # Assign current_user to User to use it outside of controllers
   # see: https://amitrmohanty.wordpress.com/2014/01/20/how-to-get-current_user-in-model-and-observer-rails/
-  before_filter :set_current_user
+  before_action :set_current_user
 
   def set_current_user
     User.current = current_user

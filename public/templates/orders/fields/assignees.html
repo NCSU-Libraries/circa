@@ -1,13 +1,54 @@
-<div class="form-section" ng-class="validationErrors['assignees'] ? 'has-error' : ''">
+<div ng-class="ctrl.validationErrors['assignees'] ? 'has-error' : ''">
 
   <h2>Assigned staff</h2>
 
-  <div ng-if="validationErrors['assignees']" class="validation-error field-validation-error">{{ validationErrors['assignees'] }}</div>
+  <div
+      ng-if="ctrl.validationErrors['assignees']"
+      class="validation-error field-validation-error">
+    {{ ctrl.validationErrors['assignees'] }}
+  </div>
 
-  <div ng-include="templateUrl('orders/assignee_list')"></div>
+  <ul
+      class="subrecords-list assignees-list"
+      ng-if="ctrl.order['assignees'].length > 0">
 
-  <div ng-include="templateUrl('orders/assignee_selector')"></div>
+    <li ng-repeat="user in ctrl.order['assignees']">
+      <div class="row">
 
-  <div><span class="link" ng-click="createAndAddAssignee()">Create and add new staff assignee</span></div>
+        <div class="small-9 columns">
+          <div class="record-overview user-overview">
+            <div class="overview-element primary">
+              {{ user.display_name }} ({{ user['email'] }})
+            </div>
+          </div>
+        </div>
+
+        <div class="small-3 columns">
+          <div class="subrecord-actions-primary user-actions">
+            <div
+                class="link action"
+                ng-click="ctrl.removeAssignee(user)">
+              Remove
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </li>
+  </ul>
+
+  <div ng-include="ctrl.templateUrl('orders/fields/assignee_selector')"></div>
+
+  <div class="add-user-links" ng-hide="ctrl.assigneeSelect.show">
+
+    <span class="add-user-link">
+      <span class="link" ng-click="ctrl.showAssigneeSelector()">
+        <i class="fas fa-plus-circle"></i>Assign staff user to order
+      </span>
+    </span>
+
+  </div>
+
+  <div ng-include="ctrl.templateUrl('orders/fields/removed_assignees_list')"></div>
 
 </div>

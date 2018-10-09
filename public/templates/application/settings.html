@@ -1,30 +1,38 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="SettingsCtrl as ctrl">
 
-<h1>Settings</h1>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
 
-<div class="section-nav">
+  <main>
 
-<!-- This one needs to be re-written -->
-<!--
-  <div class="section-nav-item">
-    <i class="fa fa-gear"></i>
-    <span class="link" ng-click="goto('/settings/enumeration_values/list/order_type')">Add/edit order type values</span>
-  </div>
- -->
+    <h1>Settings</h1>
 
-  <div class="section-nav-item">
-    <i class="fa fa-gear"></i>
-    <span class="link" ng-click="goto('/settings/enumeration_values/list/patron_type')">Manage patron type values</span>
-  </div>
+    <div class="section-nav">
 
-  <div class="section-nav-item">
-    <i class="fa fa-gear"></i>
-    <span class="link" ng-click="goto('/settings/user_roles')">Mange user roles</span>
-  </div>
+    <!-- This one needs to be re-written -->
+    <!--
+      <div class="section-nav-item">
+        <i class="fa fa-gear"></i>
+        <span class="link" ng-click="goto('/settings/enumeration_values/list/order_type')">Add/edit order type values</span>
+      </div>
+     -->
 
-  <div class="section-nav-item">
-    <i class="fa fa-gear"></i>
-    <span class="link" ng-click="goto('/settings/order_sub_types')">Manage order sub types</span>
-  </div>
+      <div class="section-nav-item">
+        <i class="fa fa-gear"></i>
+        <span class="link" ng-click="ctrl.goto('/settings/enumeration_values/list/researcher_type')">Manage researcher type values</span>
+      </div>
+
+      <div class="section-nav-item">
+        <i class="fa fa-gear"></i>
+        <span class="link" ng-click="ctrl.goto('/settings/user_roles')">Manage user roles</span>
+      </div>
+
+      <div class="section-nav-item">
+        <i class="fa fa-gear"></i>
+        <span class="link" ng-click="ctrl.goto('/settings/order_sub_types')">Manage order sub types</span>
+      </div>
+
+    </div>
+
+  </main>
 
 </div>

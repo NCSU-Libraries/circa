@@ -1,156 +1,132 @@
 // Settings
 
-var UserRolesCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var UserRolesCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
-  var _this = this;
+  this.section = 'settings';
 
-  $scope.section = 'settings';
-
-  CircaCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
-
-  $scope.updateLevels = function(index, sortDelta, callback) {
-    _this.updateLevel($scope, index, sortDelta, callback);
-  }
-
-  $scope.updateUserRole = function() {
-    _this.updateUserRole($scope);
-  }
-
-  $scope.createUserRole = function() {
-    _this.createUserRole($scope);
-  }
-
-  $scope.mergeUserRoles = function() {
-    _this.mergeUserRoles($scope);
-  }
-
-  $scope.currentUserAssignableRoleIds = function(roleId) {
-    _this.currentUserAssignableRoleIds($scope);
-  }
-
-  $scope.updateLevels = function(index, delta) {
-    _this.updateLevels($scope, index, delta);
-  }
-
+  CircaCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
 }
 
 UserRolesCtrl.prototype = Object.create(CircaCtrl.prototype);
-UserRolesCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+UserRolesCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('UserRolesCtrl', UserRolesCtrl);
 
 
-UserRolesCtrl.prototype.getUserRolesList = function(scope, callback) {
-  scope.loading = true;
+UserRolesCtrl.prototype.getUserRolesList = function(callback) {
+  this.loading = true;
   var _this = this;
   var path = '/user_roles';
   this.apiRequests.get(path).then(function(response) {
-    scope.loading = false;
+    _this.loading = false;
     if (response.status == 200) {
-      scope.userRolesList = response.data['user_roles'];
-      _this.commonUtils.executeCallback(callback, scope);
+      _this.userRolesList = response.data['user_roles'];
+      _this.commonUtils.executeCallback(callback);
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }
 
 
-UserRolesCtrl.prototype.getUserRole = function(scope, id, callback) {
-  scope.loading = true;
+UserRolesCtrl.prototype.getUserRole = function(id, callback) {
+  this.loading = true;
   var _this = this;
   var path = '/user_roles/' + id;
   this.apiRequests.get(path).then(function(response) {
-    scope.loading = false;
+    _this.loading = false;
     if (response.status == 200) {
-      scope.userRole = response.data['user_role'];
-      _this.commonUtils.executeCallback(callback, scope);
+
+      console.log(response.data['user_role']);
+
+      _this.userRole = response.data['user_role'];
+      _this.commonUtils.executeCallback(callback);
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }
 
 
-UserRolesCtrl.prototype.createUserRole = function(scope, callback) {
-  scope.loading = true;
+UserRolesCtrl.prototype.createUserRole = function(callback) {
+  this.loading = true;
   var _this = this;
   var path = '/user_roles';
-  this.apiRequests.post(path, { user_role: scope.userRole }).then(function(response) {
-    scope.loading = false;
+  this.apiRequests.post(path, { user_role: this.userRole }).then(function(response) {
+    _this.loading = false;
     if (response.status == 200) {
-      _this.commonUtils.executeCallback(callback, scope);
-      _this.goto('/settings/user_roles/list')
+      _this.commonUtils.executeCallback(callback);
+      _this.goto('/settings/user_roles')
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }
 
 
-UserRolesCtrl.prototype.updateUserRole = function(scope, callback) {
-  scope.loading = true;
+UserRolesCtrl.prototype.updateUserRole = function(callback) {
+  this.loading = true;
   var _this = this;
-  var path = '/user_roles/' + scope.userRole.id;
-  this.apiRequests.put(path, { user_role: scope.userRole }).then(function(response) {
-    scope.loading = false;
+  var path = '/user_roles/' + this.userRole.id;
+  this.apiRequests.put(path, { user_role: this.userRole }).then(function(response) {
+    _this.loading = false;
     if (response.status == 200) {
-      _this.commonUtils.executeCallback(callback, scope);
-      _this.goto('/settings/user_roles/list')
+      _this.commonUtils.executeCallback(callback);
+      _this.goto('/settings/user_roles')
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }
 
 
-UserRolesCtrl.prototype.currentUserAssignableRoleIds = function(scope) {
+UserRolesCtrl.prototype.currentUserAssignableRoleIds = function() {
   var roleIds = [];
-  for (var i = 0; i < scope.currentUser.assignableRoles.length; i++) {
-    roleIds.push(scope.currentUser.assignableRoles[i]['id']);
+  for (var i = 0; i < this.currentUser.assignableRoles.length; i++) {
+    roleIds.push(this.currentUser.assignableRoles[i]['id']);
   }
   return roleIds;
 }
 
 
-UserRolesCtrl.prototype.updateLevels = function(scope, index, delta, callback) {
+UserRolesCtrl.prototype.updateLevels = function(index, delta, callback) {
   var _this = this;
 
-  var sorted_values = this.commonUtils.shiftPositionOfItemInArray(scope.userRolesList, index, delta)
+  var sorted_values = this.commonUtils.shiftPositionOfItemInArray(this.userRolesList, index, delta)
 
   var postData = { user_roles: sorted_values };
 
   this.apiRequests.post('/user_roles/update_levels', postData).then(function(response) {
-    scope.loading = false;
+    _this.loading = false;
     if (response.status == 200) {
-     scope.userRolesList = response.data['user_roles'];
-      _this.commonUtils.executeCallback(callback, scope);
+      _this.userRolesList = response.data['user_roles'];
+      _this.commonUtils.executeCallback(callback);
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }
 
 
-UserRolesCtrl.prototype.mergeUserRoles = function(scope, callback) {
-  scope.loading = true;
+UserRolesCtrl.prototype.mergeUserRoles = function(callback) {
+  this.loading = true;
   var _this = this;
   var path = '/user_roles/merge';
   var putData = {
-    merge_from_id: scope.userRole.id,
-    merge_into_id: scope.mergeIntoId
+    merge_from_id: this.userRole.id,
+    merge_into_id: this.mergeIntoId
   }
   this.apiRequests.put(path, putData).then(function(response) {
-    scope.loading = false;
+    _this.loading = false;
     if (response.status == 200) {
       _this.goto('/settings/user_roles/list');
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }

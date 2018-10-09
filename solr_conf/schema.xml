@@ -167,7 +167,7 @@
    <field name="start_datetime" type="date" indexed="true" stored="true" multiValued="false" />
    <field name="end_datetime" type="date" indexed="true" stored="true" multiValued="false" />
    <field name="active" type="boolean" indexed="true" stored="true" multiValued="false" />
-   <field name="patron_id" type="int" indexed="true" stored="true" multiValued="true" />
+   <field name="researcher_id" type="int" indexed="true" stored="true" multiValued="true" />
    <field name="order_id" type="int" indexed="true" stored="true" multiValued="false" />
     -->
 
@@ -203,10 +203,12 @@
    <copyField source="first_name" dest="first_name_t"/>
    <field name="last_name" type="string" indexed="true" stored="true" multiValued="false" />
    <copyField source="last_name" dest="last_name_t" />
+   <field name="display_name" type="string" indexed="true" stored="true" multiValued="false" />
+   <copyField source="display_name" dest="display_name_t" />
    <field name="affiliation" type="string" indexed="true" stored="true" multiValued="false" />
    <field name="agreement_confirmed" type="boolean" indexed="true" stored="true" multiValued="false" />
-   <field name="patron_type" type="string" indexed="true" stored="true" multiValued="false" />
-   <field name="patron_type_id" type="int" indexed="true" stored="true" multiValued="false" />
+   <field name="researcher_type" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="researcher_type_id" type="int" indexed="true" stored="true" multiValued="false" />
    <field name="is_staff" type="boolean" indexed="true" stored="true" multiValued="false" />
    <field name="is_admin" type="boolean" indexed="true" stored="true" multiValued="false" />
    <field name="role" type="string" indexed="true" stored="true" multiValued="false" />

@@ -16,7 +16,6 @@ namespace :users do
     end
   end
 
-
   # This is a one-time task to be run after migrations to update user_role model
   desc "migrate to new user_role model"
   task :migrate_user_roles => :environment do |t, args|
@@ -36,16 +35,14 @@ namespace :users do
               'admin' => 1,
               'staff' => 10,
               'assistant' => 20,
-              'patron' => 30
+              'researcher' => 30
             }
             role = UserRole.create(name: u.role_old, level: levels[u.role_old])
           end
           u.update_attributes(user_role_id: role.id)
         end
       end
-
     end
   end
-
 
 end

@@ -1,184 +1,125 @@
-var ItemsCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var ItemsCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
   var _this = this;
 
-  $scope.section = 'items';
+  this.section = 'items';
 
-  CircaCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+  CircaCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
 
   this.apiRequests = apiRequests;
   this.location = $location;
   this.window = $window;
 
-  // $scope.sort = 'resource_title asc';
-  // $scope.sortOrder = 'asc';
-
-  $scope.getItemMovementHistory = function(id) {
-    _this.getItemMovementHistory($scope, id);
-  }
-
-  $scope.getItemModificationHistory = function(id) {
-    _this.getItemModificationHistory($scope, id);
-  }
-
-  this.initializeFilterConfig($scope);
-
-  $scope.confirmObsolete = function(itemId) {
-    _this.confirmObsolete($scope, itemId)
-  }
-
-  $scope.updateItemFromSource = function(itemId) {
-    _this.updateItemFromSource($scope, itemId);
-  }
-
+  this.initializeFilterConfig();
 }
 
-ItemsCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+ItemsCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 
 ItemsCtrl.prototype = Object.create(CircaCtrl.prototype);
 
 circaControllers.controller('ItemsCtrl', ItemsCtrl);
 
 
-ItemsCtrl.prototype.getPage = function(scope, page) {
-  this.getItems(scope, page);
+ItemsCtrl.prototype.getPage = function(page) {
+  this.getItems(page);
 }
 
 
-ItemsCtrl.prototype.getItems = function(scope, page) {
-
-  console.log(page);
-
-  scope.loading = true;
+ItemsCtrl.prototype.getItems = function(page) {
+  this.loading = true;
   var path = '/items';
   var _this = this;
   page = page ? page : 1;
-  scope.page = page;
+  this.page = page;
 
-  var config = this.listRequestConfig(scope);
+  var config = this.listRequestConfig();
 
   this.updateLocationQueryParams(config['params']);
 
   this.apiRequests.getPage(path, page, config).then(function(response) {
-    scope.loading = false;
+    _this.loading = false;
     if (response.status == 200) {
-      scope.items = response.data['items'];
+      _this.items = response.data['items'];
       var paginationParams = _this.commonUtils.paginationParams(response.data['meta']['pagination']);
-
-      console.log(paginationParams);
-
-      _this.commonUtils.objectMerge(scope, paginationParams);
+      _this.commonUtils.objectMerge(_this, paginationParams);
     }
   });
 }
 
 
-ItemsCtrl.prototype.getItem = function(scope, id, callback) {
+ItemsCtrl.prototype.getItem = function(id, callback) {
   var path = '/items/' + id;
   var _this = this;
   this.apiRequests.get(path).then(function(response) {
     if (response.status == 200) {
-      scope.item = response.data['item'];
-      _this.commonUtils.executeCallback(callback, scope);
+      _this.item = response.data['item'];
+      _this.commonUtils.executeCallback(callback);
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }
 
 
-ItemsCtrl.prototype.getItemMovementHistory = function(scope, id, callback) {
+ItemsCtrl.prototype.getItemMovementHistory = function(id, callback) {
   var path = '/items/' + id + '/movement_history';
   var _this = this;
   this.apiRequests.get(path).then(function(response) {
     if (response.status == 200) {
-      if (scope['item']) {
-        scope['item']['movement_history'] =
+      if (_this['item']) {
+        _this['item']['movement_history'] =
             response.data['item']['movement_history'];
       }
-      _this.commonUtils.executeCallback(callback, scope);
+      _this.commonUtils.executeCallback(callback);
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }
 
 
-ItemsCtrl.prototype.getItemModificationHistory = function(scope, id, callback) {
+ItemsCtrl.prototype.getItemModificationHistory = function(id, callback) {
   var path = '/items/' + id + '/modification_history';
   var _this = this;
   this.apiRequests.get(path).then(function(response) {
     if (response.status == 200) {
-      if (scope['item']) {
-        scope['item']['modification_history'] =
+      if (_this['item']) {
+        _this['item']['modification_history'] =
             response.data['item']['modification_history'];
       }
-      _this.commonUtils.executeCallback(callback, scope);
+      _this.commonUtils.executeCallback(callback);
     }
     else {
-      scope.error = response.data['error'];
+      _this.error = response.data['error'];
     }
   });
 }
 
 
-ItemsCtrl.prototype.confirmObsolete = function(scope, itemId) {
-  var _this = this;
-
-  var modalInstance = _this.modal.open({
-    templateUrl: _this.templateUrl('items/obsolete'),
-    controller: 'CircaModalInstanceCtrl',
-    resolve: {
-      resolved: function() {
-        return {
-          itemId: itemId
-        }
-      }
-    }
-  });
-
-  modalInstance.result.then(function (result) {
-    _this.obsolete(scope, itemId);
-  }, function () {
-    console.log('Modal dismissed at: ' + new Date());
-  });
+ItemsCtrl.prototype.openItemObsoleteModal = function() {
+  this.showItemObsoleteModal = true;
 }
 
 
-ItemsCtrl.prototype.obsolete = function(scope, itemId) {
-  scope.loading = true;
-  var path = '/items/' + itemId + '/obsolete';
+ItemsCtrl.prototype.closeItemObsoleteModal = function() {
+  this.showItemObsoleteModal = false;
+}
+
+
+ItemsCtrl.prototype.obsoleteItem = function(id) {
+  this.showItemObsoleteModal = false;
+  this.loading = true;
+  var path = '/items/' + id + '/obsolete';
   var _this = this;
   this.apiRequests.put(path).then(function(response) {
-
-    console.log(response);
-
-    scope.loading = false;
+    _this.loading = false;
     if ((response.status - 200) < 100) {
-      // var message = "Item " + itemId + " has been marked as obsolete";
-      // _this.goto('/items', true, message);
-      scope.item = response.data['item'];
+      _this.item = response.data['item'];
     }
     else if (response.data['error'] && response.data['error']['detail']) {
-      scope.flash = response.data['error']['detail'];
+      _this.flash = response.data['error']['detail'];
     }
   });
 }
-
-// Moved to circa_item.js
-// ItemsCtrl.prototype.updateItemFromSource = function(scope, itemId) {
-//   scope.loading = true;
-//   var path = '/items/' + itemId + '/update_from_source';
-//   var _this = this;
-//   this.apiRequests.get(path).then(function(response) {
-//     scope.loading = false;
-//     if (response.status == 200) {
-//       scope.item = response.data['item'];
-//     }
-//     else if (response.data['error'] && response.data['error']['detail']) {
-//       scope.flash = response.data['error']['detail'];
-//     }
-//   });
-// }

@@ -184,7 +184,7 @@ The application defines four primary classes:
 
 * **Order** - a request for materials
 * **Item** - an individual item that can be requested and delivered for use (e.g. a box, volume, etc.)
-* **User** - any person (either a staff member or a patron) associated with an order, or staff serving in an administrative capacity.
+* **User** - any person (either a staff member or a researcher) associated with an order, or staff serving in an administrative capacity.
 * **Location** - a physical location to or from which Items can be moved
 
 
@@ -215,9 +215,9 @@ When the Item is created, a corresponding Location record will be created (if a 
 
 ### Users
 
-The User model is used for both researchers/patrons and for staff users of Circa. Circa uses Devise for authentication, and the User model includes all of the attributes that are provided with the Devise registration module.
+The User model is used for both researchers/researchers and for staff users of Circa. Circa uses Devise for authentication, and the User model includes all of the attributes that are provided with the Devise registration module.
 
-Users are categorized by user role and patron type.
+Users are categorized by user role and researcher type.
 
 
 #### User roles
@@ -228,14 +228,14 @@ User roles provide high-level categorization of users. The default roles are:
 * admin
 * staff
 * assistant
-* patron
+* researcher
 
 Roles are used to provide authorization of some functionality in the system (currently just for admins). Each role is assigned a level (integer) which determines the User's level of access. A user with a role with a lower level has all of the privileges of roles with higher level values.
 
 
-#### Patron type
+#### Researcher type
 
-Every user, even staff, currently have to be assigned a patron type. This value is primarily for reporting purposes - there is no variable functionality associated with patron types.
+Every user, even staff, currently have to be assigned a researcher type. This value is primarily for reporting purposes - there is no variable functionality associated with researcher types.
 
 
 ### Locations

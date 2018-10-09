@@ -1,20 +1,39 @@
-<div ng-include="templateUrl('common/app_header')"></div>
+<div ng-controller="UserRolesEditCtrl as ctrl">
 
-<div ng-show="loading" ng-include="templateUrl('common/processing')"/>
+  <div ng-include="ctrl.templateUrl('common/app_header')"></div>
 
-<h1>Edit user role</h1>
+  <main>
 
-<div ng-hide="loading">
+    <div
+        ng-show="ctrl.loading"
+        ng-include="ctrl.templateUrl('common/processing')">
+    </div>
 
-  <div ng-include="templateUrl('user_roles/form_fields')"/>
-    <button class="button" ng-click="updateUserRole()">Update</button>
-    <button class="button" ng-click="goto('/settings/user_roles/list')">Cancel</button>
-  </div>
+    <h1>Edit user role</h1>
 
-<!--
-  <div ng-if="debug" class="data-panel">
-    {{ userRole | json }}
-  </div>
- -->
+    <div ng-hide="ctrl.loading">
+
+      <div ng-include="ctrl.templateUrl('user_roles/form_fields')">
+      </div>
+
+      <button
+          class="button"
+          ng-click="ctrl.updateUserRole()">
+        Update
+      </button>
+
+      <button
+          class="button"
+          ng-click="ctrl.goto('/settings/user_roles/list')">
+        Cancel
+      </button>
+
+    </div>
+
+    <div ng-if="ctrl.debug" class="data-panel">
+      {{ ctrl.userRole | json }}
+    </div>
+
+  </main>
 
 </div>

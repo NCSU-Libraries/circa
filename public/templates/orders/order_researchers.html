@@ -1,15 +1,24 @@
-<ul class="sub-records-list users-list">
+<ul class="order-users-list">
 
-  <li ng-repeat="user in order['users'] | limitTo: calculatedUsersLimit()">
-    <span class="link" ng-click="showUser(user['id'])">{{ user['last_name'] }}, {{ user['first_name'] }} ({{ user['email'] }})</span>
-    <span ng-if="user['id'] == order['primary_user_id']">[primary]</span>
-    <span ng-if="!user['agreement_confirmed']" class="callout alert">This user has not signed the policies agreement <span class="link" ng-click="goto('users/' + user['id'] + '/edit')">Edit user</span></span>
+  <li ng-repeat="user in ctrl.order['users'] | limitTo: ctrl.calculatedUsersLimit()">
+    <span class="link" ng-click="ctrl.showUser(user['id'])">{{ user['last_name'] }},
+      {{ user['first_name'] }}
+      ({{ user['email'] }})</span>
+    <span ng-if="user.id == ctrl.order['primary_user_id']" class="inline-label-tag">Primary</span>
+    <span ng-if="user.remote" class="inline-label-tag">Remote</span>
+
+    <span ng-if="!user['agreement_confirmed']" class="callout alert">This user has not signed the policies agreement</span>
+
+    <span class="inline-edit-link">
+      <span class="link" ng-click="ctrl.goto('users/' + user['id'] + '/edit')"><i class="fas fa-edit"></i></span>
+    </span>
+
   </li>
 
 </ul>
 
-<div ng-if="order['users'].length > usersLimit">
-  <span ng-if="truncateUsers" class="truncated-list-post-note">+ {{ order['users'].length - usersLimit }} more</span>
-  <span ng-if="truncateUsers" class="link" ng-click="toggleTruncateUsers()">Show all</span>
-  <span ng-if="!truncateUsers" class="link" ng-click="toggleTruncateUsers()">Show less</span>
+<div ng-if="ctrl.order['users'].length > ctrl.usersLimit">
+  <span ng-if="ctrl.truncateUsers" class="truncated-list-post-note">+ {{ ctrl.order['users'].length - ctrl.usersLimit }} more</span>
+  <span ng-if="ctrl.truncateUsers" class="link" ng-click="ctrl.toggleTruncateUsers()">Show all</span>
+  <span ng-if="!ctrl.truncateUsers" class="link" ng-click="ctrl.toggleTruncateUsers()">Show less</span>
 </div>

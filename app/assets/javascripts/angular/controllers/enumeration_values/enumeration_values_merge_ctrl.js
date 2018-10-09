@@ -1,27 +1,26 @@
 // Enumeration values list
 
-var EnumerationValuesMergeCtrl = function($scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils) {
+var EnumerationValuesMergeCtrl = function($route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils) {
 
-  EnumerationValuesCtrl.call(this, $scope, $route, $routeParams, $location, $window, $modal, apiRequests, sessionCache, commonUtils, formUtils);
+  EnumerationValuesCtrl.call(this, $route, $routeParams, $location, $window, apiRequests, sessionCache, commonUtils, formUtils);
 
-  this.getEnumerationValue($scope, $routeParams.enumerationValueId);
+  this.getEnumerationValue($routeParams.enumerationValueId);
 
-  var setMergeIntoValues = function(scope, data) {
-    scope.mergeIntoValues = [];
-    for (var i = 0; i < scope.enumerationValuesList.length; i++) {
-      var value = scope.enumerationValuesList[i];
+  var setMergeIntoValues = function(data) {
+    this.mergeIntoValues = [];
+    for (var i = 0; i < this.enumerationValuesList.length; i++) {
+      var value = this.enumerationValuesList[i];
       if (value['id'] != $routeParams.enumerationValueId) {
-        scope.mergeIntoValues.push(value);
+        this.mergeIntoValues.push(value);
       }
     }
   }
 
-  this.getEnumerationValuesList($scope, $routeParams.enumerationName, setMergeIntoValues);
+  this.getEnumerationValuesList($routeParams.enumerationName, setMergeIntoValues);
 
-  $scope.mode = 'merge';
-
+  this.mode = 'merge';
 }
 
 EnumerationValuesMergeCtrl.prototype = Object.create(EnumerationValuesCtrl.prototype);
-EnumerationValuesMergeCtrl.$inject = ['$scope', '$route', '$routeParams', '$location', '$window', '$modal', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
+EnumerationValuesMergeCtrl.$inject = ['$route', '$routeParams', '$location', '$window', 'apiRequests', 'sessionCache', 'commonUtils', 'formUtils'];
 circaControllers.controller('EnumerationValuesMergeCtrl', EnumerationValuesMergeCtrl);

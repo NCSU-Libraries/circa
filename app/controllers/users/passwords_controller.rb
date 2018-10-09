@@ -1,6 +1,6 @@
 class Users::PasswordsController < Devise::PasswordsController
 
-  skip_before_filter :require_no_authentication
+  skip_before_action :require_no_authentication
 
   # GET /resource/password/new
   # def new
