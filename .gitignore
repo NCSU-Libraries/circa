@@ -37,3 +37,4 @@ vendor/bundle
 
 # ignore Jasmine Rakefile - messes up asset compilation
 app/assets/javascripts/angular/controllers/Rakefile
+app/custom
