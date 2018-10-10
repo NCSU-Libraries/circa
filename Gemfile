@@ -63,6 +63,9 @@ gem 'resque-scheduler'
 
 gem 'whenever', :require => false
 
+# security vulnerability fix - http://nvd.nist.gov/vuln/detail/CVE-2018-3760
+gem 'sprockets', '~> 3.7.2'
+
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console'

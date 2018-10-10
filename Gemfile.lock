@@ -283,7 +283,7 @@ GEM
       railties (>= 3.1)
     spring (2.0.2)
       activesupport (>= 4.2)
-    sprockets (3.7.1)
+    sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
     sprockets-rails (3.2.1)
@@ -362,6 +362,7 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   sinon-rails
   spring
+  sprockets (~> 3.7.2)
   sprockets-rails
   sqlite3
   therubyracer
@@ -372,4 +373,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.16.1
+   1.16.4
