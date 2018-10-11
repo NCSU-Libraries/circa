@@ -12,7 +12,10 @@
 
     <div ng-hide="loading">
 
-      <div ng-include="ctrl.templateUrl('users/ldap_search')"/>
+      <div
+        ng-if="ctrl.customTemplateExists('ldapSearch')"
+        ng-include="ctrl.customTemplateUrl('ldapSearch')">
+      </div>
 
       <div
           class="form user-form"

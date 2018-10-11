@@ -14,6 +14,11 @@
 
       <div ng-hide="ctrl.loading">
 
+        <div
+          ng-if="ctrl.customTemplateExists('ldapSearch')"
+          ng-include="ctrl.customTemplateUrl('ldapSearch')">
+        </div>
+
         <div ng-init="user = ctrl.user">
           <div class="user-form" ng-include="ctrl.templateUrl('users/form_fields')"/>
         </div>

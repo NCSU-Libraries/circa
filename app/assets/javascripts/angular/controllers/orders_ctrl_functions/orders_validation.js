@@ -109,7 +109,8 @@ OrdersCtrl.prototype.validateReproductionSpec = function() {
   if (this.order['order_type']['name'] == 'reproduction') {
     this.order['item_orders'].forEach(function(itemOrder, index) {
 
-      if (!itemOrder['reproduction_spec']['detail'] ||
+      if (!itemOrder['reproduction_spec'] ||
+          !itemOrder['reproduction_spec']['detail'] ||
           itemOrder['reproduction_spec']['detail'].length == 0) {
         _this.validationErrors['reproduction_spec_detail'][index] =
             "Details of items for reproduction must be provided";

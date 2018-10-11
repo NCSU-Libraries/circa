@@ -1,7 +1,8 @@
 <div ng-class="ctrl.validationErrors['users'] ? 'has-error' : ''">
 
-  <h2 ng-if="ctrl.order['order_type']['name'] == 'research'">Researchers</h2>
-  <h2 ng-if="ctrl.order['order_type']['name'] != 'research'">Requester</h2>
+  <h2>
+    {{ ctrl.order['order_type']['name'] == 'research' ? 'Researchers' : 'Requester' }}
+  </h2>
 
   <div ng-if="ctrl.validationErrors['users']" class="validation-error field-validation-error">{{ ctrl.validationErrors['users'] }}</div>
 
@@ -13,14 +14,12 @@
 
     <span class="add-user-link">
       <span class="link" ng-click="ctrl.showUserSelector()">
-        <i class="fas fa-plus-circle"></i>Add existing user to order
-      </span>
+        <i class="fas fa-plus-circle"></i>Add existing user to order</span>
     </span>
 
     <span class="add-user-link">
       <span class="link" ng-click="ctrl.openNewUserModal()">
-        <i class="fas fa-plus-circle"></i>Create new user and add to order
-      </span>
+        <i class="fas fa-plus-circle"></i>Create new user and add to order</span>
     </span>
 
   </div>
