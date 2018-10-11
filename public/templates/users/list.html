@@ -16,9 +16,9 @@
 
     <div ng-include="ctrl.templateUrl('common/search_form')"></div>
 
-    <div ng-show="loading" ng-include="ctrl.templateUrl('common/processing')"/>
+    <div ng-show="ctrl.loading" ng-include="ctrl.templateUrl('common/processing')"/>
 
-    <div ng-hide="loading">
+    <div ng-hide="ctrl.loading">
       <div ng-include="ctrl.templateUrl('common/pagination')"></div>
 
       <ul class="records-list user-list">

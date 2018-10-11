@@ -6,11 +6,9 @@
 
     <h1>New user</h1>
 
-    <div
-        ng-show="loading"
-        ng-include="ctrl.templateUrl('common/processing')"/>
+    <div ng-show="ctrl.loading" ng-include="ctrl.templateUrl('common/processing')"/>
 
-    <div ng-hide="loading">
+    <div ng-hide="ctrl.loading">
 
       <div
         ng-if="ctrl.customTemplateExists('ldapSearch')"

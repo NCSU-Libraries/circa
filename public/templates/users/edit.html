@@ -13,11 +13,11 @@
       </h1>
 
       <div
-          ng-show="loading"
+          ng-show="ctrl.loading"
           ng-include="ctrl.templateUrl('common/processing')">
       </div>
 
-      <div ng-hide="loading">
+      <div ng-hide="ctrl.loading">
 
         <div
             class="form user-form"

@@ -8,9 +8,9 @@
 
     <p>NOTE: Permanent locations of materials are maintained in ArchivesSpace. This is for temporary locations only.</p>
 
-    <div ng-show="loading" ng-include="ctrl.templateUrl('common/processing')"/>
+    <div ng-show="ctrl.loading" ng-include="ctrl.templateUrl('common/processing')"/>
 
-    <div ng-hide="loading">
+    <div ng-hide="ctrl.loading">
 
       <div ng-include="ctrl.templateUrl('locations/form_fields')"/>
 
