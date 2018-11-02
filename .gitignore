@@ -40,6 +40,5 @@ app/assets/javascripts/angular/controllers/Rakefile
 
 # ignore NCSU customization symlinks
 app/custom
-app/assets/javascripts/angular/controllers/custom
 public/templates/custom
 config/initializers/wolftech_authenticatable.rb

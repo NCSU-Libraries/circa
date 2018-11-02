@@ -1,0 +1,6 @@
+---
+- name: bundle install
+  become_user: vagrant
+  shell: bash -lc "bundle install"
+  args:
+    chdir: /vagrant
