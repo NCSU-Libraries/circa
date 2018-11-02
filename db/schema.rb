@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2018_07_17_170822) do
 
-  create_table "access_sessions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "access_sessions", id: :integer, force: :cascade do |t|
     t.integer "item_id", null: false
     t.integer "order_id"
     t.datetime "start_datetime", null: false
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["order_id"], name: "fk_rails_41324cb864"
   end
 
-  create_table "course_reserves", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "course_reserves", id: :integer, force: :cascade do |t|
     t.string "course_number"
     t.string "course_name"
     t.integer "order_id"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "digital_collections_orders", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "digital_collections_orders", id: :integer, force: :cascade do |t|
     t.integer "order_id", null: false
     t.string "resource_identifier", null: false
     t.text "detail"
@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["resource_identifier"], name: "by_image_id"
   end
 
-  create_table "enumeration_values", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "enumeration_values", id: :integer, force: :cascade do |t|
     t.integer "enumeration_id"
     t.string "value"
     t.string "value_short"
@@ -58,14 +58,14 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["enumeration_id"], name: "index_enumeration_values_on_enumeration_id"
   end
 
-  create_table "enumerations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "enumerations", id: :integer, force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "invoices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "invoices", force: :cascade do |t|
     t.integer "order_id"
     t.date "invoice_date"
     t.date "payment_date"
@@ -76,14 +76,14 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "item_archivesspace_records", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "item_archivesspace_records", id: :integer, force: :cascade do |t|
     t.integer "item_id", null: false
     t.string "archivesspace_uri", null: false
     t.index ["archivesspace_uri"], name: "index_item_archivesspace_records_on_archivesspace_uri"
     t.index ["item_id"], name: "fk_rails_54d96fd87e"
   end
 
-  create_table "item_catalog_records", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "item_catalog_records", id: :integer, force: :cascade do |t|
     t.integer "item_id", null: false
     t.string "catalog_record_id", null: false
     t.string "catalog_item_id", null: false
@@ -92,7 +92,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "item_orders", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "item_orders", id: :integer, force: :cascade do |t|
     t.integer "item_id"
     t.integer "order_id"
     t.datetime "created_at", null: false
@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["order_id"], name: "index_item_orders_on_order_id"
   end
 
-  create_table "items", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "items", id: :integer, force: :cascade do |t|
     t.string "resource_title", limit: 8704
     t.string "resource_identifier"
     t.string "resource_uri"
@@ -128,7 +128,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["resource_uri"], name: "index_items_on_resource_uri"
   end
 
-  create_table "locations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "locations", id: :integer, force: :cascade do |t|
     t.string "title"
     t.string "uri"
     t.datetime "created_at", null: false
@@ -141,7 +141,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["uri"], name: "index_locations_on_uri"
   end
 
-  create_table "notes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "notes", id: :integer, force: :cascade do |t|
     t.integer "noted_id"
     t.string "noted_type"
     t.text "content"
@@ -150,7 +150,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["noted_type", "noted_id"], name: "index_notes_on_noted_type_and_noted_id"
   end
 
-  create_table "order_assignments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "order_assignments", id: :integer, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "order_id", null: false
     t.datetime "created_at", null: false
@@ -159,7 +159,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["user_id"], name: "index_order_assignments_on_user_id"
   end
 
-  create_table "order_fees", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "order_fees", id: :integer, force: :cascade do |t|
     t.integer "record_id"
     t.string "record_type"
     t.decimal "per_unit_fee", precision: 7, scale: 2
@@ -171,7 +171,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.string "per_order_fee_description"
   end
 
-  create_table "order_sub_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "order_sub_types", id: :integer, force: :cascade do |t|
     t.string "name", null: false
     t.string "label", null: false
     t.integer "order_type_id", null: false
@@ -182,14 +182,14 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["order_type_id"], name: "fk_rails_db7b89e182"
   end
 
-  create_table "order_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "order_types", id: :integer, force: :cascade do |t|
     t.string "name", null: false
     t.string "label", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "order_users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "order_users", id: :integer, force: :cascade do |t|
     t.integer "user_id"
     t.integer "order_id"
     t.datetime "created_at", null: false
@@ -200,7 +200,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["user_id"], name: "index_order_users_on_user_id"
   end
 
-  create_table "orders", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "orders", id: :integer, force: :cascade do |t|
     t.date "access_date_start"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -215,7 +215,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["location_id"], name: "fk_rails_5b9551c291"
   end
 
-  create_table "reproduction_formats", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "reproduction_formats", id: :integer, force: :cascade do |t|
     t.string "name"
     t.decimal "default_unit_fee_internal", precision: 7, scale: 2
     t.datetime "created_at", null: false
@@ -225,7 +225,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.decimal "default_unit_fee", precision: 7, scale: 2
   end
 
-  create_table "reproduction_specs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "reproduction_specs", id: :integer, force: :cascade do |t|
     t.integer "item_order_id"
     t.text "detail"
     t.integer "pages"
@@ -234,7 +234,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "state_transitions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "state_transitions", id: :integer, force: :cascade do |t|
     t.integer "record_id", null: false
     t.string "record_type", null: false
     t.string "to_state", null: false
@@ -251,7 +251,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["to_state"], name: "index_state_transitions_on_to_state"
   end
 
-  create_table "user_access_sessions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "user_access_sessions", id: :integer, force: :cascade do |t|
     t.integer "access_session_id", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
@@ -260,14 +260,14 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["user_id"], name: "fk_rails_7838ae636f"
   end
 
-  create_table "user_roles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "user_roles", id: :integer, force: :cascade do |t|
     t.string "name"
     t.integer "level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "users", id: :integer, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -303,7 +303,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_170822) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "versions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "versions", id: :integer, force: :cascade do |t|
     t.string "item_type", null: false
     t.integer "item_id", null: false
     t.string "event", null: false
