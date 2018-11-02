@@ -17,12 +17,6 @@
       rvm1_user: "{{ansible_user}}"
       rvm1_rvm_version: 'stable'
       rvm1_autolib_mode: 3
-    # - role: dev-open-firewall
-    #   ports:
-    #     - 3000
-    #     - 8983
-    #     - 80
-    #     - 443
     - role: dev-bundle
       become: yes
       become_method: sudo
