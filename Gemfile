@@ -66,6 +66,9 @@ gem 'whenever', :require => false
 # security vulnerability fix - http://nvd.nist.gov/vuln/detail/CVE-2018-3760
 gem 'sprockets', '~> 3.7.2'
 
+# security vulnerability fix - https://nvd.nist.gov/vuln/detail/CVE-2018-16468
+gem "loofah", ">= 2.2.3"
+
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console'
