@@ -1,6 +1,13 @@
 # Circa Demo Vagrant Box
 
-Follow these steps to get a vagrant box demo of Circa up and running
+Follow these steps to get a vagrant box demo of Circa up and running.
+
+## Prerequisites
+1. Vagrant - vagrant is available for all operating systems and instructions for installing vagrant can be found here: https://www.vagrantup.com/downloads.html
+2. ArchivesSpace - Circa requires an ArchivesSpace installation with the following additional requirements
+   1. the archivesspace-component-uri-display-plugin that is found here: https://github.com/NCSU-Libraries/archivesspace-component-uri-display-plugin must be installed and enabled on your ArchivesSpace installation. For testing purposes it is okay if this is installed on just staging - if that is the instance of ArchivesSpace that you will be using for the demo.
+   2. ArchivesSpace username/password. The Circa demo will retrieve resource URIs from ArchiveSpace which requires a username and password.
+
 
 1. Open your terminal application and `run git clone git@github.com:NCSU-Libraries/circa.git`
 2. run cd circa
