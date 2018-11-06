@@ -2,7 +2,7 @@
 
 Follow these steps to get a vagrant box demo of Circa up and running
 
-1. Open your terminal application and run git clone https://github.com/toddstoffer/circa
+1. Open your terminal application and `run git clone git@github.com:NCSU-Libraries/circa.git`
 2. run cd circa
 3. Create a copy of the file config/application_example.yml and name it application.yml (keeping it in the config folder)
 4. Create a copy of the file config/database-sqlite3.yml and name to database.yml (keeping it in the config folder)
