@@ -10,13 +10,29 @@
 
 - name: generating secrets
   become_user: vagrant
-  shell: bash -lc "bundle exec rake circa:generate_secrets"
+  shell: bundle exec rake {{item}}
   args:
     chdir: /vagrant
+  with_items:
+    - circa:generate_secrets
+    - db:schema:load
+    - db:seed
+    - users:create_admin
 
-# - name: run rake scripts
-#   command: "{{bundler_executable_path}} exec rake {{item}}"
-#   with_items:
-#     - db:schema:load
-#     - db:seed
-#     - users:create_admin
+
+# - name: load schema
+#   become_user: vagrant
+#   shell: bundle exec rake db:schema:load
+#   args:
+#     chdir: /vagrant
+# - name: seed db
+#   become_user: vagrant
+#   shell: bundle exec rake db:seed
+#   args:
+#     chdir: /vagrant
+# - name: create admin user
+#   become_user: vagrant
+#   shell: bundle exec rake users:create_admin
+#   :
+#   args:
+#     chdir: /vagrant
