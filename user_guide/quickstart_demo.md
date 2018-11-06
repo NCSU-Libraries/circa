@@ -1,7 +1,5 @@
 # Circa Demo Vagrant Box
 
-Follow these steps to get a vagrant box demo of Circa up and running.
-
 ## Prerequisites
 1. Vagrant - vagrant is available for all operating systems and instructions for installing vagrant can be found here: https://www.vagrantup.com/downloads.html
 2. ArchivesSpace - Circa requires an ArchivesSpace installation with the following additional requirements
