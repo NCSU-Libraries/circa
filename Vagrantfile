@@ -6,7 +6,6 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = "circa"
   config.ssh.forward_agent = "true"
   config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
-  config.vbguest.auto_update = true
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
