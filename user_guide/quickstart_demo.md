@@ -14,11 +14,12 @@
    2. ArchivesSpace username/password. The Circa demo will retrieve resource URIs from ArchiveSpace which requires a username and password.
 
 ## Quick Start
+### Installation
 
 1. Make sure you have installed Vagrant and VirtualBox
 2. Install the vbguest Vagrant plugin by running the command `vagrant plugin install vagrant-vbguest` from your terminal application
 3. Run  `git clone git@github.com:NCSU-Libraries/circa.git` from your terminal to clone the Circa GitHub repo
-4. run cd circa`
+4. Run `cd circa`
 5. Create a copy of the file config/application_example.yml and name it application.yml (keeping it in the config folder)
 6. Create a copy of the file config/database-sqlite3.yml and name to database.yml (keeping it in the config folder)
 7. Update application.yml with the information needed to connect with your ArchivesSpace installation
@@ -49,10 +50,8 @@
    1. This will import the vagrant box, boot up and run the ansible provisioner which installs all of the necessary application components - it may take a little while for this process to complete. **At the end of the process you will see 1 failed task - this is expected.**
 
 9. From your terminal run `vagrant provision`
-10. run `vagrant ssh` to ssh into the newly created virtual machine
-11. run `cd /vagrant` to change into the application root folder
-12. run `rails s -b 0.0.0.0`
-13. in your browser go to localhost:3000
-14. login using admin@circa as the username and  circa_admin as the password
-15. click on locations > create new location
-    1. Give it a name and click create location
+10. Run `vagrant ssh` to ssh into the newly created virtual machine
+11. Run `cd /vagrant` to change into the application root folder
+12. Run `rails s -b 0.0.0.0` to start the application
+13. In your browser go to localhost:3000
+14. Log in using the username **admin@circa** and the password **circa_admin**
