@@ -1,14 +1,16 @@
 ---
 - hosts: circa
-  become: yes
-  become_method: sudo
-  become_user: root
   gather_facts: yes
   vars:
-    - ruby_version: ruby-2.4.1
+    - ruby_version: ruby-2.5.0
     - project_name: circa
   roles:
-    - role: basic-setup
+    # - role: mariadb
+    #   become: yes
+    #   databases:
+    #     - "{{project_name}}"
+    #     - "{{project_name}}_test"
+
     - role: rvm_io.ruby
       tags: ruby
       rvm1_rubies:
@@ -17,21 +19,22 @@
       rvm1_user: "{{ansible_user}}"
       rvm1_rvm_version: 'stable'
       rvm1_autolib_mode: 3
-    - role: dev-bundle
-      become: yes
-      become_method: sudo
-      become_user: vagrant
-      ruby: "{{bundler_ruby}}"
+
     - role: geerlingguy.java
       become: yes
       when: "ansible_os_family == 'RedHat'"
       java_packages:
         - java-1.8.0-openjdk
-    - role: ansible-solr
-      version: 6.6.0
-      confdir: /vagrant/solr_conf/
-      cores:
+
+    - role: geerlingguy.solr
+      become: yes
+      solr_version: "6.6.0"
+      solr_create_user: true
+      solr_user: "{{ansible_user}}"
+      solr_remove_cruft: true
+      solr_port: "8983"
+      solr_cores:
         - circa
-      group: vagrant
-    # - role: archivesspace
+
+    - role: archivesspace
     - role: circa

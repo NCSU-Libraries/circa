@@ -8,13 +8,48 @@
     - sqlite
     - mysql-devel
 
+- name: adding archivesspace.yml config
+  template:
+    src: templates/archivesspace.j2
+    dest: "/vagrant/config/archivesspace.yml"
+    mode: 0700
+
+- name: adding database.yml config
+  template:
+    src: templates/database-sqlite3.j2
+    dest: "/vagrant/config/database.yml"
+    mode: 0700
+
+- name: adding email.yml config
+  template:
+    src: templates/email.j2
+    dest: "/vagrant/config/email.yml"
+    mode: 0700
+
+- name: adding solr.yml config
+  template:
+    src: templates/solr.j2
+    dest: "/vagrant/config/solr.yml"
+    mode: 0700
+
+# - name: install executable-hooks
+#   gem:
+#     name: executable-hooks
+#     state: present
+#     user_install: yes
+
+- name: bundle install
+  bundler:
+    state: present
+    executable: "{{bundler_executable_path}}"
+    chdir: "/vagrant"
+
 - name: generating secrets
-  become_user: vagrant
-  shell: bundle exec rake {{item}}
-  args:
-    chdir: /vagrant
+  command: "{{bundler_executable_path}} exec rake circa:generate_secrets"
+
+- name: run rake scripts
+  command: "{{bundler_executable_path}} exec rake {{item}}"
   with_items:
-    - circa:generate_secrets
     - db:schema:load
     - db:seed
     - users:create_admin

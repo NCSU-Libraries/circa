@@ -1,0 +1,22 @@
+defaults: &defaults
+  archivesspace_backend_port: {{archivesspace_backend_port}}
+  archivesspace_frontend_port: {{archivesspace_frontend_port}}
+  archivesspace_solr_port: {{archivesspace_solr_port}}
+  archivesspace_solr_core_path: {{archivesspace_solr_core_path}}
+  archivesspace_username: {{archivesspace_username}}
+  archivesspace_password: {{archivesspace_password}}
+  archivesspace_host: {{archivesspace_host}}
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+  archivesspace_host: {{archivesspace_host_staging}}
+
+production:
+  <<: *defaults
+  archivesspace_host: {{archivesspace_host_production}}

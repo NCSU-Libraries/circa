@@ -4,9 +4,6 @@ A web-based system for managing requests for special collections materials. The 
 
 Circa provides close integration with ArchivesSpace, upon which the application depends for managing containers associated with specific collection components, as well as the location of those containers. It can also support requests for materials described in an ILS.
 
-## [Circa Demo Quick Start](user_guide/quickstart_demo.md)
-If you would like to see a demonstration of Circa, you can install it locally using Vagrant. Instructions for doing so are at  [user_guide/quickstart_demo.md](user_guide/quickstart_demo.md).
-
 
 # System requirements
 
