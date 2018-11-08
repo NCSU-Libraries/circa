@@ -17,11 +17,11 @@
 ### Installation
 
 1. Make sure you have installed Vagrant and VirtualBox
-2. Install the vbguest Vagrant plugin by running the command `vagrant plugin install vagrant-vbguest` from your terminal application
-3. Run  `git clone git@github.com:NCSU-Libraries/circa.git` from your terminal to clone the Circa GitHub repo
-4. Run `cd circa`
-5. Create a copy of the file config/application_example.yml and name it application.yml (keeping it in the config folder)
-6. Create a copy of the file config/database-sqlite3.yml and name to database.yml (keeping it in the config folder)
+2. Install the vbguest Vagrant plugin by running the command `vagrant plugin install vagrant-vbguest` from your terminal application.
+3. Clone the Circa repository to your local machine by running `git clone git@github.com:NCSU-Libraries/circa.git`or download and unzip from https://github.com/ncsu-libraries/circa.
+4. Run `cd circa`.
+5. Rename application_example.yml to application.yml in the config directory. 
+6. Rename database-sqlite3.yml to database.yml in the config directory. 
 7. Update application.yml with the information needed to connect with your ArchivesSpace installation
 
      * **archivesspace_host** (ex. *archivespace.yourhost.org*)<br>
@@ -46,8 +46,11 @@
 
      * **archivesspace_https**: To force connections via https, set this to '1',
      otherwise leave it out.
-8. From your terminal run `vagrant up`
-   1. This will import the vagrant box, boot up and run the ansible provisioner which installs all of the necessary application components - it may take a little while for this process to complete. **At the end of the process you will see 1 failed task - this is expected.**
+     
+8. From your terminal `cd` into the Circa directory and run `vagrant up`
+   > This will import the correct base VM, boot up, and run the ansible provisioner that installs all of the necessary application components. This process will take a few minutes to complete.
+   >
+   > **At the end of the process you will see 1 failed task - this is expected.**
 
 9. From your terminal run `vagrant provision`
 10. Run `vagrant ssh` to ssh into the newly created virtual machine
