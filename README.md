@@ -113,7 +113,7 @@ will override **archivesspace_host**
 The port number used to connect to the ArchivesSpace backend. If your deployment
 does not require a port number (e.g. for SSL) **do not include this option**.
 
-* **archivesspace_backend_port** (ex. *8080*)<br>
+* **archivesspace_frontend_port** (ex. *8080*)<br>
 The port number used to connect to the ArchivesSpace frontend. If your deployment
 does not require a port number (e.g. for SSL) **do not include this option**.
 
