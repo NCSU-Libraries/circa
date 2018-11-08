@@ -24,20 +24,25 @@
 6. Rename database-sqlite3.yml to database.yml in the config directory. 
 7. Update application.yml with the information needed to connect with your ArchivesSpace installation
 
-     * **archivesspace_host** (ex. *archivespace.yourhost.org*)<br>
-     The host name for the ArchivesSpace instance.
-     This option should be used for the 'default' ArchivesSpace deployment scenario,
-     with each component sharing a host but served on different ports.
+     * **archivesspace_host** (ex. *archivespace.yourhost.org*)
+     
+        The host name for the ArchivesSpace instance. This option should be used for the 'default' ArchivesSpace deployment scenario, with each component sharing a host but served on different ports.
 
-     * **archivesspace_backend_host** (ex. *api.archivespace.yourhost.org*)<br>
-     The hostname for the ArchivesSpace backend (API).
-     Use this option if the backend uses an unique host name. If present, this value
-     will override **archivesspace_host**
+     * **archivesspace_backend_host** (ex. *api.archivespace.yourhost.org*)
+     
+        The hostname for the ArchivesSpace backend (API). Use this option if the backend uses an unique host name. If present, this value will override **archivesspace_host**
 
-     * **archivesspace_frontend_host** (ex. *staff.archivespace.yourhost.org*)<br>
-     The hostname for the ArchivesSpace frontend (staff interface).
-     Use this option if the frontend uses an unique host name. If present, this value
-     will override **archivesspace_host**
+     * **archivesspace_frontend_host** (ex. *staff.archivespace.yourhost.org*)
+     
+        The hostname for the ArchivesSpace frontend (staff interface). Use this option if the frontend uses an unique host name. If present, this value will override **archivesspace_host**
+     
+     * **archivesspace_backend_port** (ex. *8089*)
+     
+        The port number used to connect to the ArchivesSpace backend. If your deployment does not require a port number (e.g. for SSL) **do not include this option**.
+
+     * **archivesspace_frontend_port** (ex. *8080*)
+     
+        The port number used to connect to the ArchivesSpace frontend. If your deployment does not require a port number (e.g. for SSL) **do not include this option**.
 
      * **archivesspace_username**: User name used to connect to ArchivesSpace.
      User should have read access to all resources.
@@ -48,9 +53,10 @@
      otherwise leave it out.
      
 8. From your terminal `cd` into the Circa directory and run `vagrant up`
-   > This will import the correct base VM, boot up, and run the ansible provisioner that installs all of the necessary application components. This process will take a few minutes to complete.
-   >
-   > **At the end of the process you will see 1 failed task - this is expected.**
+   
+      This will import the correct base VM, boot up, and run the ansible provisioner that installs all of the necessary application components. This process will take a few minutes to complete.
+   
+      **At the end of the process you will see 1 failed task - this is expected.**
 
 9. From your terminal run `vagrant provision`
 10. Run `vagrant ssh` to ssh into the newly created virtual machine
