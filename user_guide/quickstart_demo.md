@@ -3,10 +3,12 @@
 ## Prerequisites
 1. **Vagrant** - Vagrant is available for all operating systems and instructions for installing vagrant can be found here: https://www.vagrantup.com/downloads.html
 2. **Virtualbox** - Virtalbox is required for management of the vagrant machines. Virtualbox can be downloaded at https://www.virtualbox.org/wiki/Downloads
-   **Important Note About VirtualBox and OSX 10.13 (High Sierra)** There is a known error with the compatibility of VirtualBox and a security setting in OSX 10.13. You must give VirtualBox additional permissions to run using the following steps.
-      1. Open System Preferences
-      2. Click on Security & Privacy
-      3. If you see a sentence that reads "System software from developer... was blocked from loading" click the 'allow' button next to it
+   
+   > **Important Note About VirtualBox and OSX 10.13 (High Sierra)** There is a known error with the compatibility of VirtualBox and a security setting in OSX 10.13. You must give VirtualBox additional permissions to run using the following steps.
+   >   1. Open System Preferences
+   >   2. Click on Security & Privacy
+   >   3. If you see a sentence that reads "System software from developer... was blocked from loading" click the 'allow' button next to it
+   
 2. **ArchivesSpace** - Circa requires an ArchivesSpace installation with the following additional requirements
    1. the archivesspace-component-uri-display-plugin that is found here: https://github.com/NCSU-Libraries/archivesspace-component-uri-display-plugin must be installed and enabled on your ArchivesSpace installation. For testing purposes it is okay if this is installed on just staging - if that is the instance of ArchivesSpace that you will be using for the demo.
    2. ArchivesSpace username/password. The Circa demo will retrieve resource URIs from ArchiveSpace which requires a username and password.
