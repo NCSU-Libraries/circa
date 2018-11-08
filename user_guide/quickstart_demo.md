@@ -3,7 +3,7 @@
 ## Prerequisites
 1. **Vagrant** - Vagrant is available for all operating systems and instructions for installing vagrant can be found here: https://www.vagrantup.com/downloads.html
 2. **Virtualbox** - Virtalbox is required for management of the vagrant machines. Virtualbox can be downloaded at https://www.virtualbox.org/wiki/Downloads
-   **Important Note About VirtualBox and OSX 10.13 (High Sierra)** There is a known error with the compatibility of VirtualBox and OSX 10.13. This will cause the Vagrant provisioning to fail. You must give VirtualBox additional permissions to run using the following steps.
+   **Important Note About VirtualBox and OSX 10.13 (High Sierra)** There is a known error with the compatibility of VirtualBox and a security setting in OSX 10.13. You must give VirtualBox additional permissions to run using the following steps.
       1. Open System Preferences
       2. Click on Security & Privacy
       3. If you see a sentence that reads "System software from developer... was blocked from loading" click the 'allow' button next to it
