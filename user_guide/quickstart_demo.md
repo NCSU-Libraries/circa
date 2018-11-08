@@ -10,8 +10,8 @@
    >   3. If you see a sentence that reads "System software from developer... was blocked from loading" click the 'allow' button next to it
    
 2. **ArchivesSpace** - Circa requires an ArchivesSpace installation with the following additional requirements
-   1. the archivesspace-component-uri-display-plugin that is found here: https://github.com/NCSU-Libraries/archivesspace-component-uri-display-plugin must be installed and enabled on your ArchivesSpace installation. For testing purposes it is okay if this is installed on just staging - if that is the instance of ArchivesSpace that you will be using for the demo.
-   2. ArchivesSpace username/password. The Circa demo will retrieve resource URIs from ArchiveSpace which requires a username and password.
+   1. The archivesspace-component-uri-display-plugin that is found here: https://github.com/NCSU-Libraries/archivesspace-component-uri-display-plugin must be installed and enabled on your ArchivesSpace installation. For testing purposes it is okay if this is installed on just staging - if that is the instance of ArchivesSpace that you will be using for the demo.
+   2. ArchivesSpace username/password. The Circa demo will retrieve resource URIs from ArchiveSpace which requires a username and password. This should be a new account that is just used for Circa. It requires read access to all ArchivesSpace resources.
 
 ## Quick Start
 ### Installation
