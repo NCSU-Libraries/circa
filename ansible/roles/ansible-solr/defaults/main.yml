@@ -1,0 +1,3 @@
+version: "6.6.2"
+group: deploy
+solr_user: solr
