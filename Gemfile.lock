@@ -180,7 +180,7 @@ GEM
     paper_trail-association_tracking (1.0.0)
     phantomjs (2.1.1.0)
     raabro (1.1.5)
-    rack (2.0.5)
+    rack (2.0.6)
     rack-protection (2.0.3)
       rack
     rack-test (1.0.0)
@@ -351,6 +351,7 @@ DEPENDENCIES
   mysql2
   net-ldap
   paper_trail (>= 9.2.0)
+  rack (>= 2.0.6)
   rails (~> 5.2.0)
   rails-controller-testing
   rake

@@ -63,11 +63,15 @@ gem 'resque-scheduler'
 
 gem 'whenever', :require => false
 
-# security vulnerability fix - http://nvd.nist.gov/vuln/detail/CVE-2018-3760
+# security vulnerability fix: http://nvd.nist.gov/vuln/detail/CVE-2018-3760
 gem 'sprockets', '~> 3.7.2'
 
-# security vulnerability fix - https://nvd.nist.gov/vuln/detail/CVE-2018-16468
+# security vulnerability fix: https://nvd.nist.gov/vuln/detail/CVE-2018-16468
 gem "loofah", ">= 2.2.3"
+
+# security vulnerabilities fix: https://nvd.nist.gov/vuln/detail/CVE-2018-16471
+# and https://nvd.nist.gov/vuln/detail/CVE-2018-16470
+gem "rack", ">= 2.0.6"
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
