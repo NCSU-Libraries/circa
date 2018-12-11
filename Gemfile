@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~>5.2.0'
+gem 'rails', '~>5.2.1'
 gem 'rake'
 
 # Use mysql as the database for Active Record
@@ -72,6 +72,9 @@ gem "loofah", ">= 2.2.3"
 # security vulnerabilities fix: https://nvd.nist.gov/vuln/detail/CVE-2018-16471
 # and https://nvd.nist.gov/vuln/detail/CVE-2018-16470
 gem "rack", ">= 2.0.6"
+
+# security vulnerabilities fix: https://nvd.nist.gov/vuln/detail/CVE-2018-16477
+gem "activestorage", ">= 5.2.1.1"
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
