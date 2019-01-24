@@ -1,7 +1,7 @@
 <div class="list-sort">
-<span class="label">Sort:</span>
-<span class="sort-option link" ng-if="ctrl.sortField != 'access_date_start'" ng-click="ctrl.sortList('access_date_start')">Access date</span>
-<span class="sort-option selected" ng-if="ctrl.sortField == 'access_date_start'">Access date <span ng-include="ctrl.templateUrl('common/sort_order_toggle_numeric')"></span></span>
-<span class="sort-option link" ng-if="ctrl.sortField != 'created_at'" ng-click="ctrl.sortList('created_at')">Date created</span>
-<span class="sort-option selected" ng-if="ctrl.sortField == 'created_at'">Date created <span ng-include="ctrl.templateUrl('common/sort_order_toggle_numeric')"></span></span>
+  <span class="label">Sort:</span>
+  <span class="sort-option link" ng-if="ctrl.sortField != 'created_at'" ng-click="ctrl.sortList('created_at')">Date created</span>
+  <span class="sort-option selected" ng-if="ctrl.sortField == 'created_at'">Date created <span ng-include="ctrl.templateUrl('common/sort_order_toggle_numeric')"></span></span>
+  <span class="sort-option link" ng-if="ctrl.sortField != 'access_date_start'" ng-click="ctrl.sortList('access_date_start')">Access date</span>
+  <span class="sort-option selected" ng-if="ctrl.sortField == 'access_date_start'">Access date <span ng-include="ctrl.templateUrl('common/sort_order_toggle_numeric')"></span></span>
 </div>

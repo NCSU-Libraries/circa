@@ -12,7 +12,7 @@ class OrdersController < ApplicationController
 
   def index
     @params = params
-    @params[:sort] ||= 'access_date_start desc'
+    @params[:sort] ||= 'created_at desc'
     @list = get_list_via_solr('order')
 
     @api_response = {
