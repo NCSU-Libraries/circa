@@ -376,7 +376,7 @@ module ItemStateConfig
     # This is a helper method used in even_callbacks above
     def close_applicable_orders(metadata={})
       open_orders.each do |o|
-        if o.finished? && o.order_type.name != 'reproduction'
+        if o.finished?
           o.trigger(:close, metadata)
         end
       end
