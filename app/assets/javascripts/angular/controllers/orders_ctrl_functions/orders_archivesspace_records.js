@@ -29,8 +29,11 @@ OrdersCtrl.prototype.orderArchivesSpaceRecords = function () {
 
 OrdersCtrl.prototype.addItemsFromArchivesSpace = function(callback) {
   var _this = this;
-
   var uri = this.archivesSpaceRecordSelect['uri'];
+  // ensure that leading slash is included in URI
+  if (!uri.match(/^\//)) {
+    uri = '/' + uri;
+  }
 
   this.archivesSpaceRecordSelect['loading'] = true;
   this.archivesSpaceRecordSelect['alert'] = null;
@@ -42,13 +45,12 @@ OrdersCtrl.prototype.addItemsFromArchivesSpace = function(callback) {
     }
   }
 
-
   if (_this.orderArchivesSpaceRecords().indexOf(uri) >= 0) {
     _this.initializeArchivesSpaceRecordSelect();
     _this.archivesSpaceRecordSelect['alert'] = 'The ArchivesSpace record at ' + uri + ' is already included in this order.';
   }
   else {
-    _this.apiRequests.post('items/create_from_archivesspace', { 'archivesspace_uri': _this.archivesSpaceRecordSelect['uri'], 'digital_object': _this.archivesSpaceRecordSelect['digitalObject'] } ).then(function(response) {
+    _this.apiRequests.post('items/create_from_archivesspace', { 'archivesspace_uri': uri, 'digital_object': _this.archivesSpaceRecordSelect['digitalObject'] } ).then(function(response) {
 
       _this.archivesSpaceRecordSelect['loading'] = false;
 
@@ -59,11 +61,11 @@ OrdersCtrl.prototype.addItemsFromArchivesSpace = function(callback) {
               _this.itemIds.push(item['id']);
               item['archivesspace_uri'] = uri;
 
-              _this.addItemOrder(item, _this.archivesSpaceRecordSelect['uri']);
+              _this.addItemOrder(item, uri);
             }
             else {
               _this.archivesSpaceRecordSelect['alert'] = "One or more containers corresponding to the ArchivesSpace record is already included in the order. The ArchivesSpace URI entered will be added for reference.";
-              addArchivesSpaceUriToItemOrder(item['id'], _this.archivesSpaceRecordSelect['uri']);
+              addArchivesSpaceUriToItemOrder(item['id'], uri);
             }
           });
           // _this.archivesSpaceRecordSelect['uri'] = null;
