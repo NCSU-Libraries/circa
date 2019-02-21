@@ -174,7 +174,7 @@
       <span class="field-label">Address (line 2)</span><br>
       <input
           type="text"
-          ng-model="user['address2']">
+          ng-model="ctrl.user['address2']">
       <div
           ng-if="ctrl.user.validationErrors['address2']"
           class="validation-error field-validation-error">
@@ -193,7 +193,7 @@
       <span class="field-label">City</span><br>
       <input
           type="text"
-          ng-model="user['city']">
+          ng-model="ctrl.user['city']">
       <div
           ng-if="ctrl.user.validationErrors['city']"
           class="validation-error field-validation-error">
