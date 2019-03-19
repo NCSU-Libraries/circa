@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
   config.vm.hostname = "circa"
   config.ssh.forward_agent = "true"
-  config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+  config.vm.synced_folder ".", "/vagrant", type: "sshfs", ssh_opts_append: "-o Compression=yes", sshfs_opts_append: "-o cache=no"
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -40,6 +40,9 @@ Vagrant.configure("2") do |config|
     vb.memory = 1024
     vb.cpus = 1
   end
+
+  # install git before running ansible provisioner
+  config.vm.provision "shell", inline: "yum -y install git"
 
   #ansible provisioning
   config.vm.provision "ansible_local" do |ansible|

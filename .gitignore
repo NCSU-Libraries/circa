@@ -7,7 +7,7 @@
 # Ignore secrets
 /config/application.yml
 /config/deploy.rb
-/config/database.yml
+# /config/database.yml
 /config/secrets.yml
 # legacy config files
 /config/archivesspace.yml

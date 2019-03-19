@@ -5,33 +5,45 @@
   become_user: root
   gather_facts: yes
   vars:
-    - ruby_version: ruby-2.4.1
+    - ruby_version: ruby-2.5.1
     - project_name: circa
-  roles:
-    - role: basic-setup
-    - role: rvm_io.ruby
-      tags: ruby
-      rvm1_rubies:
-        - "{{ ruby_version }}"
-      rvm1_bundler_install: True
-      rvm1_user: "{{ansible_user}}"
-      rvm1_rvm_version: 'stable'
-      rvm1_autolib_mode: 3
-    - role: dev-bundle
-      become: yes
-      become_method: sudo
-      become_user: vagrant
-      ruby: "{{bundler_ruby}}"
-    - role: geerlingguy.java
-      become: yes
-      when: "ansible_os_family == 'RedHat'"
-      java_packages:
-        - java-1.8.0-openjdk
-    - role: ansible-solr
-      version: 6.6.0
-      confdir: /vagrant/solr_conf/
-      cores:
-        - circa
-      group: vagrant
-    # - role: archivesspace
-    - role: circa
+  tasks:
+    - include_role:
+        name: basic-setup
+    - include_role:
+        name: geerlingguy.mysql
+    - include_role:
+        name: rvm.ruby
+      vars:
+        tags: ruby
+        rvm1_rubies:
+          - "{{ ruby_version }}"
+        rvm1_bundler_install: True
+        rvm1_user: "{{ansible_user}}"
+        rvm1_rvm_version: 'stable'
+        rvm1_autolib_mode: 3
+    - include_role:
+        name: dev-bundle
+      vars:
+        become: yes
+        become_method: sudo
+        become_user: vagrant
+        ruby: "{{bundler_ruby}}"
+    - include_role:
+        name: geerlingguy.java
+      vars:
+        become: yes
+        when: "ansible_os_family == 'RedHat'"
+        java_packages:
+          - java-1.8.0-openjdk
+    - include_role:
+        name: solr
+      vars:
+        version: 6.6.0
+        confdir: /vagrant/solr_conf/
+        cores:
+          - circa
+        solr_user: vagrant
+        group: vagrant
+    - include_role:
+        name: circa

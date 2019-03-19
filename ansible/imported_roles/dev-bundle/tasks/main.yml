@@ -1,0 +1,13 @@
+---
+- name: add github.ncsu.edu to known_hosts
+  become_user: vagrant
+  lineinfile:
+    state: present
+    dest: ~/.ssh/known_hosts
+    create: yes
+    line: github.ncsu.edu ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCy5K6oZoBJ881aKKkon5MB016unAgciPVqNAlFY6PWtbUd7qJEwbJJAtxZcY43UmB8x4SW8yjqLGeQDEjioDkYY/Ml58Sh+gzAdeMeloGI2uwgVw77bGvcREAZ8s/lpx3D48XtvbS/IU4CgOO7RcMFsOH0y4jVX0LDdDxKLVXu/mUxnrqB8d/NtaZjOeI1b38LxFpfF6RVD7MBC9xhuZUcofVLQMhZq+OZ85xBxqb8UV5Ujp5hPbjO2uBDf3F1G0VLZko8W6LIiJaeBrEVl2UhQR2NDX5w7sUPg9D9mRWDQvIws1C887XeyF84cxkshFzuqbbtnGPVDxNpjMnDoWsN
+- name: bundle install
+  become_user: vagrant
+  shell: bash -lc "bundle install"
+  args:
+    chdir: /vagrant
