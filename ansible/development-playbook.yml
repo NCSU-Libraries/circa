@@ -12,6 +12,10 @@
         name: basic-setup
     - include_role:
         name: geerlingguy.mysql
+      vars:
+        mysql_databases:
+          - name: circa
+          - name: circa_test
     - include_role:
         name: rvm.ruby
       vars:
