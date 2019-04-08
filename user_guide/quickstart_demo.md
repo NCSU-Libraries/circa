@@ -4,15 +4,15 @@
 1. [Vagrant](https://www.vagrantup.com/downloads.html)
 1. [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 1. Circa requires an [ArchivesSpace](https://archivesspace.org/) installation with the following additional requirements:
-   
-   a. The [archivesspace-component-uri-display-plugin](https://github.com/NCSU-Libraries/archivesspace-component-uri-display-plugin) must be installed and enabled on your ArchivesSpace installation.
-   
+
+   a. Version 2.5.2 or higher or, for earlier versions, the archivesspace-component-uri-display-plugin](https://github.com/NCSU-Libraries/archivesspace-component-uri-display-plugin) installed and enabled on your ArchivesSpace installation.
+
    b. ArchivesSpace username and password. The Circa demo will retrieve resource URIs from ArchiveSpace which requires a username and password. This should be a new account that is just used for Circa. It requires read access to all ArchivesSpace resources.
 
 ## Quick Start
 ### Installation
 
-Verify the prerequisites listed above. 
+Verify the prerequisites listed above.
 
 Check out the code and change directories:
 
@@ -27,7 +27,7 @@ Copy config/application_example.yml to config/application.yml:
 cp config/application_example.yml config/application.yml
 ```
 
-Update config/application.yml with the appropriate [ArchiveSpace connection parameters](https://github.com/NCSU-Libraries/circa#archivesspace-connection-parameters). 
+Update config/application.yml with the appropriate [ArchiveSpace connection parameters](https://github.com/NCSU-Libraries/circa#archivesspace-connection-parameters).
 
 Start Vagrant:
 
