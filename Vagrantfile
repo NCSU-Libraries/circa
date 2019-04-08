@@ -1,6 +1,15 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+vagrant_plugins = %w(vagrant-vbguest vagrant-sshfs)
+vagrant_plugins.each do |plugin|
+  unless Vagrant.has_plugin? plugin
+    puts "Plugin #{plugin} is not installed. Install it with:"
+    puts "vagrant plugin install #{vagrant_plugins.join(' ')}"
+    exit
+  end
+end
+
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
   config.vm.hostname = "circa"

@@ -71,3 +71,8 @@
     state: link
     force: yes
   with_items: "{{cores}}"
+- name: restart solr
+  become_user: "{{solr_user}}"
+  command: bin/solr restart
+  args:
+    chdir: /opt/solr

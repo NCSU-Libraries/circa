@@ -10,7 +10,7 @@
 
 - name: generating secrets
   become_user: vagrant
-  shell: bundle exec rake {{item}}
+  shell: ~/.rvm/gems/{{ ruby_version }}/wrappers/bundle exec rake {{item}}
   args:
     chdir: /vagrant
   with_items:
