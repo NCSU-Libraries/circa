@@ -3,7 +3,7 @@ OrdersCtrl.prototype.initializeArchivesSpaceRecordSelect = function() {
   this.archivesSpaceRecordSelect = {
     uri: '',
     loading: false,
-    alert: null,
+    alert: this.archivesSpaceRecordSelect['alert'] || null,
     digitalObject: false,
     show: false
   };
@@ -52,7 +52,7 @@ OrdersCtrl.prototype.addItemsFromArchivesSpace = function(callback) {
   // else {
 
     _this.apiRequests.post('items/create_from_archivesspace', { 'archivesspace_uri': uri, 'digital_object': _this.archivesSpaceRecordSelect['digitalObject'] } ).then(function(response) {
-
+      var alert = null;
       _this.archivesSpaceRecordSelect['loading'] = false;
 
       if (response.status == 200) {
@@ -65,7 +65,7 @@ OrdersCtrl.prototype.addItemsFromArchivesSpace = function(callback) {
               _this.addItemOrder(item, uri);
             }
             else {
-              _this.archivesSpaceRecordSelect['alert'] = "One or more containers corresponding to the ArchivesSpace record is already included in the order. The ArchivesSpace URI entered will be recorded for reference if unique to this order.";
+              alert = "One or more containers corresponding to the ArchivesSpace record is already included in the order. The ArchivesSpace URI entered will be recorded for reference if unique to this order.";
               addArchivesSpaceUriToItemOrder(item['id'], uri);
             }
           });
@@ -74,12 +74,13 @@ OrdersCtrl.prototype.addItemsFromArchivesSpace = function(callback) {
           _this.commonUtils.executeCallback(callback, response.data);
         }
         else {
-          _this.archivesSpaceRecordSelect['alert'] = 'The ArchivesSpace record at ' + uri + ' has no linked containers and cannot be ordered.';
+          alert = 'The ArchivesSpace record at ' + uri + ' has no linked containers and cannot be ordered.';
         }
       }
       else {
-        _this.archivesSpaceRecordSelect['alert'] = response.data['error']['detail'];
+        alert = response.data['error']['detail'];
       }
+      _this.archivesSpaceRecordSelect['alert'] = alert;
       _this.initializeArchivesSpaceRecordSelect();
     });
 
