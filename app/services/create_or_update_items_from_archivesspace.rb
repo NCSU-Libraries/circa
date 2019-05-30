@@ -147,7 +147,7 @@ class CreateOrUpdateItemsFromArchivesspace
       end
     end
     if @items_attributes.empty?
-      item_attributes = attributes.clone
+      item_attributes = @attributes.clone
       item_attributes[:digital_object] = true
       item_attributes[:unprocessed] = true
       item_attributes[:uri] = @data['uri']
