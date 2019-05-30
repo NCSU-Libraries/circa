@@ -18,7 +18,9 @@ If you would like to see a demonstration of Circa, you can install it locally us
 
 # Installation
 
-These instructions should help you get a local development version up and running. Better options for providing a development environment (like Vagrant) are in the works.
+These instructions should help you get a local development version up and running.
+
+To use Circa in production requires knowledge of deploying Rails applications on a web server or via a remote host. While the specifics of deploying Circa to a web server are beyond the scope of these instructions, most of the configuration instructions still apply.
 
 ## Clone repo and basic setup
 
