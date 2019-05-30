@@ -1,9 +1,9 @@
 // Initialize object used to manage selections from ArchivesSpace
-OrdersCtrl.prototype.initializeArchivesSpaceRecordSelect = function() {
+OrdersCtrl.prototype.initializeArchivesSpaceRecordSelect = function(alert) {
   this.archivesSpaceRecordSelect = {
     uri: '',
     loading: false,
-    alert: this.archivesSpaceRecordSelect['alert'] || null,
+    alert: alert || null,
     digitalObject: false,
     show: false
   };
@@ -80,8 +80,7 @@ OrdersCtrl.prototype.addItemsFromArchivesSpace = function(callback) {
       else {
         alert = response.data['error']['detail'];
       }
-      _this.archivesSpaceRecordSelect['alert'] = alert;
-      _this.initializeArchivesSpaceRecordSelect();
+      _this.initializeArchivesSpaceRecordSelect(alert);
     });
 
   // }
