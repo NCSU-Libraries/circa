@@ -207,6 +207,8 @@ table {
   border-width: 0;
   background: $yellow;
   padding: 0.5rem;
+  margin: 1rem 0;
+  font-weight: bold;
 
   &.notice, &.info {
     background-color: $blue;

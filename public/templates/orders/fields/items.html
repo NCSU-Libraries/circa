@@ -10,7 +10,9 @@
 
     <div ng-include="ctrl.templateUrl('orders/fields/item_list')"></div>
 
-    <div ng-show="ctrl.recordSelectAlert" class="alert">{{ ctrl.recordSelectAlert }}</div>
+
+    <div ng-show="ctrl.recordSelectAlert" class="alert-box warning">{{ ctrl.recordSelectAlert }}</div>
+
 
     <div class="add-item-links" ng-hide="ctrl.showItemSelector">
 
