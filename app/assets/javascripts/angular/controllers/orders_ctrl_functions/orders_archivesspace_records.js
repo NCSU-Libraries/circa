@@ -45,11 +45,12 @@ OrdersCtrl.prototype.addItemsFromArchivesSpace = function(callback) {
     }
   }
 
-  if (_this.orderArchivesSpaceRecords().indexOf(uri) >= 0) {
-    _this.initializeArchivesSpaceRecordSelect();
-    _this.archivesSpaceRecordSelect['alert'] = 'The ArchivesSpace record at ' + uri + ' is already included in this order.';
-  }
-  else {
+  // if (_this.orderArchivesSpaceRecords().indexOf(uri) >= 0) {
+  //   _this.initializeArchivesSpaceRecordSelect();
+  //   _this.archivesSpaceRecordSelect['alert'] = 'The ArchivesSpace record at ' + uri + ' is already included in this order.';
+  // }
+  // else {
+
     _this.apiRequests.post('items/create_from_archivesspace', { 'archivesspace_uri': uri, 'digital_object': _this.archivesSpaceRecordSelect['digitalObject'] } ).then(function(response) {
 
       _this.archivesSpaceRecordSelect['loading'] = false;
@@ -64,7 +65,7 @@ OrdersCtrl.prototype.addItemsFromArchivesSpace = function(callback) {
               _this.addItemOrder(item, uri);
             }
             else {
-              _this.archivesSpaceRecordSelect['alert'] = "One or more containers corresponding to the ArchivesSpace record is already included in the order. The ArchivesSpace URI entered will be added for reference.";
+              _this.archivesSpaceRecordSelect['alert'] = "One or more containers corresponding to the ArchivesSpace record is already included in the order. The ArchivesSpace URI entered will be recorded for reference if unique to this order.";
               addArchivesSpaceUriToItemOrder(item['id'], uri);
             }
           });
@@ -81,6 +82,7 @@ OrdersCtrl.prototype.addItemsFromArchivesSpace = function(callback) {
       }
       _this.initializeArchivesSpaceRecordSelect();
     });
-  }
+
+  // }
 
 }
