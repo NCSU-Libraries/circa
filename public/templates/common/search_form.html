@@ -1,11 +1,11 @@
-<div class="row collapse">
+<div class="row collapse" search-form>
 
   <div class="small-9 columns">
     <input type="search" ng-keypress="$event.keyCode === 13 && ctrl.search()" placeholder="Enter search term..." ng-model="ctrl.searchParams.q">
   </div>
 
   <div class="small-3 columns">
-    <a class="button postfix" ng-click="ctrl.search()">Search</a>
+    <a class="button postfix search-submit" ng-click="ctrl.search()">Search</a>
   </div>
 
 </div>
