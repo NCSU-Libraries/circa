@@ -20,7 +20,10 @@ default: &default
 
 development:
   <<: *default
-  database: circa
+  database: circa_dev
+  username: circa
+  password: Als0Spr@chZ@r@thustr@
+  host: mysqldevcl.lib.ncsu.edu
   # socket: /var/lib/mysql/mysql.sock
 
 # Warning: The database defined as "test" will be erased and

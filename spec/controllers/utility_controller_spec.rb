@@ -21,7 +21,7 @@ RSpec.describe UtilityController, type: :controller do
       sign_in(create(:user))
       get :catalog_record, params: { catalog_record_id: 'NCSU604802' }
       data = JSON.parse(response.body)
-      expect(data['data']['record']['recordSpec']).to eq('NCSU604802')
+      expect(data['data']['id']).to eq('NCSU604802')
     end
 
   end

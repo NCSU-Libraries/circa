@@ -16,33 +16,8 @@
 
     <section class="invoice-to print-2 columns">
       <h2>To</h2>
-      <% if @custom_to %>
-        <%= @custom_to.html_safe %>
-      <% else %>
-        <%= @user.display_name %><br>
-        <% if !@user.address1.blank? %>
-          <%= @user.address1 %><br>
-        <% end %>
-        <% if !@user.address2.blank? %>
-          <%= @user.address2 %><br>
-        <% end %>
-        <% if !@user.city.blank? %>
-          <%= @user.city %><%= @user.state ? ',' : '' %>
-        <% end %>
-        <% if !@user.state.blank? %>
-          <%= @user.state %>
-        <% end %>
-        <% if !@user.zip.blank? %>
-          <%= @user.zip %>
-        <% end %>
-        <% if !@user.phone.blank? %>
-          <br><%= @user.phone %>
-        <% end %>
-        <% if !@user.email.blank? %>
-          <br><em><%= @user.email %></em>
-        <% end %>
+      <%= to_adderess %>
 
-      <% end %>
     </section>
 
   </div>

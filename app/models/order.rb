@@ -86,6 +86,11 @@ class Order < ApplicationRecord
   end
 
 
+  ## This method does not quite work because it wasn't spec'ed very well
+  ## Should provide data for a user at the time of a specific version
+  ##   but we need to pass either a version idex or timestamp to this method
+  ##   and I'm not sure which to do because the method isn't actually used.
+
   def version_users
     if !self.paper_trail.live?
       v = self.version
@@ -102,6 +107,11 @@ class Order < ApplicationRecord
     end
   end
 
+
+  ## This method does not quite work because it wasn't spec'ed very well
+  ## Should provide assignees at the time of a specific version
+  ##   but we need to pass either a version idex or timestamp to this method
+  ##   and I'm not sure which to do because the method isn't actually used.
 
   def version_assignees
     if !self.paper_trail.live?

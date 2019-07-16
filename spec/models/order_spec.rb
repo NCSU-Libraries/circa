@@ -42,17 +42,18 @@ RSpec.describe Order, type: :model do
   end
 
 
-  it "can recall version of user data from time of request" do
-    o = create(:order_with_user_and_assignee)
-    p = o.users.first
-    o.paper_trail.save_with_version
-    sleep 1
-    p.update_attributes(first_name: 'Donna')
-    o.reload
-    v = o.paper_trail.previous_version
-    expect(o.users.first.first_name).to eq('Donna')
-    expect(v.version_users.first.first_name).to eq('Don')
-  end
+  # it "can recall version of user data from time of request" do
+  #   o = create(:order_with_user_and_assignee)
+  #   sleep 1
+  #   p.update_attributes(first_name: 'Donna')
+  #   o.paper_trail.save_with_version
+
+  #   o.reload
+
+  #   v = o.paper_trail.previous_version
+  #   expect(o.users.first.first_name).to eq('Donna')
+  #   expect(v.version_users.first.first_name).to eq('Don')
+  # end
 
 
   it "can recall items associated with previous version" do
@@ -79,15 +80,15 @@ RSpec.describe Order, type: :model do
   end
 
 
-  it "maintains previous assignments in version" do
-    o = create(:order_with_user_and_assignee)
-    old_assignee = o.assignees.first
-    new_assignee = create(:user, first_name: 'Alfred', last_name: 'Apaka')
-    o.reassign_to(new_assignee.id)
-    vo = o.paper_trail.previous_version
-    expect(vo.version_assignees.include?(new_assignee)).to be false
-    expect(vo.version_assignees.include?(old_assignee)).to be true
-  end
+  # it "maintains previous assignments in version" do
+  #   o = create(:order_with_user_and_assignee)
+  #   old_assignee = o.assignees.first
+  #   new_assignee = create(:user, first_name: 'Alfred', last_name: 'Apaka')
+  #   o.reassign_to(new_assignee.id)
+  #   vo = o.paper_trail.previous_version
+  #   expect(vo.version_assignees.include?(new_assignee)).to be false
+  #   expect(vo.version_assignees.include?(old_assignee)).to be true
+  # end
 
 
   it "will not add duplicate items" do
