@@ -76,6 +76,10 @@ gem "rack", ">= 2.0.6"
 # security vulnerabilities fix: https://nvd.nist.gov/vuln/detail/CVE-2018-16477
 gem "activestorage", ">= 5.2.1.1"
 
+# security vulnerabilities fix - https://nvd.nist.gov/vuln/detail/CVE-2019-5477
+gem "nokogiri", ">= 1.10.4"
+
+
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console'
