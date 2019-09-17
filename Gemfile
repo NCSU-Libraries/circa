@@ -10,7 +10,7 @@ gem 'mysql2'
 # Make SQLite available for development
 gem 'sqlite3'
 
-gem "devise", ">= 4.6.0"
+gem "devise", ">= 4.7.1"
 gem 'net-ldap'
 
 gem 'archivesspace-api-utility', git: "https://github.com/NCSU-Libraries/archivesspace-api-utility.git"
