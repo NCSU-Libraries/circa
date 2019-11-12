@@ -9,9 +9,11 @@ class AccessSession < ApplicationRecord
   has_many  :users, through: :user_access_sessions
 
   before_create do
-    self.start_datetime = DateTime.now
+    self.start_datetime ||= DateTime.now
     self.active = true
-    self.class.check_in_use(self)
+    if !self.end_datetime
+      self.class.check_in_use(self)
+    end
   end
 
   before_save do

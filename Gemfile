@@ -67,7 +67,7 @@ gem 'whenever', :require => false
 gem 'sprockets', '~> 3.7.2'
 
 # security vulnerability fix: https://nvd.nist.gov/vuln/detail/CVE-2018-16468
-gem "loofah", ">= 2.2.3"
+gem "loofah", ">= 2.3.1"
 
 # security vulnerabilities fix: https://nvd.nist.gov/vuln/detail/CVE-2018-16471
 # and https://nvd.nist.gov/vuln/detail/CVE-2018-16470

@@ -101,7 +101,7 @@ GEM
       sass-rails (< 5.1)
       sprockets (< 4.0)
     concurrent-ruby (1.1.5)
-    crass (1.0.4)
+    crass (1.0.5)
     database_cleaner (1.7.0)
     devise (4.7.1)
       bcrypt (~> 3.0)
@@ -147,7 +147,7 @@ GEM
       railties (>= 3.2.16)
     json (1.8.6)
     libv8 (3.16.14.19)
-    loofah (2.2.3)
+    loofah (2.3.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -170,7 +170,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (5.0.1)
     nio4r (2.3.1)
-    nokogiri (1.10.4)
+    nokogiri (1.10.5)
       mini_portile2 (~> 2.4.0)
     orm_adapter (0.5.0)
     paper_trail (9.2.0)
@@ -347,7 +347,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   jquery-ui-rails
-  loofah (>= 2.2.3)
+  loofah (>= 2.3.1)
   modernizr-rails
   mysql2
   net-ldap
