@@ -7,8 +7,8 @@ FactoryBot.define do
 
 
   factory :course_reserve, :class => 'CourseReserve' do
-    course_number '1234'
-    course_name 'course reserve name'
+    course_number { '1234' }
+    course_name { 'course reserve name' }
   end
 
 
@@ -28,33 +28,33 @@ FactoryBot.define do
 
 
   factory :access_session do
-    start_datetime DateTime.now
-    end_datetime DateTime.now
+    start_datetime { DateTime.now }
+    end_datetime { DateTime.now }
   end
 
 
   factory :location, aliases: [:temporary_location, :permanent_location, :current_location] do
     sequence( :uri ) { |n| "/repositories/2/resources/1234#{n}" }
     sequence( :title ) { |n| "Location #{n}" }
-    source_id Location.archivesspace_location_source_id
+    source_id { Location.archivesspace_location_source_id }
   end
 
 
   factory :order_type do
-    name 'test'
-    label 'test'
+    name { 'test' }
+    label { 'test' }
   end
 
 
   factory :order_sub_type do
-    name 'test'
-    label 'test'
+    name { 'test' }
+    label { 'test' }
     order_type
   end
 
 
   factory :order do
-    access_date_start Date.today
+    access_date_start { Date.today }
     order_sub_type
     temporary_location
 
@@ -74,7 +74,7 @@ FactoryBot.define do
 
     factory :order_with_items do
       transient do
-        item_count 3
+        item_count { 3 }
       end
       after(:create) do |order, evaluator|
         create_list(:item, evaluator.item_count).each do |i|
@@ -100,11 +100,11 @@ FactoryBot.define do
 
 
   factory :user do
-    first_name "Don"
-    last_name "Ho"
+    first_name { "Don" }
+    last_name { "Ho" }
     sequence( :email ) { |n| "person#{n}@example.com" }
-    password Devise::Encryptor.digest(User, 'password')
-    agreement_confirmed_at Time.now
+    password { Devise::Encryptor.digest(User, 'password') }
+    agreement_confirmed_at { Time.now }
     user_role
 
     factory :user_with_role do
@@ -119,7 +119,7 @@ FactoryBot.define do
 
     factory :user_with_orders do
       transient do
-        orders_count 3
+        orders_count { 3 }
       end
       after(:create) do |user, evaluator|
         create_list(:order, evaluator.orders_count).each do |r|
@@ -130,7 +130,7 @@ FactoryBot.define do
 
     factory :user_with_assigned_orders do
       transient do
-        orders_count 3
+        orders_count { 3 }
       end
       after(:create) do |user, evaluator|
         create_list(:order, evaluator.orders_count).each do |r|
@@ -162,7 +162,7 @@ FactoryBot.define do
 
 
   factory :note do
-    content "Mr Leopold Bloom ate with relish the inner organs of beasts and fowls."
+    content { "Mr Leopold Bloom ate with relish the inner organs of beasts and fowls." }
   end
 
 
@@ -174,7 +174,7 @@ FactoryBot.define do
 
   factory :digital_collections_order do
     sequence( :resource_identifier ) { |n| "image#{n}" }
-    requested_images [ 'imagefile0001', 'imagefile0002', 'imagefile0003' ]
+    requested_images { [ 'imagefile0001', 'imagefile0002', 'imagefile0003' ] }
     sequence(:resource_title) { |n| "Digital image order #{n}" }
     order
   end
@@ -190,8 +190,8 @@ FactoryBot.define do
 
 
   factory :order_fee do
-    per_unit_fee 1.00
-    per_order_fee 1.00
+    per_unit_fee { 1.00 }
+    per_order_fee { 1.00 }
   end
 
 

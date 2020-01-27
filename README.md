@@ -10,9 +10,9 @@ If you would like to see a demonstration of Circa, you can install it locally us
 
 # System requirements
 
-* Ruby 2.2.1 or higher
+* Ruby 2.4.1 or higher
 * MySQL
-* Solr 5
+* Solr 5 or higher
 * Redis (to support email notifications)
 
 

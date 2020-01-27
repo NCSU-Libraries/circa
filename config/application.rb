@@ -46,6 +46,10 @@ module Circa
     config.autoload_paths += %W(#{config.root}/app/custom)
     config.autoload_paths += Dir["#{config.root}/app/custom/**/"]
 
+    if ['development','test'].include? Rails.env
+      Rails.application.config.active_record.sqlite3.represent_boolean_as_integer = true
+    end
+
     if Rails.env == 'test'
       config.autoload_paths += %W(#{config.root}/spec)
       config.autoload_paths += Dir["#{config.root}/spec/**/"]

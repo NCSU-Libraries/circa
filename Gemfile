@@ -8,7 +8,7 @@ gem 'rake'
 gem 'mysql2'
 
 # Make SQLite available for development
-gem 'sqlite3'
+gem 'sqlite3', '~> 1.3.6'
 
 gem "devise", ">= 4.7.1"
 gem 'net-ldap'
@@ -16,6 +16,7 @@ gem 'net-ldap'
 gem 'archivesspace-api-utility', git: "https://github.com/NCSU-Libraries/archivesspace-api-utility.git"
 
 gem 'paper_trail', '>=9.2.0'
+# gem 'paper_trail-association_tracking'
 
 # Using 0.10.0.rc3
 # gem 'active_model_serializers', git: "https://github.com/rails-api/active_model_serializers.git", branch: "0-10-stable"

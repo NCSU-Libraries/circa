@@ -1,42 +1,25 @@
-# MySQL.  Versions 5.0+ are recommended.
+# SQLite version 3.x
+#   gem install sqlite3
 #
-# Install the MYSQL driver
-#   gem install mysql2
-#
-# Ensure the MySQL gem is defined in your Gemfile
-#   gem 'mysql2'
-#
-# And be sure to use new-style password hashing:
-#   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
 #
 default: &default
-  adapter: mysql2
-  encoding: utf8
+  adapter: sqlite3
   pool: 5
-  host: 127.0.0.1
-  username: root
-  password: root
-  socket: /tmp/mysql.sock
+  timeout: 5000
 
 development:
   <<: *default
-  database: circa_dev
-  username: circa
-  password: Als0Spr@chZ@r@thustr@
-  host: mysqldevcl.lib.ncsu.edu
-  # socket: /var/lib/mysql/mysql.sock
+  database: db/development.sqlite3
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  adapter: sqlite3
-  pool: 5
-  timeout: 5000
   database: db/test.sqlite3
-  username: root
 
-# DO NOT INCLUDE PRODUCTION CREDENTIALS IN THE GITHUB REPO
 production:
   <<: *default
+  database: db/production.sqlite3
