@@ -159,10 +159,13 @@ class SerializeOrder < SerializeRecord
         end
       when :reproduction_spec
         reproduction_spec = item_order.reproduction_spec
+
         if reproduction_spec
           serialized[:reproduction_spec] = reproduction_spec.attributes
-          serialized[:reproduction_spec][:reproduction_format] =
-              reproduction_spec.reproduction_format.attributes
+          if reproduction_spec.reproduction_format
+            serialized[:reproduction_spec][:reproduction_format] =
+                reproduction_spec.reproduction_format.attributes
+          end
         end
       when :item
         serialized[:item] = SerializeItem.call(item, skip_associations: [:orders] )[:item]

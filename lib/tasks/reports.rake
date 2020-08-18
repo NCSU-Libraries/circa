@@ -1,5 +1,46 @@
 namespace :reports do
 
+  desc "report access sessions by collection"
+  task :access_sessions_by_collection => :environment do |t|
+    require 'csv'
+
+    tmp = Rails.root.to_s + '/tmp'
+    FileUtils.mkdir tmp if !Dir.exists? tmp
+    report_path = "#{tmp}/access_sessions_by_collection_#{DateTime.now.strftime("%F")}.csv"
+    report = File.new(report_path, 'w')
+
+    collections = {}
+
+    AccessSession.find_each do |as|
+      item = as.item
+      collections[item.resource_identifier] ||= {}
+      collections[item.resource_identifier]['identifier'] ||= item.resource_identifier
+      collections[item.resource_identifier]['title'] ||= item.resource_title
+      collections[item.resource_identifier]['total_access_sessions'] ||= 0
+      collections[item.resource_identifier]['total_access_sessions'] += 1
+    end
+
+    sorted_collections = collections.sort_by { |k,v| -v['total_access_sessions'] }
+
+    csv_headers = collections[collections.keys.first].keys
+
+    csv_string = CSV.generate do |csv|
+      csv << csv_headers.map { |h| h.to_s }
+      sorted_collections.each do |c|
+        v = c[1]
+        row = []
+        csv_headers.each do |h|
+          row << v[h]
+        end
+        csv << row
+      end
+    end
+    report.puts csv_string
+    report.close
+
+  end
+
+
   task :access_sessions, [:start, :end] => :environment do |t, args|
     start_date = args[:start]
     end_date = args[:end]
