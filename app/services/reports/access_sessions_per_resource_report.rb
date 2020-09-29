@@ -20,6 +20,8 @@ class AccessSessionsPerResourceReport < GenerateReport
       @resource_data[i.resource_identifier][:items] = @resource_data[i.resource_identifier][:item_ids].length
     end
 
+    @resource_data
+
   end
 
 

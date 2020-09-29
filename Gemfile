@@ -53,7 +53,7 @@ gem 'turbolinks'
 gem 'jbuilder'
 
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
+# gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'rsolr'
 
@@ -70,9 +70,8 @@ gem 'sprockets', '~> 3.7.2'
 # security vulnerability fix: https://nvd.nist.gov/vuln/detail/CVE-2018-16468
 gem "loofah", ">= 2.3.1"
 
-# security vulnerabilities fix: https://nvd.nist.gov/vuln/detail/CVE-2018-16471
-# and https://nvd.nist.gov/vuln/detail/CVE-2018-16470
-gem "rack", ">= 2.0.6"
+# security vulnerabilities fix: https://nvd.nist.gov/vuln/detail/CVE-2020-8184
+gem "rack", ">= 2.2.3"
 
 # security vulnerabilities fix: https://nvd.nist.gov/vuln/detail/CVE-2018-16477
 gem "activestorage", ">= 5.2.1.1"
@@ -80,6 +79,8 @@ gem "activestorage", ">= 5.2.1.1"
 # security vulnerabilities fix - https://nvd.nist.gov/vuln/detail/CVE-2019-5477
 gem "nokogiri", ">= 1.10.4"
 
+# security vulnerabilities fix - https://nvd.nist.gov/vuln/detail/CVE-2013-0269
+gem "json", "~> 2.3.0"
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
